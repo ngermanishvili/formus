@@ -39,6 +39,12 @@ export default function Nav() {
         </li>
       ))}
       <li>
+        <Link href="/media">Media</Link>
+      </li>
+      <li>
+        <Link href="/about-formus">About</Link>
+      </li>
+      <li>
         <Link href="/projects">Projects</Link>
       </li>
 

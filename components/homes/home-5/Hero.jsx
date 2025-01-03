@@ -181,7 +181,7 @@ export default function Hero() {
                 {services.map((elm, i) => (
                   <SwiperSlide key={i} className="swiper-slide">
                     <div className="cardService cardServiceStyle3 wow fadeInUp">
-                      <Link href={`/service-single/${elm.id}`}>
+                      <Link href={`/about/${elm.id}`}>
                         <div className="cardImage">
                           <Image
                             width={370}

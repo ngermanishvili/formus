@@ -56,15 +56,15 @@ export const menuItems = [
 
 
 
-  {
-    id: 5,
-    title: "Blog",
-    link: "#",
-    subMenu: [
-      { id: 45, title: "Blog Grid", link: "/blog-grid" },
-      { id: 46, title: "Blog Grid 2", link: "/blog-grid-2" },
-      { id: 47, title: "Blog List", link: "/blog-list" },
-      { id: 48, title: "Blog Single", link: "/blog-single/1" },
-    ],
-  },
+  // {
+  //   id: 5,
+  //   title: "Blog",
+  //   link: "#",
+  //   subMenu: [
+  //     { id: 45, title: "Blog Grid", link: "/blog-grid" },
+  //     { id: 46, title: "Blog Grid 2", link: "/blog-grid-2" },
+  //     { id: 47, title: "Blog List", link: "/blog-list" },
+  //     { id: 48, title: "Blog Single", link: "/blog-single/1" },
+  //   ],
+  // },
 ];

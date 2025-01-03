@@ -93,7 +93,7 @@ export default function Services2() {
               {services.map((elm, i) => (
                 <SwiperSlide key={i} className="swiper-slide">
                   <div className="cardService cardServiceStyle4 wow fadeInUp">
-                    <Link href={`/service-single/${elm.id}`}>
+                    <Link href={`/about/${elm.id}`}>
                       <div className="cardImage">
                         <Image
                           width={370}

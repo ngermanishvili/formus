@@ -12,7 +12,7 @@ export default function Services3() {
           {services.slice(0, 6).map((elm, i) => (
             <div key={i} className="col-lg-4 col-sm-6 mb-30">
               <div className="cardService cardServiceStyle4 wow fadeInUp">
-                <Link href={`/service-single/${elm.id}`}>
+                <Link href={`/about/${elm.id}`}>
                   <div className="cardImage">
                     <Image
                       width={370}

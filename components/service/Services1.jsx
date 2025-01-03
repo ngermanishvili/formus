@@ -22,7 +22,7 @@ export default function Services1() {
                     </p>
                     <Link
                       className="cardLink btn btn-arrow-up"
-                      href={`/service-single/${elm.id}`}
+                      href={`/about/${elm.id}`}
                     >
                       <svg
                         className="icon-16"

@@ -14,7 +14,7 @@ export default function Service() {
             <div key={i} className="col-lg-4 mb-30">
               <div className="cardServiceStyle2 wow fadeInUp">
                 <div className="cardImage">
-                  <Link href={`/service-single/${elm.id}`}>
+                  <Link href={`/about/${elm.id}`}>
                     <Image
                       width={370}
                       height={400}
@@ -33,7 +33,7 @@ export default function Service() {
                   </p>
                   <Link
                     className="cardLink btn btn-link hover-up"
-                    href={`/service-single/${elm.id}`}
+                    href={`/about/${elm.id}`}
                   >
                     Learn more
                     <svg

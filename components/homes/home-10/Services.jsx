@@ -75,7 +75,7 @@ export default function Services() {
               <SwiperSlide key={i} className="swiper-slide">
                 <div className="cardService cardServiceStyle5 wow fadeInUp">
                   <div className="cardImage">
-                    <Link href={`/service-single/${elm.id}`}>
+                    <Link href={`/about/${elm.id}`}>
                       <Image
                         width={1710}
                         height={1500}
@@ -92,7 +92,7 @@ export default function Services() {
                     <div className="mt-30">
                       <Link
                         className="btn btn-secondary"
-                        href={`/service-single/${elm.id}`}
+                        href={`/about/${elm.id}`}
                       >
                         More Detail
                         <svg

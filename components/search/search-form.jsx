@@ -12,24 +12,22 @@ import { Search } from "lucide-react";
 
 export default function SearchForm() {
   const locations = ["თბილისი", "ბათუმი", "ქუთაისი", "რუსთავი", "გორი"];
-
   const propertyTypes = ["ბინა", "სახლი", "კომერციული ფართი", "მიწის ნაკვეთი"];
 
   return (
-    <div className="w-full bg-white rounded px-4 py-2 flex items-center gap-2 max-w-6xl mx-auto">
-      <div className="flex-1 min-w-[200px]">
+    <div className="w-full bg-white rounded-lg shadow-md px-4 py-2 flex flex-col md:flex-row items-center gap-2 max-w-6xl mx-auto">
+      <div className="flex-1 w-full md:w-auto min-w-[200px]">
         <Input
           type="text"
           placeholder="საძიებო სიტყვა"
-          className="border-0 focus-visible:ring-0 focus-visible:ring-offset-0 px-0 h-10"
+          className="border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-10 px-3 w-full"
         />
       </div>
-
-      <div className="w-px h-6 bg-gray-200" />
-
-      <div className="flex-1 min-w-[200px]">
+      <div className="w-px h-6 bg-gray-200 md:hidden" />{" "}
+      {/* Hide vertical line on mobile */}
+      <div className="flex-1 w-full md:w-auto min-w-[200px]">
         <Select>
-          <SelectTrigger className="border-0 focus:ring-0 shadow-none h-10 px-0">
+          <SelectTrigger className="border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-10 px-3 w-full">
             <SelectValue placeholder="მდებარეობა" />
           </SelectTrigger>
           <SelectContent>
@@ -41,12 +39,11 @@ export default function SearchForm() {
           </SelectContent>
         </Select>
       </div>
-
-      <div className="w-px h-6 bg-gray-200" />
-
-      <div className="flex-1 min-w-[200px]">
+      <div className="w-px h-6 bg-gray-200 md:hidden" />{" "}
+      {/* Hide vertical line on mobile */}
+      <div className="flex-1 w-full md:w-auto min-w-[200px]">
         <Select>
-          <SelectTrigger className="border-0 focus:ring-0 shadow-none h-10 px-0">
+          <SelectTrigger className="border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 h-10 px-3 w-full">
             <SelectValue placeholder="ტიპი" />
           </SelectTrigger>
           <SelectContent>
@@ -58,18 +55,17 @@ export default function SearchForm() {
           </SelectContent>
         </Select>
       </div>
-
-      <div className="w-px h-6 bg-gray-200" />
-
+      <div className="w-px h-6 bg-gray-200 md:hidden" />{" "}
+      {/* Hide vertical line on mobile */}
       <Button
         variant="ghost"
-        className="text-gray-600 hover:text-gray-800 px-2"
+        className="text-gray-600 hover:text-gray-800 px-2 rounded-lg hidden md:block"
       >
         დეტალური
       </Button>
-
-      <Button className="bg-black text-white hover:bg-gray-800 px-6">
-        <Search className="w-4 h-4" />
+      <Button className="bg-black text-white hover:bg-gray-800 px-6 rounded-lg flex items-center">
+        <Search className="w-4 h-4 mr-1" />
+        ძიება
       </Button>
     </div>
   );

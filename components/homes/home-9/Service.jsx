@@ -40,7 +40,7 @@ export default function Service() {
           {services.slice(0, 4).map((elm, i) => (
             <div key={i} className="col-lg-3 col-md-6">
               <div className="cardService cardServiceStyle4 wow fadeInUp">
-                <Link href={`/service-single/${elm.id}`}>
+                <Link href={`/about/${elm.id}`}>
                   <div className="cardImage">
                     <Image
                       width={370}

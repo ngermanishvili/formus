@@ -7,7 +7,7 @@ export default function SearchBox({ service }) {
   return (
     <section className="section">
       <div className="banner-image-service wow fadeInUp"></div>
-      <div className="box-form-service-single">
+      <div className="box-form-about">
         <div className="box-search-ride box-search-ride-style-2 wow fadeInUp  light-input">
           <div className="box-search-tabs wow fadeInUp">
             <div className="head-tabs">

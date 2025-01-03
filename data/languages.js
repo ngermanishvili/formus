@@ -7,14 +7,9 @@ export const languages = [
   },
   {
     id: 2,
-    code: "fr",
-    name: "French",
+    code: "ka",
+    name: "KA",
     image: "/assets/imgs/template/icons/fr.png",
   },
-  {
-    id: 3,
-    code: "cn",
-    name: "Chinese",
-    image: "/assets/imgs/template/icons/cn.png",
-  },
+
 ];

@@ -42,7 +42,7 @@ export default function Footer5() {
               <div className="flex items-center mb-2">
                 <Phone className="text-white mr-2" size={20} />
                 <a
-                  className="text-14-medium call-phone color-white hover-up"
+                  className="text-14-medium  color-white hover-up"
                   href="tel:+995555555555"
                 >
                   +(995) 555-555-555
@@ -54,7 +54,7 @@ export default function Footer5() {
               <h6 className="text-14 color-white-2 mb-20">Working Hours</h6>
               <div className="flex items-center mb-2">
                 <Clock className="text-white mr-2" size={20} />
-                <span className="text-14-medium time-footer color-white">
+                <span className="text-14-medium  color-white">
                   Mon-Sat: 09:00 - 17:00 - Sun: Closed
                 </span>
               </div>

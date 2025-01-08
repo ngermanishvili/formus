@@ -22,11 +22,11 @@ const AboutFormus = () => {
 
         {/* Title Section */}
         <div className="w-full max-w-6xl px-4">
-          <h2 className="text-3xl font-bold mb-6">About Formus</h2>
+          <h2 className="text-4xl font-bold mb-6">About Formus</h2>
 
           {/* First Text Section */}
           <div className="mb-12">
-            <p className="text-gray-700 mb-4">
+            <p className="text-gray-700 mb-4 text-lg leading-relaxed">
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis
               ipsum suspendisse ultrices gravida. Risus commodo viverra maecenas
@@ -41,7 +41,7 @@ const AboutFormus = () => {
           {/* Middle Section with Text and Right Image */}
           <div className="flex flex-col md:flex-row items-center gap-8 mb-12">
             <div className="flex-1">
-              <p className="text-gray-700">
+              <p className="text-gray-700 mb-4 text-lg leading-relaxed">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis
                 ipsum suspendisse ultrices gravida. Risus commodo viverra
@@ -58,7 +58,7 @@ const AboutFormus = () => {
               </p>
             </div>
             <div className="relative">
-              <div className="w-64 h-64 rounded-full overflow-hidden">
+              <div className="w-72 h-72 rounded-full overflow-hidden">
                 <img
                   src="/assets/imgs/page/homepage5/banner.png"
                   alt="Building Detail"
@@ -73,7 +73,7 @@ const AboutFormus = () => {
 
           {/* Bottom Section with Left Image and Text */}
           <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="w-64 h-64 rounded-full overflow-hidden">
+            <div className="w-72 h-72 rounded-full overflow-hidden">
               <img
                 src="/assets/imgs/page/homepage5/banner.png"
                 alt="Building Detail"
@@ -81,7 +81,7 @@ const AboutFormus = () => {
               />
             </div>
             <div className="flex-1">
-              <p className="text-gray-700">
+              <p className="text-gray-700 mb-4 text-lg leading-relaxed">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis
                 ipsum suspendisse ultrices gravida. Risus commodo viverra

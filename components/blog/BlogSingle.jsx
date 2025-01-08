@@ -173,119 +173,7 @@ export default function BlogSingle({ blog }) {
             </div>
           </div>
         </div>
-        <div className="border-bottom mb-30 mt-60"></div>
-        <div className="author-box wow fadeInUp">
-          <div className="item-author">
-            <div className="item-author-image">
-              <Image
-                width={210}
-                height={210}
-                src="/assets/imgs/page/blog2/author.png"
-                alt="luxride"
-              />
-            </div>
-            <div className="item-author-info">
-              <h6 className="text-18-medium">Esther Howard</h6>
-              <p className="text-14 color-grey">Marketing Coordinator</p>
-              <p className="text-16 color-text">
-                Etiam vitae leo et diam pellentesque porta. Sed eleifend
-                ultricies risus, vel rutrum erat commodo ut. Praesent finibus
-                congue euismod. Nullam scelerisque massa vel augue placerat, a
-                tempor sem egestas. Curabitur placerat finibus lacus.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div className="border-bottom mb-30 mt-60"></div>
-        <div className="box-pagination-single wow fadeInUp">
-          <div className="row align-items-center">
-            <div className="col-lg-5 col-sm-5 col-5">
-              <div className="box-pager-inner">
-                <a className="prev-page text-18-medium" href="#">
-                  Prev
-                  <svg
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
-                    ></path>
-                  </svg>
-                </a>
-                <p className="pl-40 text-16 color-text d-none d-sm-block">
-                  The most efficient airlines and airports globally
-                </p>
-              </div>
-            </div>
-            <div className="col-lg-2 text-center col-sm-2 col-2">
-              <a href="#">
-                <Image
-                  width={20}
-                  height={20}
-                  src="/assets/imgs/page/blog2/grid.png"
-                  alt="luxride"
-                />
-              </a>
-            </div>
-            <div className="col-lg-5 col-sm-5 col-5">
-              <div className="box-pager-inner text-end">
-                <a className="next-page text-18-medium" href="#">
-                  Next
-                  <svg
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                    ></path>
-                  </svg>
-                </a>
-                <p className="pr-40 text-16 color-text d-none d-sm-block">
-                  The most efficient airlines and airports globally
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="border-bottom mb-50 mt-25"></div>
-        <div className="box-reviews wow fadeInUp">
-          <h5 className="text-20-medium color-text mb-30">Reviews</h5>
-          {reviews.map((elm, i) => (
-            <div key={i} className="item-reviews">
-              <div className="item-author-info">
-                <div className="item-avatar">{elm.authorInitials}</div>
-                <div className="item-info">
-                  <h6 className="text-16-medium">{elm.authorName}</h6>
-                  <p className="text-14 color-grey">{elm.date}</p>
-                </div>
-              </div>
-              <div className="item-desc">
-                <p className="color-text text-16">{elm.description}</p>
-              </div>
-              <div className="buttons-like">
-                <a className="btn btn-like mr-30" href="#">
-                  Helpful
-                </a>
-                <a className="btn btn-dislike" href="#">
-                  Not helpful
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="border-bottom mb-50 mt-60"></div>
+
         <div className="box-form-comment wow fadeInUp">
           <h5 className="text-20-medium mb-30">Leave a Comment</h5>
           <p className="text-14 color-text mb-30">
@@ -337,7 +225,10 @@ export default function BlogSingle({ blog }) {
                   </div>
                 </div>
                 <div className="col-lg-12">
-                  <button className="btn btn-primary" type="submit">
+                  <button
+                    className="btn btn-primary w-full flex justify-center items-center"
+                    type="submit"
+                  >
                     Post Review
                     <svg
                       className="icon-16 ml-5"

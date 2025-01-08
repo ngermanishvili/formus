@@ -31,7 +31,7 @@ export const blogs2 = [
     monthYear: "Jun, 2022",
     imageSrc: "/assets/imgs/page/homepage1/news1.png",
     tag: "Travel",
-    title: "3 hidden-gem destinations for your wish list",
+    title: "ტესტი ტესტი პარარა ტესტი-testii",
   },
   {
     id: 2,

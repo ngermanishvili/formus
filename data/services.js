@@ -1,41 +1,12 @@
 export const services = [
   {
     id: 1,
-    title: "Intercity Rides",
-    description: "Mercedes-Benz E-Class, BMW 5 Series, Cadillac XTS or similar",
-    image: "/assets/imgs/page/homepage5/banner.png",
-  },
-  {
-    id: 2,
-    title: "Chauffeur Hailing",
-    description: "Mercedes-Benz E-Class, BMW 5 Series, Cadillac XTS or similar",
-    image: "/assets/imgs/page/homepage5/banner.png",
-  },
-  {
-    id: 3,
-    title: "Airport Transfers",
-    description: "Mercedes-Benz E-Class, BMW 5 Series, Cadillac XTS or similar",
-    image: "/assets/imgs/page/homepage5/banner.png",
-  },
-  {
-    id: 4,
-    title: "Sprinter Class",
-    description: "Mercedes-Benz E-Class, BMW 5 Series, Cadillac XTS or similar",
-    image: "/assets/imgs/page/homepage5/banner.png",
-  },
-  {
-    id: 5,
-    title: "Wedding Class",
-    description: "Mercedes-Benz E-Class, BMW 5 Series, Cadillac XTS or similar",
-    image: "/assets/imgs/page/homepage5/banner.png",
-  },
-  {
-    id: 6,
-    title: "Travel Transfer",
-    description: "Mercedes-Benz E-Class, BMW 5 Series, Cadillac XTS or similar",
+    title: "Ortachala Hills",
+    description: "Ortachala Hills is a new residential complex in the heart of Tbilisi, Ortachala. The complex is located on a hill, which offers a beautiful view of the city. The complex consists of 3 residential buildings, which are connected by a common infrastructure. The complex has a large green area, a playground, a swimming pool, a fitness center, a cafe, and a supermarket. The complex is located in a quiet and peaceful area, which is ideal for families with children.",
     image: "/assets/imgs/page/homepage5/banner.png",
   },
 ];
+
 export const services2 = [
   { id: 1, text: "Intercity Rides" },
   { id: 2, text: "Chauffeur Hailing" },

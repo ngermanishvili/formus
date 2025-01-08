@@ -1,10 +1,11 @@
+import BreadCumb2 from "@/components/blog/BreadCumb2";
 import Footer1 from "@/components/footers/Footer1";
 import Header1 from "@/components/headers/Header1";
 import MobailHeader1 from "@/components/headers/MobailHeader1";
 import Breadcumb from "@/components/service/serviceSingle/Breadcumb";
 import Features1 from "@/components/service/serviceSingle/Features1";
 import Features2 from "@/components/service/serviceSingle/Features2";
-import SearchBox from "@/components/service/serviceSingle/SearchBox";
+import SearchBox from "@/components/service/serviceSingle/SearchBox2";
 import { allServices } from "@/data/services";
 import React from "react";
 
@@ -15,7 +16,7 @@ export default function page({ params }) {
     <>
       <Header1 /> <MobailHeader1 />
       <main className="main">
-        <Breadcumb service={service} />
+        <BreadCumb2 service={service} />
         <SearchBox service={service} />
         <Features1 />
         <Features2 />

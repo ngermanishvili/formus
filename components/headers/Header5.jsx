@@ -46,14 +46,8 @@ export default function Header5() {
               </div>
             </div>
             <div className="header-top-2">
-              <Link className="d-flex" href="/">
-                <Image
-                  width={150}
-                  height={50}
-                  alt="Luxride"
-                  src="/assets/imgs/template/logo.svg"
-                  style={{ height: "fit-content" }}
-                />
+              <Link href="/" className="d-flex">
+                <span className="text-white text-2xl font-bold">FORMUS</span>
               </Link>
             </div>
             <div className="header-top-3">

@@ -4,14 +4,6 @@ import { blogs2 } from "@/data/blogs";
 import Link from "next/link";
 
 export default function Blogs1() {
-  const createSlug = (text) => {
-    return text
-      .toLowerCase()
-      .replace(/[^a-zა-ჰ0-9\s-]/g, "") // ქართული და ლათინური სიმბოლოები
-      .replace(/\s+/g, "-") // სფეისების შეცვლა დეფისით
-      .replace(/-+/g, "-") // მრავლობითი დეფისების შეცვლა
-      .trim();
-  };
   return (
     <section className="section pt-60 bg-white latest-new-white">
       <div className="container-sub">
@@ -19,7 +11,7 @@ export default function Blogs1() {
           {blogs2.map((elm, i) => (
             <div key={i} className="col-lg-4">
               <div className="cardNews wow fadeInUp">
-                <Link href={`/media-single/${createSlug(elm.title)}-${elm.id}`}>
+                <Link href={`/blog-single/${elm.id}`}>
                   <div className="cardImage">
                     <div className="datePost">
                       <div className="heading-52-medium color-white">
@@ -40,17 +32,14 @@ export default function Blogs1() {
                   <div className="tags mb-10">
                     <a href="#">{elm.tag}</a>
                   </div>
-                  <Link
-                    className="color-white"
-                    href={`/media-single/${createSlug(elm.title)}-${elm.id}`}
-                  >
+                  <Link className="color-white" href={`/blog-single/${elm.id}`}>
                     <h3 className="text-20-medium color-white mb-20">
                       {elm.title}
                     </h3>
                   </Link>
                   <Link
                     className="cardLink btn btn-arrow-up"
-                    href={`/media-single/${elm.id}`}
+                    href={`/blog-single/${elm.id}`}
                   >
                     <svg
                       className="icon-16"

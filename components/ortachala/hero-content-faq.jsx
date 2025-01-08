@@ -2,12 +2,12 @@
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Faq() {
+export default function FaqLeft() {
   return (
     <section className="relative bg-white">
       <div className="flex flex-col lg:flex-row items-stretch">
         {/* Left Image */}
-        <div className="w-full lg:w-1/2 relative h-[600px] group overflow-hidden">
+        <div className="w-full lg:w-1/2 relative h-[400px] group overflow-hidden">
           <Image
             src="/assets/imgs/page/homepage5/banner.png"
             alt="Luxride"
@@ -26,13 +26,13 @@ export default function Faq() {
           <p className="text-gray-600 text-lg leading-relaxed mb-10">
             Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat
             nam numquam eaque vitae accusamus maxime ut quia nihil sequi dolore
-            illo soluta recusandae necessitatibus, deserunt, ab, dolorum ullam
-            possimus maiores?
+            illo soluta recusandae necessitatibus.
           </p>
-          <Link href="/faq">
-            <span className="inline-block text-lg text-white bg-black px-8 py-3 rounded-sm hover:bg-gray-800 transition-colors">
-              Learn More
-            </span>
+          <Link
+            href="/faq"
+            className="inline-flex items-center text-lg font-medium text-white bg-black px-8 py-3 rounded-sm hover:bg-gray-800 transition-colors w-fit"
+          >
+            Learn More
           </Link>
         </div>
       </div>

@@ -2,7 +2,6 @@
 import { languages } from "@/data/languages"; // Ensure this is set up correctly
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useTranslation } from "next-i18next";
 
 export default function Language() {
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0].code);

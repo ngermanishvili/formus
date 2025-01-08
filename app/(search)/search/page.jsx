@@ -10,10 +10,11 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Search } from "lucide-react";
 import PropertyResults from "@/components/search/search-table";
-import Footer2 from "@/components/footers/Footer2";
 import Header1 from "@/components/headers/Header1";
+import Footer5 from "@/components/footers/Footer1";
+import { DetailedSearchFilter } from "@/components/search/detailed-search";
 
 export default function SearchForm() {
   const [showResults, setShowResults] = useState(false);
@@ -27,7 +28,7 @@ export default function SearchForm() {
   return (
     <>
       <Header1 />
-      <div className="w-full justify-center mx-auto  align-middle bg-[#abc123] p-60">
+      <div className="w-full justify-center mx-auto align-middle bg-[#abc123] p-60">
         <div className="flex flex-col gap-4">
           <div className="w-full backdrop-blur-md bg-white/90 rounded-2xl shadow-xl p-4 md:p-6 flex flex-col md:flex-row items-center gap-4 max-w-6xl mx-auto transition-all">
             <div className="flex-1 w-full">
@@ -92,13 +93,7 @@ export default function SearchForm() {
             </div>
 
             <div className="flex items-center gap-2 w-full md:w-auto">
-              <Button
-                variant="ghost"
-                className="text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-xl h-12 hidden md:flex items-center gap-2"
-              >
-                <SlidersHorizontal className="w-4 h-4" />
-                დეტალური
-              </Button>
+              <DetailedSearchFilter />
               <Button
                 className="bg-black hover:bg-gray-800 text-white rounded-xl h-12 px-8 w-full md:w-auto flex items-center gap-2 transition-all"
                 onClick={handleSearch}
@@ -112,7 +107,7 @@ export default function SearchForm() {
           {showResults && <PropertyResults />}
         </div>
       </div>
-      <Footer2 />
+      <Footer5 />
     </>
   );
 }

@@ -1,3 +1,4 @@
+// app/api/auth/login/route.js
 import { query } from "@/lib/db";
 import { NextResponse } from "next/server";
 import crypto from 'crypto';
@@ -7,16 +8,29 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 export async function POST(request) {
     console.log('---Login Debug Start---');
+
     try {
+        // მოვიღოთ და დავალოგოთ request body
         const body = await request.json();
-        console.log('Request body:', body);
+        console.log('Request body:', { ...body, password: '[HIDDEN]' });
+
         const { username, password } = body;
 
+        if (!username || !password) {
+            return NextResponse.json(
+                { status: "error", message: "შეიყვანეთ მომხმარებელი და პაროლი" },
+                { status: 400 }
+            );
+        }
+
         console.log('Querying database for user:', username);
+
+        // PostgreSQL-ის სინტაქსით
         const users = await query(
-            `SELECT * FROM admin WHERE username = ? AND is_active = TRUE`,
+            `SELECT * FROM admin WHERE username = $1 AND is_active = true`,
             [username]
         );
+
         console.log('Query result length:', users.length);
 
         if (!users.length) {
@@ -30,6 +44,7 @@ export async function POST(request) {
         const user = users[0];
         console.log('Found user:', { ...user, password: '[HIDDEN]' });
 
+        // პაროლის შემოწმება
         const hashedPassword = crypto
             .createHash('sha256')
             .update(password)
@@ -46,7 +61,7 @@ export async function POST(request) {
             );
         }
 
-        // Create token
+        // ტოკენის შექმნა
         const token = await new SignJWT({
             userId: user.admin_id,
             username: user.username
@@ -56,12 +71,12 @@ export async function POST(request) {
             .setExpirationTime('24h')
             .sign(new TextEncoder().encode(JWT_SECRET));
 
-        console.log('Generated token:', token);
+        console.log('Generated token:', token.substring(0, 20) + '...');
 
-        // Update last login
+        // ბოლო შესვლის დროის განახლება PostgreSQL სინტაქსით
         console.log('Updating last login...');
         await query(
-            `UPDATE admin SET last_login = NOW() WHERE admin_id = ?`,
+            `UPDATE admin SET last_login = CURRENT_TIMESTAMP WHERE admin_id = $1`,
             [user.admin_id]
         );
 
@@ -70,6 +85,7 @@ export async function POST(request) {
             message: "წარმატებული ავტორიზაცია"
         });
 
+        // ქუქის დაყენება
         console.log('Setting cookie...');
         response.cookies.set({
             name: 'auth_token',
@@ -86,11 +102,19 @@ export async function POST(request) {
 
     } catch (error) {
         console.error('Login error details:', {
+            name: error.name,
             message: error.message,
+            code: error.code,
             stack: error.stack
         });
+
+        // დეტალური error მესიჯები დეველოპმენტისთვის
+        const errorMessage = process.env.NODE_ENV === 'development'
+            ? `სისტემური შეცდომა: ${error.message}`
+            : "სისტემური შეცდომა";
+
         return NextResponse.json(
-            { status: "error", message: "სისტემური შეცდომა" },
+            { status: "error", message: errorMessage },
             { status: 500 }
         );
     }

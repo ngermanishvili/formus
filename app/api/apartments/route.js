@@ -7,7 +7,7 @@ export async function POST(request) {
         const data = await request.json();
         console.log("Received data:", data);
 
-        // Insert apartment type
+        // ჩავსვათ apartment type და დავაბრუნოთ მისი ID
         const typeResult = await db.query(
             `INSERT INTO apartment_types (
                 total_area,
@@ -19,7 +19,8 @@ export async function POST(request) {
                 living_room_area,
                 balcony_area,
                 balcony2_area
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+            RETURNING type_id`,
             [
                 parseFloat(data.total_area) || 0,
                 parseFloat(data.studio_area) || 0,
@@ -35,17 +36,14 @@ export async function POST(request) {
 
         console.log("Type creation result:", typeResult);
 
-        // Get the last inserted ID
-        const [lastTypeIdResult] = await db.query('SELECT LAST_INSERT_ID() as id');
-        const typeId = lastTypeIdResult.id;
-
+        const typeId = typeResult[0]?.type_id;
         console.log("Created type with ID:", typeId);
 
         if (!typeId) {
             throw new Error("Failed to create apartment type");
         }
 
-        // Insert apartment
+        // ჩავსვათ apartment და დავაბრუნოთ მისი ID
         const apartmentResult = await db.query(
             `INSERT INTO apartments (
                 block_id,
@@ -53,10 +51,11 @@ export async function POST(request) {
                 floor,
                 type_id,
                 status
-            ) VALUES (?, ?, ?, ?, ?)`,
+            ) VALUES ($1, $2, $3, $4, $5)
+            RETURNING apartment_id`,
             [
                 data.block_id,
-                parseInt(data.apartment_number),
+                data.apartment_number.toString(), // PostgreSQL-ში apartment_number არის varchar
                 parseInt(data.floor),
                 typeId,
                 'available'
@@ -65,42 +64,62 @@ export async function POST(request) {
 
         console.log("Apartment creation result:", apartmentResult);
 
-        // Get the last inserted ID
-        const [lastApartmentIdResult] = await db.query('SELECT LAST_INSERT_ID() as id');
-        const apartmentId = lastApartmentIdResult.id;
-
+        const apartmentId = apartmentResult[0]?.apartment_id;
         console.log("Created apartment with ID:", apartmentId);
 
         if (!apartmentId) {
-            // If apartment creation failed, delete the type we just created
-            await db.query('DELETE FROM apartment_types WHERE type_id = ?', [typeId]);
+            // თუ apartment-ის შექმნა ვერ მოხერხდა, წავშალოთ ახლახანს შექმნილი type
+            await db.query('DELETE FROM apartment_types WHERE type_id = $1', [typeId]);
             throw new Error("Failed to create apartment");
         }
 
-        // Return success response
+        // წამოვიღოთ სრული ინფორმაცია ახალ ბინაზე
+        const newApartment = await db.query(`
+            SELECT 
+                a.*,
+                t.total_area,
+                t.studio_area,
+                t.bedroom_area,
+                t.bedroom2_area,
+                t.bathroom_area,
+                t.bathroom2_area,
+                t.living_room_area,
+                t.balcony_area,
+                t.balcony2_area
+            FROM apartments a
+            JOIN apartment_types t ON a.type_id = t.type_id
+            WHERE a.apartment_id = $1
+        `, [apartmentId]);
+
+        // დავაბრუნოთ წარმატებული პასუხი
         return NextResponse.json({
             status: "success",
             message: "ბინა წარმატებით დაემატა",
             data: {
                 apartment_id: apartmentId,
-                type_id: typeId
+                type_id: typeId,
+                details: newApartment[0]
             }
         });
+
     } catch (error) {
         console.error("Error creating apartment:", {
             message: error.message,
-            stack: error.stack,
-            name: error.name
+            code: error.code,
+            detail: error.detail,
+            hint: error.hint
         });
 
         return NextResponse.json(
             {
                 status: "error",
-                message: error.message,
-                details: {
-                    name: error.name,
-                    stack: error.stack
-                }
+                message: "შეცდომა ბინის დამატებისას",
+                details: process.env.NODE_ENV === 'development' ? {
+                    message: error.message,
+                    code: error.code,
+                    detail: error.detail,
+                    hint: error.hint
+                } : undefined
             },
             { status: 500 }
         );

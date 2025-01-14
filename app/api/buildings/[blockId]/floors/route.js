@@ -1,10 +1,11 @@
-// app/api/buildings/[blockId]/floors/route.js
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
+    console.log('Fetching floors for block:', params.blockId);
+    
     try {
-        const floors = await db.query(`
+        const result = await db.query(`
             SELECT 
                 f.floor_id,
                 f.block_id,
@@ -16,12 +17,14 @@ export async function GET(request, { params }) {
                 f.area,
                 f.rooms
             FROM floors f
-            WHERE f.block_id = ?
-            ORDER BY f.floor_number DESC
+            WHERE f.block_id = $1
+            ORDER BY f.floor_number::integer DESC
         `, [params.blockId]);
 
+        console.log(`Found ${result.rows.length} floors`);
+
         // გარდავქმნათ მონაცემები შესაბამის ფორმატში
-        const formattedFloors = floors.map(floor => ({
+        const formattedFloors = result.rows.map(floor => ({
             id: floor.floor_id,
             title: floor.title,
             points: floor.polygon_coords,
@@ -37,20 +40,37 @@ export async function GET(request, { params }) {
             data: formattedFloors
         });
     } catch (error) {
+        console.error('Error fetching floors:', {
+            error: error.message,
+            code: error.code,
+            detail: error.detail,
+            hint: error.hint
+        });
+
+        const errorMessage = process.env.NODE_ENV === 'development'
+            ? {
+                message: error.message,
+                detail: error.detail,
+                hint: error.hint
+              }
+            : 'შეცდომა სართულების მოძიებისას';
+
         return NextResponse.json(
             {
                 status: "error",
-                message: error.message
+                message: errorMessage
             },
             { status: 500 }
         );
     }
 }
 
-// POST მეთოდი ახალი სართულის დასამატებლად
 export async function POST(request, { params }) {
+    console.log('Creating new floor for block:', params.blockId);
+    
     try {
         const data = await request.json();
+        console.log('Received floor data:', { ...data, polygon_coords: '[HIDDEN]' });
 
         const result = await db.query(`
             INSERT INTO floors (
@@ -62,7 +82,9 @@ export async function POST(request, { params }) {
                 price,
                 area,
                 rooms
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ) 
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            RETURNING floor_id
         `, [
             params.blockId,
             data.floor_number,
@@ -74,18 +96,36 @@ export async function POST(request, { params }) {
             data.rooms
         ]);
 
+        const newFloorId = result.rows[0].floor_id;
+        console.log('Created new floor with ID:', newFloorId);
+
         return NextResponse.json({
             status: "success",
             message: "სართული წარმატებით დაემატა",
             data: {
-                floor_id: result.insertId
+                floor_id: newFloorId
             }
         });
     } catch (error) {
+        console.error('Error creating floor:', {
+            error: error.message,
+            code: error.code,
+            detail: error.detail,
+            hint: error.hint
+        });
+
+        const errorMessage = process.env.NODE_ENV === 'development'
+            ? {
+                message: error.message,
+                detail: error.detail,
+                hint: error.hint
+              }
+            : 'შეცდომა სართულის დამატებისას';
+
         return NextResponse.json(
             {
                 status: "error",
-                message: error.message
+                message: errorMessage
             },
             { status: 500 }
         );

@@ -4,6 +4,7 @@ import React, { useState, memo, useEffect } from "react";
 import Header1 from "@/components/headers/Header1";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import LoadingOverlay from "@/components/loader/loader";
 
 // API ფუნქციები
 const api = {
@@ -22,22 +23,12 @@ const api = {
   },
 };
 
-const LoadingOverlay = () => (
-  <div className="absolute inset-0 bg-white/80 flex items-center justify-center">
-    <div className="space-y-4 w-[300px]">
-      <Skeleton className="h-4 w-full" />
-      <Skeleton className="h-4 w-2/3" />
-      <Skeleton className="h-4 w-1/2" />
-    </div>
-  </div>
-);
-
 const Polygon = memo(({ data, isHovered, onHover, onClick }) => (
   <g>
     <polygon
       points={data.points}
       title={data.title}
-      className="fill-transparent stroke-transparent hover:fill-red-500/40 hover:stroke-red-500 stroke-2 transition-all duration-200 cursor-pointer"
+      className="fill-transparent stroke-transparent hover:fill-blue-500/30 hover:stroke-blue-500 stroke-2 transition-all duration-200 cursor-pointer"
       onClick={() => onClick(data)}
       onMouseEnter={() => onHover(data)}
       onMouseLeave={() => onHover(null)}
@@ -45,7 +36,7 @@ const Polygon = memo(({ data, isHovered, onHover, onClick }) => (
     {isHovered && (
       <polygon
         points={data.points}
-        className="stroke-red-400 stroke-1 fill-none animate-pulse"
+        className="stroke-  -500 stroke-2 fill-none animate-pulse"
       />
     )}
   </g>
@@ -62,7 +53,7 @@ const InfoCard = memo(({ data }) => (
                transition-all duration-200"
   >
     <div className="text-xl font-bold mb-2">{data.title}</div>
-    <div className="text-red-400 mb-1">{data.status}</div>
+    <div className="text-blue-400 mb-1">{data.status}</div>
     <div className="text-gray-300">{data.area}</div>
   </div>
 ));
@@ -113,30 +104,35 @@ const OrtachalaPolygon = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header1 />
-      <div className="flex-grow relative w-full">
-        <img
-          src="/assets/ortachala-mtavari.png"
-          alt="Ortachala"
-          className="w-full h-full object-contain"
-        />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative w-full h-full">
-            <svg
-              className="w-full h-full"
-              viewBox="0 0 4496 2596"
-              preserveAspectRatio="xMidYMid meet"
+      <div className="relative w-full h-screen">
+        <div className="relative w-full h-full">
+          <img
+            src="https://res.cloudinary.com/ds9dsumwl/image/upload/v1736874418/ortachala-mtavari-mb_sq959w.png"
+            alt="Ortachala"
+            className="w-full h-full object-contain"
+          />
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div
+              className="relative w-full h-full"
+              style={{ aspectRatio: "1.73/1" }}
             >
-              {polygons.map((polygon) => (
-                <Polygon
-                  key={polygon.floor_id}
-                  data={polygon}
-                  isHovered={hoveredPolygon?.floor_id === polygon.floor_id}
-                  onHover={setHoveredPolygon}
-                  onClick={handlePolygonClick}
-                />
-              ))}
-            </svg>
+              <svg
+                className="w-full h-full"
+                viewBox="0 0 4496 2596"
+                preserveAspectRatio="xMidYMid meet"
+                style={{ pointerEvents: "auto" }}
+              >
+                {polygons.map((polygon) => (
+                  <Polygon
+                    key={polygon.floor_id}
+                    data={polygon}
+                    isHovered={hoveredPolygon?.floor_id === polygon.floor_id}
+                    onHover={setHoveredPolygon}
+                    onClick={handlePolygonClick}
+                  />
+                ))}
+              </svg>
+            </div>
           </div>
         </div>
         {hoveredPolygon && <InfoCard data={hoveredPolygon} />}

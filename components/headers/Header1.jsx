@@ -24,7 +24,7 @@ export default function Header1() {
   }, []);
 
   return (
-    <header className={`header sticky-bar ${scrolled ? "stick" : ""}`}>
+    <header className={`header`}>
       <div className="container">
         <div className="main-header">
           <div className="header-left">

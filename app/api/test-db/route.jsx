@@ -4,8 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    // მარტივი ტესტ კვერი
-    const result = await db.query("SELECT 1 + 1 as test");
+    const result = await db.query("SELECT * FROM building_blocks LIMIT 1");
 
     return NextResponse.json({
       status: "success",
@@ -16,7 +15,6 @@ export async function GET() {
     console.error("Connection error details:", {
       code: error.code,
       errno: error.errno,
-      sqlState: error.sqlState,
       sqlMessage: error.sqlMessage,
     });
 
@@ -25,11 +23,6 @@ export async function GET() {
         status: "error",
         message: "Database connection failed",
         error: error.message,
-        details: {
-          code: error.code,
-          errno: error.errno,
-          sqlState: error.sqlState,
-        },
       },
       { status: 500 }
     );

@@ -7,7 +7,9 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 const PUBLIC_APIS = [
     '/api/buildings',
     '/api/polygons',
-    'api/buildings'
+    '/api/buildings',
+    '/api/test-db',
+
 ];
 
 export function middleware(request) {

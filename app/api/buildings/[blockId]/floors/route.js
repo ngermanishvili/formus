@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(request, { params }) {
     console.log('Fetching floors for block:', params.blockId);
-    
+
     try {
         const result = await db.query(`
             SELECT 
@@ -21,10 +21,21 @@ export async function GET(request, { params }) {
             ORDER BY f.floor_number::integer DESC
         `, [params.blockId]);
 
-        console.log(`Found ${result.rows.length} floors`);
+        // Full result logging
+        console.log('Database result:', {
+            hasResult: !!result,
+            resultType: typeof result,
+            isArray: Array.isArray(result),
+        });
+
+        // Safely get the data array
+        const floors = Array.isArray(result) ? result :
+            Array.isArray(result?.rows) ? result.rows : [];
+
+        console.log(`Found ${floors.length} floors`);
 
         // გარდავქმნათ მონაცემები შესაბამის ფორმატში
-        const formattedFloors = result.rows.map(floor => ({
+        const formattedFloors = floors.map(floor => ({
             id: floor.floor_id,
             title: floor.title,
             points: floor.polygon_coords,
@@ -37,22 +48,28 @@ export async function GET(request, { params }) {
 
         return NextResponse.json({
             status: "success",
-            data: formattedFloors
+            data: formattedFloors,
+            meta: {
+                total: formattedFloors.length,
+                block: params.blockId
+            }
         });
     } catch (error) {
         console.error('Error fetching floors:', {
             error: error.message,
             code: error.code,
             detail: error.detail,
-            hint: error.hint
+            hint: error.hint,
+            stack: error.stack
         });
 
         const errorMessage = process.env.NODE_ENV === 'development'
             ? {
                 message: error.message,
                 detail: error.detail,
-                hint: error.hint
-              }
+                hint: error.hint,
+                stack: error.stack
+            }
             : 'შეცდომა სართულების მოძიებისას';
 
         return NextResponse.json(
@@ -67,7 +84,7 @@ export async function GET(request, { params }) {
 
 export async function POST(request, { params }) {
     console.log('Creating new floor for block:', params.blockId);
-    
+
     try {
         const data = await request.json();
         console.log('Received floor data:', { ...data, polygon_coords: '[HIDDEN]' });
@@ -96,7 +113,12 @@ export async function POST(request, { params }) {
             data.rooms
         ]);
 
-        const newFloorId = result.rows[0].floor_id;
+        const newFloorId = Array.isArray(result?.rows) ? result.rows[0]?.floor_id : null;
+
+        if (!newFloorId) {
+            throw new Error('Failed to get new floor ID');
+        }
+
         console.log('Created new floor with ID:', newFloorId);
 
         return NextResponse.json({
@@ -111,15 +133,17 @@ export async function POST(request, { params }) {
             error: error.message,
             code: error.code,
             detail: error.detail,
-            hint: error.hint
+            hint: error.hint,
+            stack: error.stack
         });
 
         const errorMessage = process.env.NODE_ENV === 'development'
             ? {
                 message: error.message,
                 detail: error.detail,
-                hint: error.hint
-              }
+                hint: error.hint,
+                stack: error.stack
+            }
             : 'შეცდომა სართულის დამატებისას';
 
         return NextResponse.json(

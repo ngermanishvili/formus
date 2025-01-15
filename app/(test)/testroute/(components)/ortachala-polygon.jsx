@@ -1,28 +1,62 @@
 "use client";
-
 import React, { useState, memo, useEffect } from "react";
 import Header1 from "@/components/headers/Header1";
 import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
 import LoadingOverlay from "@/components/loader/loader";
+import { useRouter } from "next/navigation";
 
-// API ფუნქციები
+const IMAGES = {
+  first:
+    "https://res.cloudinary.com/ds9dsumwl/image/upload/v1736945106/ortachala_new-compressed_l3mi8b.png",
+};
+
+const VIEW_BOX = {
+  first: "0 0 3906 2200",
+};
+
 const api = {
-  getFloors: async (blockId) => {
+  getFloors: async (blockIds) => {
     try {
-      const res = await fetch(`/api/buildings/${blockId}/floors`);
-      const data = await res.json();
-      if (data.status === "success") {
-        return data.data;
-      }
-      throw new Error(data.message);
+      const promises = blockIds.map((blockId) =>
+        fetch(`/api/buildings/${blockId}/floors`)
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.status === "success") {
+              // დავამატოთ block_id თითოეულ სართულს
+              return data.data.map((floor) => ({
+                ...floor,
+                block_id: blockId,
+              }));
+            }
+            throw new Error(data.message);
+          })
+      );
+      const results = await Promise.all(promises);
+      return results.flat();
     } catch (error) {
       console.error("Error fetching floors:", error);
       throw error;
     }
   },
-};
 
+  getApartments: async (blockId) => {
+    try {
+      const response = await fetch(`/api/buildings/${blockId}/apartments`);
+      const data = await response.json();
+
+      if (data.status === "success") {
+        return data.data.map((apartment) => ({
+          ...apartment,
+          block_id: blockId,
+        }));
+      }
+      throw new Error(data.message);
+    } catch (error) {
+      console.error("Error fetching apartments:", error);
+      throw error;
+    }
+  },
+};
 const Polygon = memo(({ data, isHovered, onHover, onClick }) => (
   <g>
     <polygon
@@ -30,49 +64,121 @@ const Polygon = memo(({ data, isHovered, onHover, onClick }) => (
       title={data.title}
       className="fill-transparent stroke-transparent hover:fill-blue-500/30 hover:stroke-blue-500 stroke-2 transition-all duration-200 cursor-pointer"
       onClick={() => onClick(data)}
-      onMouseEnter={() => onHover(data)}
+      onMouseEnter={(e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        onHover(data, {
+          x: e.clientX,
+          y: e.clientY,
+        });
+      }}
+      onMouseMove={(e) => {
+        onHover(data, {
+          x: e.clientX,
+          y: e.clientY,
+        });
+      }}
       onMouseLeave={() => onHover(null)}
     />
     {isHovered && (
       <polygon
         points={data.points}
-        className="stroke-  -500 stroke-2 fill-none animate-pulse"
+        className="stroke-blue-500 stroke-2 fill-none animate-pulse"
       />
     )}
   </g>
 ));
 
-Polygon.displayName = "Polygon";
+const InfoCard = memo(({ data, apartments, position }) => {
+  if (!position) return null;
 
-const InfoCard = memo(({ data }) => (
-  <div
-    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-               bg-black/80 backdrop-blur-sm rounded-lg p-4 
-               border border-blue-500/50 shadow-xl
-               animate-fade-in text-white
-               transition-all duration-200"
-  >
-    <div className="text-xl font-bold mb-2">{data.title}</div>
-    <div className="text-blue-400 mb-1">{data.status}</div>
-    <div className="text-gray-300">{data.area}</div>
-  </div>
-));
+  const floorApartments =
+    apartments?.filter((apt) => {
+      const isMatchingFloor = apt.floor.toString() === data.floor;
+      const isMatchingBlock = apt.block_id === data.block_id;
 
-InfoCard.displayName = "InfoCard";
+      return isMatchingFloor && isMatchingBlock;
+    }) || [];
+
+  // სტატუსების დათვლა
+  const statusCounts = {
+    available: 0,
+    sold: 0,
+    reserved: 0,
+  };
+
+  floorApartments.forEach((apt) => {
+    statusCounts[apt.status] = (statusCounts[apt.status] || 0) + 1;
+  });
+
+  const averageArea = floorApartments.length
+    ? (
+        floorApartments.reduce((sum, apt) => sum + Number(apt.total_area), 0) /
+        floorApartments.length
+      ).toFixed(1)
+    : 0;
+
+  return (
+    <div
+      className="fixed bg-black/80 backdrop-blur-sm rounded-lg p-4 
+                border border-blue-500/50 shadow-xl z-50
+                text-white min-w-[200px]"
+      style={{
+        left: `${position.x}px`,
+        top: `${position.y - 10}px`,
+        transform: "translateY(-100%)",
+      }}
+    >
+      <div className="text-lg font-bold mb-2">
+        {data.block_id} ბლოკი, სართული {data.floor}
+      </div>
+
+      <div className="space-y-2">
+        <div className="text-gray-300">სულ ბინა: {floorApartments.length}</div>
+
+        <div className="text-sm">
+          <div className="flex items-center gap-2">
+            <span className="text-green-400">ხელმისაწვდომი:</span>
+            <span className="text-gray-300">{statusCounts.available}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-red-400">გაყიდული:</span>
+            <span className="text-gray-300">{statusCounts.sold}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-yellow-400">დაჯავშნილი:</span>
+            <span className="text-gray-300">{statusCounts.reserved}</span>
+          </div>
+        </div>
+
+        <div className="text-gray-400 text-sm">
+          საშუალო ფართი: {averageArea} მ²
+        </div>
+      </div>
+    </div>
+  );
+});
 
 const OrtachalaPolygon = () => {
   const [hoveredPolygon, setHoveredPolygon] = useState(null);
+  const [hoverPosition, setHoverPosition] = useState(null);
   const [polygons, setPolygons] = useState([]);
+  const [apartments, setApartments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const router = useRouter();
   useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
-        const blockId = "D";
-        const floorsData = await api.getFloors(blockId);
+        const blockIds = ["A", "B", "D"];
+
+        const [floorsData, ...apartmentsData] = await Promise.all([
+          api.getFloors(blockIds),
+          ...blockIds.map((blockId) => api.getApartments(blockId)),
+        ]);
+
         setPolygons(floorsData);
+        setApartments(apartmentsData.flat());
       } catch (error) {
         setError(error.message);
       } finally {
@@ -83,8 +189,15 @@ const OrtachalaPolygon = () => {
     fetchData();
   }, []);
 
+  // In OrtachalaPolygon.jsx
   const handlePolygonClick = (data) => {
-    console.log("Selected floor:", data);
+    console.log("Clicked floor data:", data); // Debug log
+    if (!data.id) {
+      // Using id instead of floor_id based on your formattedFloors mapping
+      console.error("No floor ID found in:", data);
+      return;
+    }
+    router.push(`/floor/${data.id}`);
   };
 
   if (error) {
@@ -107,53 +220,55 @@ const OrtachalaPolygon = () => {
       <div className="relative w-full h-screen">
         <div className="relative w-full h-full">
           <img
-            src="https://res.cloudinary.com/ds9dsumwl/image/upload/v1736874418/ortachala-mtavari-mb_sq959w.png"
+            src={IMAGES.first}
             alt="Ortachala"
             className="w-full h-full object-contain"
           />
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div
-              className="relative w-full h-full"
-              style={{ aspectRatio: "1.73/1" }}
-            >
+            <div className="relative w-full h-full">
               <svg
                 className="w-full h-full"
-                viewBox="0 0 4496 2596"
+                viewBox={VIEW_BOX.first}
                 preserveAspectRatio="xMidYMid meet"
                 style={{ pointerEvents: "auto" }}
               >
-                {polygons.map((polygon) => (
-                  <Polygon
-                    key={polygon.floor_id}
-                    data={polygon}
-                    isHovered={hoveredPolygon?.floor_id === polygon.floor_id}
-                    onHover={setHoveredPolygon}
-                    onClick={handlePolygonClick}
-                  />
-                ))}
+                {polygons.map((polygon) => {
+                  // ვიყენებთ formattedFloors-ის ფორმატირებას API-დან
+                  const polygonData = {
+                    ...polygon,
+                    id: polygon.id,
+                    floor: polygon.floor,
+                    block_id: polygon.block_id,
+                    points: polygon.points,
+                    title: polygon.title,
+                  };
+
+                  return (
+                    <Polygon
+                      key={polygonData.id}
+                      data={polygonData}
+                      isHovered={hoveredPolygon?.id === polygonData.id}
+                      onHover={(data, position) => {
+                        setHoveredPolygon(data);
+                        setHoverPosition(position);
+                      }}
+                      onClick={handlePolygonClick}
+                    />
+                  );
+                })}
               </svg>
             </div>
           </div>
         </div>
-        {hoveredPolygon && <InfoCard data={hoveredPolygon} />}
+        {hoveredPolygon && (
+          <InfoCard
+            data={hoveredPolygon}
+            apartments={apartments}
+            position={hoverPosition}
+          />
+        )}
         {isLoading && <LoadingOverlay />}
       </div>
-
-      <style jsx>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translate(-50%, -60%);
-          }
-          to {
-            opacity: 1;
-            transform: translate(-50%, -50%);
-          }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.2s ease-out forwards;
-        }
-      `}</style>
     </div>
   );
 };

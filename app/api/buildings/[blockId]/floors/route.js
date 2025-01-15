@@ -1,3 +1,4 @@
+//app/api/buildings/%5BblockId%5D/floors/route.js
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
@@ -38,6 +39,7 @@ export async function GET(request, { params }) {
         const formattedFloors = floors.map(floor => ({
             id: floor.floor_id,
             title: floor.title,
+            block_id: params.blockId, // დავრწმუნდეთ რომ block_id სწორად მიეწოდება
             points: floor.polygon_coords,
             status: floor.status,
             price: floor.price || 'თავისუფალი',

@@ -1,3 +1,4 @@
+//app/api/buildings/%5BblockId%5D/bulk/route.js
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 

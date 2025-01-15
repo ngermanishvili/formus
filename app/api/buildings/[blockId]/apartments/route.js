@@ -28,17 +28,7 @@ export async function GET(request, { params }) {
                 apartment_number
         `, [params.blockId]);
 
-        // დეტალური ლოგირება მთლიანი result ობიექტის
-        console.log('Full result object:', JSON.stringify(result));
-
-        // შევამოწმოთ result ობიექტი და მისი თვისებები
         const apartments = result?.length ? result : [];
-
-        console.log(`Found ${apartments.length} apartments for block ${params.blockId}`);
-
-        if (apartments.length > 0) {
-            console.log('Sample apartment data:', JSON.stringify(apartments[0]));
-        }
 
         return NextResponse.json({
             status: "success",
@@ -49,29 +39,13 @@ export async function GET(request, { params }) {
             }
         });
     } catch (error) {
-        console.error('Error fetching apartments:', {
-            error: error.message,
-            code: error.code,
-            detail: error.detail,
-            hint: error.hint,
-            position: error.position,
-            stack: error.stack
-        });
-
-        const errorMessage = process.env.NODE_ENV === 'development'
-            ? {
-                message: error.message,
-                detail: error.detail,
-                hint: error.hint,
-                position: error.position,
-                stack: error.stack
-            }
-            : 'შეცდომა ბინების მოძიებისას';
+        console.error('Error fetching apartments:', error);
 
         return NextResponse.json(
             {
                 status: "error",
-                message: errorMessage
+                message: "შეცდომა ბინების მოძიებისას",
+                detail: process.env.NODE_ENV === 'development' ? error.message : undefined
             },
             { status: 500 }
         );

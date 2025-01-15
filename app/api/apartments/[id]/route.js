@@ -207,3 +207,47 @@ export async function GET(request, { params }) {
     );
   }
 }
+
+import { db } from "@/lib/db";
+import { NextResponse } from "next/server";
+
+export async function DELETE(request, { params }) {
+  try {
+    const { id } = params;
+
+    // ჯერ წავშალოთ apartment_types
+    await db.query(`
+      DELETE FROM apartment_types 
+      WHERE type_id IN (
+        SELECT type_id 
+        FROM apartments 
+        WHERE apartment_id = $1
+      )
+    `, [id]);
+
+    // შემდეგ წავშალოთ apartment
+    const result = await db.query(
+      'DELETE FROM apartments WHERE apartment_id = $1',
+      [id]
+    );
+
+    if (result.rowCount === 0) {
+      return NextResponse.json({
+        status: "error",
+        message: "ბინა ვერ მოიძებნა"
+      }, { status: 404 });
+    }
+
+    return NextResponse.json({
+      status: "success",
+      message: "ბინა წარმატებით წაიშალა"
+    });
+
+  } catch (error) {
+    console.error('Error deleting apartment:', error);
+    return NextResponse.json({
+      status: "error",
+      message: "შეცდომა ბინის წაშლისას"
+    }, { status: 500 });
+  }
+}

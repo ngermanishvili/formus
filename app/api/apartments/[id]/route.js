@@ -9,9 +9,6 @@ export async function PUT(request, { params }) {
 
     console.log('Updating apartment:', { id, ...data });
 
-    // PostgreSQL არ აქვს JOIN UPDATE სინტაქსი, ამიტომ ორ ნაბიჯად გავაკეთოთ
-
-    // 1. ჯერ მოვძებნოთ type_id
     const typeResult = await db.query(
       `SELECT type_id FROM apartments WHERE apartment_id = $1`,
       [id]
@@ -208,8 +205,6 @@ export async function GET(request, { params }) {
   }
 }
 
-import { db } from "@/lib/db";
-import { NextResponse } from "next/server";
 
 export async function DELETE(request, { params }) {
   try {

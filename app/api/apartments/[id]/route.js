@@ -99,59 +99,7 @@ export async function PUT(request, { params }) {
   }
 }
 
-// წაშლის ფუნქცია
-export async function DELETE(request, { params }) {
-  try {
-    const { id } = params;
 
-    // ჯერ წავშალოთ apartment_types
-    await db.query(`
-            DELETE FROM apartment_types
-            WHERE type_id IN (
-                SELECT type_id 
-                FROM apartments 
-                WHERE apartment_id = $1
-            )
-        `, [id]);
-
-    // შემდეგ წავშალოთ apartment
-    const result = await db.query(
-      'DELETE FROM apartments WHERE apartment_id = $1',
-      [id]
-    );
-
-    if (result.rowCount === 0) {
-      return NextResponse.json(
-        {
-          status: "error",
-          message: "ბინა ვერ მოიძებნა"
-        },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({
-      status: "success",
-      message: "ბინა წარმატებით წაიშალა"
-    });
-
-  } catch (error) {
-    console.error('Error deleting apartment:', {
-      message: error.message,
-      code: error.code,
-      detail: error.detail
-    });
-
-    return NextResponse.json(
-      {
-        status: "error",
-        message: "შეცდომა ბინის წაშლისას",
-        detail: process.env.NODE_ENV === 'development' ? error.message : undefined
-      },
-      { status: 500 }
-    );
-  }
-}
 
 // მონაცემების წამოღების ფუნქცია
 export async function GET(request, { params }) {

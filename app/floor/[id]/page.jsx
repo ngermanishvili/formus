@@ -18,7 +18,7 @@ const Polygon = memo(({ data, isHovered, onHover }) => (
           }
           ${
             data.status === "sold"
-              ? "stroke-red-200 hover:fill-red-400/10 hover:stroke-red-400"
+              ? "stroke-red-400 hover:fill-red-400/10 hover:stroke-red-400"
               : ""
           }
           ${
@@ -75,7 +75,7 @@ const InfoPanel = memo(({ data }) => {
   };
 
   return (
-    <div className="w-full max-w-sm bg-white rounded-xl shadow-lg  border-black overflow-hidden transition-all duration-300 ease-in-out">
+    <div className="w-full max-w-sm bg-gray-200 rounded-xl shadow-lg  border-black overflow-hidden transition-all duration-300 ease-in-out">
       <div className="p-6 space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-2xl font-bold text-gray-900">
@@ -210,12 +210,12 @@ const FloorDetails = () => {
   const { floor, apartments } = floorData;
 
   return (
-    <div className="flex flex-col min-h-screen bg-white">
+    <div className="flex flex-col min-h-screen bg-gray-200">
       <Header1 />
       <div className="flex-grow container mx-auto px-4 py-8">
         <div className="flex gap-8">
           {/* Floor Plan Visualization */}
-          <div className="flex-grow bg-black rounded-xl shadow-sm  border-black p-8">
+          <div className="flex-grow bg-gray-800 rounded-xl shadow-sm  border-black p-8">
             <div className="relative w-full max-w-[1122px] aspect-[1122/672] mx-auto">
               <img
                 src={floor.floor_plan_url}

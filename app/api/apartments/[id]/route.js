@@ -99,8 +99,6 @@ export async function PUT(request, { params }) {
   }
 }
 
-
-
 // მონაცემების წამოღების ფუნქცია
 export async function GET(request, { params }) {
   try {

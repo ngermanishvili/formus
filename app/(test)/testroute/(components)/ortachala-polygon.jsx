@@ -193,11 +193,12 @@ const OrtachalaPolygon = () => {
   const handlePolygonClick = (data) => {
     console.log("Clicked floor data:", data); // Debug log
     if (!data.id) {
-      // Using id instead of floor_id based on your formattedFloors mapping
       console.error("No floor ID found in:", data);
       return;
     }
-    router.push(`/floor/${data.id}`);
+    // ვქმნით slug-ს სადაც შევა ID და სართულის ნომერი
+    const slug = `${data.id}-floor-${data.floor}-block-${data.block_id}`;
+    router.push(`/floor/${slug}`);
   };
 
   if (error) {

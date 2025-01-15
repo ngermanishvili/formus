@@ -1,49 +1,54 @@
+//app/floor/%5Bid%5D/page.jsx
 "use client";
 import React, { useState, memo, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Header1 from "@/components/headers/Header1";
 import LoadingOverlay from "@/components/loader/loader";
-
-const Polygon = memo(({ data, isHovered, onHover }) => (
-  <g>
-    <polygon
-      points={data.polygon_coords}
-      className={`
-          fill-transparent stroke-gray-200
-          transition-all duration-300 cursor-pointer
-          ${
-            isHovered
-              ? "fill-green-500/50 stroke-blue-500"
-              : "hover:fill-green-400/30 hover:stroke-blue-400"
-          }
-          ${
-            data.status === "sold"
-              ? "stroke-red-400 hover:fill-red-400/10 hover:stroke-red-400"
-              : ""
-          }
-          ${
-            data.status === "reserved"
-              ? "stroke-yellow-200 hover:fill-yellow-400/10 hover:stroke-yellow-400"
-              : ""
-          }
-        `}
-      strokeWidth="1.5"
-      onMouseEnter={() => onHover(data)}
-      onMouseLeave={() => onHover(null)}
-    />
-    {isHovered && (
+import { useRouter } from "next/navigation"; // დავამატოთ ეს
+const Polygon = memo(({ data, isHovered, onHover, onClick }) => {
+  console.log("Polygon data:", data); // დებაგინგისთვის
+  return (
+    <g>
       <polygon
         points={data.polygon_coords}
         className={`
-            stroke-2 fill-none animate-pulse
-            ${data.status === "sold" ? "stroke-red-500" : ""}
-            ${data.status === "reserved" ? "stroke-yellow-500" : ""}
-            ${data.status === "available" ? "stroke-green-500" : ""}
-          `}
+              fill-transparent stroke-gray-200
+              transition-all duration-300 cursor-pointer
+              ${
+                isHovered
+                  ? "fill-green-500/50 stroke-blue-500"
+                  : "hover:fill-green-400/30 hover:stroke-blue-400"
+              }
+              ${
+                data.status === "sold"
+                  ? "stroke-red-400 hover:fill-red-400/10 hover:stroke-red-400"
+                  : ""
+              }
+              ${
+                data.status === "reserved"
+                  ? "stroke-yellow-200 hover:fill-yellow-400/10 hover:stroke-yellow-400"
+                  : ""
+              }
+            `}
+        strokeWidth="1.5"
+        onMouseEnter={() => onHover(data)}
+        onMouseLeave={() => onHover(null)}
+        onClick={() => onClick(data)} // გასწორებული ვერსია
       />
-    )}
-  </g>
-));
+      {isHovered && (
+        <polygon
+          points={data.polygon_coords}
+          className={`
+              stroke-2 fill-none animate-pulse
+              ${data.status === "sold" ? "stroke-red-500" : ""}
+              ${data.status === "reserved" ? "stroke-yellow-500" : ""}
+              ${data.status === "available" ? "stroke-green-500" : ""}
+            `}
+        />
+      )}
+    </g>
+  );
+});
 
 const InfoPanel = memo(({ data }) => {
   if (!data) return null;
@@ -171,6 +176,7 @@ const InfoPanel = memo(({ data }) => {
 });
 
 const FloorDetails = () => {
+  const router = useRouter();
   const params = useParams();
   const [floorData, setFloorData] = useState(null);
   const [hoveredApartment, setHoveredApartment] = useState(null);
@@ -184,11 +190,18 @@ const FloorDetails = () => {
         if (!params.id || params.id === "undefined") {
           throw new Error("სართულის ID არ არის მითითებული");
         }
-        const response = await fetch(`/api/buildings/floor/${params.id}`);
+
+        // ამოვიღოთ მხოლოდ ID ნაწილი URL-დან
+        const floorId = params.id.split("-")[0];
+        console.log("Fetching floor with ID:", floorId);
+
+        const response = await fetch(`/api/buildings/floor/${floorId}`);
         const result = await response.json();
+
         if (result.status !== "success") {
           throw new Error(result.message || "შეცდომა მონაცემების მიღებისას");
         }
+
         setFloorData(result.data);
       } catch (error) {
         console.error("Error fetching floor data:", error);
@@ -209,13 +222,23 @@ const FloorDetails = () => {
 
   const { floor, apartments } = floorData;
 
+  const handlePolygonClick = (data) => {
+    console.log("Clicked apartment data:", data);
+    if (!data.apartment_id) {
+      console.error("No apartment ID found in:", data);
+      return;
+    }
+    // Create a slug for the apartment URL
+    const slug = `${data.apartment_id}-apartment-${data.apartment_number}-floor-${data.floor}`;
+    router.push(`/apartment/${slug}`);
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-200">
       <Header1 />
       <div className="flex-grow container mx-auto px-4 py-8">
         <div className="flex gap-8">
-          {/* Floor Plan Visualization */}
-          <div className="flex-grow bg-gray-800 rounded-xl shadow-sm  border-black p-8">
+          <div className="flex-grow bg-gray-800 rounded-xl shadow-sm border-black p-8">
             <div className="relative w-full max-w-[1122px] aspect-[1122/672] mx-auto">
               <img
                 src={floor.floor_plan_url}
@@ -237,6 +260,7 @@ const FloorDetails = () => {
                         apartment.apartment_id
                       }
                       onHover={setHoveredApartment}
+                      onClick={handlePolygonClick}
                     />
                   ))}
                 </svg>
@@ -244,7 +268,6 @@ const FloorDetails = () => {
             </div>
           </div>
 
-          {/* Side Info Panel */}
           <div className="w-96 flex-shrink-0 transition-all duration-300">
             {hoveredApartment ? (
               <InfoPanel data={hoveredApartment} />

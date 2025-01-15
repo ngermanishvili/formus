@@ -57,36 +57,50 @@ const api = {
     }
   },
 };
-const Polygon = memo(({ data, isHovered, onHover, onClick }) => (
-  <g>
-    <polygon
-      points={data.points}
-      title={data.title}
-      className="fill-transparent stroke-transparent hover:fill-blue-500/30 hover:stroke-blue-500 stroke-2 transition-all duration-200 cursor-pointer"
-      onClick={() => onClick(data)}
-      onMouseEnter={(e) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        onHover(data, {
-          x: e.clientX,
-          y: e.clientY,
-        });
-      }}
-      onMouseMove={(e) => {
-        onHover(data, {
-          x: e.clientX,
-          y: e.clientY,
-        });
-      }}
-      onMouseLeave={() => onHover(null)}
-    />
-    {isHovered && (
+
+const isSold = (status) => status === "გაყიდულია";
+
+const Polygon = memo(({ data, isHovered, onHover, onClick }) => {
+  const getHoverClass = () => {
+    if (isSold(data.status)) {
+      return "hover:fill-red-500/40 hover:stroke-red-500";
+    }
+    return "hover:fill-green-500/40 hover:stroke-green-500";
+  };
+
+  return (
+    <g>
       <polygon
         points={data.points}
-        className="stroke-blue-500 stroke-2 fill-none animate-pulse"
+        title={data.title}
+        className={`fill-transparent stroke-transparent ${getHoverClass()} stroke-2 transition-all duration-200 cursor-pointer`}
+        onClick={() => onClick(data)}
+        onMouseEnter={(e) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          onHover(data, {
+            x: e.clientX,
+            y: e.clientY,
+          });
+        }}
+        onMouseMove={(e) => {
+          onHover(data, {
+            x: e.clientX,
+            y: e.clientY,
+          });
+        }}
+        onMouseLeave={() => onHover(null)}
       />
-    )}
-  </g>
-));
+      {isHovered && (
+        <polygon
+          points={data.points}
+          className={`${
+            isSold(data.status) ? "stroke-red-500" : "stroke-green-500"
+          } stroke-2 fill-none animate-pulse`}
+        />
+      )}
+    </g>
+  );
+});
 
 const InfoCard = memo(({ data, apartments, position }) => {
   if (!position) return null;

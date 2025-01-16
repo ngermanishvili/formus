@@ -1,33 +1,76 @@
-"use client";
-import { languages } from "@/data/languages"; // Ensure this is set up correctly
+import { languages } from "@/data/languages";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useRouter, usePathname } from "@/src/i18n/routing";
 
 export default function Language() {
-  const [selectedLanguage, setSelectedLanguage] = useState(languages[0].code);
+  const router = useRouter();
+  const pathname = usePathname();
   const [ddOpen, setDdOpen] = useState(false);
 
-  // Handle language change
-  const handleLanguageChange = (code) => {
-    setSelectedLanguage(code);
-    // Here you would typically handle changing the language using i18next's i18n.changeLanguage method.
-    i18n.changeLanguage(code);
-    setDdOpen(false);
+  // Function to get base path without any language prefixes
+  const getBasePath = (path) => {
+    // Remove leading and trailing slashes
+    const trimmedPath = path.replace(/^\/+|\/+$/g, "");
+
+    // Split into segments
+    const segments = trimmedPath.split("/");
+
+    // Create array of language codes
+    const languageCodes = languages.map((lang) => lang.code);
+
+    // Filter out any segments that match language codes
+    const cleanSegments = segments.filter(
+      (segment) => !languageCodes.includes(segment)
+    );
+
+    // Reconstruct path
+    return cleanSegments.length > 0 ? `/${cleanSegments.join("/")}` : "/";
+  };
+
+  const handleLanguageChange = async (code) => {
+    try {
+      // Get base path without any language codes
+      const basePath = getBasePath(pathname);
+
+      // Construct new path
+      const newPath = code + (basePath === "/" ? "" : basePath);
+
+      // Use router.replace instead of push to avoid adding to history
+      await router.replace(`/${newPath}`);
+
+      setDdOpen(false);
+    } catch (error) {
+      console.error("Error changing language:", error);
+    }
   };
 
   useEffect(() => {
     const myDiv = document.getElementById("myDiv");
     const myDiv2 = document.getElementById("myDiv2");
 
-    document.addEventListener("click", function (event) {
-      const isClickInside = myDiv.contains(event.target);
-      const isClickInside2 = myDiv2.contains(event.target);
+    const handleClickOutside = (event) => {
+      const isClickInside = myDiv?.contains(event.target);
+      const isClickInside2 = myDiv2?.contains(event.target);
 
       if (!isClickInside && !isClickInside2) {
         setDdOpen(false);
       }
-    });
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
+
+  // Get current language from pathname
+  const getCurrentLanguage = () => {
+    const firstSegment = pathname.split("/")[1];
+    return languages.some((lang) => lang.code === firstSegment)
+      ? firstSegment
+      : "ka";
+  };
+
+  const currentLanguage = getCurrentLanguage();
 
   return (
     <>
@@ -37,7 +80,7 @@ export default function Language() {
         className="text-14-medium icon-list icon-account"
       >
         <span className="text-14-medium color-white arrow-down">
-          {selectedLanguage}
+          {currentLanguage.toUpperCase()}
         </span>
       </span>
       <div
@@ -46,8 +89,12 @@ export default function Language() {
       >
         <ul>
           {languages.map((elm, i) => (
-            <li key={i} onClick={() => handleLanguageChange(elm.code)}>
-              <a className="font-md" href="#">
+            <li
+              key={i}
+              onClick={() => handleLanguageChange(elm.code)}
+              className={currentLanguage === elm.code ? "active" : ""}
+            >
+              <a className="font-md">
                 <Image width={22} height={16} src={elm.image} alt={elm.name} />
                 {elm.name}
               </a>

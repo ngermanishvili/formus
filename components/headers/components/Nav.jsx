@@ -1,55 +1,51 @@
 "use client";
-import { menuItems } from "@/data/menu";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link, usePathname } from "@/src/i18n/routing";
+import { useTranslations } from "next-intl";
 
 export default function Nav() {
+  const t = useTranslations("Navigation");
   const pathname = usePathname();
+
+  const getPathWithoutLocale = (path) => {
+    const segments = path.split("/");
+    return segments.length > 2 ? segments.slice(2).join("/") : "";
+  };
+
+  const currentPath = getPathWithoutLocale(pathname);
+
   return (
     <>
-      {menuItems.map((elm, i) => (
-        <li key={i} className="has-children">
-          <a
-            className={`active ${
-              elm.subMenu.some(
-                (elm3) => pathname.split("/")[1] == elm3.link.split("/")[1]
-              )
-                ? "active-link"
-                : ""
-            } `}
-          >
-            {elm.title}
-          </a>
-          <ul className="sub-menu">
-            {elm.subMenu.map((elm2, i2) => (
-              <li key={i2}>
-                <Link
-                  className={
-                    pathname.split("/")[1] == elm2.link.split("/")[1]
-                      ? "active-link"
-                      : ""
-                  }
-                  href={elm2.link}
-                >
-                  {elm2.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </li>
-      ))}
       <li>
-        <Link href="/media">Media</Link>
+        <Link
+          href="media"
+          className={currentPath === "media" ? "active-link" : ""}
+        >
+          {t("media")}
+        </Link>
       </li>
       <li>
-        <Link href="/about-formus">About</Link>
+        <Link
+          href="about-formus"
+          className={currentPath === "about-formus" ? "active-link" : ""}
+        >
+          {t("about")}
+        </Link>
       </li>
       <li>
-        <Link href="/projects">Projects</Link>
+        <Link
+          href="projects"
+          className={currentPath === "projects" ? "active-link" : ""}
+        >
+          {t("projects")}
+        </Link>
       </li>
-
       <li>
-        <Link href="/contact">Contact</Link>
+        <Link
+          href="contact"
+          className={currentPath === "contact" ? "active-link" : ""}
+        >
+          {t("contact")}
+        </Link>
       </li>
     </>
   );

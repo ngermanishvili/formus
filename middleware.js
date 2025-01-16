@@ -1,31 +1,45 @@
 import { NextResponse } from 'next/server';
 import { jwtVerify } from 'jose';
+import createIntlMiddleware from 'next-intl/middleware';
+import { routing } from './src/i18n/routing';
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
-// საჯარო API endpoint-ების სია
 const PUBLIC_APIS = [
     '/api/buildings',
     '/api/polygons',
     '/api/buildings',
     '/api/test-db',
-
 ];
 
-export function middleware(request) {
+const intlMiddleware = createIntlMiddleware({
+    ...routing,
+    localePrefix: "never",
+    defaultLocale: 'ka'
+});
+
+export async function middleware(request) {
     const path = request.nextUrl.pathname;
     console.log('Checking path:', path);
 
-    // ვამოწმებთ არის თუ არა მოთხოვნილი path საჯარო
+    const hasLocalePrefix = routing.locales.some(locale =>
+        path.startsWith(`/${locale}/`) || path === `/${locale}`
+    );
+
+    if (!path.startsWith('/api') && !path.startsWith('/admin')) {
+        if (hasLocalePrefix) {
+            return NextResponse.next();
+        }
+        return intlMiddleware(request);
+    }
+
     const isPublicApi = PUBLIC_APIS.some(api => path.startsWith(api));
 
-    // თუ საჯარო API-ია, პირდაპირ ვაძლევთ წვდომას
     if (isPublicApi) {
         console.log('Public API access granted:', path);
         return NextResponse.next();
     }
 
-    // არ ვამოწმებთ auth endpoints
     if (path.startsWith('/api/auth')) {
         return NextResponse.next();
     }
@@ -35,7 +49,7 @@ export function middleware(request) {
     if (path === '/login') {
         if (token) {
             try {
-                const verified = jwtVerify(
+                await jwtVerify(
                     token.value,
                     new TextEncoder().encode(JWT_SECRET)
                 );
@@ -49,7 +63,6 @@ export function middleware(request) {
         return NextResponse.next();
     }
 
-    // ვამოწმებთ admin გვერდებს და დაცულ API-ებს
     if (path.startsWith('/admin') ||
         (path.startsWith('/api/') && !isPublicApi)) {
 
@@ -64,7 +77,7 @@ export function middleware(request) {
         }
 
         try {
-            const verified = jwtVerify(
+            await jwtVerify(
                 token.value,
                 new TextEncoder().encode(JWT_SECRET)
             );
@@ -87,8 +100,10 @@ export function middleware(request) {
 
 export const config = {
     matcher: [
+        '/',
+        '/((?!api|_next|_vercel|.*\\..*).*)',
         '/admin/:path*',
         '/api/:path*',
         '/login'
     ]
-}
+};

@@ -1,10 +1,18 @@
 "use client";
 import { Link, usePathname } from "@/src/i18n/routing";
 import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 
 export default function Nav() {
   const t = useTranslations("Navigation");
   const pathname = usePathname();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading delay
+    const timer = setTimeout(() => setLoading(false), 1000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const getPathWithoutLocale = (path) => {
     const segments = path.split("/");
@@ -12,6 +20,10 @@ export default function Nav() {
   };
 
   const currentPath = getPathWithoutLocale(pathname);
+
+  if (loading) {
+    return <div>Loading...</div>; // Placeholder while loading translations
+  }
 
   return (
     <>

@@ -94,8 +94,8 @@ export default function Language() {
               onClick={() => handleLanguageChange(elm.code)}
               className={currentLanguage === elm.code ? "active" : ""}
             >
-              <a className="font-md">
-                <Image width={22} height={16} src={elm.image} alt={elm.name} />
+              <a className="font-md cursor-pointer">
+                <Image width={18} height={14} src={elm.image} alt={elm.name} />
                 {elm.name}
               </a>
             </li>

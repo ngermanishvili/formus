@@ -8,8 +8,8 @@ export const languages = [
   {
     id: 2,
     code: "ka",
-    name: "KA",
-    image: "/assets/imgs/template/icons/fr.png",
+    name: "ქართული",
+    image: "/assets/imgs/template/icons/geo.png",
   },
 
 ];

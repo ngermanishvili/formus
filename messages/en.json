@@ -14,6 +14,13 @@
     "services": "Services",
     "blog": "Blog",
     "media": "Media",
-    "projects": "Projects"
+    "projects": "Projects",
+    "chooseApartment": "Choose Apartment"
+
+  },
+  "faq": {
+    "title": "Main Page Content",
+    "description": "Description of the main page content",
+    "button": "Click me"
   }
 }

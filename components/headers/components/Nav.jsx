@@ -22,7 +22,7 @@ export default function Nav() {
   const currentPath = getPathWithoutLocale(pathname);
 
   if (loading) {
-    return <div>Loading...</div>; // Placeholder while loading translations
+    return <div>Loading...</div>;
   }
 
   return (
@@ -57,6 +57,14 @@ export default function Nav() {
           className={currentPath === "contact" ? "active-link" : ""}
         >
           {t("contact")}
+        </Link>
+      </li>
+      <li>
+        <Link
+          href="choose-apartment"
+          className={currentPath === "test" ? "active-link" : ""}
+        >
+          {t("chooseApartment")}
         </Link>
       </li>
     </>

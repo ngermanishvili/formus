@@ -1,8 +1,11 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export default function Faq() {
+  const t = useTranslations("faq");
+
   return (
     <section className="relative bg-white">
       <div className="flex flex-col lg:flex-row items-stretch">
@@ -10,7 +13,7 @@ export default function Faq() {
         <div className="w-full lg:w-1/2 relative h-[600px] group overflow-hidden">
           <Image
             src="/assets/imgs/page/homepage5/banner.png"
-            alt="Luxride"
+            alt={t("title")}
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-110"
             priority
@@ -21,17 +24,14 @@ export default function Faq() {
         {/* Right Content */}
         <div className="w-full lg:w-1/2 px-8 lg:px-16 py-16 flex flex-col justify-center">
           <h2 className="text-4xl font-bold text-black mb-8 leading-tight">
-            How It Works
+            {t("title")}
           </h2>
           <p className="text-gray-600 text-lg leading-relaxed mb-10">
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Repellat
-            nam numquam eaque vitae accusamus maxime ut quia nihil sequi dolore
-            illo soluta recusandae necessitatibus, deserunt, ab, dolorum ullam
-            possimus maiores?
+            {t("description")}
           </p>
           <Link href="/faq">
             <span className="inline-block text-lg text-white bg-black px-8 py-3 rounded-sm hover:bg-gray-800 transition-colors">
-              Learn More
+              {t("button")}
             </span>
           </Link>
         </div>

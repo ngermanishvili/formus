@@ -7,10 +7,12 @@ import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Hero() {
   const [sliders, setSliders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
     const fetchSliders = async () => {
@@ -72,6 +74,10 @@ export default function Hero() {
     autoplay: {
       delay: 10000,
     },
+    onSlideChange: (swiper) => {
+      // სლაიდის ცვლილებისას ვანახლებთ აქტიურ ინდექსს
+      setActiveIndex(swiper.realIndex);
+    },
   };
 
   if (loading) {
@@ -89,8 +95,10 @@ export default function Hero() {
           className="box-cover-image"
           style={{
             backgroundImage: `url(${
-              sliders[0]?.image_url || "assets/imgs/page/homepage5/banner.png"
+              sliders[activeIndex]?.image_url ||
+              "assets/imgs/page/homepage5/banner.png"
             })`,
+            transition: "background-image 0.3s ease-in-out",
           }}
         ></div>
         <div className="box-banner-info">
@@ -131,6 +139,7 @@ export default function Hero() {
                 </SwiperSlide>
               ))}
             </Swiper>
+
             <div className="box-pagination-button box-pagination-button-2">
               <div className="swiper-button-prev swiper-button-prev-banner swiper-button-prev-banner-2 snbp11">
                 <svg

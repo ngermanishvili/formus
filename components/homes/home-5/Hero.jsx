@@ -5,49 +5,37 @@ import Image from "next/image";
 import Link from "next/link";
 import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
 
-const banners = [
-  {
-    id: 1,
-    url: "/assets/imgs/page/homepage1/banner.png",
-    title: "Embark on an Unforgettable Journey",
-    text: "Discover the World with Our Expert Guides",
-  },
-  {
-    id: 2,
-    url: "/assets/imgs/page/homepage1/banner2.png",
-    title: "Adventure Awaits",
-    text: "Find Your Perfect Escape",
-  },
-  {
-    id: 3,
-    url: "/assets/imgs/page/homepage1/banner3.png",
-    title: "Luxury Redefined",
-    text: "Travel in Style and Comfort",
-  },
-  {
-    id: 4,
-    url: "/assets/imgs/page/homepage1/banner4.png",
-    title: "Serenity at Its Best",
-    text: "Relax in the World's Most Beautiful Locations",
-  },
-  {
-    id: 5,
-    url: "/assets/imgs/page/homepage1/banner5.png",
-    title: "Taste the Adventure",
-    text: "Culinary Tours to Excite Your Palate",
-  },
-];
 export default function Hero() {
+  const [sliders, setSliders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSliders = async () => {
+      try {
+        const response = await fetch("/api/sliders");
+        const data = await response.json();
+        if (data.status === "success") {
+          setSliders(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching sliders:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSliders();
+  }, []);
+
   const settings1 = {
     spaceBetween: 30,
     slidesPerView: 4,
     slidesPerGroup: 1,
-    // initialSlide: 1,
     loop: true,
-
     modules: [Navigation, Autoplay],
-
     autoplay: {
       delay: 10000,
     },
@@ -72,6 +60,7 @@ export default function Hero() {
       },
     },
   };
+
   const settings2 = {
     slidesPerView: 1,
     loop: true,
@@ -80,11 +69,18 @@ export default function Hero() {
       prevEl: ".snbp11",
     },
     modules: [Navigation, Autoplay],
-
     autoplay: {
       delay: 10000,
     },
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <Loader2 className="h-8 w-8 animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <section className="section banner-home5">
@@ -92,7 +88,9 @@ export default function Hero() {
         <div
           className="box-cover-image"
           style={{
-            backgroundImage: "url(assets/imgs/page/homepage5/banner.png)",
+            backgroundImage: `url(${
+              sliders[0]?.image_url || "assets/imgs/page/homepage5/banner.png"
+            })`,
           }}
         ></div>
         <div className="box-banner-info">
@@ -102,15 +100,13 @@ export default function Hero() {
               style={{ maxWidth: "100%", overflow: "hidden" }}
               className="swiper-container swiper-banner-1 pb-0"
             >
-              {banners.map((elm, i) => (
-                <SwiperSlide key={i} className="swiper-slide">
+              {sliders.map((slider) => (
+                <SwiperSlide key={slider.id} className="swiper-slide">
                   <p className="text-16 color-white wow fadeInUp">
-                    {elm.title}
+                    {slider.title}
                   </p>
                   <h2 className="heading-52-medium color-white wow fadeInUp">
-                    {elm.text.split(" ").slice(0, 4).join(" ")}
-                    <br className="d-none d-lg-block" />
-                    {elm.text.split(" ").slice(4).join(" ")}
+                    {slider.description}
                   </h2>
                   <div className="mt-30 wow fadeInUp">
                     <Link className="btn btn-border" href="/fleet-list">

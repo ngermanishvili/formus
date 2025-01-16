@@ -1,16 +1,16 @@
 Next.js პროექტის ფოლდერის სტრუქტურის ანალიზი
 პროექტის მისამართი: /Users/german/Downloads/themeforest-2oSAJ26m-luxride-chauffeur-limousine-transport-and-car-hire-react-nextjs-template/luxride
-თარიღი: 2025-01-16 20:19:26
+თარიღი: 2025-01-16 23:27:23
 
 ==================================================
 
 📄 jsconfig.json (.json, 0.07 KB)
 📁 messages/
-    📄 en.json (.json, 0.29 KB)
-    📄 ka.json (.json, 0.46 KB)
+    📄 en.json (.json, 0.51 KB)
+    📄 ka.json (.json, 0.85 KB)
 📄 tailwind.config.js (.js, 2.12 KB)
 📁 app/
-    📄 layout.jsx (.jsx, 0.69 KB)
+    📄 layout.jsx (.jsx, 0.40 KB)
     📁 [locale]/
         📁 (services)/
             📁 projects/
@@ -24,7 +24,7 @@ Next.js პროექტის ფოლდერის სტრუქტუ�
                 📄 page.jsx (.jsx, 0.69 KB)
         📁 page-not-found/
             📄 page.jsx (.jsx, 0.60 KB)
-        📄 layout.jsx (.jsx, 0.95 KB)
+        📄 layout.jsx (.jsx, 1.15 KB)
         📁 (ortachala)/
             📁 ortachala-hills/
                 📄 page.jsx (.jsx, 1.58 KB)
@@ -59,7 +59,7 @@ Next.js პროექტის ფოლდერის სტრუქტუ�
                     📄 ortachala-polygon.jsx (.jsx, 8.81 KB)
                 📄 page.jsx (.jsx, 0.44 KB)
         📄 not-found.jsx (.jsx, 0.60 KB)
-        📄 page.jsx (.jsx, 1.54 KB)
+        📄 page.jsx (.jsx, 0.55 KB)
         📁 choose-apartment/
             📄 page.jsx (.jsx, 0.51 KB)
         📁 (search)/
@@ -67,6 +67,7 @@ Next.js პროექტის ფოლდერის სტრუქტუ�
                 📄 page.jsx (.jsx, 4.26 KB)
             📁 [id]/
                 📄 page.jsx (.jsx, 0.12 KB)
+        📄 client-layout.jsx (.jsx, 0.36 KB)
         📁 (fleets)/
             📁 fleet-list-3/
                 📄 page.jsx (.jsx, 0.62 KB)
@@ -141,6 +142,8 @@ Next.js პროექტის ფოლდერის სტრუქტუ�
                 📄 route.js (.js, 4.47 KB)
                 📁 [id]/
                     📄 route.js (.js, 5.07 KB)
+            📁 sliders/
+                📄 route.js (.js, 1.83 KB)
             📁 upload/
                 📄 route.js (.js, 1.62 KB)
         📁 (blogs)/
@@ -168,22 +171,63 @@ Next.js პროექტის ფოლდერის სტრუქტუ�
         📄 globals.css (.css, 1.61 KB)
         📁 login/
             📄 page.jsx (.jsx, 4.18 KB)
-        📁 (admin)/
-            📁 admin/
-                📄 layout.jsx (.jsx, 4.32 KB)
-                📄 page.jsx (.jsx, 0.11 KB)
-                📁 dashboard/
-                    📄 page.jsx (.jsx, 0.24 KB)
-                    📁 blog/
-                        📄 page.jsx (.jsx, 2.85 KB)
-                        📁 [id]/
-                            📄 page.jsx (.jsx, 3.77 KB)
-                        📁 create/
-                            📄 page.jsx (.jsx, 7.77 KB)
         📁 invoice/
             📄 page.jsx (.jsx, 0.38 KB)
     📄 page.jsx (.jsx, 0.10 KB)
+    📁 api/
+        📁 buildings/
+            📄 route.js (.js, 0.48 KB)
+            📁 [blockId]/
+                📁 bulk/
+                    📄 route.js (.js, 2.63 KB)
+                📁 apartments/
+                    📄 route.js (.js, 1.59 KB)
+                📁 floors/
+                    📄 route.js (.js, 4.82 KB)
+            📁 floor/
+                📁 [id]/
+                    📄 route.js (.js, 3.42 KB)
+        📁 auth/
+            📁 logout/
+                📄 route.js (.js, 0.71 KB)
+            📁 check/
+                📄 route.js (.js, 0.86 KB)
+            📁 login/
+                📄 route.js (.js, 4.10 KB)
+        📁 blog/
+            📄 route.js (.js, 2.43 KB)
+            📁 [id]/
+                📄 route.js (.js, 4.11 KB)
+        📁 test-db/
+            📄 route.jsx (.jsx, 0.69 KB)
+        📁 apartments/
+            📄 route.js (.js, 4.47 KB)
+            📁 [id]/
+                📄 route.js (.js, 5.07 KB)
+        📁 sliders/
+            📄 route.js (.js, 1.83 KB)
+            📁 [id]/
+                📄 route.js (.js, 4.90 KB)
+        📁 upload/
+            📄 route.js (.js, 1.62 KB)
     📄 globals.css (.css, 1.61 KB)
+    📁 (admin)/
+        📁 admin/
+            📄 layout.jsx (.jsx, 4.62 KB)
+            📄 page.jsx (.jsx, 0.11 KB)
+            📁 dashboard/
+                📄 page.jsx (.jsx, 0.24 KB)
+                📁 blog/
+                    📄 page.jsx (.jsx, 2.85 KB)
+                    📁 [id]/
+                        📄 page.jsx (.jsx, 3.77 KB)
+                    📁 create/
+                        📄 page.jsx (.jsx, 7.77 KB)
+                📁 sliders/
+                    📄 page.jsx (.jsx, 5.61 KB)
+                    📁 [id]/
+                        📁 edit/
+                            📄 page.jsx (.jsx, 6.38 KB)
 📁 utlis/
     📄 activeInputFocus.js (.js, 1.13 KB)
     📄 addSwiperPadding.js (.js, 0.34 KB)
@@ -225,6 +269,7 @@ Next.js პროექტის ფოლდერის სტრუქტუ�
         📄 3d-photo.jsx (.jsx, 0.88 KB)
         📄 hero-content.jsx (.jsx, 2.56 KB)
         📄 hero-content-faq.jsx (.jsx, 1.49 KB)
+    📁 test/
     📁 booking/
         📄 BookingVehicles.jsx (.jsx, 6.47 KB)
         📄 BookingExtra.jsx (.jsx, 6.98 KB)
@@ -263,7 +308,7 @@ Next.js პროექტის ფოლდერის სტრუქტუ�
         📁 home-5/
             📄 Testimonials.jsx (.jsx, 2.56 KB)
             📄 hero-ortachala.jsx (.jsx, 3.73 KB)
-            📄 Faq.jsx (.jsx, 1.52 KB)
+            📄 Faq.jsx (.jsx, 1.37 KB)
             📄 Blogs.jsx (.jsx, 3.38 KB)
             📄 Hero.jsx (.jsx, 6.30 KB)
             📄 Feet.jsx (.jsx, 5.22 KB)
@@ -412,8 +457,8 @@ Next.js პროექტის ფოლდერის სტრუქტუ�
         📄 Header8.jsx (.jsx, 3.05 KB)
         📄 Header1.jsx (.jsx, 2.40 KB)
         📁 components/
-            📄 Language.jsx (.jsx, 1.74 KB)
-            📄 Nav.jsx (.jsx, 1.35 KB)
+            📄 Language.jsx (.jsx, 3.08 KB)
+            📄 Nav.jsx (.jsx, 1.67 KB)
             📄 MobileNav.jsx (.jsx, 2.37 KB)
         📄 Header3.jsx (.jsx, 2.68 KB)
         📄 Header2.jsx (.jsx, 2.70 KB)
@@ -921,6 +966,7 @@ Next.js პროექტის ფოლდერის სტრუქტუ�
                     📄 laptop.png (.png, 550.00 KB)
                     📄 linkedin.png (.png, 0.26 KB)
                     📄 to.svg (.svg, 1.74 KB)
+                    📄 geo.png (.png, 6.95 KB)
                     📄 next-day.png (.png, 0.22 KB)
                     📄 call.svg (.svg, 3.12 KB)
                     📄 google-icon.svg (.svg, 0.57 KB)
@@ -1016,7 +1062,8 @@ Next.js პროექტის ფოლდერის სტრუქტუ�
     📄 use-blocks.js (.js, 4.37 KB)
     📄 use-toast.js (.js, 3.01 KB)
     📄 use-apartments.js (.js, 4.09 KB)
-📄 middleware.js (.js, 3.45 KB)
+📄 routes.js (.js, 0.00 KB)
+📄 middleware.js (.js, 3.04 KB)
 📄 structure.py (.py, 4.05 KB)
 📁 lib/
     📄 db.js (.js, 1.94 KB)
@@ -1038,7 +1085,7 @@ Next.js პროექტის ფოლდერის სტრუქტუ�
     📄 contact.js (.js, 0.94 KB)
     📄 cars.js (.js, 3.49 KB)
     📄 locations.js (.js, 0.63 KB)
-    📄 languages.js (.js, 0.23 KB)
+    📄 languages.js (.js, 0.25 KB)
     📄 menu.js (.js, 2.56 KB)
     📄 process.js (.js, 4.05 KB)
     📄 cities.js (.js, 0.88 KB)
@@ -1047,4 +1094,4 @@ Next.js პროექტის ფოლდერის სტრუქტუ�
 📁 src/
     📁 i18n/
         📄 request.js (.js, 0.40 KB)
-        📄 routing.js (.js, 0.29 KB)
+        📄 routing.js (.js, 0.32 KB)

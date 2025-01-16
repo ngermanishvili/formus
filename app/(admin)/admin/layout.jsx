@@ -11,6 +11,7 @@ import {
   ChevronDown,
   Menu,
   X,
+  Images,
 } from "lucide-react";
 
 const AdminLayout = ({ children }) => {
@@ -70,6 +71,11 @@ const AdminLayout = ({ children }) => {
       title: "ბლოგები",
       href: "/admin/dashboard/blog",
       icon: <FileText className="w-5 h-5" />,
+    },
+    {
+      title: "სლაიდერები",
+      href: "/admin/dashboard/sliders",
+      icon: <Images className="w-5 h-5" />,
     },
     {
       title: "მომხმარებლები",

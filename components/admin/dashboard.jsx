@@ -80,6 +80,7 @@ export default function AdminPanel() {
       .then((data) => {
         if (data.status === "success") {
           setBlocks(data.data);
+          setSelectedBlock(data.data[0].block_id);
         }
       });
   }, []);
@@ -206,19 +207,8 @@ export default function AdminPanel() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="bg-white border-b border-gray-200 fixed top-0 left-0 right-0 z-10">
-        <div className="flex items-center justify-between px-6 py-4">
-          <div className="flex items-center space-x-4">
-            <LayoutGrid className="h-6 w-6 text-blue-600" />
-            <h1 className="text-xl font-semibold text-gray-800">
-              მშენებარე ბინების მართვა
-            </h1>
-          </div>
-        </div>
-      </div>
-
-      <div className="pt-20 px-6 pb-6 mt-[120px]">
+    <div className="bg-gray-50">
+      <div className="pt-20 px-6 pb-6">
         {notification && (
           <Alert
             className={`mb-4 ${
@@ -240,7 +230,7 @@ export default function AdminPanel() {
         )}
 
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex justify-between mb-4">
             <div className="flex items-center space-x-2">
               <Building2 className="h-5 w-5 text-gray-500" />
               <h2 className="text-lg font-medium text-gray-700">
@@ -248,7 +238,10 @@ export default function AdminPanel() {
               </h2>
             </div>
             {selectedBlock && (
-              <Button onClick={() => setIsAddDialogOpen(true)}>
+              <Button
+                onClick={() => setIsAddDialogOpen(true)}
+                className="bg-blue-600 hover:bg-blue-700"
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 ახალი ბინის დამატება
               </Button>
@@ -264,7 +257,11 @@ export default function AdminPanel() {
                         selectedBlock === block.block_id ? "default" : "outline"
                       }
                       onClick={() => setSelectedBlock(block.block_id)}
-                      className="h-11"
+                      className={`h-11 ${
+                        selectedBlock === block.block_id
+                          ? "bg-blue-600 hover:bg-blue-700"
+                          : "hover:bg-blue-50"
+                      }`}
                     >
                       {block.block_name}
                     </Button>
@@ -279,55 +276,59 @@ export default function AdminPanel() {
         </div>
 
         {selectedBlock && (
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-                <div className="flex items-center space-x-2 w-full sm:w-auto">
-                  <Search className="h-4 w-4 text-gray-500" />
-                  <Input
-                    placeholder="ძებნა..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full sm:w-[300px]"
-                  />
-                </div>
-                <div className="flex items-center space-x-2 w-full sm:w-auto">
-                  <Filter className="h-4 w-4 text-gray-500" />
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline">
-                        სართული: {filterFloor === "all" ? "ყველა" : filterFloor}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuLabel>აირჩიეთ სართული</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      {[
-                        "all",
-                        ...new Set(
-                          apartments.map((apt) => apt.floor.toString())
-                        ),
-                      ]
-                        .sort()
-                        .map((floor) => (
-                          <DropdownMenuItem
-                            key={floor}
-                            onClick={() => setFilterFloor(floor)}
-                          >
-                            {floor === "all"
-                              ? "ყველა სართული"
-                              : `${floor} სართული`}
-                          </DropdownMenuItem>
-                        ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+          <Card className="overflow-hidden border-none shadow-lg">
+            <CardContent className="p-0">
+              <div className="p-6 bg-white border-b">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                  <div className="flex items-center space-x-2 w-full sm:w-auto">
+                    <Search className="h-4 w-4 text-gray-500" />
+                    <Input
+                      placeholder="ძებნა..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full sm:w-[300px] border-gray-200 focus:ring-blue-500"
+                    />
+                  </div>
+                  <div className="flex items-center space-x-2 w-full sm:w-auto">
+                    <Filter className="h-4 w-4 text-gray-500" />
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" className="border-gray-200">
+                          სართული:{" "}
+                          {filterFloor === "all" ? "ყველა" : filterFloor}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-48">
+                        <DropdownMenuLabel>აირჩიეთ სართული</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        {[
+                          "all",
+                          ...new Set(
+                            apartments.map((apt) => apt.floor.toString())
+                          ),
+                        ]
+                          .sort()
+                          .map((floor) => (
+                            <DropdownMenuItem
+                              key={floor}
+                              onClick={() => setFilterFloor(floor)}
+                              className="cursor-pointer hover:bg-blue-50"
+                            >
+                              {floor === "all"
+                                ? "ყველა სართული"
+                                : `${floor} სართული`}
+                            </DropdownMenuItem>
+                          ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
               </div>
 
-              <div className="rounded-md border">
+              <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
-                    <TableRow>
+                    <TableRow className="bg-gray-50 hover:bg-gray-50">
                       {[
                         { key: "apartment_number", label: "ბინის №" },
                         { key: "floor", label: "სართული" },
@@ -344,13 +345,15 @@ export default function AdminPanel() {
                       ].map(({ key, label }) => (
                         <TableHead
                           key={key}
-                          className={key === "actions" ? "w-[100px]" : ""}
+                          className={`${
+                            key === "actions" ? "w-[100px]" : ""
+                          } bg-gray-50 text-gray-600`}
                         >
                           {key !== "actions" ? (
                             <Button
                               variant="ghost"
                               onClick={() => handleSort(key)}
-                              className="hover:bg-transparent"
+                              className="hover:bg-gray-100 text-gray-600 font-medium"
                             >
                               {label}
                               <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -364,7 +367,10 @@ export default function AdminPanel() {
                   </TableHeader>
                   <TableBody>
                     {filteredAndSortedApartments.map((apt) => (
-                      <TableRow key={apt.apartment_id}>
+                      <TableRow
+                        key={apt.apartment_id}
+                        className="hover:bg-blue-50/50 transition-colors"
+                      >
                         {editingApartment?.apartment_id === apt.apartment_id ? (
                           <>
                             {Object.keys(apt)
@@ -375,7 +381,7 @@ export default function AdminPanel() {
                                   key !== "actions"
                               )
                               .map((key) => (
-                                <TableCell key={key}>
+                                <TableCell key={key} className="py-3">
                                   <Input
                                     type="number"
                                     step={key.includes("area") ? "0.01" : "1"}
@@ -386,7 +392,7 @@ export default function AdminPanel() {
                                         [key]: e.target.value,
                                       })
                                     }
-                                    className="w-full"
+                                    className="w-full border-gray-200 focus:ring-blue-500"
                                   />
                                 </TableCell>
                               ))}
@@ -400,6 +406,7 @@ export default function AdminPanel() {
                                       editingApartment
                                     )
                                   }
+                                  className="bg-green-600 hover:bg-green-700"
                                 >
                                   <Save className="h-4 w-4" />
                                 </Button>
@@ -407,6 +414,7 @@ export default function AdminPanel() {
                                   size="sm"
                                   variant="outline"
                                   onClick={() => setEditingApartment(null)}
+                                  className="border-gray-200"
                                 >
                                   <X className="h-4 w-4" />
                                 </Button>
@@ -423,13 +431,18 @@ export default function AdminPanel() {
                                   key !== "actions"
                               )
                               .map((key) => (
-                                <TableCell key={key}>
+                                <TableCell key={key} className="py-3">
                                   {key.includes("area") ? (
-                                    <Badge variant="outline">
+                                    <Badge
+                                      variant="outline"
+                                      className="bg-blue-50 text-blue-700 border-blue-200"
+                                    >
                                       {apt[key]} მ²
                                     </Badge>
                                   ) : (
-                                    apt[key]
+                                    <span className="font-medium text-gray-700">
+                                      {apt[key]}
+                                    </span>
                                   )}
                                 </TableCell>
                               ))}
@@ -438,14 +451,18 @@ export default function AdminPanel() {
                                 <DropdownMenuTrigger asChild>
                                   <Button
                                     variant="ghost"
-                                    className="h-8 w-8 p-0"
+                                    className="h-8 w-8 p-0 hover:bg-blue-50"
                                   >
                                     <MoreVertical className="h-4 w-4" />
                                   </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
+                                <DropdownMenuContent
+                                  align="end"
+                                  className="w-40"
+                                >
                                   <DropdownMenuItem
                                     onClick={() => setEditingApartment(apt)}
+                                    className="cursor-pointer hover:bg-blue-50"
                                   >
                                     რედაქტირება
                                   </DropdownMenuItem>

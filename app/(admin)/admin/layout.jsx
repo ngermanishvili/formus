@@ -12,6 +12,7 @@ import {
   Menu,
   X,
   Images,
+  Info,
 } from "lucide-react";
 
 const AdminLayout = ({ children }) => {
@@ -86,6 +87,11 @@ const AdminLayout = ({ children }) => {
       title: "პარამეტრები",
       href: "/admin/dashboard/settings",
       icon: <Settings className="w-5 h-5" />,
+    },
+    {
+      title: "ჩვენს შესახებ",
+      href: "/admin/dashboard/about",
+      icon: <Info className="w-5 h-5" />,
     },
   ];
 

@@ -190,6 +190,7 @@ const OrtachalaPolygon = () => {
           api.getFloors(blockIds),
           ...blockIds.map((blockId) => api.getApartments(blockId)),
         ]);
+        console.log(await api.getFloors(["A"]));
 
         setPolygons(floorsData);
         setApartments(apartmentsData.flat());

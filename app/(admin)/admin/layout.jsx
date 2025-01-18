@@ -78,15 +78,11 @@ const AdminLayout = ({ children }) => {
       href: "/admin/dashboard/sliders",
       icon: <Images className="w-5 h-5" />,
     },
+
     {
-      title: "მომხმარებლები",
-      href: "/admin/dashboard/users",
-      icon: <Users className="w-5 h-5" />,
-    },
-    {
-      title: "პარამეტრები",
-      href: "/admin/dashboard/settings",
-      icon: <Settings className="w-5 h-5" />,
+      title: "პროექტები",
+      href: "/admin/dashboard/projects",
+      icon: <Info className="w-5 h-5" />,
     },
     {
       title: "ჩვენს შესახებ",

@@ -116,12 +116,11 @@ export default function SlidersPage() {
           ახალი სლაიდერი
         </Button>
       </div>
-
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>სურათი</TableHead>
-            <TableHead>სათაური</TableHead>
+            <TableHead>სათაური (ქართული)</TableHead>
+            <TableHead>სათაური (ინგლისური)</TableHead>
             <TableHead>პოზიცია</TableHead>
             <TableHead className="w-[100px]">მოქმედებები</TableHead>
           </TableRow>
@@ -129,14 +128,8 @@ export default function SlidersPage() {
         <TableBody>
           {sliders.map((slider) => (
             <TableRow key={slider.id}>
-              <TableCell>
-                <img
-                  src={slider.image_url}
-                  alt={slider.title}
-                  className="h-16 w-24 object-cover rounded"
-                />
-              </TableCell>
-              <TableCell>{slider.title}</TableCell>
+              <TableCell>{slider.title_ge}</TableCell>
+              <TableCell>{slider.title_en}</TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
                   {slider.order_position}

@@ -18,8 +18,10 @@ export default function EditSlider({ params }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
+    title_ge: "",
+    description_ge: "",
+    title_en: "",
+    description_en: "",
     image_url: "",
     order_position: 1,
   });
@@ -65,7 +67,14 @@ export default function EditSlider({ params }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          title_ge: formData.title_ge,
+          title_en: formData.title_en,
+          description_ge: formData.description_ge,
+          description_en: formData.description_en,
+          image_url: formData.image_url,
+          order_position: formData.order_position,
+        }),
       });
 
       if (response.ok) {
@@ -86,7 +95,6 @@ export default function EditSlider({ params }) {
       setSaving(false);
     }
   };
-
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -150,31 +158,76 @@ export default function EditSlider({ params }) {
           <Card>
             <CardContent className="p-6 space-y-4">
               <div className="space-y-2">
-                <Label>სათაური</Label>
+                <Label>სათაური (ქართული)</Label>
                 <Input
                   placeholder="შეიყვანეთ სათაური"
-                  value={formData.title}
+                  value={formData.title_ge}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      title: e.target.value,
+                      title_ge: e.target.value,
                     }))
                   }
                 />
               </div>
 
               <div className="space-y-2">
-                <Label>აღწერა</Label>
+                <Label>აღწერა (ქართული)</Label>
                 <Textarea
                   placeholder="შეიყვანეთ აღწერა"
-                  value={formData.description}
+                  value={formData.description_ge}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      description: e.target.value,
+                      description_ge: e.target.value,
                     }))
                   }
                   className="min-h-[100px]"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>სათაური (ENGLISH)</Label>
+                <Input
+                  placeholder="შეიყვანეთ სათაური"
+                  value={formData.title_en}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      title_en: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>აღწერა (ENGLISH)</Label>
+                <Textarea
+                  placeholder="შეიყვანეთ აღწერა"
+                  value={formData.description_en}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      description_en: e.target.value,
+                    }))
+                  }
+                  className="min-h-[100px]"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>პოზიცია</Label>
+                <Input
+                  type="number"
+                  placeholder="მიუთითეთ პოზიცია"
+                  value={formData.order_position}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      order_position: parseInt(e.target.value) || 1,
+                    }))
+                  }
+                  min="1"
                 />
               </div>
             </CardContent>

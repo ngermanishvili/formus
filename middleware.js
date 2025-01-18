@@ -10,6 +10,8 @@ const PUBLIC_APIS = [
     '/api/polygons',
     '/api/buildings',
     '/api/test-db',
+    '/api/projects',
+    '/api/sliders'
 ];
 
 const intlMiddleware = createIntlMiddleware({

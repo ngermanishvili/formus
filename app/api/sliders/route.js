@@ -8,16 +8,18 @@ export async function POST(request) {
 
         const result = await db.query(
             `INSERT INTO landing_sliders (
-        title, 
-        description, 
-        image_url,
-        order_position,
-        is_active
-      ) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+                title_ge, 
+                description_ge, 
+                title_en,
+                description_en,
+                order_position,
+                is_active
+            ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
             [
-                data.title,
-                data.description,
-                data.image_url,
+                data.title_ge,
+                data.description_ge,
+                data.title_en,
+                data.description_en,
                 data.order_position || 1,
                 true
             ]

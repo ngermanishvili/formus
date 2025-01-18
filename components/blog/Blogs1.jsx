@@ -1,56 +1,128 @@
+"use client";
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import Pagination from "../common/Pagination";
-import { blogs2 } from "@/data/blogs";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import Pagination from "../common/Pagination";
 
 export default function Blogs1() {
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const pathname = usePathname();
+  const locale = pathname?.startsWith("/en") ? "en" : "ka";
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/blog");
+        const result = await response.json();
+
+        if (result.status === "success" && Array.isArray(result.data)) {
+          setBlogs(result.data);
+          setError(null);
+        } else {
+          setError("Could not load blogs");
+        }
+      } catch (error) {
+        setError("Error loading blogs");
+        console.error("Error fetching blogs:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
   const createSlug = (text) => {
+    if (!text) return "";
+
     return text
       .toLowerCase()
-      .replace(/[^a-zა-ჰ0-9\s-]/g, "") // ქართული და ლათინური სიმბოლოები
-      .replace(/\s+/g, "-") // სფეისების შეცვლა დეფისით
-      .replace(/-+/g, "-") // მრავლობითი დეფისების შეცვლა
+      .replace(/[^a-zა-ჰ0-9\s-]/g, "")
+      .replace(/\s+/g, "-")
+      .replace(/-+/g, "-")
       .trim();
   };
+
+  if (loading) {
+    return (
+      <section className="section pt-60 bg-white latest-new-white">
+        <div className="container-sub">
+          <div className="text-center">Loading...</div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="section pt-60 bg-white latest-new-white">
+        <div className="container-sub">
+          <div className="text-center text-red-500">{error}</div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="section pt-60 bg-white latest-new-white">
       <div className="container-sub">
         <div className="row mt-50">
-          {blogs2.map((elm, i) => (
-            <div key={i} className="col-lg-4">
+          {blogs.map((blog) => (
+            <div key={blog.id} className="col-lg-4">
               <div className="cardNews wow fadeInUp">
-                <Link href={`/media-single/${createSlug(elm.title)}-${elm.id}`}>
+                <Link
+                  href={`/media-single/${createSlug(
+                    locale === "ka" ? blog.title_ge : blog.title_en
+                  )}-${blog.id}`}
+                >
                   <div className="cardImage">
                     <div className="datePost">
                       <div className="heading-52-medium color-white">
-                        {elm.date}.
+                        {new Date(blog.created_at).getDate()}.
                       </div>
-                      <p className="text-14 color-white">{elm.monthYear}</p>
+                      <p className="text-14 color-white">
+                        {new Date(blog.created_at).toLocaleString(locale, {
+                          month: "long",
+                          year: "numeric",
+                        })}
+                      </p>
                     </div>
-                    <Image
-                      width={1104}
-                      height={780}
-                      style={{ height: "fit-content" }}
-                      src={elm.imageSrc}
-                      alt="luxride"
-                    />
+                    {blog.image_url && (
+                      <Image
+                        width={1104}
+                        height={780}
+                        style={{ height: "fit-content" }}
+                        src={blog.image_url}
+                        alt={locale === "ka" ? blog.title_ge : blog.title_en}
+                      />
+                    )}
                   </div>
                 </Link>
                 <div className="cardInfo">
-                  <div className="tags mb-10">
-                    <a href="#">{elm.tag}</a>
-                  </div>
                   <Link
                     className="color-white"
-                    href={`/media-single/${createSlug(elm.title)}-${elm.id}`}
+                    href={`/media-single/${createSlug(
+                      locale === "ka" ? blog.title_ge : blog.title_en
+                    )}-${blog.id}`}
                   >
                     <h3 className="text-20-medium color-white mb-20">
-                      {elm.title}
+                      {locale === "ka" ? blog.title_ge : blog.title_en}
                     </h3>
                   </Link>
+                  <p className="color-white mb-20">
+                    {locale === "ka"
+                      ? blog.description_ge.split(" ").slice(0, 8).join(" ")
+                      : blog.description_en.split(" ").slice(0, 8).join(" ")}
+                    ...
+                  </p>
                   <Link
                     className="cardLink btn btn-arrow-up"
-                    href={`/media-single/${elm.id}`}
+                    href={`/media-single/${blog.id}`}
                   >
                     <svg
                       className="icon-16"
@@ -65,7 +137,7 @@ export default function Blogs1() {
                         strokeLinecap="round"
                         strokeLinejoin="round"
                         d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
-                      ></path>
+                      />
                     </svg>
                   </Link>
                 </div>
@@ -73,11 +145,13 @@ export default function Blogs1() {
             </div>
           ))}
         </div>
-        <div className="text-center mt-40 mb-120 wow fadeInUp">
-          <nav className="box-pagination">
-            <Pagination />
-          </nav>
-        </div>
+        {blogs.length > 0 && (
+          <div className="text-center mt-40 mb-120 wow fadeInUp">
+            <nav className="box-pagination">
+              <Pagination />
+            </nav>
+          </div>
+        )}
       </div>
     </section>
   );

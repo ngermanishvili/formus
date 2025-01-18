@@ -35,10 +35,23 @@ export async function PATCH(request, { params }) {
 
         const result = await db.query(
             `UPDATE landing_sliders 
-       SET title = $1, description = $2, image_url = $3
-       WHERE id = $4
-       RETURNING *`,
-            [data.title, data.description, data.image_url, id]
+             SET title_ge = $1, 
+                 title_en = $2, 
+                 description_ge = $3, 
+                 description_en = $4,
+                 image_url = $5,
+                 order_position = $6
+             WHERE id = $7
+             RETURNING *`,
+            [
+                data.title_ge,
+                data.title_en,
+                data.description_ge,
+                data.description_en,
+                data.image_url,
+                data.order_position,
+                id
+            ]
         );
 
         return NextResponse.json({

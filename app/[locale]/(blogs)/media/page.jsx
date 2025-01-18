@@ -1,3 +1,4 @@
+// app/[locale]/(blogs)/media/page.jsx
 import Blogs1 from "@/components/blog/Blogs1";
 import BreadCumb from "@/components/blog/BreadCumb";
 import Footer1 from "@/components/footers/Footer1";

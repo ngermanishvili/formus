@@ -8,11 +8,15 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { usePathname } from "next/navigation";
 
 export default function Hero() {
   const [sliders, setSliders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
+
+  const pathname = usePathname();
+  const currentLang = pathname.includes("/ka") ? "ge" : "en";
 
   useEffect(() => {
     const fetchSliders = async () => {
@@ -75,7 +79,6 @@ export default function Hero() {
       delay: 10000,
     },
     onSlideChange: (swiper) => {
-      // სლაიდის ცვლილებისას ვანახლებთ აქტიურ ინდექსს
       setActiveIndex(swiper.realIndex);
     },
   };
@@ -110,11 +113,13 @@ export default function Hero() {
             >
               {sliders.map((slider) => (
                 <SwiperSlide key={slider.id} className="swiper-slide">
-                  <p className="text-16 color-white wow fadeInUp">
-                    {slider.title}
+                  <p className="heading-52-medium color-white wow fadeInUp">
+                    {currentLang === "ge" ? slider.title_ge : slider.title_en}
                   </p>
-                  <h2 className="heading-52-medium color-white wow fadeInUp">
-                    {slider.description}
+                  <h2 className="text-16 color-white wow fadeInUp">
+                    {currentLang === "ge"
+                      ? slider.description_ge
+                      : slider.description_en}
                   </h2>
                   <div className="mt-30 wow fadeInUp">
                     <Link className="btn btn-border" href="/fleet-list">

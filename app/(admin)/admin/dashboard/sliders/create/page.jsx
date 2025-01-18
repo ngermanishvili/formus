@@ -17,8 +17,10 @@ export default function CreateSlider() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    title: "",
-    description: "",
+    title_ge: "",
+    description_ge: "",
+    title_en: "",
+    description_en: "",
     image_url: "",
     order_position: 1,
   });
@@ -66,8 +68,10 @@ export default function CreateSlider() {
 
   const isFormValid = () => {
     return (
-      formData.title.trim() !== "" &&
-      formData.description.trim() !== "" &&
+      formData.title_ge.trim() !== "" &&
+      formData.title_en.trim() !== "" &&
+      formData.description_ge.trim() !== "" &&
+      formData.description_en.trim() !== "" &&
       formData.image_url !== ""
     );
   };
@@ -128,28 +132,57 @@ export default function CreateSlider() {
           <Card>
             <CardContent className="p-6 space-y-4">
               <div className="space-y-2">
-                <Label>სათაური</Label>
+                <Label>სათაური (ქართული)</Label>
                 <Input
                   placeholder="შეიყვანეთ სათაური"
-                  value={formData.title}
+                  value={formData.title_ge}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      title: e.target.value,
+                      title_ge: e.target.value,
                     }))
                   }
                 />
               </div>
 
               <div className="space-y-2">
-                <Label>აღწერა</Label>
+                <Label>აღწერა (ქართული)</Label>
                 <Textarea
                   placeholder="შეიყვანეთ აღწერა"
-                  value={formData.description}
+                  value={formData.description_ge}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      description: e.target.value,
+                      description_ge: e.target.value,
+                    }))
+                  }
+                  className="min-h-[100px]"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>სათაური (ENGLISH)</Label>
+                <Input
+                  placeholder="შეიყვანეთ სათაური"
+                  value={formData.title_en}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      title_en: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>აღწერა (ENGLISH)</Label>
+                <Textarea
+                  placeholder="შეიყვანეთ აღწერა"
+                  value={formData.description_en}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      description_en: e.target.value,
                     }))
                   }
                   className="min-h-[100px]"

@@ -50,11 +50,15 @@ export async function POST(request) {
                 apartment_number,
                 floor,
                 type_id,
-                status
+                status,
+                   home_2d,    // დამატებული
+        home_3d     // დამატებული
             ) VALUES ($1, $2, $3, $4, $5)
             RETURNING apartment_id`,
             [
                 data.block_id,
+                data.home_2d,    // დამატებული
+                data.home_3d,    // დამატებული
                 data.apartment_number.toString(), // PostgreSQL-ში apartment_number არის varchar
                 parseInt(data.floor),
                 typeId,
@@ -85,7 +89,9 @@ export async function POST(request) {
                 t.bathroom2_area,
                 t.living_room_area,
                 t.balcony_area,
-                t.balcony2_area
+                t.balcony2_area,
+                      a.home_2d,     // დამატებული
+        a.home_3d      // დამატებული
             FROM apartments a
             JOIN apartment_types t ON a.type_id = t.type_id
             WHERE a.apartment_id = $1

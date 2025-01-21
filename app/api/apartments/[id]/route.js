@@ -55,6 +55,8 @@ export async function PUT(request, { params }) {
             SET 
                 apartment_number = $1,
                 floor = $2
+           home_2d = $3,     
+        home_3d = $4     
             WHERE apartment_id = $3
         `, [data.apartment_number, data.floor, id]);
 
@@ -112,7 +114,9 @@ export async function GET(request, { params }) {
                 t.bedroom_area,
                 t.bathroom_area,
                 t.living_room_area,
-                t.balcony_area
+                t.balcony_area,
+                a.home_2d, 
+                a.home_3d   
             FROM apartments a
             JOIN apartment_types t ON a.type_id = t.type_id
             WHERE a.apartment_id = $1

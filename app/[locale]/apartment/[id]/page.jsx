@@ -1,4 +1,3 @@
-//app/apartments/%5Bid%5D/page.jsx
 "use client";
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -6,15 +5,19 @@ import Header1 from "@/components/headers/Header1";
 import LoadingOverlay from "@/components/loader/loader";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import Image from "next/image";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 const ApartmentDetails = () => {
   const router = useRouter();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [activeView, setActiveView] = useState("3D");
+  const [isImageOpen, setIsImageOpen] = useState(false);
 
   const params = useParams();
-  const apartmentId = params.id.split("-")[0]; // მაინც აიღებს მხოლოდ პირველ ნაწილს (3)
+  const apartmentId = params.id.split("-")[0];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,105 +93,173 @@ const ApartmentDetails = () => {
           {/* Main Info */}
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-white rounded-xl shadow-sm p-6">
-              <div className="flex justify-between items-start mb-6">
-                <div>
-                  <h1 className="text-3xl font-bold text-gray-900">
-                    ბინა {data.apartment_number}
-                  </h1>
-                  <p className="text-gray-500">
-                    ბლოკი {data.block_id}, სართული {data.floor}
-                  </p>
-                </div>
-                <div
-                  className={`px-4 py-2 rounded-full ${getStatusColor(
-                    data.status
-                  )}`}
+              <div className="flex gap-2 mb-4">
+                <button
+                  onClick={() => setActiveView("2D")}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors
+                    ${
+                      activeView === "2D"
+                        ? "bg-black text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
                 >
-                  {getStatusText(data.status)}
-                </div>
+                  2D ვიზუალი
+                </button>
+                <button
+                  onClick={() => setActiveView("3D")}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors
+                    ${
+                      activeView === "3D"
+                        ? "bg-black text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                >
+                  3D ვიზუალი
+                </button>
               </div>
 
-              <div className="border-t pt-6">
-                <h2 className="text-xl font-semibold mb-4">
-                  ბინის პარამეტრები
-                </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-gray-50 p-4 rounded-lg">
-                    <div className="text-sm text-gray-500">საერთო ფართი</div>
-                    <div className="text-2xl font-semibold">
-                      {data.total_area} მ²
-                    </div>
+              {/* Image Container with Hover Effect */}
+              <div
+                className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-gray-100 cursor-zoom-in group"
+                onClick={() => setIsImageOpen(true)}
+              >
+                <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity z-10" />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                  <div className="rounded-full bg-white/20 p-3 backdrop-blur-sm">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6 text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"
+                      />
+                    </svg>
                   </div>
+                </div>
+                <Image
+                  src={activeView === "2D" ? data.home_2d : data.home_3d}
+                  alt={`${activeView} ვიზუალი`}
+                  fill
+                  className="object-contain transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Side Panel */}
+          <div className="space-y-6">
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              {data.price && (
+                <div className="mb-4 pb-4 border-b">
+                  <div className="text-sm text-gray-500">ფასი</div>
+                  <div className="text-2xl font-bold">${data.price}</div>
+                </div>
+              )}
+
+              <div className="space-y-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h1 className="text-3xl font-bold text-gray-900">
+                      ბინა {data.apartment_number}
+                    </h1>
+                    <p className="text-gray-500">
+                      ბლოკი {data.block_id}, სართული {data.floor}
+                    </p>
+                  </div>
+                  <div
+                    className={`px-4 py-2 rounded-full ${getStatusColor(
+                      data.status
+                    )}`}
+                  >
+                    {getStatusText(data.status)}
+                  </div>
+                </div>
+
+                <div className="space-y-3 mt-6">
+                  {data.total_area > 0 && (
+                    <div className="bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
+                      <div className="text-sm text-gray-500">საერთო ფართი</div>
+                      <div className="text-lg font-semibold">
+                        {data.total_area} მ²
+                      </div>
+                    </div>
+                  )}
 
                   {data.studio_area > 0 && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
                       <div className="text-sm text-gray-500">სტუდიო</div>
-                      <div className="text-2xl font-semibold">
+                      <div className="text-lg font-semibold">
                         {data.studio_area} მ²
                       </div>
                     </div>
                   )}
 
                   {data.bedroom_area > 0 && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
                       <div className="text-sm text-gray-500">საძინებელი</div>
-                      <div className="text-2xl font-semibold">
+                      <div className="text-lg font-semibold">
                         {data.bedroom_area} მ²
                       </div>
                     </div>
                   )}
 
                   {data.bedroom2_area > 0 && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
                       <div className="text-sm text-gray-500">საძინებელი 2</div>
-                      <div className="text-2xl font-semibold">
+                      <div className="text-lg font-semibold">
                         {data.bedroom2_area} მ²
                       </div>
                     </div>
                   )}
 
                   {data.living_room_area > 0 && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
                       <div className="text-sm text-gray-500">მისაღები</div>
-                      <div className="text-2xl font-semibold">
+                      <div className="text-lg font-semibold">
                         {data.living_room_area} მ²
                       </div>
                     </div>
                   )}
 
                   {data.bathroom_area > 0 && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
                       <div className="text-sm text-gray-500">სველი წერტილი</div>
-                      <div className="text-2xl font-semibold">
+                      <div className="text-lg font-semibold">
                         {data.bathroom_area} მ²
                       </div>
                     </div>
                   )}
 
                   {data.bathroom2_area > 0 && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
                       <div className="text-sm text-gray-500">
                         სველი წერტილი 2
                       </div>
-                      <div className="text-2xl font-semibold">
+                      <div className="text-lg font-semibold">
                         {data.bathroom2_area} მ²
                       </div>
                     </div>
                   )}
 
                   {data.balcony_area > 0 && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
                       <div className="text-sm text-gray-500">აივანი</div>
-                      <div className="text-2xl font-semibold">
+                      <div className="text-lg font-semibold">
                         {data.balcony_area} მ²
                       </div>
                     </div>
                   )}
 
                   {data.balcony2_area > 0 && (
-                    <div className="bg-gray-50 p-4 rounded-lg">
+                    <div className="bg-gray-50 p-3 rounded-lg hover:bg-gray-100 transition-colors">
                       <div className="text-sm text-gray-500">აივანი 2</div>
-                      <div className="text-2xl font-semibold">
+                      <div className="text-lg font-semibold">
                         {data.balcony2_area} მ²
                       </div>
                     </div>
@@ -196,71 +267,73 @@ const ApartmentDetails = () => {
                 </div>
               </div>
             </div>
-
-            {data.polygon_coords && (
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <h2 className="text-xl font-semibold mb-4">
-                  ბინის მდებარეობა სართულზე
-                </h2>
-                <div className="relative w-full aspect-[1122/672]">
-                  <svg
-                    viewBox="0 0 1122 672"
-                    className="w-full h-full"
-                    preserveAspectRatio="xMidYMid meet"
-                  >
-                    <polygon
-                      points={data.polygon_coords}
-                      className={`
-                        stroke-2
-                        ${
-                          data.status === "sold"
-                            ? "fill-red-200 stroke-red-500"
-                            : ""
-                        }
-                        ${
-                          data.status === "reserved"
-                            ? "fill-yellow-200 stroke-yellow-500"
-                            : ""
-                        }
-                        ${
-                          data.status === "available"
-                            ? "fill-green-200 stroke-green-500"
-                            : ""
-                        }
-                      `}
-                    />
-                  </svg>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Side Panel */}
-          <div className="space-y-6">
-            <div className="bg-white rounded-xl shadow-sm p-6">
-              <h2 className="text-xl font-semibold mb-4">
-                დამატებითი ინფორმაცია
-              </h2>
-              {data.price && (
-                <div className="mb-4">
-                  <div className="text-sm text-gray-500">ფასი</div>
-                  <div className="text-2xl font-bold">${data.price}</div>
-                </div>
-              )}
-              {/* აქ შეგიძლია დაამატო სხვა დამატებითი ინფორმაცია */}
-            </div>
-
-            {data.status === "available" && (
-              <div className="bg-white rounded-xl shadow-sm p-6">
-                <h2 className="text-xl font-semibold mb-4">დაკავშირება</h2>
-                <Button className="w-full" size="lg">
-                  დაგვიკავშირდით
-                </Button>
-              </div>
-            )}
           </div>
         </div>
       </div>
+
+      {/* Image Modal */}
+      <Dialog open={isImageOpen} onOpenChange={setIsImageOpen}>
+        <DialogContent className="max-w-[70vw] h-[70vh] bg-black/95 border-0 rounded-xl p-4 shadow-2xl">
+          {/* Close Button */}
+          <button
+            onClick={() => setIsImageOpen(false)}
+            className="absolute right-4 top-4 z-50 rounded-full bg-white/10 p-2 backdrop-blur-sm transition-all hover:bg-white/20"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+
+          {/* Image View Controls */}
+          <div className="absolute left-4 top-4 z-50 flex gap-2">
+            <button
+              onClick={() => setActiveView("2D")}
+              className={`rounded-full px-4 py-2 text-sm font-medium transition-all
+                ${
+                  activeView === "2D"
+                    ? "bg-white text-black"
+                    : "bg-white/10 text-white backdrop-blur-sm hover:bg-white/20"
+                }`}
+            >
+              2D ვიზუალი
+            </button>
+            <button
+              onClick={() => setActiveView("3D")}
+              className={`rounded-full px-4 py-2 text-sm font-medium transition-all
+                ${
+                  activeView === "3D"
+                    ? "bg-white text-black"
+                    : "bg-white/10 text-white backdrop-blur-sm hover:bg-white/20"
+                }`}
+            >
+              3D ვიზუალი
+            </button>
+          </div>
+
+          {/* Image Container */}
+          <div className="relative h-full w-full overflow-hidden">
+            <Image
+              src={activeView === "2D" ? data.home_2d : data.home_3d}
+              alt={`${activeView} ვიზუალი`}
+              fill
+              className="object-contain transition-opacity duration-300 rounded-lg"
+              quality={100}
+              priority
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

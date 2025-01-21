@@ -73,7 +73,6 @@ export async function GET(request, { params }) {
             WHERE a.block_id = $1 AND a.floor = $2
             ORDER BY a.apartment_number
         `, [floorData.block_id, floorData.floor_number]);
-
         console.log('6. Apartments query result:', {
             count: apartmentsResult.length,
             firstApartment: apartmentsResult[0]

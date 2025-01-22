@@ -6,14 +6,13 @@ import Header1 from "@/components/headers/Header1";
 
 const ChooseApartment = () => {
   return (
-    <div className="flex flex-col bg-black  overflow-hidden">
+    <div className="flex flex-col min-h-screen bg-black">
       <Header1 />
-      <div className="flex-1 w-full">
+      <main className="flex-1 w-full relative">
         <OrtachalaPolygon />
-      </div>
+      </main>
       <Footer1 />
     </div>
   );
 };
-
 export default ChooseApartment;

@@ -14,6 +14,8 @@ const PUBLIC_APIS = [
     '/api/sliders',
     '/api/apartments',
     '/api/buildings/floor',
+    '/api/navigation'
+
 ];
 
 const intlMiddleware = createIntlMiddleware({

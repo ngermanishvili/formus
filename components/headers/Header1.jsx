@@ -58,16 +58,6 @@ export default function Header1() {
               <div className="d-none d-xxl-inline-block box-dropdown-cart align-middle mr-10">
                 <Language />
               </div>
-              <div className="box-button-login d-inline-block mr-10 align-middle">
-                <Link className="btn btn-default hover-up" href="/login">
-                  Log In
-                </Link>
-              </div>
-              <div className="box-button-login d-none2 d-inline-block align-middle">
-                <Link className="btn btn-white hover-up" href="/register">
-                  Sign Up
-                </Link>
-              </div>
             </div>
           </div>
         </div>

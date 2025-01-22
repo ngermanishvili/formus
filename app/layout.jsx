@@ -1,6 +1,7 @@
 import { DM_Sans } from "next/font/google";
 import "../public/assets/scss/style.scss";
 import "./globals.css";
+import { Toaster } from "sonner";
 
 const DM_SansFont = DM_Sans({
   weight: ["400", "500", "700"],
@@ -12,7 +13,10 @@ export default function RootLayout({ children }) {
   return (
     <html>
       <head></head>
-      <body className={DM_SansFont.variable}>{children}</body>
+      <body className={DM_SansFont.variable}>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

@@ -1,17 +1,41 @@
 "use client";
+
 import { Link, usePathname } from "@/src/i18n/routing";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+import { useLocale } from "next-intl"; // დავამატოთ ეს
 
 export default function Nav() {
   const t = useTranslations("Navigation");
   const pathname = usePathname();
+  const locale = useLocale(); // დავამატოთ ეს
   const [loading, setLoading] = useState(true);
+  const [routes, setRoutes] = useState([]);
 
   useEffect(() => {
-    // Simulate loading delay
-    const timer = setTimeout(() => setLoading(false), 1000);
-    return () => clearTimeout(timer);
+    const fetchRoutes = async () => {
+      try {
+        const response = await fetch("/api/navigation", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch navigation");
+        }
+
+        const data = await response.json();
+        setRoutes(data.data || []);
+      } catch (error) {
+        console.error("Error fetching navigation:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchRoutes();
   }, []);
 
   const getPathWithoutLocale = (path) => {
@@ -26,47 +50,23 @@ export default function Nav() {
   }
 
   return (
-    <>
-      <li>
-        <Link
-          href="media"
-          className={currentPath === "media" ? "active-link" : ""}
-        >
-          {t("media")}
-        </Link>
-      </li>
-      <li>
-        <Link
-          href="about-formus"
-          className={currentPath === "about-formus" ? "active-link" : ""}
-        >
-          {t("about")}
-        </Link>
-      </li>
-      <li>
-        <Link
-          href="projects"
-          className={currentPath === "projects" ? "active-link" : ""}
-        >
-          {t("projects")}
-        </Link>
-      </li>
-      <li>
-        <Link
-          href="contact"
-          className={currentPath === "contact" ? "active-link" : ""}
-        >
-          {t("contact")}
-        </Link>
-      </li>
-      <li>
-        <Link
-          href="choose-apartment"
-          className={currentPath === "test" ? "active-link" : ""}
-        >
-          {t("chooseApartment")}
-        </Link>
-      </li>
-    </>
+    <div className="flex space-x-6 my-4">
+      {" "}
+      {/* Added wrapper div with flex */}
+      {routes.map((route) => (
+        <li key={route.id} className="list-none">
+          {" "}
+          {/* Added list-none to remove bullet points */}
+          <Link
+            href={route.path}
+            className={`${
+              currentPath === route.path ? "active-link" : ""
+            } whitespace-nowrap`} // Added whitespace-nowrap
+          >
+            {route.translations[locale]}
+          </Link>
+        </li>
+      ))}
+    </div>
   );
 }

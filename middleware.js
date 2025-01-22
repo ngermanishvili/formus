@@ -14,7 +14,8 @@ const PUBLIC_APIS = [
     '/api/sliders',
     '/api/apartments',
     '/api/buildings/floor',
-    '/api/navigation'
+    '/api/navigation',
+    '/api/about'
 
 ];
 

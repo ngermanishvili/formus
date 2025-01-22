@@ -4,8 +4,6 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 export default function Faq() {
-  const t = useTranslations("faq");
-
   return (
     <section className="relative bg-white">
       <div className="flex flex-col lg:flex-row items-stretch">

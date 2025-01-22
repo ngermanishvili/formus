@@ -1,8 +1,11 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 export default function Faq() {
+  const t = useTranslations("faq");
+
   return (
     <section className="relative bg-white">
       <div className="flex flex-col lg:flex-row items-stretch">
@@ -21,21 +24,14 @@ export default function Faq() {
         {/* Right Content */}
         <div className="w-full lg:w-1/2 px-8 lg:px-16 py-16 flex flex-col justify-center">
           <h2 className="text-4xl font-bold text-black mb-8 leading-tight">
-            Lorem ipsum dolor sit amet.
+            {t("title")}
           </h2>
           <p className="text-gray-600 text-lg leading-relaxed mb-10">
-            {/* {t("description")} */}
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt
-            cumque quia rem, porro aperiam ullam quos veniam quibusdam a impedit
-            esse aliquid. Animi perspiciatis ex voluptas voluptatum ullam
-            repellendus neque vel consectetur placeat, eos in excepturi nostrum
-            quo atque! Modi minima explicabo, quibusdam perferendis neque
-            impedit. Reprehenderit, voluptates quidem. Temporibus!
+            {t("description")}
           </p>
           <Link href="/faq">
             <span className="inline-block text-lg text-white bg-black px-8 py-3 rounded-sm hover:bg-gray-800 transition-colors">
-              {/* {t("button")} */}
-              lorem
+              {t("button")}
             </span>
           </Link>
         </div>

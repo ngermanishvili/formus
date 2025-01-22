@@ -1,11 +1,9 @@
-"use client"
+"use client";
 import { Link, usePathname } from "@/src/i18n/routing";
-import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { useLocale } from "next-intl";
 
 export default function Nav() {
-  const t = useTranslations("Navigation");
   const pathname = usePathname();
   const locale = useLocale();
   const [loading, setLoading] = useState(true);

@@ -11,13 +11,5 @@ const DM_SansFont = DM_Sans({
 });
 
 export default function RootLayout({ children }) {
-  return (
-    <html>
-      <head></head>
-      <body className={DM_SansFont.variable}>
-        <Providers>{children}</Providers>
-        <Toaster />
-      </body>
-    </html>
-  );
+  return children; // Just pass children through
 }

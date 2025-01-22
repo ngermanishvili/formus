@@ -1,14 +1,13 @@
-"use client";
-
+"use client"
 import { Link, usePathname } from "@/src/i18n/routing";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
-import { useLocale } from "next-intl"; // დავამატოთ ეს
+import { useLocale } from "next-intl";
 
 export default function Nav() {
   const t = useTranslations("Navigation");
   const pathname = usePathname();
-  const locale = useLocale(); // დავამატოთ ეს
+  const locale = useLocale();
   const [loading, setLoading] = useState(true);
   const [routes, setRoutes] = useState([]);
 
@@ -38,6 +37,7 @@ export default function Nav() {
     fetchRoutes();
   }, []);
 
+  // Modified to preserve language prefix
   const getPathWithoutLocale = (path) => {
     const segments = path.split("/");
     return segments.length > 2 ? segments.slice(2).join("/") : "";
@@ -50,18 +50,14 @@ export default function Nav() {
   }
 
   return (
-    <div className="flex space-x-6 my-4">
-      {" "}
-      {/* Added wrapper div with flex */}
+    <div className="flex space-x-2 my-4">
       {routes.map((route) => (
         <li key={route.id} className="list-none">
-          {" "}
-          {/* Added list-none to remove bullet points */}
           <Link
-            href={route.path}
+            href={`/${locale}/${route.path}`} // Modified to include locale
             className={`${
               currentPath === route.path ? "active-link" : ""
-            } whitespace-nowrap`} // Added whitespace-nowrap
+            } whitespace-nowrap`}
           >
             {route.translations[locale]}
           </Link>

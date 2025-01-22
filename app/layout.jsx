@@ -2,6 +2,7 @@ import { DM_Sans } from "next/font/google";
 import "../public/assets/scss/style.scss";
 import "./globals.css";
 import { Toaster } from "sonner";
+import Providers from "@/components/progressbar/progress-bar";
 
 const DM_SansFont = DM_Sans({
   weight: ["400", "500", "700"],
@@ -14,7 +15,7 @@ export default function RootLayout({ children }) {
     <html>
       <head></head>
       <body className={DM_SansFont.variable}>
-        {children}
+        <Providers>{children}</Providers>
         <Toaster />
       </body>
     </html>

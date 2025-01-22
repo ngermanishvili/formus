@@ -94,7 +94,6 @@ export default function CreateRoute() {
             <div className="space-y-2">
               <Label className="text-sm font-medium">გზა (Path)</Label>
               <Input
-                disabled
                 required
                 className="w-full border rounded-lg"
                 value={formData.path}
@@ -114,7 +113,6 @@ export default function CreateRoute() {
             <div className="space-y-2">
               <Label className="text-sm font-medium">სათაური (ქართულად)</Label>
               <Input
-                disabled
                 required
                 className="w-full border rounded-lg"
                 value={formData.translations.ka}
@@ -136,7 +134,6 @@ export default function CreateRoute() {
                 სათაური (ინგლისურად)
               </Label>
               <Input
-                disabled
                 required
                 className="w-full border rounded-lg"
                 value={formData.translations.en}

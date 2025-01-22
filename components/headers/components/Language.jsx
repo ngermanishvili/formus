@@ -1,3 +1,4 @@
+"use client"
 import { languages } from "@/data/languages";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -8,36 +9,35 @@ export default function Language() {
   const pathname = usePathname();
   const [ddOpen, setDdOpen] = useState(false);
 
-  // Function to get base path without any language prefixes
-  const getBasePath = (path) => {
-    // Remove leading and trailing slashes
-    const trimmedPath = path.replace(/^\/+|\/+$/g, "");
+  // Get current language from pathname
+  const getCurrentLanguage = () => {
+    const firstSegment = pathname.split("/")[1];
+    return languages.some((lang) => lang.code === firstSegment)
+      ? firstSegment
+      : "ka";
+  };
 
-    // Split into segments
-    const segments = trimmedPath.split("/");
+  // Function to get path without current language prefix
+  const getPathWithoutCurrentLang = (path) => {
+    const segments = path.split("/");
+    const currentLang = getCurrentLanguage();
 
-    // Create array of language codes
-    const languageCodes = languages.map((lang) => lang.code);
-
-    // Filter out any segments that match language codes
-    const cleanSegments = segments.filter(
-      (segment) => !languageCodes.includes(segment)
-    );
-
-    // Reconstruct path
-    return cleanSegments.length > 0 ? `/${cleanSegments.join("/")}` : "/";
+    if (segments[1] === currentLang) {
+      return "/" + segments.slice(2).join("/");
+    }
+    return path;
   };
 
   const handleLanguageChange = async (code) => {
     try {
-      // Get base path without any language codes
-      const basePath = getBasePath(pathname);
+      // Get path without current language prefix
+      const pathWithoutLang = getPathWithoutCurrentLang(pathname);
 
-      // Construct new path
-      const newPath = code + (basePath === "/" ? "" : basePath);
+      // Construct new path with new language code
+      const newPath = `/${code}${pathWithoutLang}`;
 
-      // Use router.replace instead of push to avoid adding to history
-      await router.replace(`/${newPath}`);
+      // Use router.push to navigate
+      await router.push(newPath);
 
       setDdOpen(false);
     } catch (error) {
@@ -61,14 +61,6 @@ export default function Language() {
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
-
-  // Get current language from pathname
-  const getCurrentLanguage = () => {
-    const firstSegment = pathname.split("/")[1];
-    return languages.some((lang) => lang.code === firstSegment)
-      ? firstSegment
-      : "ka";
-  };
 
   const currentLanguage = getCurrentLanguage();
 

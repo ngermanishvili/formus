@@ -1,0 +1,1169 @@
+Next.js პროექტის ფოლდერის სტრუქტურის ანალიზი
+პროექტის მისამართი: /Users/german/Downloads/themeforest-2oSAJ26m-luxride-chauffeur-limousine-transport-and-car-hire-react-nextjs-template/luxride
+თარიღი: 2025-01-23 02:18:50
+
+==================================================
+
+📄 jsconfig.json (.json, 0.07 KB)
+📁 .vercel/
+    📁 cache/
+    📄 project.json (.json, 0.09 KB)
+    📄 README.txt (.txt, 0.51 KB)
+📁 messages/
+    📄 en.json (.json, 0.51 KB)
+    📄 ka.json (.json, 0.85 KB)
+📄 tailwind.config.js (.js, 2.12 KB)
+📁 app/
+    📄 layout.jsx (.jsx, 0.47 KB)
+    📁 [locale]/
+        📁 page-not-found/
+            📄 page.jsx (.jsx, 0.60 KB)
+        📄 layout.jsx (.jsx, 1.15 KB)
+        📁 (ortachala)/
+            📁 ortachala-hills/
+                📄 page.jsx (.jsx, 1.58 KB)
+        📄 favicon.ico (.ico, 0.69 KB)
+        📁 (pages)/
+            📁 contact-2/
+                📄 page.jsx (.jsx, 0.71 KB)
+            📁 contact/
+                📄 page.jsx (.jsx, 0.82 KB)
+            📁 about/
+                📄 page.jsx (.jsx, 1.34 KB)
+            📁 register/
+                📄 page.jsx (.jsx, 0.64 KB)
+            📁 team-single/
+                📁 [id]/
+                    📄 page.jsx (.jsx, 0.81 KB)
+            📁 about-2/
+                📄 page.jsx (.jsx, 1.24 KB)
+            📁 our-team/
+                📄 page.jsx (.jsx, 0.80 KB)
+            📁 coming-soon/
+                📄 page.jsx (.jsx, 0.29 KB)
+            📁 pricing/
+                📄 page.jsx (.jsx, 0.73 KB)
+            📁 about-formus/
+                📄 page.jsx (.jsx, 5.77 KB)
+        📁 (test)/
+            📁 testroute/
+                📁 (components)/
+                    📄 musha-polygon.jsx (.jsx, 0.95 KB)
+                    📄 search-ortachala.jsx (.jsx, 4.29 KB)
+                    📄 test-ortachala-1.jsx (.jsx, 14.08 KB)
+                    📄 ortachala-polygon.jsx (.jsx, 15.43 KB)
+                📄 page.jsx (.jsx, 0.44 KB)
+        📄 not-found.jsx (.jsx, 0.60 KB)
+        📄 page.jsx (.jsx, 0.55 KB)
+        📁 choose-apartment/
+            📄 page.jsx (.jsx, 0.51 KB)
+        📁 (search)/
+            📁 search/
+                📄 page.jsx (.jsx, 4.26 KB)
+            📁 [id]/
+                📄 page.jsx (.jsx, 0.12 KB)
+        📄 client-layout.jsx (.jsx, 0.36 KB)
+        📁 (fleets)/
+            📁 fleet-list-3/
+                📄 page.jsx (.jsx, 0.62 KB)
+            📁 fleet-list-4/
+                📄 page.jsx (.jsx, 0.62 KB)
+            📁 fleet-list-2/
+                📄 page.jsx (.jsx, 0.62 KB)
+            📁 fleet-single/
+                📁 [id]/
+                    📄 page.jsx (.jsx, 0.90 KB)
+            📁 fleet-list/
+                📄 page.jsx (.jsx, 0.61 KB)
+        📁 (homes)/
+            📁 home-2/
+                📄 page.jsx (.jsx, 1.23 KB)
+            📁 home-10/
+                📄 page.jsx (.jsx, 1.37 KB)
+            📁 home-5/
+                📄 page.jsx (.jsx, 1.21 KB)
+            📁 home-4/
+                📄 page.jsx (.jsx, 1.26 KB)
+            📁 home-3/
+                📄 page.jsx (.jsx, 1.38 KB)
+            📁 home-6/
+                📄 page.jsx (.jsx, 1.21 KB)
+            📁 home-1/
+                📄 page.jsx (.jsx, 1.47 KB)
+            📁 home-8/
+                📄 page.jsx (.jsx, 1.45 KB)
+            📁 home-9/
+                📄 page.jsx (.jsx, 1.35 KB)
+            📁 home-7/
+                📄 page.jsx (.jsx, 1.33 KB)
+        📁 (booking)/
+            📁 booking-vehicle/
+                📄 page.jsx (.jsx, 0.84 KB)
+            📁 booking-receved/
+                📄 page.jsx (.jsx, 0.64 KB)
+            📁 booking-passenger/
+                📄 page.jsx (.jsx, 0.84 KB)
+            📁 booking-payment/
+                📄 page.jsx (.jsx, 0.83 KB)
+            📁 booking-extra/
+                📄 page.jsx (.jsx, 0.82 KB)
+        📁 api/
+            📁 buildings/
+                📄 route.js (.js, 0.48 KB)
+                📁 [blockId]/
+                    📁 bulk/
+                        📄 route.js (.js, 2.63 KB)
+                    📁 apartments/
+                        📄 route.js (.js, 1.59 KB)
+                    📁 floors/
+                        📄 route.js (.js, 4.82 KB)
+                📁 floor/
+                    📁 [id]/
+                        📄 route.js (.js, 3.42 KB)
+            📁 auth/
+                📁 logout/
+                    📄 route.js (.js, 0.71 KB)
+                📁 check/
+                    📄 route.js (.js, 0.86 KB)
+                📁 login/
+                    📄 route.js (.js, 4.10 KB)
+            📁 blog/
+                📄 route.js (.js, 2.43 KB)
+                📁 [id]/
+                    📄 route.js (.js, 4.11 KB)
+            📁 test-db/
+                📄 route.jsx (.jsx, 0.69 KB)
+            📁 apartments/
+                📄 route.js (.js, 4.47 KB)
+                📁 [id]/
+                    📄 route.js (.js, 5.07 KB)
+            📁 sliders/
+                📄 route.js (.js, 1.83 KB)
+            📁 upload/
+                📄 route.js (.js, 1.62 KB)
+        📁 (blogs)/
+            📁 blog-single/
+                📁 [id]/
+                    📄 page.jsx (.jsx, 0.65 KB)
+            📁 blog/
+                📄 page.jsx (.jsx, 0.67 KB)
+            📁 blog-grid-2/
+                📄 page.jsx (.jsx, 0.67 KB)
+            📁 media-single/
+                📁 [slug]/
+                    📄 page.jsx (.jsx, 0.75 KB)
+            📁 blog-list/
+                📄 page.jsx (.jsx, 0.67 KB)
+            📁 media/
+                📄 page.jsx (.jsx, 0.71 KB)
+        📁 floor/
+            📄 layout.jsx (.jsx, 0.31 KB)
+            📁 (components)/
+                📄 room-area.jsx (.jsx, 1.30 KB)
+                📄 info-panel.jsx (.jsx, 2.13 KB)
+            📁 [id]/
+                📄 page.jsx (.jsx, 9.08 KB)
+        📁 apartment/
+            📁 [id]/
+                📄 page.jsx (.jsx, 12.79 KB)
+        📄 globals.css (.css, 1.61 KB)
+        📁 login/
+            📄 page.jsx (.jsx, 4.18 KB)
+        📁 (projects)/
+            📁 projects/
+                📄 page.jsx (.jsx, 0.72 KB)
+                📁 [id]/
+                    📁 [slug]/
+                        📄 page.jsx (.jsx, 1.64 KB)
+            📁 project-details/
+                📁 [id]/
+                    📄 page.jsx (.jsx, 1.62 KB)
+            📁 service-grid-2/
+                📄 page.jsx (.jsx, 0.69 KB)
+            📁 service-grid-3/
+                📄 page.jsx (.jsx, 0.69 KB)
+        📁 invoice/
+            📄 page.jsx (.jsx, 0.38 KB)
+    📄 page.jsx (.jsx, 0.10 KB)
+    📁 api/
+        📁 buildings/
+            📄 route.js (.js, 0.48 KB)
+            📁 [blockId]/
+                📁 bulk/
+                    📄 route.js (.js, 2.63 KB)
+                📁 apartments/
+                    📄 route.js (.js, 1.59 KB)
+                📁 floors/
+                    📄 route.js (.js, 4.82 KB)
+            📁 floor/
+                📁 [id]/
+                    📄 route.js (.js, 3.42 KB)
+        📁 auth/
+            📁 logout/
+                📄 route.js (.js, 0.71 KB)
+            📁 check/
+                📄 route.js (.js, 0.86 KB)
+            📁 login/
+                📄 route.js (.js, 4.10 KB)
+        📁 projects/
+            📄 route.js (.js, 2.58 KB)
+            📁 [id]/
+                📄 route.js (.js, 2.88 KB)
+        📁 navigation/
+            📄 route.js (.js, 3.48 KB)
+            📁 [id]/
+                📄 route.js (.js, 5.07 KB)
+        📁 about/
+            📄 route.js (.js, 3.18 KB)
+            📁 [id]/
+                📄 route.js (.js, 4.96 KB)
+        📁 blog/
+            📄 route.js (.js, 2.43 KB)
+            📁 [id]/
+                📄 route.js (.js, 4.11 KB)
+        📁 test-db/
+            📄 route.jsx (.jsx, 0.69 KB)
+        📁 apartments/
+            📄 route.js (.js, 4.84 KB)
+            📁 [id]/
+                📄 route.js (.js, 5.18 KB)
+        📁 sliders/
+            📄 route.js (.js, 1.96 KB)
+            📁 [id]/
+                📄 route.js (.js, 5.25 KB)
+                📁 position/
+                    📄 route.js (.js, 2.32 KB)
+        📁 upload/
+            📄 route.js (.js, 1.62 KB)
+    📄 globals.css (.css, 1.79 KB)
+    📁 (admin)/
+        📁 admin/
+            📄 layout.jsx (.jsx, 5.14 KB)
+            📄 page.jsx (.jsx, 0.11 KB)
+            📁 dashboard/
+                📁 projects/
+                    📄 page.jsx (.jsx, 3.11 KB)
+                    📁 [id]/
+                        📄 page.jsx (.jsx, 8.51 KB)
+                        📁 edit/
+                            📄 page.jsx (.jsx, 15.56 KB)
+                    📁 create/
+                        📄 page.jsx (.jsx, 14.40 KB)
+                📄 page.jsx (.jsx, 0.24 KB)
+                📁 navigation/
+                    📄 page.jsx (.jsx, 3.74 KB)
+                    📁 [id]/
+                        📁 edit/
+                            📄 page.jsx (.jsx, 7.90 KB)
+                    📁 create/
+                        📄 page.jsx (.jsx, 6.39 KB)
+                📁 about/
+                    📄 page.jsx (.jsx, 11.81 KB)
+                📁 blog/
+                    📄 page.jsx (.jsx, 2.85 KB)
+                    📁 [id]/
+                        📄 page.jsx (.jsx, 8.51 KB)
+                    📁 create/
+                        📄 page.jsx (.jsx, 7.77 KB)
+                📁 sliders/
+                    📄 page.jsx (.jsx, 5.47 KB)
+                    📁 [id]/
+                        📁 edit/
+                            📄 page.jsx (.jsx, 8.34 KB)
+                    📁 create/
+                        📄 page.jsx (.jsx, 7.76 KB)
+📁 utlis/
+    📄 activeInputFocus.js (.js, 1.13 KB)
+    📄 addSwiperPadding.js (.js, 0.34 KB)
+📄 next.config.mjs (.mjs, 0.28 KB)
+📄 folder_structure_20250117_165244.log (.log, 48.35 KB)
+📁 utils/
+    📄 slugify.js (.js, 1.18 KB)
+📄 check.js (.js, 1.32 KB)
+📄 README.md (.md, 1.36 KB)
+📁 components/
+    📁 ui/
+        📄 dialog.jsx (.jsx, 3.15 KB)
+        📄 radio-group.jsx (.jsx, 1.12 KB)
+        📄 switch.jsx (.jsx, 1.01 KB)
+        📄 skeleton.jsx (.jsx, 0.22 KB)
+        📄 input.jsx (.jsx, 0.67 KB)
+        📄 textarea.jsx (.jsx, 0.57 KB)
+        📄 select.jsx (.jsx, 4.56 KB)
+        📄 dropdown-menu.jsx (.jsx, 6.03 KB)
+        📄 toast.jsx (.jsx, 3.75 KB)
+        📄 button.jsx (.jsx, 1.64 KB)
+        📄 table.jsx (.jsx, 2.18 KB)
+        📄 badge.jsx (.jsx, 0.97 KB)
+        📄 toaster.jsx (.jsx, 0.77 KB)
+        📄 slider.jsx (.jsx, 0.91 KB)
+        📄 card.jsx (.jsx, 1.41 KB)
+        📄 tabs.jsx (.jsx, 1.51 KB)
+        📄 alert-dialog.jsx (.jsx, 3.39 KB)
+        📄 alert.jsx (.jsx, 1.30 KB)
+        📄 tooltip.jsx (.jsx, 1.07 KB)
+        📄 label.jsx (.jsx, 0.53 KB)
+        📄 sheet.jsx (.jsx, 3.47 KB)
+    📄 Invoice.jsx (.jsx, 3.24 KB)
+    📁 contact/
+        📄 ContactForm.jsx (.jsx, 3.24 KB)
+        📄 Map2.jsx (.jsx, 4.51 KB)
+        📄 ContactForm2.jsx (.jsx, 4.65 KB)
+        📄 Offices.jsx (.jsx, 0.93 KB)
+        📄 BreadCumb.jsx (.jsx, 0.54 KB)
+        📄 Map.jsx (.jsx, 0.62 KB)
+    📄 ComingSoon.jsx (.jsx, 2.83 KB)
+    📁 ortachala/
+        📄 3d-photo.jsx (.jsx, 0.88 KB)
+        📄 hero-content.jsx (.jsx, 4.58 KB)
+        📄 hero-content-faq.jsx (.jsx, 1.49 KB)
+    📁 test/
+    📁 booking/
+        📄 BookingVehicles.jsx (.jsx, 6.47 KB)
+        📄 BookingExtra.jsx (.jsx, 6.98 KB)
+        📄 BookingPayment.jsx (.jsx, 10.81 KB)
+        📄 SideBar.jsx (.jsx, 4.28 KB)
+        📄 BookingTab.jsx (.jsx, 1.61 KB)
+        📄 BookingRecieved.jsx (.jsx, 4.34 KB)
+        📄 PassengerDetails.jsx (.jsx, 7.12 KB)
+    📁 footers/
+        📄 Footer9.jsx (.jsx, 4.10 KB)
+        📄 Footer8.jsx (.jsx, 4.05 KB)
+        📄 Footer6.jsx (.jsx, 5.76 KB)
+        📄 Footer7.jsx (.jsx, 6.45 KB)
+        📄 Footer5.jsx (.jsx, 5.74 KB)
+        📄 Footer4.jsx (.jsx, 6.45 KB)
+        📄 Footer1.jsx (.jsx, 3.53 KB)
+        📄 Footer3.jsx (.jsx, 6.12 KB)
+        📄 Footer2.jsx (.jsx, 6.44 KB)
+    📁 homes/
+        📁 home-2/
+            📄 Testimonials.jsx (.jsx, 4.17 KB)
+            📄 DownloadApp.jsx (.jsx, 2.06 KB)
+            📄 Facts.jsx (.jsx, 3.13 KB)
+            📄 Hero.jsx (.jsx, 10.13 KB)
+            📄 Feet.jsx (.jsx, 3.03 KB)
+            📄 Service.jsx (.jsx, 2.14 KB)
+        📁 home-10/
+            📄 Process.jsx (.jsx, 3.55 KB)
+            📄 Features.jsx (.jsx, 1.05 KB)
+            📄 Facts.jsx (.jsx, 1.10 KB)
+            📄 Features2.jsx (.jsx, 0.56 KB)
+            📄 Hero.jsx (.jsx, 10.33 KB)
+            📄 Feet.jsx (.jsx, 5.58 KB)
+            📄 Partners.jsx (.jsx, 1.16 KB)
+            📄 Services.jsx (.jsx, 5.42 KB)
+        📁 home-5/
+            📄 Testimonials.jsx (.jsx, 2.56 KB)
+            📄 hero-ortachala.jsx (.jsx, 7.38 KB)
+            📄 Faq.jsx (.jsx, 1.37 KB)
+            📄 Blogs.jsx (.jsx, 3.38 KB)
+            📄 Hero.jsx (.jsx, 8.18 KB)
+            📄 Feet.jsx (.jsx, 5.22 KB)
+            📄 Cities.jsx (.jsx, 4.60 KB)
+            📄 Service.jsx (.jsx, 1.09 KB)
+        📁 home-4/
+            📄 DownloadApp.jsx (.jsx, 2.30 KB)
+            📄 Hero.jsx (.jsx, 1.89 KB)
+            📄 Feet.jsx (.jsx, 5.33 KB)
+            📄 Steps.jsx (.jsx, 1.31 KB)
+            📄 Service.jsx (.jsx, 3.00 KB)
+        📁 home-3/
+            📄 Testimonials.jsx (.jsx, 4.27 KB)
+            📄 Proces2.jsx (.jsx, 4.51 KB)
+            📄 Process.jsx (.jsx, 0.92 KB)
+            📄 Hero.jsx (.jsx, 1.95 KB)
+            📄 Feet.jsx (.jsx, 5.55 KB)
+            📄 Cities.jsx (.jsx, 4.63 KB)
+            📄 Partners.jsx (.jsx, 1.17 KB)
+            📄 Service.jsx (.jsx, 5.70 KB)
+        📁 home-6/
+            📄 Testimonials.jsx (.jsx, 5.13 KB)
+            📄 Faq.jsx (.jsx, 4.28 KB)
+            📄 Blogs.jsx (.jsx, 3.66 KB)
+            📄 Process.jsx (.jsx, 1.01 KB)
+            📄 Features.jsx (.jsx, 1.97 KB)
+            📄 Hero.jsx (.jsx, 3.51 KB)
+            📄 Feet.jsx (.jsx, 5.35 KB)
+        📁 home-1/
+            📄 Faq.jsx (.jsx, 1.69 KB)
+            📄 Hero.jsx (.jsx, 4.56 KB)
+            📄 Feet.jsx (.jsx, 5.58 KB)
+            📄 Service.jsx (.jsx, 5.75 KB)
+        📁 home-8/
+            📄 Testimonials.jsx (.jsx, 3.99 KB)
+            📄 Features.jsx (.jsx, 1.13 KB)
+            📄 Facts.jsx (.jsx, 1.11 KB)
+            📄 Hero.jsx (.jsx, 12.39 KB)
+            📄 Feet.jsx (.jsx, 5.30 KB)
+            📄 Services.jsx (.jsx, 3.48 KB)
+        📁 common/
+            📁 blogs/
+                📄 Blogs.jsx (.jsx, 3.35 KB)
+                📄 Blogs2.jsx (.jsx, 3.35 KB)
+            📁 cta/
+                📄 Cta.jsx (.jsx, 2.42 KB)
+            📁 features/
+                📄 Features.jsx (.jsx, 1.51 KB)
+            📁 cities/
+                📄 Cities.jsx (.jsx, 4.58 KB)
+            📁 partners/
+                📄 Partners2.jsx (.jsx, 1.16 KB)
+        📁 home-9/
+            📄 Blogs.jsx (.jsx, 3.70 KB)
+            📄 DownloadApp.jsx (.jsx, 2.05 KB)
+            📄 Process.jsx (.jsx, 1.01 KB)
+            📄 Features.jsx (.jsx, 1.12 KB)
+            📄 Features3.jsx (.jsx, 1.34 KB)
+            📄 Features2.jsx (.jsx, 2.92 KB)
+            📄 Hero.jsx (.jsx, 4.65 KB)
+            📄 Feet.jsx (.jsx, 5.57 KB)
+            📄 Service.jsx (.jsx, 2.20 KB)
+        📁 home-7/
+            📄 Testimonials.jsx (.jsx, 4.69 KB)
+            📄 DownloadApp.jsx (.jsx, 1.87 KB)
+            📄 Process.jsx (.jsx, 1.11 KB)
+            📄 Features.jsx (.jsx, 1.15 KB)
+            📄 Services2.jsx (.jsx, 4.64 KB)
+            📄 Hero.jsx (.jsx, 4.55 KB)
+            📄 Services.jsx (.jsx, 1.92 KB)
+    📁 otherPages/
+        📁 about/
+            📄 Faq.jsx (.jsx, 1.69 KB)
+            📄 Features.jsx (.jsx, 1.52 KB)
+            📄 Features3.jsx (.jsx, 3.13 KB)
+            📄 Features2.jsx (.jsx, 1.01 KB)
+            📄 Banner.jsx (.jsx, 0.31 KB)
+            📄 Breadcumb.jsx (.jsx, 0.51 KB)
+            📄 Banner2.jsx (.jsx, 1.89 KB)
+        📄 Login.jsx (.jsx, 4.58 KB)
+        📁 team/
+            📄 Education.jsx (.jsx, 0.83 KB)
+            📄 TeamDetails.jsx (.jsx, 5.68 KB)
+            📄 BreadCumb2.jsx (.jsx, 0.43 KB)
+            📄 BreadCumbs.jsx (.jsx, 0.51 KB)
+            📄 Awards.jsx (.jsx, 0.68 KB)
+            📄 Experience.jsx (.jsx, 0.83 KB)
+            📄 Biography.jsx (.jsx, 0.79 KB)
+            📄 TeamMambers.jsx (.jsx, 2.54 KB)
+        📄 Register.jsx (.jsx, 5.79 KB)
+        📁 pricing/
+            📄 Pricing.jsx (.jsx, 4.88 KB)
+            📄 Breadcumb.jsx (.jsx, 0.55 KB)
+    📁 admin/
+        📁 blog/
+            📄 edit-blogs.jsx (.jsx, 2.85 KB)
+            📄 add-blogs.jsx (.jsx, 7.77 KB)
+        📄 dashboard.jsx (.jsx, 24.60 KB)
+        📄 topbar.jsx (.jsx, 0.47 KB)
+        📁 table/
+            📄 apartment-list.jsx (.jsx, 8.25 KB)
+        📁 dialogs/
+            📄 add-apartment-dialog.jsx (.jsx, 4.76 KB)
+        📄 block-selector.jsx (.jsx, 1.33 KB)
+        📄 table-filter.jsx (.jsx, 0.44 KB)
+    📁 language/
+    📁 blog/
+        📄 Ortachala-Projects.jsx (.jsx, 2.56 KB)
+        📄 BreadCumb2.jsx (.jsx, 1.26 KB)
+        📄 Blogs3.jsx (.jsx, 6.20 KB)
+        📄 Blogs2.jsx (.jsx, 6.07 KB)
+        📄 Blogs1.jsx (.jsx, 5.02 KB)
+        📄 BreadCumb.jsx (.jsx, 0.53 KB)
+        📄 RelatedBlogs.jsx (.jsx, 2.51 KB)
+        📄 BlogSingle.jsx (.jsx, 3.12 KB)
+    📁 search/
+        📄 detailed-search.jsx (.jsx, 9.59 KB)
+        📄 search-table.jsx (.jsx, 6.90 KB)
+        📄 search-form.jsx (.jsx, 3.91 KB)
+    📁 project/
+        📄 project-content.jsx (.jsx, 4.19 KB)
+        📄 features.jsx (.jsx, 2.16 KB)
+        📄 project-hero.jsx (.jsx, 1.85 KB)
+    📁 testcomponent/
+    📄 404.jsx (.jsx, 1.46 KB)
+    📁 common/
+        📁 downloadApp/
+            📄 DownloadApp2.jsx (.jsx, 1.85 KB)
+            📄 DownloadApp.jsx (.jsx, 0.93 KB)
+        📁 testimonials/
+            📄 Testimonials.jsx (.jsx, 3.51 KB)
+            📄 Testimonials2.jsx (.jsx, 3.43 KB)
+        📁 features/
+            📄 Features.jsx (.jsx, 1.10 KB)
+            📄 Features2.jsx (.jsx, 1.88 KB)
+        📄 DatePicker.jsx (.jsx, 0.28 KB)
+        📁 partners/
+            📄 Partners.jsx (.jsx, 1.18 KB)
+        📄 Pagination.jsx (.jsx, 1.81 KB)
+        📄 TimePicker.jsx (.jsx, 0.33 KB)
+        📁 facts/
+            📄 Facts.jsx (.jsx, 1.10 KB)
+        📁 process/
+            📄 Process2.jsx (.jsx, 1.31 KB)
+            📄 Process.jsx (.jsx, 3.55 KB)
+        📄 PlacePicker.jsx (.jsx, 1.94 KB)
+    📁 headers/
+        📄 MobailHeader1.jsx (.jsx, 1.33 KB)
+        📄 Header9.jsx (.jsx, 2.23 KB)
+        📄 Header8.jsx (.jsx, 3.05 KB)
+        📄 Header1.jsx (.jsx, 1.95 KB)
+        📁 components/
+            📄 Language.jsx (.jsx, 3.08 KB)
+            📄 Nav.jsx (.jsx, 1.90 KB)
+            📄 MobileNav.jsx (.jsx, 2.37 KB)
+        📄 Header3.jsx (.jsx, 2.68 KB)
+        📄 Header2.jsx (.jsx, 2.70 KB)
+        📄 Header6.jsx (.jsx, 2.17 KB)
+        📄 Header7.jsx (.jsx, 2.36 KB)
+        📄 Header5.jsx (.jsx, 3.35 KB)
+        📄 header-ortachala.jsx (.jsx, 2.39 KB)
+        📄 Header4.jsx (.jsx, 2.68 KB)
+    📁 loader/
+        📄 loader.jsx (.jsx, 1.92 KB)
+    📁 fleet-single/
+        📄 BusnessClassFleet.jsx (.jsx, 2.00 KB)
+        📄 BookSection.jsx (.jsx, 3.67 KB)
+        📄 Features.jsx (.jsx, 5.47 KB)
+        📄 Details.jsx (.jsx, 5.74 KB)
+    📁 service/
+        📄 Services1 copy.jsx (.jsx, 2.24 KB)
+        📁 serviceSingle/
+            📄 Breadcumb2.jsx (.jsx, 0.56 KB)
+            📄 SearchBox2.jsx (.jsx, 0.47 KB)
+            📄 Features2.jsx (.jsx, 3.67 KB)
+            📄 Features1.jsx (.jsx, 1.06 KB)
+            📄 Breadcumb.jsx (.jsx, 0.56 KB)
+            📄 SearchBox.jsx (.jsx, 8.97 KB)
+        📄 Services1.jsx (.jsx, 3.91 KB)
+        📄 Services2.jsx (.jsx, 2.25 KB)
+        📄 Services3.jsx (.jsx, 1.36 KB)
+        📄 Breadcumb.jsx (.jsx, 0.56 KB)
+    📁 fleet-list/
+        📄 FeetList2.jsx (.jsx, 4.95 KB)
+        📄 FeetList3.jsx (.jsx, 4.75 KB)
+        📄 FeetList1.jsx (.jsx, 4.93 KB)
+        📁 FleetList4/
+            📄 index.jsx (.jsx, 0.46 KB)
+            📄 Style4.jsx (.jsx, 1.73 KB)
+            📄 Style5.jsx (.jsx, 1.92 KB)
+            📄 Style2.jsx (.jsx, 1.85 KB)
+            📄 Style3.jsx (.jsx, 1.92 KB)
+            📄 Style1.jsx (.jsx, 1.90 KB)
+        📄 BreadCumb.jsx (.jsx, 0.54 KB)
+    📁 (admin)/
+        📁 admin/
+            📄 layout.jsx (.jsx, 4.47 KB)
+            📄 page.jsx (.jsx, 0.11 KB)
+            📁 dashboard/
+                📄 page.jsx (.jsx, 0.24 KB)
+                📁 blog/
+                    📄 page.jsx (.jsx, 2.85 KB)
+                    📁 [id]/
+                        📄 page.jsx (.jsx, 3.77 KB)
+                    📁 create/
+                        📄 page.jsx (.jsx, 7.77 KB)
+                📁 sliders/
+                    📄 page.jsx (.jsx, 5.61 KB)
+                    📁 [id]/
+                        📁 edit/
+                            📄 page.jsx (.jsx, 6.38 KB)
+                    📁 create/
+                        📄 page.jsx (.jsx, 6.54 KB)
+📁 public/
+    📄 index.html (.html, 0.00 KB)
+    📁 locales/
+        📁 ka/
+            📄 common.json (.json, 0.23 KB)
+        📁 de/
+        📁 fr/
+        📁 en/
+            📄 common.json (.json, 0.13 KB)
+    📁 assets/
+        📁 css/
+            📁 vendors/
+                📄 bootstrap.min.css (.css, 186.63 KB)
+                📄 bootstrap.min.css.map (.map, 414.21 KB)
+                📄 uicons-regular-straight.css (.css, 17.92 KB)
+                📄 normalize.css (.css, 5.99 KB)
+                📄 uicons-regular-rounded.css (.css, 24.99 KB)
+            📁 plugins/
+                📄 magnific-popup.css (.css, 6.60 KB)
+                📄 slick.css (.css, 1.54 KB)
+                📄 animate.min.css (.css, 88.00 KB)
+                📄 swiper-bundle.min.css (.css, 13.55 KB)
+                📄 bootstrap.css (.css, 191.53 KB)
+                📄 perfect-scrollbar.css (.css, 2.54 KB)
+                📄 select2.min.css (.css, 9.68 KB)
+                📄 animate.css (.css, 16.58 KB)
+                📄 bootstrap.css.map (.map, 503.14 KB)
+                📄 jquery-ui.css (.css, 35.83 KB)
+                📄 jquery.timepicker.min.css (.css, 1.00 KB)
+        📁 imgs/
+            📁 page/
+                📁 contact/
+                    📄 email.png (.png, 1.33 KB)
+                    📄 paris.png (.png, 4.69 KB)
+                    📄 london.png (.png, 4.10 KB)
+                    📄 london.svg (.svg, 8.31 KB)
+                    📄 paris.svg (.svg, 5.58 KB)
+                    📄 istabul.svg (.svg, 3.09 KB)
+                    📄 location.png (.png, 1.65 KB)
+                    📄 new-york.png (.png, 4.21 KB)
+                    📄 phone.png (.png, 1.57 KB)
+                    📄 new-york.svg (.svg, 5.10 KB)
+                    📄 istabul.png (.png, 2.39 KB)
+                📁 homepage5/
+                    📄 banner.png (.png, 2012.81 KB)
+                    📄 map.png (.png, 205.00 KB)
+                    📄 quote.png (.png, 0.46 KB)
+                    📄 bg-banner.png (.png, 34.88 KB)
+                    📄 img-how.png (.png, 3.08 KB)
+                    📄 bg-trans-pink.png (.png, 6.13 KB)
+                📁 homepage2/
+                    📄 like.svg (.svg, 4.09 KB)
+                    📄 next-white.svg (.svg, 1.36 KB)
+                    📄 arrow-button.svg (.svg, 0.88 KB)
+                    📄 bg-download.png (.png, 12.49 KB)
+                    📄 showcase.png (.png, 7.72 KB)
+                    📄 arrow-button.png (.png, 0.55 KB)
+                    📄 next-white.png (.png, 0.41 KB)
+                    📄 like.png (.png, 0.67 KB)
+                    📄 intercity.png (.png, 5.29 KB)
+                    📄 bg-line.svg (.svg, 4.40 KB)
+                    📄 prev-white.png (.png, 0.43 KB)
+                    📄 marker.svg (.svg, 2.42 KB)
+                    📄 apple.png (.png, 1.13 KB)
+                    📄 vehicle.svg (.svg, 2.97 KB)
+                    📄 play.svg (.svg, 0.75 KB)
+                    📄 airport.png (.png, 5.29 KB)
+                    📄 quote.png (.png, 0.51 KB)
+                    📄 route.png (.png, 0.70 KB)
+                    📄 route.svg (.svg, 3.80 KB)
+                    📄 google.png (.png, 1.03 KB)
+                    📄 chauffeur.png (.png, 5.29 KB)
+                    📄 author.png (.png, 0.90 KB)
+                    📄 vehicle.png (.png, 0.72 KB)
+                    📄 marker.png (.png, 0.30 KB)
+                    📄 prev-white.svg (.svg, 1.38 KB)
+                    📄 bg-line.png (.png, 13.02 KB)
+                📁 booking/
+                    📄 payment.svg (.svg, 1.57 KB)
+                    📄 img-vehicle-3.png (.png, 56.91 KB)
+                    📄 payment-hover.svg (.svg, 1.57 KB)
+                    📄 pax-hover.svg (.svg, 4.73 KB)
+                    📄 plus.png (.png, 0.15 KB)
+                    📄 img-vehicle-2.png (.png, 50.38 KB)
+                    📄 vehicle-hover.png (.png, 0.53 KB)
+                    📄 luggage.svg (.svg, 1.60 KB)
+                    📄 tick.png (.png, 0.62 KB)
+                    📄 free-time.png (.png, 0.40 KB)
+                    📄 extra-hover.png (.png, 0.37 KB)
+                    📄 time.png (.png, 0.40 KB)
+                    📄 extra.svg (.svg, 1.24 KB)
+                    📄 cancel.svg (.svg, 1.13 KB)
+                    📄 img-vehicle-4.png (.png, 65.50 KB)
+                    📄 cancel.png (.png, 0.43 KB)
+                    📄 time.svg (.svg, 1.42 KB)
+                    📄 extra.png (.png, 0.56 KB)
+                    📄 img-vehicle.png (.png, 49.72 KB)
+                    📄 safe.png (.png, 1.91 KB)
+                    📄 extra-hover.svg (.svg, 1.23 KB)
+                    📄 free-time.svg (.svg, 1.23 KB)
+                    📄 tick.svg (.svg, 0.49 KB)
+                    📄 luggage.png (.png, 0.29 KB)
+                    📄 plus.svg (.svg, 0.20 KB)
+                    📄 vehicle-hover.svg (.svg, 2.98 KB)
+                    📄 payment-hover.png (.png, 0.34 KB)
+                    📄 pax-hover.png (.png, 0.48 KB)
+                    📄 payment.png (.png, 0.46 KB)
+                    📄 minus.png (.png, 0.13 KB)
+                    📄 completed.png (.png, 1.53 KB)
+                    📄 vehicle.svg (.svg, 2.85 KB)
+                    📄 plan.svg (.svg, 1.47 KB)
+                    📄 meet.svg (.svg, 3.08 KB)
+                    📄 pax.png (.png, 0.72 KB)
+                    📄 dotted.png (.png, 0.17 KB)
+                    📄 location.png (.png, 0.79 KB)
+                    📄 passenger.svg (.svg, 6.98 KB)
+                    📄 passenger.png (.png, 0.53 KB)
+                    📄 location.svg (.svg, 0.87 KB)
+                    📄 pax.svg (.svg, 4.74 KB)
+                    📄 payment-card.png (.png, 5.19 KB)
+                    📄 meet.png (.png, 0.62 KB)
+                    📄 plan.png (.png, 0.67 KB)
+                    📄 vehicle.png (.png, 0.84 KB)
+                    📄 minus.svg (.svg, 0.14 KB)
+                📁 homepage10/
+                    📄 banner.png (.png, 14.56 KB)
+                    📄 service2.png (.png, 9.65 KB)
+                    📄 map.png (.png, 1137.09 KB)
+                    📄 service1.png (.png, 9.65 KB)
+                    📄 icon1.png (.png, 1.47 KB)
+                    📄 play.svg (.svg, 0.86 KB)
+                    📄 icon3.png (.png, 1.87 KB)
+                    📄 icon2.png (.png, 1.53 KB)
+                    📄 line.png (.png, 24.64 KB)
+                    📄 icon2.svg (.svg, 2.98 KB)
+                    📄 img-reliability.png (.png, 12.90 KB)
+                    📄 icon3.svg (.svg, 3.05 KB)
+                    📄 play.png (.png, 2.72 KB)
+                    📄 icon1.svg (.svg, 1.63 KB)
+                📁 homepage3/
+                    📄 safe.svg (.svg, 1.57 KB)
+                    📄 time.png (.png, 0.33 KB)
+                    📄 address.png (.png, 0.33 KB)
+                    📄 banner2.png (.png, 1.58 KB)
+                    📄 city2.png (.png, 3.47 KB)
+                    📄 city3.png (.png, 3.47 KB)
+                    📄 banner3.png (.png, 0.80 KB)
+                    📄 banner1.png (.png, 1.58 KB)
+                    📄 city1.png (.png, 3.47 KB)
+                    📄 safe.png (.png, 0.49 KB)
+                    📄 city4.png (.png, 3.47 KB)
+                    📄 tick.svg (.svg, 0.45 KB)
+                    📄 city5.png (.png, 3.47 KB)
+                    📄 city6.png (.png, 3.47 KB)
+                    📄 price.png (.png, 0.49 KB)
+                    📄 apple.png (.png, 1.16 KB)
+                    📄 dashed.png (.png, 0.13 KB)
+                    📄 vehicle.svg (.svg, 2.96 KB)
+                    📄 img3.png (.png, 0.43 KB)
+                    📄 bg-download-3.png (.png, 13.72 KB)
+                    📄 img2.png (.png, 1.25 KB)
+                    📄 bg-banner.png (.png, 27.26 KB)
+                    📄 img1.png (.png, 2.34 KB)
+                    📄 star.png (.png, 0.22 KB)
+                    📄 route.svg (.svg, 58.12 KB)
+                    📄 google.png (.png, 1.05 KB)
+                    📄 img-how.png (.png, 10.11 KB)
+                    📄 vehicle.png (.png, 0.71 KB)
+                    📄 price.svg (.svg, 2.95 KB)
+                    📄 bg-line.png (.png, 24.98 KB)
+                📁 homepage4/
+                    📄 journey.png (.png, 4.61 KB)
+                    📄 driver.svg (.svg, 3.27 KB)
+                    📄 tick.png (.png, 0.27 KB)
+                    📄 seat.png (.png, 0.98 KB)
+                    📄 wheel.svg (.svg, 4.93 KB)
+                    📄 banner.png (.png, 23.32 KB)
+                    📄 wheel.png (.png, 1.36 KB)
+                    📄 banner.svg (.svg, 389.59 KB)
+                    📄 seat.svg (.svg, 3.36 KB)
+                    📄 tick.svg (.svg, 0.50 KB)
+                    📄 bg-chauffer.png (.png, 4.94 KB)
+                    📄 pattern.png (.png, 3.58 KB)
+                    📄 driver.png (.png, 0.85 KB)
+                    📄 journey.svg (.svg, 81.06 KB)
+                    📄 limo.svg (.svg, 2.98 KB)
+                    📄 img4.png (.png, 0.51 KB)
+                    📄 price.png (.png, 0.58 KB)
+                    📄 apple.png (.png, 1.17 KB)
+                    📄 vehicle.svg (.svg, 78.72 KB)
+                    📄 route.png (.png, 4.78 KB)
+                    📄 img3.png (.png, 1.22 KB)
+                    📄 img2.png (.png, 1.76 KB)
+                    📄 phone.png (.png, 0.58 KB)
+                    📄 img1.png (.png, 1.76 KB)
+                    📄 phone.svg (.svg, 2.81 KB)
+                    📄 route.svg (.svg, 58.43 KB)
+                    📄 google.png (.png, 1.05 KB)
+                    📄 vehicle.png (.png, 4.67 KB)
+                    📄 price.svg (.svg, 2.96 KB)
+                    📄 limo.png (.png, 0.72 KB)
+                📁 about/
+                    📄 banner.png (.png, 12.60 KB)
+                    📄 banner2.png (.png, 6.69 KB)
+                    📄 bg-trip.png (.png, 4.13 KB)
+                    📄 icon1.png (.png, 0.41 KB)
+                    📄 icon3.png (.png, 0.57 KB)
+                    📄 icon2.png (.png, 0.42 KB)
+                    📄 quote.png (.png, 0.27 KB)
+                    📄 img1.png (.png, 1.70 KB)
+                    📄 icon2.svg (.svg, 2.96 KB)
+                    📄 icon3.svg (.svg, 2.99 KB)
+                    📄 icon1.svg (.svg, 1.56 KB)
+                📁 blog/
+                    📄 news1.png (.png, 6.25 KB)
+                    📄 news2.png (.png, 6.25 KB)
+                    📄 news3.png (.png, 6.25 KB)
+                    📄 news6.png (.png, 6.25 KB)
+                    📄 news4.png (.png, 6.25 KB)
+                    📄 news5.png (.png, 6.25 KB)
+                📁 blog2/
+                    📄 dislike.png (.png, 0.21 KB)
+                    📄 img-single3.png (.png, 3.08 KB)
+                    📄 img-single2.png (.png, 5.55 KB)
+                    📄 img-single.png (.png, 5.55 KB)
+                    📄 like.png (.png, 0.21 KB)
+                    📄 grid.png (.png, 0.10 KB)
+                    📄 img-single4.png (.png, 3.08 KB)
+                    📄 news1.png (.png, 5.01 KB)
+                    📄 news2.png (.png, 5.01 KB)
+                    📄 news3.png (.png, 5.01 KB)
+                    📄 quote.png (.png, 0.40 KB)
+                    📄 news7.png (.png, 14.79 KB)
+                    📄 news6.png (.png, 14.79 KB)
+                    📄 news4.png (.png, 5.01 KB)
+                    📄 news5.png (.png, 14.79 KB)
+                    📄 author.png (.png, 0.90 KB)
+                    📄 post3.png (.png, 1.27 KB)
+                    📄 post2.png (.png, 1.27 KB)
+                    📄 post1.png (.png, 1.27 KB)
+                📁 team-single/
+                    📄 user.png (.png, 6.68 KB)
+                    📄 dashed.png (.png, 0.18 KB)
+                📁 signin/
+                    📄 facebook.svg (.svg, 0.37 KB)
+                    📄 google.svg (.svg, 0.53 KB)
+                    📄 apple.svg (.svg, 0.85 KB)
+                📄 about.svg (.svg, 1.56 KB)
+                📁 our-team/
+                    📄 team8.png (.png, 5.00 KB)
+                    📄 bg-trans.png (.png, 0.09 KB)
+                    📄 team7.png (.png, 5.00 KB)
+                    📄 team6.png (.png, 5.00 KB)
+                    📄 team4.png (.png, 5.00 KB)
+                    📄 team5.png (.png, 5.00 KB)
+                    📄 team1.png (.png, 5.00 KB)
+                    📄 team2.png (.png, 5.00 KB)
+                    📄 team3.png (.png, 5.00 KB)
+                📁 homepage1/
+                    📄 train.png (.png, 0.50 KB)
+                    📄 safe.svg (.svg, 2.13 KB)
+                    📄 bg-faqs.png (.png, 12.98 KB)
+                    📄 desktop.png (.png, 429.81 KB)
+                    📄 bg-trans.png (.png, 70.02 KB)
+                    📄 bg-download.png (.png, 46.95 KB)
+                    📄 suv.png (.png, 8.42 KB)
+                    📄 eqs.png (.png, 8.42 KB)
+                    📄 plane.png (.png, 0.61 KB)
+                    📄 banner.png (.png, 14.56 KB)
+                    📄 bg-showcase.png (.png, 22.31 KB)
+                    📄 banner2.png (.png, 14.56 KB)
+                    📄 service3.png (.png, 1.70 KB)
+                    📄 bg-our-service.png (.png, 14.35 KB)
+                    📄 banner3.png (.png, 14.56 KB)
+                    📄 service2.png (.png, 1.70 KB)
+                    📄 btn-arrow.png (.png, 0.89 KB)
+                    📄 safe.png (.png, 2.16 KB)
+                    📄 service1.png (.png, 1.70 KB)
+                    📄 banner4.png (.png, 14.56 KB)
+                    📄 service5.png (.png, 5.02 KB)
+                    📄 play-icon.svg (.svg, 0.88 KB)
+                    📄 bg-our-fleet.png (.png, 20.05 KB)
+                    📄 banner5.png (.png, 14.56 KB)
+                    📄 service4.png (.png, 1.63 KB)
+                    📄 suv-class.png (.png, 8.42 KB)
+                    📄 service6.png (.png, 5.02 KB)
+                    📄 service7.png (.png, 5.02 KB)
+                    📄 news1.png (.png, 6.25 KB)
+                    📄 building.png (.png, 0.53 KB)
+                    📄 img-video.png (.png, 1.70 KB)
+                    📄 e-class.png (.png, 8.42 KB)
+                    📄 news2.png (.png, 6.25 KB)
+                    📄 vehicle.svg (.svg, 3.13 KB)
+                    📄 news3.png (.png, 6.25 KB)
+                    📄 service8.png (.png, 5.02 KB)
+                    📄 quote.png (.png, 0.33 KB)
+                    📄 private.png (.png, 2.23 KB)
+                    📄 img3.png (.png, 1.27 KB)
+                    📄 bg-testimonials.png (.png, 2.69 KB)
+                    📄 laptop.png (.png, 71.49 KB)
+                    📄 img2.png (.png, 1.27 KB)
+                    📄 v-class.png (.png, 8.42 KB)
+                    📄 phone.png (.png, 51.81 KB)
+                    📄 img1.png (.png, 1.47 KB)
+                    📄 prices.png (.png, 2.62 KB)
+                    📄 bg-trans2.png (.png, 1.13 KB)
+                    📄 line.png (.png, 32.34 KB)
+                    📄 play.png (.png, 2.92 KB)
+                    📄 desktop2.png (.png, 85.26 KB)
+                    📄 price.svg (.svg, 5.24 KB)
+                    📄 maps.png (.png, 172.51 KB)
+                📁 comingsoon/
+                    📄 banner.png (.png, 8.59 KB)
+                📁 homepage6/
+                    📄 banner.png (.png, 66.96 KB)
+                    📄 banner.svg (.svg, 231.55 KB)
+                    📄 dashed.png (.png, 0.21 KB)
+                    📄 img1.png (.png, 8.39 KB)
+                    📄 customer1.png (.png, 1.21 KB)
+                    📄 customer2.png (.png, 1.21 KB)
+                    📄 customer3.png (.png, 1.39 KB)
+                    📄 customer-quote.png (.png, 0.45 KB)
+                    📄 dashed.svg (.svg, 0.22 KB)
+                📁 homepage8/
+                    📄 time.png (.png, 0.62 KB)
+                    📄 address.svg (.svg, 2.40 KB)
+                    📄 banner.png (.png, 13.64 KB)
+                    📄 address.png (.png, 0.70 KB)
+                    📄 map.png (.png, 209.81 KB)
+                    📄 time.svg (.svg, 2.43 KB)
+                    📄 globe.png (.png, 0.58 KB)
+                    📄 img3.png (.png, 59.90 KB)
+                    📄 img2.png (.png, 6.70 KB)
+                    📄 location.png (.png, 0.52 KB)
+                    📄 img1.png (.png, 5.02 KB)
+                    📄 call.png (.png, 0.64 KB)
+                    📄 call.svg (.svg, 3.25 KB)
+                📁 fleet/
+                    📄 slide2.png (.png, 5.24 KB)
+                    📄 newspaper.png (.png, 0.78 KB)
+                    📄 slide1.png (.png, 5.24 KB)
+                    📄 coffee.png (.png, 0.73 KB)
+                    📄 cooperation.png (.png, 0.84 KB)
+                    📄 rim.png (.png, 1.15 KB)
+                    📄 banner.png (.png, 13.64 KB)
+                    📄 rim.svg (.svg, 5.37 KB)
+                    📄 safe.png (.png, 0.27 KB)
+                    📄 cooperation.svg (.svg, 7.58 KB)
+                    📄 coffee.svg (.svg, 3.30 KB)
+                    📄 newspaper.svg (.svg, 2.63 KB)
+                    📄 suv-class.png (.png, 5.96 KB)
+                    📄 free-cancel.png (.png, 0.24 KB)
+                    📄 camera.svg (.svg, 2.75 KB)
+                    📄 water.png (.png, 0.46 KB)
+                    📄 free-wait.png (.png, 0.23 KB)
+                    📄 wedding.png (.png, 5.02 KB)
+                    📄 water.svg (.svg, 4.77 KB)
+                    📄 meet.png (.png, 0.27 KB)
+                    📄 camera.png (.png, 0.54 KB)
+                    📄 vehicle.png (.png, 3.88 KB)
+                    📄 b-class.png (.png, 8.42 KB)
+                📁 homepage9/
+                    📄 from.svg (.svg, 1.76 KB)
+                    📄 time.png (.png, 0.41 KB)
+                    📄 call-footer.svg (.svg, 3.25 KB)
+                    📄 address.svg (.svg, 2.39 KB)
+                    📄 address.png (.png, 0.39 KB)
+                    📄 time.svg (.svg, 2.43 KB)
+                    📄 from.png (.png, 0.48 KB)
+                    📄 planning.svg (.svg, 1.60 KB)
+                    📄 to.svg (.svg, 1.75 KB)
+                    📄 call.png (.png, 0.38 KB)
+                    📄 clock.png (.png, 0.48 KB)
+                    📄 clock.svg (.svg, 1.55 KB)
+                    📄 to.png (.png, 0.50 KB)
+                    📄 planning.png (.png, 0.39 KB)
+                📁 homepage7/
+                    📄 banner.png (.png, 15.77 KB)
+                    📄 service3.png (.png, 5.03 KB)
+                    📄 service2.png (.png, 5.03 KB)
+                    📄 map.png (.png, 114.38 KB)
+                    📄 safe.png (.png, 0.45 KB)
+                    📄 service1.png (.png, 5.03 KB)
+                    📄 price.png (.png, 0.47 KB)
+                    📄 apple.png (.png, 1.06 KB)
+                    📄 vehicle.svg (.svg, 2.96 KB)
+                    📄 img1.png (.png, 13.32 KB)
+                    📄 bg-your-trip.png (.png, 4.13 KB)
+                    📄 route.svg (.svg, 1.57 KB)
+                    📄 google.png (.png, 0.95 KB)
+                    📄 airport.svg (.svg, 3.96 KB)
+                    📄 vehicle.png (.png, 0.61 KB)
+                    📄 price.svg (.svg, 2.95 KB)
+                📁 404/
+                    📄 404.png (.png, 4.51 KB)
+                    📄 404.svg (.svg, 63.50 KB)
+                📁 pricing/
+                    📄 tick.png (.png, 0.52 KB)
+                    📄 bussiness.png (.png, 2.25 KB)
+                    📄 bussiness.svg (.svg, 4.30 KB)
+                    📄 free.svg (.svg, 7.21 KB)
+                    📄 professional.svg (.svg, 6.48 KB)
+                    📄 professional.png (.png, 2.02 KB)
+                    📄 free.png (.png, 2.70 KB)
+                📁 services/
+                    📄 travel2.png (.png, 5.29 KB)
+                    📄 class.png (.png, 5.03 KB)
+                    📄 travel.png (.png, 5.02 KB)
+                    📄 terms.png (.png, 0.87 KB)
+                    📄 banner.png (.png, 12.42 KB)
+                    📄 terms.svg (.svg, 4.85 KB)
+                    📄 price.png (.png, 0.47 KB)
+                    📄 airport.png (.png, 0.79 KB)
+                    📄 img2.png (.png, 10.11 KB)
+                    📄 img1.png (.png, 10.11 KB)
+                    📄 wedding2.png (.png, 5.29 KB)
+                    📄 wedding.png (.png, 5.02 KB)
+                    📄 airport.svg (.svg, 4.00 KB)
+                📁 invoice/
+                    📄 logo.png (.png, 1.51 KB)
+            📁 ortachala/
+                📄 ortachala-hills.jpg (.jpg, 561.81 KB)
+            📁 template/
+                📄 bg-footer.png (.png, 7.19 KB)
+                📄 google-footer.png (.png, 1.10 KB)
+                📄 loading.gif (.gif, 672.07 KB)
+                📄 logo-black.svg (.svg, 2.19 KB)
+                📄 marker.svg (.svg, 2.43 KB)
+                📄 apple.png (.png, 1.21 KB)
+                📄 favicon.png (.png, 0.41 KB)
+                📁 icons/
+                    📄 search.svg (.svg, 1.36 KB)
+                    📄 call-black.svg (.svg, 3.12 KB)
+                    📄 cn.png (.png, 0.33 KB)
+                    📄 friend.svg (.svg, 7.01 KB)
+                    📄 plus.png (.png, 0.91 KB)
+                    📄 from.svg (.svg, 1.75 KB)
+                    📄 luggage.svg (.svg, 1.60 KB)
+                    📄 down-arrow.png (.png, 0.23 KB)
+                    📄 tw-black.png (.png, 0.39 KB)
+                    📄 fb.svg (.svg, 0.39 KB)
+                    📄 tw.png (.png, 0.28 KB)
+                    📄 angle-down.svg (.svg, 0.63 KB)
+                    📄 angle-down-black.svg (.svg, 0.63 KB)
+                    📄 instagram.png (.png, 0.32 KB)
+                    📄 apple-icon.svg (.svg, 1.41 KB)
+                    📄 instagram.svg (.svg, 3.57 KB)
+                    📄 nav-icon.svg (.svg, 0.19 KB)
+                    📄 tw.svg (.svg, 1.08 KB)
+                    📄 fb.png (.png, 0.23 KB)
+                    📄 en.png (.png, 0.71 KB)
+                    📄 time.svg (.svg, 1.54 KB)
+                    📄 tw-black.svg (.svg, 1.08 KB)
+                    📄 apple-icon-black.svg (.svg, 1.41 KB)
+                    📄 google-icon-black.svg (.svg, 0.57 KB)
+                    📄 plus.svg (.svg, 0.31 KB)
+                    📄 fr.png (.png, 0.21 KB)
+                    📄 logo-black.svg (.svg, 2.19 KB)
+                    📄 globe-black.svg (.svg, 2.87 KB)
+                    📄 instagram-black.png (.png, 0.47 KB)
+                    📄 minus.png (.png, 0.48 KB)
+                    📄 linkedin-black.png (.png, 0.34 KB)
+                    📄 fb-black.png (.png, 0.29 KB)
+                    📄 prev-day.png (.png, 0.21 KB)
+                    📄 laptop.png (.png, 550.00 KB)
+                    📄 linkedin.png (.png, 0.26 KB)
+                    📄 to.svg (.svg, 1.74 KB)
+                    📄 geo.png (.png, 6.95 KB)
+                    📄 next-day.png (.png, 0.22 KB)
+                    📄 call.svg (.svg, 3.12 KB)
+                    📄 google-icon.svg (.svg, 0.57 KB)
+                    📄 linkedin.svg (.svg, 1.00 KB)
+                    📄 calendar.svg (.svg, 1.60 KB)
+                    📄 globe.svg (.svg, 2.87 KB)
+                    📄 line.png (.png, 32.34 KB)
+                    📄 fb-black.svg (.svg, 0.39 KB)
+                    📄 linkedin-black.svg (.svg, 0.64 KB)
+                    📄 minus.svg (.svg, 0.22 KB)
+                    📄 instagram-black.svg (.svg, 1.85 KB)
+                📄 apple-footer.png (.png, 1.22 KB)
+                📄 google.png (.png, 1.11 KB)
+                📄 logo.svg (.svg, 2.17 KB)
+                📄 favicon.svg (.svg, 2.90 KB)
+                📄 marker.png (.png, 0.27 KB)
+            📁 slider/
+                📁 swiper/
+                    📄 prev.svg (.svg, 0.57 KB)
+                    📄 next.svg (.svg, 0.63 KB)
+                📁 logo/
+                    📄 air.svg (.svg, 41.32 KB)
+                    📄 nla.svg (.svg, 124.46 KB)
+                    📄 nba.svg (.svg, 105.51 KB)
+                    📄 eb.svg (.svg, 26.95 KB)
+        📁 scss/
+            📁 vendors/
+                📄 _vendors-import.scss (.scss, 0.52 KB)
+            📁 layout/
+                📄 _responsive.scss (.scss, 19.94 KB)
+                📄 _navigation.scss (.scss, 15.83 KB)
+                📄 _sidebar.scss (.scss, 0.00 KB)
+                📄 _footer.scss (.scss, 7.19 KB)
+                📄 _header.scss (.scss, 15.13 KB)
+                📄 _spacing.scss (.scss, 13.41 KB)
+            📄 custom.scss (.scss, 5.42 KB)
+            📁 components/
+                📄 _banners.scss (.scss, 6.11 KB)
+                📄 _noUISlider.scss (.scss, 2.98 KB)
+                📄 _misc.scss (.scss, 5.00 KB)
+                📄 _buttons.scss (.scss, 10.65 KB)
+                📄 _tabs.scss (.scss, 0.00 KB)
+                📄 _card.scss (.scss, 10.88 KB)
+                📄 _slider.scss (.scss, 2.94 KB)
+                📄 _form.scss (.scss, 1.15 KB)
+            📁 abstracts/
+                📄 _functions.scss (.scss, 0.00 KB)
+                📄 _variables.scss (.scss, 2.12 KB)
+                📄 _mixins.scss (.scss, 4.38 KB)
+            📄 style.scss (.scss, 1.67 KB)
+            📁 pages/
+                📄 _comingsoon.scss (.scss, 1.40 KB)
+                📄 _blog-list.scss (.scss, 6.88 KB)
+                📄 _about.scss (.scss, 1.33 KB)
+                📄 _homepage7.scss (.scss, 2.27 KB)
+                📄 _fleet.scss (.scss, 3.06 KB)
+                📄 _homepage6.scss (.scss, 3.22 KB)
+                📄 _booking.scss (.scss, 10.84 KB)
+                📄 _pricing.scss (.scss, 1.56 KB)
+                📄 _login.scss (.scss, 0.72 KB)
+                📄 _homepage1.scss (.scss, 11.62 KB)
+                📄 _contact.scss (.scss, 0.86 KB)
+                📄 _invoice.scss (.scss, 1.40 KB)
+                📄 _team-single.scss (.scss, 2.50 KB)
+                📄 _homepage3.scss (.scss, 4.39 KB)
+                📄 _services.scss (.scss, 0.49 KB)
+                📄 _homepage2.scss (.scss, 5.20 KB)
+                📄 _homepage9.scss (.scss, 2.53 KB)
+                📄 _homepage5.scss (.scss, 3.90 KB)
+                📄 _homepage4.scss (.scss, 1.74 KB)
+                📄 _homepage8.scss (.scss, 3.99 KB)
+                📄 _homepage10.scss (.scss, 3.75 KB)
+            📁 themes/
+                📄 _default.scss (.scss, 0.00 KB)
+            📁 base/
+                📄 _typography.scss (.scss, 0.17 KB)
+                📄 _animation.scss (.scss, 4.53 KB)
+                📄 _common.scss (.scss, 12.13 KB)
+        📄 polygon-ld1.jpg (.jpg, 1512.73 KB)
+        📁 fonts/
+            📁 uicons/
+                📄 uicons-regular-rounded.eot (.eot, 145.25 KB)
+                📄 uicons-regular-straight.eot (.eot, 75.24 KB)
+                📄 uicons-regular-straight.woff2 (.woff2, 30.34 KB)
+                📄 uicons-regular-rounded.woff2 (.woff2, 57.98 KB)
+                📄 uicons-regular-rounded.woff (.woff, 70.91 KB)
+                📄 uicons-regular-straight.woff (.woff, 36.84 KB)
+📄 .gitignore (, 0.38 KB)
+📄 package-lock.json (.json, 148.84 KB)
+📄 package.json (.json, 1.53 KB)
+📁 hooks/
+    📄 use-filters.js (.js, 4.03 KB)
+    📄 use-blocks.js (.js, 4.37 KB)
+    📄 use-toast.js (.js, 3.01 KB)
+    📄 use-apartments.js (.js, 4.09 KB)
+📄 routes.js (.js, 0.00 KB)
+📄 middleware.js (.js, 3.16 KB)
+📄 structure.py (.py, 4.05 KB)
+📁 lib/
+    📄 db.js (.js, 1.94 KB)
+    📄 data.js (.js, 1.01 KB)
+    📄 utils.js (.js, 0.13 KB)
+📄 migrate.js (.js, 6.06 KB)
+📄 components.json (.json, 0.43 KB)
+📄 postcss.config.js (.js, 0.21 KB)
+📁 data/
+    📄 footerLinks.js (.js, 1.74 KB)
+    📄 team.js (.js, 2.82 KB)
+    📄 features.js (.js, 4.57 KB)
+    📄 services.js (.js, 4.36 KB)
+    📄 partners.js (.js, 0.24 KB)
+    📄 facts.js (.js, 0.33 KB)
+    📄 testimonials.js (.js, 7.87 KB)
+    📄 search-homes.js (.js, 0.00 KB)
+    📄 faq.js (.js, 3.19 KB)
+    📄 blogs.js (.js, 6.26 KB)
+    📄 contact.js (.js, 0.94 KB)
+    📄 cars.js (.js, 3.49 KB)
+    📄 locations.js (.js, 0.63 KB)
+    📄 languages.js (.js, 0.25 KB)
+    📄 menu.js (.js, 2.56 KB)
+    📄 process.js (.js, 4.05 KB)
+    📄 cities.js (.js, 0.88 KB)
+    📄 pricing.js (.js, 1.08 KB)
+    📄 socials.js (.js, 0.41 KB)
+📁 src/
+    📁 i18n/
+        📄 request.js (.js, 0.40 KB)
+        📄 routing.js (.js, 0.32 KB)

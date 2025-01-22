@@ -139,7 +139,7 @@ export default function HeroOrtachala() {
                   <div className="mt-30 wow fadeInUp">
                     <Link
                       className="btn btn-border"
-                      href={`/project-details/${project.id}`}
+                      href={`/projects/${project.id}`}
                     >
                       {currentLang === "ge" ? "პროექტის ნახვა" : "View Project"}
                       <svg

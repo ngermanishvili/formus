@@ -131,3 +131,41 @@ export async function POST(request) {
         );
     }
 }
+
+export async function GET() {
+    try {
+        const result = await db.query(`
+        SELECT 
+          a.*,
+          t.total_area,
+          t.studio_area,
+          t.bedroom_area,
+          t.bedroom2_area,
+          t.bathroom_area,
+          t.bathroom2_area,
+          t.living_room_area,
+          t.balcony_area,
+          t.balcony2_area,
+          a.home_2d,
+          a.home_3d
+        FROM apartments a
+        JOIN apartment_types t ON a.type_id = t.type_id
+        ORDER BY a.apartment_number
+      `);
+
+        return NextResponse.json({
+            status: "success",
+            data: result
+        });
+    } catch (error) {
+        console.error('Error fetching apartments:', error);
+        return NextResponse.json(
+            {
+                status: "error",
+                message: "შეცდომა ბინების მოძიებისას",
+                detail: process.env.NODE_ENV === 'development' ? error.message : undefined
+            },
+            { status: 500 }
+        );
+    }
+}

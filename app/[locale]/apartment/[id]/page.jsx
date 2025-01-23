@@ -1,3 +1,4 @@
+//app/[locale]/apartment/[id]/page.jsx
 "use client";
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";

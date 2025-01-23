@@ -2,24 +2,27 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
+// app/api/sliders/route.js
 export async function POST(request) {
     try {
         const data = await request.json();
 
         const result = await db.query(
             `INSERT INTO landing_sliders (
-                title_ge, 
-                description_ge, 
+                title_ge,
+                description_ge,
                 title_en,
                 description_en,
+                image_url,
                 order_position,
                 is_active
-            ) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
             [
                 data.title_ge,
                 data.description_ge,
                 data.title_en,
                 data.description_en,
+                data.image_url,
                 data.order_position || 1,
                 true
             ]

@@ -2,8 +2,8 @@
 import React, { useState, memo, useEffect } from "react";
 import Header1 from "@/components/headers/Header1";
 import { Card, CardContent } from "@/components/ui/card";
-import LoadingOverlay from "@/components/loader/loader";
 import { useRouter } from "next/navigation";
+import { CldImage } from "next-cloudinary";
 
 const IMAGES = {
   first:
@@ -330,10 +330,14 @@ const OrtachalaPolygon = () => {
     <div className="relative w-full">
       <div className="relative w-full h-full flex items-center justify-center">
         <div className="w-full h-full relative overflow-hidden">
-          <img
+          <CldImage
             src={IMAGES.first}
+            width={3906}
+            height={2200}
             alt="Ortachala"
             className="w-full h-full object-contain md:object-cover"
+            cloudName="formus"
+            loading="lazy"
           />
           <div className="absolute inset-0 flex items-center justify-center">
             <svg
@@ -483,7 +487,6 @@ const OrtachalaPolygon = () => {
           </div>
         </div>
       )}
-      {isLoading && <LoadingOverlay />}
     </div>
   );
 };

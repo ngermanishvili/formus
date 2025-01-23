@@ -1,4 +1,3 @@
-//app/[locale]/apartment/[id]/page.jsx
 "use client";
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -7,6 +6,7 @@ import LoadingOverlay from "@/components/loader/loader";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Image from "next/image";
+import { CldImage } from "next-cloudinary";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 const ApartmentDetails = () => {
@@ -121,7 +121,7 @@ const ApartmentDetails = () => {
 
               {/* Image Container with Hover Effect */}
               <div
-                className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-gray-100 cursor-zoom-in group"
+                className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-gray-100  group"
                 onClick={() => setIsImageOpen(true)}
               >
                 <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity z-10" />
@@ -143,11 +143,15 @@ const ApartmentDetails = () => {
                     </svg>
                   </div>
                 </div>
-                <Image
+                <CldImage
                   src={activeView === "2D" ? data.home_2d : data.home_3d}
+                  width={1920}
+                  height={1080}
+                  className="object-cover w-full h-full transition-transform duration-300 transform group-hover:scale-110"
                   alt={`${activeView} ვიზუალი`}
-                  fill
-                  className="object-contain transition-transform duration-300 group-hover:scale-105"
+                  cloudName="formus"
+                  quality={60}
+                  loading="lazy"
                 />
               </div>
             </div>
@@ -324,13 +328,15 @@ const ApartmentDetails = () => {
 
           {/* Image Container */}
           <div className="relative h-full w-full overflow-hidden">
-            <Image
+            <CldImage
               src={activeView === "2D" ? data.home_2d : data.home_3d}
+              width={1920}
+              height={1080}
+              className="object-contain w-full h-full"
               alt={`${activeView} ვიზუალი`}
-              fill
-              className="object-contain transition-opacity duration-300 rounded-lg"
-              quality={100}
-              priority
+              cloudName="formus"
+              quality={60}
+              loading="lazy"
             />
           </div>
         </DialogContent>

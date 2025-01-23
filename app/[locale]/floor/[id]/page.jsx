@@ -5,6 +5,7 @@ import Header1 from "@/components/headers/Header1";
 import LoadingOverlay from "@/components/loader/loader";
 import { useRouter } from "next/navigation";
 import RoomAreas from "../(components)/room-area";
+import { CldImage } from "next-cloudinary";
 
 const Polygon = memo(({ data, isHovered, onHover, onClick, isMobile }) => {
   const handleClick = () => {
@@ -90,10 +91,15 @@ const InfoPanel = memo(({ data, onViewDetails }) => {
   return (
     <div className="w-full bg-gray-200 rounded-xl shadow-lg overflow-hidden lg:max-w-sm">
       <div className="relative w-full">
-        <img
+        <CldImage
           src={data.photo_3d || data.photo_2d}
+          width={800}
+          height={600}
           alt={`Apartment ${data.apartment_number}`}
           className="w-full h-48 md:h-56 lg:h-48 object-cover"
+          cloudName="formus"
+          quality={50}
+          loading="lazy"
         />
         <div
           className={`absolute top-3 right-3 px-3 py-1 rounded-full text-sm font-medium text-white ${getStatusColor(
@@ -219,11 +225,17 @@ const FloorDetails = () => {
                 style={{ paddingTop: "60.89%", position: "relative" }}
               >
                 <div className="absolute inset-0">
-                  <img
+                  <CldImage
+                    width={1115}
+                    height={678}
                     src={floor.floor_plan_url}
-                    alt={`Floor ${floor.floor_number} plan`}
+                    alt={`Floor ${floor.floor_number}`}
+                    cloudName="formus"
                     className="w-full h-full object-cover"
+                    quality={50}
+                    loading="lazy"
                   />
+
                   <svg
                     viewBox="0 0 1115 678"
                     className="absolute inset-0 w-full h-full"

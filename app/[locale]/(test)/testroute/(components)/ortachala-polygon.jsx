@@ -381,7 +381,7 @@ const OrtachalaPolygon = () => {
         >
           <div
             className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur-lg z-50 
-                      border-t border-blue-500/50 shadow-xl animate-slide-up"
+                border-t border-blue-500/50 shadow-xl animate-slide-up"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="max-w-3xl mx-auto relative">
@@ -464,6 +464,19 @@ const OrtachalaPolygon = () => {
                       მ²
                     </div>
                   </div>
+                </div>
+                {/* Add this new button section */}
+                <div className="mt-4">
+                  <button
+                    onClick={() => {
+                      handlePolygonClick(selectedPolygon);
+                      setSelectedPolygon(null);
+                    }}
+                    className="w-full bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 rounded-lg
+                        transition-colors duration-200 flex items-center justify-center"
+                  >
+                    დეტალების ნახვა
+                  </button>
                 </div>
               </div>
             </div>

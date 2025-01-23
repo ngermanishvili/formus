@@ -136,27 +136,29 @@ export async function GET() {
     try {
         const result = await db.query(`
         SELECT 
-          a.*,
-          t.total_area,
-          t.studio_area,
-          t.bedroom_area,
-          t.bedroom2_area,
-          t.bathroom_area,
-          t.bathroom2_area,
-          t.living_room_area,
-          t.balcony_area,
-          t.balcony2_area,
+          a.apartment_id,
+          a.block_id,
+          a.floor,
+          a.status,
+          a.price,
           a.home_2d,
-          a.home_3d
+          a.home_3d,
+          t.total_area
         FROM apartments a
         JOIN apartment_types t ON a.type_id = t.type_id
         ORDER BY a.apartment_number
       `);
 
-        return NextResponse.json({
-            status: "success",
-            data: result
-        });
+        return NextResponse.json(
+            { status: "success", data: result },
+            {
+                headers: {
+                    "Cache-Control": "public, max-age=300, s-maxage=600",
+                    "CDN-Cache-Control": "public, s-maxage=600",
+                    "Vercel-CDN-Cache-Control": "public, s-maxage=3600",
+                }
+            }
+        );
     } catch (error) {
         console.error('Error fetching apartments:', error);
         return NextResponse.json(

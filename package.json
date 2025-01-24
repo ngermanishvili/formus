@@ -41,6 +41,7 @@
     "react-multi-date-picker": "^4.4.1",
     "react-slick": "^0.30.2",
     "react-spinners": "^0.15.0",
+    "react-zoom-pan-pinch": "^3.6.1",
     "sass": "^1.72.0",
     "slick": "^1.12.2",
     "sonner": "^1.7.2",

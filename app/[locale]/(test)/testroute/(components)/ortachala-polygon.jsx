@@ -4,6 +4,9 @@ import Header1 from "@/components/headers/Header1";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import { CldImage } from "next-cloudinary";
+import { Minus, Plus, RotateCcw } from "lucide-react";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
+import ApartmentFilters from "@/components/apartment/filters";
 
 const IMAGES = {
   first:
@@ -173,35 +176,29 @@ const InfoCard = memo(({ data, apartments, position }) => {
         <div className="max-w-3xl mx-auto">
           <div className="p-4 md:p-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {/* სათაური */}
               <div className="col-span-2 md:col-span-4">
                 <h3 className="text-lg md:text-xl font-bold text-white">
                   {data.block_id} ბლოკი, სართული {data.floor}
                 </h3>
               </div>
-
-              {/* სტატისტიკა */}
               <div className="bg-white/10 rounded-lg p-3">
                 <div className="text-sm text-gray-400">სულ ბინა</div>
                 <div className="text-lg font-semibold text-white">
                   {floorApartments.length}
                 </div>
               </div>
-
               <div className="bg-white/10 rounded-lg p-3">
                 <div className="text-sm text-gray-400">ხელმისაწვდომი</div>
                 <div className="text-lg font-semibold text-green-400">
                   {statusCounts.available}
                 </div>
               </div>
-
               <div className="bg-white/10 rounded-lg p-3">
                 <div className="text-sm text-gray-400">გაყიდული</div>
                 <div className="text-lg font-semibold text-red-400">
                   {statusCounts.sold}
                 </div>
               </div>
-
               <div className="bg-white/10 rounded-lg p-3">
                 <div className="text-sm text-gray-400">საშუალო ფართი</div>
                 <div className="text-lg font-semibold text-blue-400">
@@ -215,7 +212,6 @@ const InfoCard = memo(({ data, apartments, position }) => {
     );
   }
 
-  // Desktop version remains the same with hover behavior
   return (
     <div
       className="fixed bg-black/90 backdrop-blur-sm rounded-lg p-4 
@@ -230,10 +226,8 @@ const InfoCard = memo(({ data, apartments, position }) => {
       <div className="text-lg font-bold mb-3">
         {data.block_id} ბლოკი, სართული {data.floor}
       </div>
-
       <div className="space-y-2">
         <div className="text-gray-300">სულ ბინა: {floorApartments.length}</div>
-
         <div className="space-y-1">
           <div className="flex items-center justify-between">
             <span className="text-gray-400">ხელმისაწვდომი:</span>
@@ -254,7 +248,6 @@ const InfoCard = memo(({ data, apartments, position }) => {
             </span>
           </div>
         </div>
-
         <div className="pt-2 border-t border-gray-700">
           <div className="flex items-center justify-between">
             <span className="text-gray-400">საშუალო ფართი:</span>
@@ -265,6 +258,62 @@ const InfoCard = memo(({ data, apartments, position }) => {
     </div>
   );
 });
+
+const Controls = ({ zoomIn, zoomOut, resetTransform }) => (
+  <div className="fixed bottom-24 right-4 flex flex-col gap-2 z-50">
+    <button
+      onClick={() => zoomIn()}
+      className="p-2 rounded-full bg-purple-500/90 backdrop-blur-sm text-white 
+               shadow-lg hover:bg-purple-600 active:bg-purple-700 transition-colors"
+    >
+      <Plus size={24} />
+    </button>
+    <button
+      onClick={() => zoomOut()}
+      className="p-2 rounded-full bg-purple-500/90 backdrop-blur-sm text-white 
+               shadow-lg hover:bg-purple-600 active:bg-purple-700 transition-colors"
+    >
+      <Minus size={24} />
+    </button>
+    <button
+      onClick={() => resetTransform()}
+      className="p-2 rounded-full bg-purple-500/90 backdrop-blur-sm text-white 
+               shadow-lg hover:bg-purple-600 active:bg-purple-700 transition-colors"
+    >
+      <RotateCcw size={24} />
+    </button>
+  </div>
+);
+
+const MobileView = ({ children }) => {
+  return (
+    <TransformWrapper
+      initialScale={1}
+      minScale={1} // ეს იყო 0.5, ვზრდით 1-მდე
+      maxScale={4}
+      limitToBounds={true} // ეს იყო false
+      wheel={{ disabled: true }}
+      doubleClick={{ disabled: true }}
+    >
+      {(utils) => (
+        <>
+          <Controls {...utils} />
+          <TransformComponent
+            wrapperClassName="!w-full !h-full"
+            contentClassName="!w-full !h-full"
+          >
+            {children}
+          </TransformComponent>
+        </>
+      )}
+    </TransformWrapper>
+  );
+};
+
+const DesktopView = ({ children }) => {
+  return children;
+};
+
 const OrtachalaPolygon = () => {
   const [hoveredPolygon, setHoveredPolygon] = useState(null);
   const [hoverPosition, setHoverPosition] = useState(null);
@@ -273,7 +322,19 @@ const OrtachalaPolygon = () => {
   const [apartments, setApartments] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 1024);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -326,51 +387,58 @@ const OrtachalaPolygon = () => {
     );
   }
 
-  return (
-    <div className="relative w-full">
-      <div className="relative w-full h-full flex items-center justify-center">
-        <div className="w-full h-full relative overflow-hidden">
-          <CldImage
-            src={IMAGES.first}
-            width={3906}
-            height={2200}
-            alt="Ortachala"
-            className="w-full h-full object-contain md:object-cover"
-            cloudName="formus"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <svg
-              className="w-full h-full"
-              viewBox={VIEW_BOX.first}
-              preserveAspectRatio="xMidYMid meet"
-            >
-              {polygons.map((polygon) => (
-                <Polygon
-                  key={polygon.id}
-                  data={polygon}
-                  isHovered={hoveredPolygon?.id === polygon.id}
-                  onHover={(data, position) => {
-                    const isMobile = window.innerWidth <= 1024;
-                    if (!isMobile) {
-                      setHoveredPolygon(data);
-                      setHoverPosition(position);
-                    }
-                  }}
-                  onClick={(data) => {
-                    const isMobile = window.innerWidth <= 1024;
-                    if (isMobile) {
-                      handleMobileClick(data);
-                    } else {
-                      handlePolygonClick(data);
-                    }
-                  }}
-                />
-              ))}
-            </svg>
-          </div>
+  const content = (
+    <div className="relative w-full h-full flex items-center justify-center">
+      <div className="w-full h-full relative overflow-hidden">
+        <CldImage
+          src={IMAGES.first}
+          width={3906}
+          height={2200}
+          alt="Ortachala"
+          className="w-full h-full object-contain md:object-cover"
+          cloudName="formus"
+          loading="lazy"
+        />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <svg
+            className="w-full h-full"
+            viewBox={VIEW_BOX.first}
+            preserveAspectRatio="xMidYMid meet"
+          >
+            {polygons.map((polygon) => (
+              <Polygon
+                key={polygon.id}
+                data={polygon}
+                isHovered={hoveredPolygon?.id === polygon.id}
+                onHover={(data, position) => {
+                  if (!isMobile) {
+                    setHoveredPolygon(data);
+                    setHoverPosition(position);
+                  }
+                }}
+                onClick={(data) => {
+                  if (isMobile) {
+                    handleMobileClick(data);
+                  } else {
+                    handlePolygonClick(data);
+                  }
+                }}
+              />
+            ))}
+          </svg>
         </div>
       </div>
+    </div>
+  );
+
+  return (
+    <div className="relative w-full">
+      {isMobile ? (
+        <MobileView>{content}</MobileView>
+      ) : (
+        <DesktopView>{content}</DesktopView>
+      )}
+
       {hoveredPolygon && (
         <InfoCard
           data={hoveredPolygon}
@@ -378,6 +446,7 @@ const OrtachalaPolygon = () => {
           position={hoverPosition}
         />
       )}
+
       {selectedPolygon && (
         <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
@@ -469,7 +538,6 @@ const OrtachalaPolygon = () => {
                     </div>
                   </div>
                 </div>
-                {/* Add this new button section */}
                 <div className="mt-4">
                   <button
                     onClick={() => {

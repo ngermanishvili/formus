@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
+import React from "react";
+import { Search, SlidersHorizontal } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -9,160 +9,125 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
-const FiltersPanel = ({
-  selectedBlock,
-  setSelectedBlock,
-  selectedFloor,
-  setSelectedFloor,
-  selectedStatus,
-  setSelectedStatus,
-  sortBy,
-  setSortBy,
-  areaRange,
-  setAreaRange,
-  resetFilters,
-  applyFilters,
-  uniqueBlocks,
-  uniqueFloors,
-}) => {
-  const [isOpen, setIsOpen] = useState("filters");
+const ApartmentFilters = ({ onSearch, onFilter, isMobile }) => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [filters, setFilters] = React.useState({
+    block: "",
+    status: "",
+    sort: "",
+  });
+
+  const handleSearch = (value) => {
+    setSearchTerm(value);
+    onSearch?.(value);
+  };
+
+  const handleFilter = (type, value) => {
+    const newFilters = { ...filters, [type]: value };
+    setFilters(newFilters);
+    onFilter?.(type, value);
+  };
+
+  const FiltersContent = () => (
+    <div className="space-y-4 w-full">
+      <div className="relative">
+        <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="ძიება ნომრით..."
+          className="pl-10"
+          value={searchTerm}
+          onChange={(e) => handleSearch(e.target.value)}
+        />
+      </div>
+
+      <div className="flex flex-col sm:flex-row gap-4">
+        <Select
+          value={filters.block}
+          onValueChange={(value) => handleFilter("block", value)}
+        >
+          <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectValue placeholder="ბლოკი" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="A">A ბლოკი</SelectItem>
+            <SelectItem value="B">B ბლოკი</SelectItem>
+            <SelectItem value="D">D ბლოკი</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select
+          value={filters.status}
+          onValueChange={(value) => handleFilter("status", value)}
+        >
+          <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectValue placeholder="სტატუსი" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="available">ხელმისაწვდომი</SelectItem>
+            <SelectItem value="sold">გაყიდული</SelectItem>
+            <SelectItem value="reserved">დაჯავშნული</SelectItem>
+          </SelectContent>
+        </Select>
+
+        <Select
+          value={filters.sort}
+          onValueChange={(value) => handleFilter("sort", value)}
+        >
+          <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectValue placeholder="სორტირება" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="price_asc">ფასი ↑</SelectItem>
+            <SelectItem value="price_desc">ფასი ↓</SelectItem>
+            <SelectItem value="area_asc">ფართი ↑</SelectItem>
+            <SelectItem value="area_desc">ფართი ↓</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="bg-white p-4 md:p-6 rounded-xl shadow-sm">
-      <Accordion
-        type="single"
-        collapsible
-        value={isOpen}
-        onValueChange={setIsOpen}
-      >
-        <AccordionItem value="filters" className="border-none">
-          <div className="flex justify-between items-center mb-6">
-            <AccordionTrigger className="hover:no-underline">
-              <h3 className="text-lg font-semibold">ფილტრები</h3>
-            </AccordionTrigger>
-            <Button variant="ghost" onClick={resetFilters} className="text-sm">
-              გასუფთავება
-            </Button>
-          </div>
-
-          <AccordionContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">ბლოკი</label>
-                <Select value={selectedBlock} onValueChange={setSelectedBlock}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="აირჩიეთ ბლოკი" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">ყველა ბლოკი</SelectItem>
-                    {uniqueBlocks.map((block) => (
-                      <SelectItem key={block} value={block}>
-                        ბლოკი {block}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+    <>
+      {isMobile ? (
+        <div className="fixed bottom-24 right-4 z-40">
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <button
+                className="rounded-full p-3 bg-purple-500 text-white shadow-lg 
+                          hover:bg-purple-600 active:bg-purple-700 transition-colors"
+              >
+                <SlidersHorizontal className="h-6 w-6" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="h-[90vh]">
+              <SheetHeader>
+                <SheetTitle>ფილტრები</SheetTitle>
+              </SheetHeader>
+              <div className="mt-6">
+                <FiltersContent />
               </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">სართული</label>
-                <Select value={selectedFloor} onValueChange={setSelectedFloor}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="აირჩიეთ სართული" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">ყველა სართული</SelectItem>
-                    {uniqueFloors.map((floor) => (
-                      <SelectItem key={floor} value={floor.toString()}>
-                        სართული {floor}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">სტატუსი</label>
-                <Select
-                  value={selectedStatus}
-                  onValueChange={setSelectedStatus}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="აირჩიეთ სტატუსი" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">ყველა სტატუსი</SelectItem>
-                    <SelectItem value="available">ხელმისაწვდომი</SelectItem>
-                    <SelectItem value="reserved">დაჯავშნული</SelectItem>
-                    <SelectItem value="sold">გაყიდული</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">სორტირება</label>
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="აირჩიეთ სორტირება" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="area-asc">ფართი (ზრდადობით)</SelectItem>
-                    <SelectItem value="area-desc">
-                      ფართი (კლებადობით)
-                    </SelectItem>
-                    <SelectItem value="floor-asc">
-                      სართული (ზრდადობით)
-                    </SelectItem>
-                    <SelectItem value="floor-desc">
-                      სართული (კლებადობით)
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2 col-span-full md:col-span-2">
-                <label className="text-sm font-medium">
-                  ფართის დიაპაზონი (მ²)
-                </label>
-                <div className="flex gap-4">
-                  <Input
-                    type="number"
-                    placeholder="მინ. ფართი"
-                    value={areaRange.min}
-                    onChange={(e) =>
-                      setAreaRange((prev) => ({ ...prev, min: e.target.value }))
-                    }
-                    className="flex-1"
-                  />
-                  <Input
-                    type="number"
-                    placeholder="მაქს. ფართი"
-                    value={areaRange.max}
-                    onChange={(e) =>
-                      setAreaRange((prev) => ({ ...prev, max: e.target.value }))
-                    }
-                    className="flex-1"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-6 flex justify-end">
-              <Button onClick={applyFilters} className="w-full md:w-auto">
-                ძებნა
-              </Button>
-            </div>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      ) : (
+        <div
+          className="w-full max-w-6xl mx-auto px-4 py-6 bg-black/80 backdrop-blur-sm 
+                        rounded-lg border border-purple-500/20 shadow-lg"
+        >
+          <FiltersContent />
+        </div>
+      )}
+    </>
   );
 };
 
-export default FiltersPanel;
+export default ApartmentFilters;

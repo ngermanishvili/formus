@@ -9,13 +9,10 @@ import MobailHeader1 from "@/components/headers/MobailHeader1";
 const AboutFormus = () => {
   const [aboutData, setAboutData] = useState([]);
   const params = useParams();
-  const locale = params.locale || "ka"; // თუ locale არაა, default არის 'ka'
+  const locale = params.locale || "ka";
 
-  // ენის მიხედვით ველების შერჩევის ფუნქცია
   const getLocalizedField = (item, field) => {
     if (!item) return "";
-
-    // მაგ: title_ge -> title_en
     const fieldSuffix = locale === "en" ? "en" : "ge";
     return item[`${field}_${fieldSuffix}`];
   };
@@ -40,7 +37,6 @@ const AboutFormus = () => {
     <>
       <Header1 /> <MobailHeader1 />
       <div className="flex flex-col items-center w-full py-10">
-        {/* Hero Image Container */}
         <div className="w-full flex justify-center mb-8 px-4">
           <div className="w-full max-w-[1100px]">
             <img
@@ -54,22 +50,22 @@ const AboutFormus = () => {
           </div>
         </div>
 
-        {/* Content Section */}
         <div className="w-full max-w-6xl px-4">
           <h2 className="text-4xl font-bold mb-6">
             {getLocalizedField(aboutData[0], "title")}
           </h2>
 
-          {/* First Section */}
           <div className="mb-12">
             <p className="text-gray-700 mb-4 text-lg leading-relaxed">
               {getLocalizedField(aboutData[0], "description")}
             </p>
           </div>
 
-          {/* Middle Section */}
           <div className="flex flex-col md:flex-row items-center gap-8 mb-12">
             <div className="flex-1">
+              <h3 className="text-2xl font-bold mb-4">
+                {getLocalizedField(aboutData[1], "title")}
+              </h3>
               <p className="text-gray-700 mb-4 text-lg leading-relaxed">
                 {getLocalizedField(aboutData[1], "description")}
               </p>
@@ -91,7 +87,6 @@ const AboutFormus = () => {
             </div>
           </div>
 
-          {/* Bottom Section */}
           <div className="flex flex-col md:flex-row items-center gap-8">
             <div className="w-72 h-72 rounded-full overflow-hidden">
               <img
@@ -104,13 +99,15 @@ const AboutFormus = () => {
               />
             </div>
             <div className="flex-1">
+              <h3 className="text-2xl font-bold mb-4">
+                {getLocalizedField(aboutData[2], "title")}
+              </h3>
               <p className="text-gray-700 mb-4 text-lg leading-relaxed">
                 {getLocalizedField(aboutData[2], "description")}
               </p>
             </div>
           </div>
 
-          {/* Contact Information */}
           {aboutData[0]?.address_ge && (
             <div className="mt-12 p-6 bg-gray-50 rounded-lg">
               <h3 className="text-2xl font-bold mb-4">
@@ -122,14 +119,14 @@ const AboutFormus = () => {
                 <p className="text-gray-700">
                   <span className="font-semibold">
                     {locale === "en" ? "Address:" : "მისამართი:"}
-                  </span>
+                  </span>{" "}
                   {getLocalizedField(aboutData[0], "address")}
                 </p>
                 {aboutData[0].phone && (
                   <p className="text-gray-700">
                     <span className="font-semibold">
                       {locale === "en" ? "Phone:" : "ტელეფონი:"}
-                    </span>
+                    </span>{" "}
                     {aboutData[0].phone}
                   </p>
                 )}
@@ -137,7 +134,7 @@ const AboutFormus = () => {
                   <p className="text-gray-700">
                     <span className="font-semibold">
                       {locale === "en" ? "Email:" : "ელ-ფოსტა:"}
-                    </span>
+                    </span>{" "}
                     {aboutData[0].email}
                   </p>
                 )}

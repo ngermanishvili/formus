@@ -4,6 +4,8 @@ import Header1 from "@/components/headers/Header1";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import { CldImage } from "next-cloudinary";
+import { Minus, Plus, RotateCcw } from "lucide-react";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 const IMAGES = {
   first:
@@ -275,6 +277,32 @@ const OrtachalaPolygon = () => {
   const [error, setError] = useState(null);
   const router = useRouter();
 
+  const Controls = ({ zoomIn, zoomOut, resetTransform }) => (
+    <div className="fixed bottom-24 right-4 flex flex-col gap-2 lg:hidden z-50">
+      <button
+        onClick={() => zoomIn()}
+        className="p-2 rounded-full bg-purple-500/90 backdrop-blur-sm text-white 
+                 shadow-lg hover:bg-purple-600 active:bg-purple-700 transition-colors"
+      >
+        <Plus size={24} />
+      </button>
+      <button
+        onClick={() => zoomOut()}
+        className="p-2 rounded-full bg-purple-500/90 backdrop-blur-sm text-white 
+                 shadow-lg hover:bg-purple-600 active:bg-purple-700 transition-colors"
+      >
+        <Minus size={24} />
+      </button>
+      <button
+        onClick={() => resetTransform()}
+        className="p-2 rounded-full bg-purple-500/90 backdrop-blur-sm text-white 
+                 shadow-lg hover:bg-purple-600 active:bg-purple-700 transition-colors"
+      >
+        <RotateCcw size={24} />
+      </button>
+    </div>
+  );
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -328,49 +356,69 @@ const OrtachalaPolygon = () => {
 
   return (
     <div className="relative w-full">
-      <div className="relative w-full h-full flex items-center justify-center">
-        <div className="w-full h-full relative overflow-hidden">
-          <CldImage
-            src={IMAGES.first}
-            width={3906}
-            height={2200}
-            alt="Ortachala"
-            className="w-full h-full object-contain md:object-cover"
-            cloudName="formus"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <svg
-              className="w-full h-full"
-              viewBox={VIEW_BOX.first}
-              preserveAspectRatio="xMidYMid meet"
+      <TransformWrapper
+        initialScale={1}
+        minScale={0.5}
+        maxScale={4}
+        limitToBounds={false}
+        wheel={{ disabled: true }}
+        doubleClick={{ disabled: true }}
+      >
+        {(utils) => (
+          <>
+            <Controls {...utils} />
+            <TransformComponent
+              wrapperClassName="!w-full !h-full"
+              contentClassName="!w-full !h-full"
             >
-              {polygons.map((polygon) => (
-                <Polygon
-                  key={polygon.id}
-                  data={polygon}
-                  isHovered={hoveredPolygon?.id === polygon.id}
-                  onHover={(data, position) => {
-                    const isMobile = window.innerWidth <= 1024;
-                    if (!isMobile) {
-                      setHoveredPolygon(data);
-                      setHoverPosition(position);
-                    }
-                  }}
-                  onClick={(data) => {
-                    const isMobile = window.innerWidth <= 1024;
-                    if (isMobile) {
-                      handleMobileClick(data);
-                    } else {
-                      handlePolygonClick(data);
-                    }
-                  }}
-                />
-              ))}
-            </svg>
-          </div>
-        </div>
-      </div>
+              <div className="relative w-full h-full flex items-center justify-center">
+                <div className="w-full h-full relative overflow-hidden">
+                  <CldImage
+                    src={IMAGES.first}
+                    width={3906}
+                    height={2200}
+                    alt="Ortachala"
+                    className="w-full h-full object-contain md:object-cover"
+                    cloudName="formus"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <svg
+                      className="w-full h-full"
+                      viewBox={VIEW_BOX.first}
+                      preserveAspectRatio="xMidYMid meet"
+                    >
+                      {polygons.map((polygon) => (
+                        <Polygon
+                          key={polygon.id}
+                          data={polygon}
+                          isHovered={hoveredPolygon?.id === polygon.id}
+                          onHover={(data, position) => {
+                            const isMobile = window.innerWidth <= 1024;
+                            if (!isMobile) {
+                              setHoveredPolygon(data);
+                              setHoverPosition(position);
+                            }
+                          }}
+                          onClick={(data) => {
+                            const isMobile = window.innerWidth <= 1024;
+                            if (isMobile) {
+                              handleMobileClick(data);
+                            } else {
+                              handlePolygonClick(data);
+                            }
+                          }}
+                        />
+                      ))}
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </TransformComponent>
+          </>
+        )}
+      </TransformWrapper>
+
       {hoveredPolygon && (
         <InfoCard
           data={hoveredPolygon}
@@ -378,6 +426,7 @@ const OrtachalaPolygon = () => {
           position={hoverPosition}
         />
       )}
+
       {selectedPolygon && (
         <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
@@ -469,7 +518,6 @@ const OrtachalaPolygon = () => {
                     </div>
                   </div>
                 </div>
-                {/* Add this new button section */}
                 <div className="mt-4">
                   <button
                     onClick={() => {

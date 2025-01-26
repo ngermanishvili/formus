@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   Select,
   SelectContent,
@@ -11,10 +12,12 @@ import { Search, SlidersHorizontal } from "lucide-react";
 import PropertyResults from "./search-table";
 
 export default function SearchForm() {
+  const t = useTranslations("SearchForm");
+
   const [showResults, setShowResults] = useState(false);
   const [searchParams, setSearchParams] = useState({
     project: "",
-    location: "თბილისი",
+    location: t("tbilisi"),
     type: "",
   });
 
@@ -33,44 +36,50 @@ export default function SearchForm() {
     <div className="flex flex-col gap-4">
       <div className="w-full backdrop-blur-md bg-white/90 rounded-2xl shadow-xl p-4 md:p-6 flex flex-col md:flex-row items-center gap-4 max-w-6xl mx-auto transition-all">
         <div className="flex-1 w-full">
-          <p className="text-gray-500 text-sm mb-1">პროექტი</p>
+          <p className="text-gray-500 text-sm mb-1">{t("project")}</p>
           <Select onValueChange={(value) => handleSelect(value, "project")}>
             <SelectTrigger className="h-12 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-green-400 transition-all">
-              <SelectValue placeholder="Ortachala Hills" />
+              <SelectValue placeholder={t("ortachalaHills")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="ortachala_hills">Ortachala Hills</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex-1 w-full">
-          <p className="text-gray-500 text-sm mb-1">მდებარეობა</p>
-          <Select
-            onValueChange={(value) => handleSelect(value, "location")}
-            defaultValue="თბილისი"
-          >
-            <SelectTrigger className="h-12 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-green-400 transition-all">
-              <SelectValue placeholder="თბილისი" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="თბილისი">თბილისი</SelectItem>
-              <SelectItem value="ბათუმი" disabled className="text-green-500">
-                ბათუმი <span className="ml-2">Soon</span>
+              <SelectItem value="ortachala_hills">
+                {t("ortachalaHills")}
               </SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div className="flex-1 w-full">
-          <p className="text-gray-500 text-sm mb-1">ტიპი</p>
-          <Select onValueChange={(value) => handleSelect(value, "type")}>
+          <p className="text-gray-500 text-sm mb-1">{t("location")}</p>
+          <Select
+            onValueChange={(value) => handleSelect(value, "location")}
+            defaultValue={t("tbilisi")}
+          >
             <SelectTrigger className="h-12 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-green-400 transition-all">
-              <SelectValue placeholder="აირჩიეთ ტიპი" />
+              <SelectValue placeholder={t("tbilisi")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="apartment">ბინა</SelectItem>
-              <SelectItem value="commercial">კომერციული ფართი</SelectItem>
+              <SelectItem value={t("tbilisi")}>{t("tbilisi")}</SelectItem>
+              <SelectItem
+                value={t("batumi")}
+                disabled
+                className="text-green-500"
+              >
+                {t("batumi")} <span className="ml-2">{t("soon")}</span>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex-1 w-full">
+          <p className="text-gray-500 text-sm mb-1">{t("type")}</p>
+          <Select onValueChange={(value) => handleSelect(value, "type")}>
+            <SelectTrigger className="h-12 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-green-400 transition-all">
+              <SelectValue placeholder={t("chooseType")} />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="apartment">{t("apartment")}</SelectItem>
+              <SelectItem value="commercial">{t("commercial")}</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -81,14 +90,14 @@ export default function SearchForm() {
             className="text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-xl h-12 hidden md:flex items-center gap-2"
           >
             <SlidersHorizontal className="w-4 h-4" />
-            დეტალური
+            {t("detailed")}
           </Button>
           <Button
             className="bg-black hover:bg-gray-800 text-white rounded-xl h-12 px-8 w-full md:w-auto flex items-center gap-2 transition-all"
             onClick={handleSearch}
           >
             <Search className="w-5 h-5" />
-            ძიება
+            {t("search")}
           </Button>
         </div>
       </div>

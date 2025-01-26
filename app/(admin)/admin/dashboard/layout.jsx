@@ -69,6 +69,7 @@ const AdminLayout = ({ children }) => {
       href: "/admin/dashboard",
       icon: <LayoutDashboard className="w-5 h-5" />,
     },
+
     {
       title: "ბლოგები",
       href: "/admin/dashboard/blog",
@@ -77,6 +78,11 @@ const AdminLayout = ({ children }) => {
     {
       title: "სლაიდერები",
       href: "/admin/dashboard/sliders",
+      icon: <Images className="w-5 h-5" />,
+    },
+    {
+      title: "მთავარი გვერდის კონტენტი",
+      href: "/admin/dashboard/hero-content",
       icon: <Images className="w-5 h-5" />,
     },
     {
@@ -89,6 +95,7 @@ const AdminLayout = ({ children }) => {
       href: "/admin/dashboard/about",
       icon: <Building className="w-5 h-5" />,
     },
+
     {
       title: "როუტების მართვა",
       href: "/admin/dashboard/navigation",

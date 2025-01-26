@@ -1,11 +1,11 @@
-//app/admin/dashboard/navigation/[id]/edit/page.jsx
+// app/(admin)/admin/dashboard/hero-content/[id]/edit/page.jsx
 "use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -21,30 +21,25 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
-export default function EditRoute({ params }) {
+export default function EditHeroContent({ params }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    path: "",
-    translations: {
-      ka: "",
-      en: "",
-    },
-    is_active: true,
+    image: "",
+    title_en: "",
+    title_ge: "",
+    description_en: "",
+    description_ge: ""
   });
 
   useEffect(() => {
-    const fetchRoute = async () => {
+    const fetchContent = async () => {
       try {
-        const res = await fetch(`/api/navigation/${params.id}`);
+        const res = await fetch(`/api/hero-content/${params.id}`);
         const data = await res.json();
 
         if (data.status === "success") {
-          setFormData({
-            path: data.data.path,
-            translations: data.data.translations,
-            is_active: data.data.is_active,
-          });
+          setFormData(data.data);
         } else {
           toast.error("მონაცემების ჩატვირთვისას დაფიქსირდა შეცდომა");
         }
@@ -53,7 +48,7 @@ export default function EditRoute({ params }) {
       }
     };
 
-    fetchRoute();
+    fetchContent();
   }, [params.id]);
 
   const handleSubmit = async (e) => {
@@ -61,19 +56,17 @@ export default function EditRoute({ params }) {
     setLoading(true);
 
     try {
-      const res = await fetch(`/api/navigation/${params.id}`, {
+      const res = await fetch(`/api/hero-content/${params.id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
       const data = await res.json();
 
       if (data.status === "success") {
-        toast.success("ნავიგაციის ელემენტი წარმატებით განახლდა");
-        router.push("/admin/dashboard/navigation");
+        toast.success("Hero კონტენტი წარმატებით განახლდა");
+        router.push("/admin/dashboard/hero-content");
         router.refresh();
       } else {
         toast.error(data.message || "განახლებისას დაფიქსირდა შეცდომა");
@@ -87,17 +80,16 @@ export default function EditRoute({ params }) {
 
   const handleDelete = async () => {
     setLoading(true);
-
     try {
-      const res = await fetch(`/api/navigation/${params.id}`, {
-        method: "DELETE",
+      const res = await fetch(`/api/hero-content/${params.id}`, {
+        method: "DELETE"
       });
 
       const data = await res.json();
 
       if (data.status === "success") {
-        toast.success("ნავიგაციის ელემენტი წარმატებით წაიშალა");
-        router.push("/admin/dashboard/navigation");
+        toast.success("Hero კონტენტი წარმატებით წაიშალა");
+        router.push("/admin/dashboard/hero-content");
         router.refresh();
       } else {
         toast.error(data.message || "წაშლისას დაფიქსირდა შეცდომა");
@@ -111,100 +103,75 @@ export default function EditRoute({ params }) {
 
   return (
     <div className="container mx-auto py-8">
-      <Card className="max-w-2xl mx-auto bg-white/50 backdrop-blur-sm">
+      <Card className="max-w-2xl mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
-            ნავიგაციის ელემენტის რედაქტირება
+            Hero კონტენტის რედაქტირება
           </CardTitle>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label className="text-sm font-medium">გზა (Path)</Label>
+              <Label>სურათის URL</Label>
               <Input
                 required
-                className="w-full border rounded-lg"
-                value={formData.path}
-                onChange={(e) =>
-                  setFormData({ ...formData, path: e.target.value })
-                }
+                value={formData.image}
+                onChange={(e) => setFormData({...formData, image: e.target.value})}
               />
             </div>
 
             <div className="space-y-2">
-              <Label className="text-sm font-medium">სათაური (ქართულად)</Label>
+              <Label>სათაური (ქართულად)</Label>
               <Input
                 required
-                className="w-full border rounded-lg"
-                value={formData.translations.ka}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    translations: {
-                      ...formData.translations,
-                      ka: e.target.value,
-                    },
-                  })
-                }
+                value={formData.title_ge}
+                onChange={(e) => setFormData({...formData, title_ge: e.target.value})}
               />
             </div>
 
             <div className="space-y-2">
-              <Label className="text-sm font-medium">
-                სათაური (ინგლისურად)
-              </Label>
+              <Label>სათაური (ინგლისურად)</Label>
               <Input
                 required
-                className="w-full border rounded-lg"
-                value={formData.translations.en}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    translations: {
-                      ...formData.translations,
-                      en: e.target.value,
-                    },
-                  })
-                }
+                value={formData.title_en}
+                onChange={(e) => setFormData({...formData, title_en: e.target.value})}
               />
             </div>
 
-            <div className="flex items-center space-x-2">
-              <Switch
-                checked={formData.is_active}
-                onCheckedChange={(checked) =>
-                  setFormData({ ...formData, is_active: checked })
-                }
+            <div className="space-y-2">
+              <Label>აღწერა (ქართულად)</Label>
+              <Textarea
+                required
+                value={formData.description_ge}
+                onChange={(e) => setFormData({...formData, description_ge: e.target.value})}
               />
-              <Label className="text-sm font-medium">აქტიური</Label>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button
-                type="submit"
-                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700"
-                disabled={loading}
-              >
+            <div className="space-y-2">
+              <Label>აღწერა (ინგლისურად)</Label>
+              <Textarea
+                required
+                value={formData.description_en}
+                onChange={(e) => setFormData({...formData, description_en: e.target.value})}
+              />
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button type="submit" disabled={loading}>
                 {loading ? "მიმდინარეობს..." : "განახლება"}
               </Button>
 
               <Button
                 type="button"
                 variant="outline"
-                className="w-full sm:w-auto"
-                onClick={() => router.push("/admin/dashboard/navigation")}
+                onClick={() => router.push("/admin/dashboard/hero-content")}
               >
                 გაუქმება
               </Button>
 
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    className="w-full sm:w-auto"
-                    disabled={loading}
-                  >
+                  <Button type="button" variant="destructive">
                     წაშლა
                   </Button>
                 </AlertDialogTrigger>
@@ -212,8 +179,7 @@ export default function EditRoute({ params }) {
                   <AlertDialogHeader>
                     <AlertDialogTitle>დარწმუნებული ხართ?</AlertDialogTitle>
                     <AlertDialogDescription>
-                      ეს მოქმედება წაშლის ნავიგაციის ელემენტს. ეს მოქმედება
-                      შეუქცევადია.
+                      ეს მოქმედება წაშლის Hero კონტენტს. ეს მოქმედება შეუქცევადია.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>

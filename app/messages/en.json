@@ -21,5 +21,35 @@
     "title": "Main Page Content",
     "description": "Description of the main page content",
     "button": "Click me"
+  },
+  "SearchForm": {
+    "project": "Project",
+    "location": "Location",
+    "type": "Type",
+    "chooseType": "Choose Type",
+    "detailed": "Detailed",
+    "search": "Search",
+    "soon": "Soon",
+    "apartment": "Apartment",
+    "commercial": "Commercial Space",
+    "ortachalaHills": "Ortachala Hills",
+    "tbilisi": "Tbilisi",
+    "batumi": "Batumi"
+  },
+
+  "Breadcrumb": {
+    "home": "Home",
+    "blog": "Blog"
+  },
+  "Footer": {
+    "address": "Address",
+    "location": "Tbilisi, Georgia",
+    "callOffice": "Call Our Office",
+    "workingHours": "Working Hours",
+    "schedule": "Mon-Sat: 09:00 - 17:00 - Sun: Closed",
+    "language": "English",
+    "privacy": "Privacy Policy",
+    "terms": "Terms & Conditions",
+    "cookies": "Cookie Policy"
   }
 }

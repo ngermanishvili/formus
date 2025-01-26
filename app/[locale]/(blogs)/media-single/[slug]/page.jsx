@@ -15,7 +15,7 @@ export default function page({ params }) {
       <Header1 /> <MobailHeader1 />
       <main className="main">
         <BlogSingle blog={blog} />
-        <RelatedBlogs />
+        {/* <RelatedBlogs /> */}
       </main>
       <Footer1 />
     </>

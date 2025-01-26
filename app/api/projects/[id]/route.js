@@ -1,93 +1,121 @@
-// app/api/projects/route.js
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request, { params }) {
     try {
-        const result = await db.query(`SELECT * FROM projects ORDER BY created_at DESC`);
-        console.log('Query Result:', result);  // ნახავთ რომ მონაცემები rows მასივშია
+        console.log('Requesting project with ID:', params.id);
 
-        // მთავარი ცვლილება - result.rows გამოყენება
+        const project = await db.query(
+            'SELECT * FROM projects WHERE id = $1',
+            [params.id]
+        );
+
+        if (!project?.length) {
+            return NextResponse.json({
+                status: "error",
+                message: "პროექტი ვერ მოიძებნა"
+            }, { status: 404 });
+        }
+
+        const data = project[0];
+
+        if (typeof data.features_en === 'string') {
+            data.features_en = JSON.parse(data.features_en);
+        }
+        if (typeof data.features_ge === 'string') {
+            data.features_ge = JSON.parse(data.features_ge);
+        }
+
         return NextResponse.json({
             status: "success",
-            data: result.rows
+            data
         });
     } catch (error) {
         console.error('API Error:', error);
-        return NextResponse.json(
-            {
-                status: "error",
-                message: "პროექტების მოძიებისას დაფიქსირდა შეცდომა"
-            },
-            { status: 500 }
-        );
+        return NextResponse.json({
+            status: "error",
+            message: error.message
+        }, { status: 500 });
     }
 }
 
-export async function POST(request) {
+export async function PUT(request, { params }) {
     try {
-        const {
-            title_en,
-            title_ge,
-            description_en,
-            description_ge,
-            main_image_url,
-            location_en,
-            location_ge,
-            features_en,
-            features_ge
-        } = await request.json();
+        const { id } = params;
+        const data = await request.json();
 
-        // ვალიდაცია
-        if (!title_ge || !description_ge || !title_en || !description_en || !main_image_url) {
-            return NextResponse.json(
-                {
-                    status: "error",
-                    message: "ყველა სავალდებულო ველი უნდა იყოს შევსებული"
-                },
-                { status: 400 }
-            );
+        if (!data.title_en || !data.title_ge || !data.description_en || !data.description_ge) {
+            return NextResponse.json({
+                status: "error",
+                message: "Missing required fields"
+            }, { status: 400 });
         }
 
         const result = await db.query(`
-            INSERT INTO projects (
-                title_en,
-                title_ge,
-                description_en,
-                description_ge,
-                main_image_url,
-                location_en,
-                location_ge,
-                features_en,
-                features_ge
-            )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+            UPDATE projects 
+            SET 
+                title_en = $1,
+                title_ge = $2,
+                description_en = $3,
+                description_ge = $4,
+                main_image_url = $5,
+                location_en = $6,
+                location_ge = $7,
+                features_en = $8,
+                features_ge = $9,
+                second_section_img = $10,
+                second_section_title_en = $11,
+                second_section_title_ge = $12,
+                second_section_description_en = $13,
+                second_section_description_ge = $14,
+                updated_at = NOW()
+            WHERE id = $15
             RETURNING *
         `, [
-            title_en,
-            title_ge,
-            description_en,
-            description_ge,
-            main_image_url,
-            location_en,
-            location_ge,
-            features_en,
-            features_ge
+            data.title_en,
+            data.title_ge,
+            data.description_en,
+            data.description_ge,
+            data.main_image_url,
+            data.location_en,
+            data.location_ge,
+            JSON.stringify(data.features_en),
+            JSON.stringify(data.features_ge),
+            data.second_section_img,
+            data.second_section_title_en,
+            data.second_section_title_ge,
+            data.second_section_description_en,
+            data.second_section_description_ge,
+            id
         ]);
 
-        // აქაც result.rows[0] უნდა გამოვიყენოთ
+        if (!result?.length) {
+            return NextResponse.json({
+                status: "error",
+                message: "პროექტი ვერ მოიძებნა"
+            }, { status: 404 });
+        }
+
+        const updatedProject = result[0];
+
+        if (typeof updatedProject.features_en === 'string') {
+            updatedProject.features_en = JSON.parse(updatedProject.features_en);
+        }
+        if (typeof updatedProject.features_ge === 'string') {
+            updatedProject.features_ge = JSON.parse(updatedProject.features_ge);
+        }
+
         return NextResponse.json({
             status: "success",
-            data: result.rows[0]
+            message: "პროექტი წარმატებით განახლდა",
+            data: updatedProject
         });
+
     } catch (error) {
-        console.error('API Error:', error);
-        return NextResponse.json(
-            {
-                status: "error",
-                message: "პროექტის დამატებისას დაფიქსირდა შეცდომა"
-            },
-            { status: 500 }
-        );
+        console.error('Update Error:', error);
+        return NextResponse.json({
+            status: "error",
+            message: error.message
+        }, { status: 500 });
     }
 }

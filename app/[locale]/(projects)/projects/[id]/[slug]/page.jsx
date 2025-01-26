@@ -32,7 +32,7 @@ export default function page({ params }) {
         {/* <HeroOrtachala /> */}
         <div className="border-bottom"></div>
         <ProjectContent id={params.id} />
-        <FaqLeft />
+        {/* <FaqLeft /> */}
         <GreenSection />
         <DownloadApp />
       </main>

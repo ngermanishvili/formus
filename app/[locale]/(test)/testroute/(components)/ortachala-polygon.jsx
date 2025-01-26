@@ -260,7 +260,7 @@ const InfoCard = memo(({ data, apartments, position }) => {
 });
 
 const Controls = ({ zoomIn, zoomOut, resetTransform }) => (
-  <div className="fixed bottom-24 right-4 flex flex-col gap-2 z-50">
+  <div className=" bottom-[400px]  justify-center items-center  flex-col gap-2 z-50">
     <button
       onClick={() => zoomIn()}
       className="p-2 rounded-full bg-purple-500/90 backdrop-blur-sm text-white 
@@ -324,6 +324,7 @@ const OrtachalaPolygon = () => {
   const [error, setError] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
   const router = useRouter();
+  const [filteredPolygons, setFilteredPolygons] = useState([]);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -388,47 +389,51 @@ const OrtachalaPolygon = () => {
   }
 
   const content = (
-    <div className="relative w-full h-full flex items-center justify-center">
-      <div className="w-full h-full relative overflow-hidden">
-        <CldImage
-          src={IMAGES.first}
-          width={3906}
-          height={2200}
-          alt="Ortachala"
-          className="w-full h-full object-contain md:object-cover"
-          cloudName="formus"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <svg
-            className="w-full h-full"
-            viewBox={VIEW_BOX.first}
-            preserveAspectRatio="xMidYMid meet"
-          >
-            {polygons.map((polygon) => (
-              <Polygon
-                key={polygon.id}
-                data={polygon}
-                isHovered={hoveredPolygon?.id === polygon.id}
-                onHover={(data, position) => {
-                  if (!isMobile) {
-                    setHoveredPolygon(data);
-                    setHoverPosition(position);
-                  }
-                }}
-                onClick={(data) => {
-                  if (isMobile) {
-                    handleMobileClick(data);
-                  } else {
-                    handlePolygonClick(data);
-                  }
-                }}
-              />
-            ))}
-          </svg>
+    <>
+      <div className="relative w-full h-full flex items-center justify-center">
+        <div className="w-full h-full relative overflow-hidden">
+          <CldImage
+            src={IMAGES.first}
+            width={3906}
+            height={2200}
+            alt="Ortachala"
+            className="w-full h-full object-contain md:object-cover"
+            cloudName="formus"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <svg
+              className="w-full h-full"
+              viewBox={VIEW_BOX.first}
+              preserveAspectRatio="xMidYMid meet"
+            >
+              {(filteredPolygons.length > 0 ? filteredPolygons : polygons).map(
+                (polygon) => (
+                  <Polygon
+                    key={polygon.id}
+                    data={polygon}
+                    isHovered={hoveredPolygon?.id === polygon.id}
+                    onHover={(data, position) => {
+                      if (!isMobile) {
+                        setHoveredPolygon(data);
+                        setHoverPosition(position);
+                      }
+                    }}
+                    onClick={(data) => {
+                      if (isMobile) {
+                        handleMobileClick(data);
+                      } else {
+                        handlePolygonClick(data);
+                      }
+                    }}
+                  />
+                )
+              )}
+            </svg>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 
   return (

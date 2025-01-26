@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import {
   Select,
@@ -8,80 +6,71 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, SlidersHorizontal } from "lucide-react";
 import PropertyResults from "./search-table";
 
 export default function SearchForm() {
   const [showResults, setShowResults] = useState(false);
-  const locations = ["თბილისი", "ბათუმი", "ქუთაისი", "რუსთავი", "გორი"];
-  const propertyTypes = ["ბინა", "სახლი", "კომერციული ფართი", "მიწის ნაკვეთი"];
+  const [searchParams, setSearchParams] = useState({
+    project: "",
+    location: "თბილისი",
+    type: "",
+  });
 
   const handleSearch = () => {
     setShowResults(true);
+  };
+
+  const handleSelect = (value, type) => {
+    setSearchParams((prev) => ({
+      ...prev,
+      [type]: value,
+    }));
   };
 
   return (
     <div className="flex flex-col gap-4">
       <div className="w-full backdrop-blur-md bg-white/90 rounded-2xl shadow-xl p-4 md:p-6 flex flex-col md:flex-row items-center gap-4 max-w-6xl mx-auto transition-all">
         <div className="flex-1 w-full">
-          <p className="text-gray-500 text-sm mb-1 text-left w-[250px]">
-            საძიებო სიტყვა
-          </p>
-          <Input
-            type="text"
-            placeholder="Search keyword"
-            className="h-12 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-green-400 transition-all text-black"
-          />
-        </div>
-
-        <div className="flex-1 w-full">
-          <p className="text-gray-500 text-sm mb-1 text-left">მდებარეობა</p>
-          <Select>
+          <p className="text-gray-500 text-sm mb-1">პროექტი</p>
+          <Select onValueChange={(value) => handleSelect(value, "project")}>
             <SelectTrigger className="h-12 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-green-400 transition-all">
-              <SelectValue
-                placeholder={
-                  <span className="font-bold text-black">
-                    მდებარეობის არჩევა
-                  </span>
-                }
-              />
+              <SelectValue placeholder="Ortachala Hills" />
             </SelectTrigger>
             <SelectContent>
-              {locations.map((location) => (
-                <SelectItem
-                  key={location}
-                  value={location.toLowerCase()}
-                  className="hover:bg-green-50"
-                >
-                  {location}
-                </SelectItem>
-              ))}
+              <SelectItem value="ortachala_hills">Ortachala Hills</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
         <div className="flex-1 w-full">
-          <p className="text-gray-500 text-sm mb-1 text-left">ტიპი</p>
-          <Select>
+          <p className="text-gray-500 text-sm mb-1">მდებარეობა</p>
+          <Select
+            onValueChange={(value) => handleSelect(value, "location")}
+            defaultValue="თბილისი"
+          >
             <SelectTrigger className="h-12 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-green-400 transition-all">
-              <SelectValue
-                placeholder={
-                  <span className="font-bold text-black">ყველა</span>
-                }
-              />
+              <SelectValue placeholder="თბილისი" />
             </SelectTrigger>
             <SelectContent>
-              {propertyTypes.map((type) => (
-                <SelectItem
-                  key={type}
-                  value={type.toLowerCase()}
-                  className="hover:bg-green-50"
-                >
-                  {type}
-                </SelectItem>
-              ))}
+              <SelectItem value="თბილისი">თბილისი</SelectItem>
+              <SelectItem value="ბათუმი" disabled className="text-green-500">
+                ბათუმი <span className="ml-2">Soon</span>
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div className="flex-1 w-full">
+          <p className="text-gray-500 text-sm mb-1">ტიპი</p>
+          <Select onValueChange={(value) => handleSelect(value, "type")}>
+            <SelectTrigger className="h-12 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-green-400 transition-all">
+              <SelectValue placeholder="აირჩიეთ ტიპი" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="apartment">ბინა</SelectItem>
+              <SelectItem value="commercial">კომერციული ფართი</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -104,7 +93,11 @@ export default function SearchForm() {
         </div>
       </div>
 
-      {showResults && <PropertyResults />}
+      {showResults && (
+        <div className="animate-in slide-in-from-top duration-500">
+          <PropertyResults searchParams={searchParams} />
+        </div>
+      )}
     </div>
   );
 }

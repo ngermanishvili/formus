@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
+import { slugify, transliterate } from "@/utils/slugify";
 
 // Swiper settings outside component to avoid re-creation
 const baseSettings = {
@@ -27,6 +28,12 @@ const breakpoints = {
 };
 
 export default function Hero() {
+  const getProjectSlug = (project) => {
+    const title = currentLang === "ge" ? project.title_ge : project.title_en;
+    const transliteratedTitle =
+      currentLang === "ge" ? transliterate(title) : title;
+    return slugify(transliteratedTitle);
+  };
   const [mounted, setMounted] = useState(false);
   const [data, setData] = useState({
     sliders: [],
@@ -200,7 +207,11 @@ export default function Hero() {
                   {data.projects.map((project) => (
                     <SwiperSlide key={project.id} className="swiper-slide">
                       <div className="cardService cardServiceStyle3 wow fadeInUp">
-                        <Link href={`/projects/${project.id}`}>
+                        <Link
+                          href={`/projects/${project.id}/${getProjectSlug(
+                            project
+                          )}`}
+                        >
                           <div className="cardImage">
                             <Image
                               width={370}

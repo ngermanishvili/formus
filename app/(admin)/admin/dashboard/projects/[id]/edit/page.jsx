@@ -18,6 +18,131 @@ import {
 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 
+const SecondSection = ({ formData, setFormData, activeTab, setActiveTab }) => {
+  return (
+    <Card>
+      <CardContent className="p-6">
+        <Label className="text-2xl font-semibold mb-6 block">
+          მეორე სექცია
+        </Label>
+        <div className="space-y-8">
+          {/* Image Upload */}
+          <div>
+            <Label className="text-base font-semibold mb-4 block">სურათი</Label>
+            <CldUploadWidget
+              uploadPreset="formus_test"
+              onSuccess={(result) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  second_section_img: result.info.secure_url,
+                }))
+              }
+            >
+              {({ open }) => (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => open()}
+                  className="w-full h-32 border-dashed"
+                >
+                  {formData.second_section_img ? (
+                    <img
+                      src={formData.second_section_img}
+                      alt="Second Section Preview"
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center">
+                      <ImagePlus className="h-8 w-8 mb-2 text-gray-400" />
+                      <span className="text-sm text-gray-500">
+                        აირჩიეთ ან ჩააგდეთ სურათი
+                      </span>
+                    </div>
+                  )}
+                </Button>
+              )}
+            </CldUploadWidget>
+          </div>
+
+          {/* Content Tabs */}
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="georgian" className="flex items-center gap-2">
+                <Globe className="h-4 w-4" />
+                ქართული
+              </TabsTrigger>
+              <TabsTrigger value="english" className="flex items-center gap-2">
+                <Languages className="h-4 w-4" />
+                English
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="georgian" className="space-y-4">
+              <div className="space-y-2">
+                <Label>სათაური</Label>
+                <Input
+                  placeholder="შეიყვანეთ სათაური"
+                  value={formData.second_section_title_ge}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      second_section_title_ge: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>აღწერა</Label>
+                <Textarea
+                  placeholder="შეიყვანეთ აღწერა"
+                  value={formData.second_section_description_ge}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      second_section_description_ge: e.target.value,
+                    }))
+                  }
+                  className="min-h-[200px]"
+                />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="english" className="space-y-4">
+              <div className="space-y-2">
+                <Label>Title</Label>
+                <Input
+                  placeholder="Enter title"
+                  value={formData.second_section_title_en}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      second_section_title_en: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Description</Label>
+                <Textarea
+                  placeholder="Enter description"
+                  value={formData.second_section_description_en}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      second_section_description_en: e.target.value,
+                    }))
+                  }
+                  className="min-h-[200px]"
+                />
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
 export default function EditProject({ params }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
@@ -33,6 +158,11 @@ export default function EditProject({ params }) {
     location_en: "",
     features_ge: "[]",
     features_en: "[]",
+    second_section_img: "",
+    second_section_title_en: "",
+    second_section_title_ge: "",
+    second_section_description_en: "",
+    second_section_description_ge: "",
   });
 
   useEffect(() => {
@@ -42,7 +172,6 @@ export default function EditProject({ params }) {
         const result = await response.json();
 
         if (result.status === "success" && result.data) {
-          // მონაცემების მომზადება
           const project = result.data;
           setFormData({
             ...project,
@@ -197,7 +326,7 @@ export default function EditProject({ params }) {
             </CardContent>
           </Card>
 
-          {/* Content Tabs */}
+          {/* Main Content Section */}
           <Card>
             <CardContent className="p-6">
               <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -410,6 +539,14 @@ export default function EditProject({ params }) {
               </Tabs>
             </CardContent>
           </Card>
+
+          {/* Second Section */}
+          <SecondSection
+            formData={formData}
+            setFormData={setFormData}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab} // დავამატოთ ეს
+          />
 
           {/* Submit Button */}
           <div className="flex justify-end gap-4">

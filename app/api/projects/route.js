@@ -1,13 +1,12 @@
-// app/api/projects/route.js
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
 export async function GET() {
     try {
         const result = await db.query(`
-            SELECT * FROM projects 
-            ORDER BY created_at DESC
-        `);
+           SELECT * FROM projects 
+           ORDER BY created_at DESC
+       `);
 
         return NextResponse.json({
             status: "success",
@@ -36,10 +35,14 @@ export async function POST(request) {
             location_en,
             location_ge,
             features_en,
-            features_ge
+            features_ge,
+            second_section_img,
+            second_section_title_en,
+            second_section_title_ge,
+            second_section_description_en,
+            second_section_description_ge
         } = await request.json();
 
-        // ვალიდაცია
         if (!title_ge || !description_ge || !title_en || !description_en || !main_image_url) {
             return NextResponse.json(
                 {
@@ -51,20 +54,25 @@ export async function POST(request) {
         }
 
         const result = await db.query(`
-            INSERT INTO projects (
-                title_en,
-                title_ge,
-                description_en,
-                description_ge,
-                main_image_url,
-                location_en,
-                location_ge,
-                features_en,
-                features_ge
-            )
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-            RETURNING *
-        `, [
+           INSERT INTO projects (
+               title_en,
+               title_ge,
+               description_en,
+               description_ge,
+               main_image_url,
+               location_en,
+               location_ge,
+               features_en,
+               features_ge,
+               second_section_img,
+               second_section_title_en,
+               second_section_title_ge,
+               second_section_description_en,
+               second_section_description_ge
+           )
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+           RETURNING *
+       `, [
             title_en,
             title_ge,
             description_en,
@@ -73,7 +81,12 @@ export async function POST(request) {
             location_en,
             location_ge,
             features_en,
-            features_ge
+            features_ge,
+            second_section_img,
+            second_section_title_en,
+            second_section_title_ge,
+            second_section_description_en,
+            second_section_description_ge
         ]);
 
         return NextResponse.json({

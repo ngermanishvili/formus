@@ -16,7 +16,8 @@ const PUBLIC_APIS = [
     '/api/buildings/floor',
     '/api/navigation',
     '/api/about',
-    '/api/blog'
+    '/api/blog',
+    '/api/projects/3'
 
 ];
 

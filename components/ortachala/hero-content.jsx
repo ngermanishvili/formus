@@ -11,36 +11,45 @@ export default function ProjectContent({ id }) {
 
   const pathname = usePathname();
   const currentLang = pathname.includes("/ka") ? "ge" : "en";
-
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // ვცვლით endpoint-ს, ვიყენებთ საერთო endpoint-ს და ვფილტრავთ ID-ის მიხედვით
-        const response = await fetch("/api/projects");
+        const response = await fetch(`/api/projects/${id}`);
         const data = await response.json();
 
         if (data.status === "success" && data.data) {
-          // ვეძებთ პროექტს ID-ის მიხედვით
-          const project = data.data.find((p) => p.id === parseInt(id));
+          const project = data.data;
 
-          if (project) {
-            setProjectData({
-              title: currentLang === "ge" ? project.title_ge : project.title_en,
-              description:
-                currentLang === "ge"
-                  ? project.description_ge
-                  : project.description_en,
-              features:
-                currentLang === "ge"
-                  ? project.features_ge
-                  : project.features_en,
-              main_image_url: project.main_image_url,
-              location:
-                currentLang === "ge"
-                  ? project.location_ge
-                  : project.location_en,
-            });
-          }
+          // Parse features if they're stored as strings
+          const features =
+            currentLang === "ge"
+              ? typeof project.features_ge === "string"
+                ? JSON.parse(project.features_ge)
+                : project.features_ge
+              : typeof project.features_en === "string"
+              ? JSON.parse(project.features_en)
+              : project.features_en;
+
+          setProjectData({
+            title: currentLang === "ge" ? project.title_ge : project.title_en,
+            description:
+              currentLang === "ge"
+                ? project.description_ge
+                : project.description_en,
+            features: features || [],
+            main_image_url: project.main_image_url,
+            location:
+              currentLang === "ge" ? project.location_ge : project.location_en,
+            second_section_img: project.second_section_img,
+            second_section_title:
+              currentLang === "ge"
+                ? project.second_section_title_ge
+                : project.second_section_title_en,
+            second_section_description:
+              currentLang === "ge"
+                ? project.second_section_description_ge
+                : project.second_section_description_en,
+          });
         }
       } catch (error) {
         console.error("Error fetching project data:", error);
@@ -101,38 +110,69 @@ export default function ProjectContent({ id }) {
       <div className="container mx-auto px-4 py-12">
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="lg:w-1/2">
-            <h2 className="text-3xl font-bold mb-4">პროექტის შესახებ</h2>
+            <h2 className="text-3xl font-bold mb-4">
+              {currentLang === "ge" ? "პროექტის შესახებ" : "About the Project"}
+            </h2>
             <p className="text-lg text-gray-600">{projectData.description}</p>
           </div>
 
           <div className="lg:w-1/2">
+            <h2 className="text-3xl font-bold mb-4">
+              {currentLang === "ge" ? "მახასიათებლები" : "Features"}
+            </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {Array.isArray(projectData.features) &&
-                projectData.features.map((feature, index) => (
-                  <div
-                    key={index}
-                    className="p-4 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow"
-                  >
-                    <div className="relative w-16 h-16 mx-auto mb-4">
-                      <Image
-                        src="/icon-placeholder.png"
-                        alt={feature.title}
-                        fill
-                        className="rounded-full object-cover"
-                      />
-                    </div>
-                    <h3 className="text-xl font-semibold text-center mb-2">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-600 text-center">
-                      {feature.description}
-                    </p>
+              {projectData.features?.map((feature, index) => (
+                <div
+                  key={index}
+                  className="p-4 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+                >
+                  <div className="relative w-16 h-16 mx-auto mb-4">
+                    <Image
+                      src={projectData.main_image_url}
+                      alt={feature.title}
+                      fill
+                      className="rounded-full object-cover"
+                    />
                   </div>
-                ))}
+                  <h3 className="text-xl font-semibold text-center mb-2">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600 text-center">
+                    {feature.description}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
+      {/* Second Section */}
+      <section className="relative bg-white">
+        <div className="flex flex-col lg:flex-row items-stretch">
+          <div className="w-full lg:w-1/2 relative h-[400px] group overflow-hidden">
+            <Image
+              src={
+                projectData.second_section_img ||
+                "/assets/imgs/page/homepage5/banner.png"
+              }
+              alt={projectData.second_section_title}
+              fill
+              className="object-cover transition-transform duration-700 group-hover:scale-110"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+          </div>
+
+          <div className="w-full lg:w-1/2 px-8 lg:px-16 py-16 flex flex-col justify-center">
+            <h2 className="text-4xl font-bold text-black mb-8 leading-tight">
+              {projectData.second_section_title}
+            </h2>
+            <p className="text-gray-600 text-lg leading-relaxed mb-10">
+              {projectData.second_section_description}
+            </p>
+          </div>
+        </div>
+      </section>
     </>
   );
 }

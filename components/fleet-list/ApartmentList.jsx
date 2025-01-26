@@ -2,6 +2,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { CldImage } from "next-cloudinary";
+import { useSearchParams } from "next/navigation";
 
 const ITEMS_PER_PAGE = 12;
 const CACHE_TTL = 1000 * 60 * 30; // 30 minutes
@@ -9,7 +10,7 @@ const CACHE_TTL = 1000 * 60 * 30; // 30 minutes
 const statusConfig = {
   available: { text: "ხელმისაწვდომი", color: "bg-green-500" },
   sold: { text: "გაყიდული", color: "bg-red-500" },
-  reserved: { text: "დაჯავშნული", color: "bg-yellow-500" },
+  reserved: { text: "დაჯავშნილი", color: "bg-yellow-500" },
   default: { text: "უცნობი", color: "bg-gray-500" },
 };
 
@@ -33,35 +34,39 @@ export default function ApartmentList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [activeView, setActiveView] = useState("3D");
-  const [filters, setFilters] = useState({
-    block: "all",
-    floor: "all",
-    status: "all",
-    priceMin: "",
-    priceMax: "",
-    areaMin: "",
-    areaMax: "",
-  });
   const [visibleItems, setVisibleItems] = useState(ITEMS_PER_PAGE);
+  const searchParams = useSearchParams();
 
-  // Memoized filter functions
+  const filters = useMemo(
+    () => ({
+      block: searchParams.get("blockId") || "all",
+      floor: searchParams.get("floor") || "all", // Add this
+      floorRange: searchParams.get("floor")?.split("-").map(Number) || null, // Add this
+      status: searchParams.get("status") || "all",
+    }),
+    [searchParams]
+  );
+
   const filterApartments = useCallback(
     (apts) => {
       return apts.filter((apt) => {
-        return (
-          (filters.block === "all" || apt.block_id === filters.block) &&
-          (filters.floor === "all" || apt.floor === parseInt(filters.floor)) &&
-          (filters.status === "all" || apt.status === filters.status) &&
-          (!filters.priceMin || apt.price >= parseInt(filters.priceMin)) &&
-          (!filters.priceMax || apt.price <= parseInt(filters.priceMax)) &&
-          (!filters.areaMin || apt.total_area >= parseInt(filters.areaMin)) &&
-          (!filters.areaMax || apt.total_area <= parseInt(filters.areaMax))
-        );
+        const blockMatch =
+          filters.block === "all" || apt.block_id === filters.block;
+
+        const floorMatch =
+          filters.floor === "all" ||
+          (filters.floorRange &&
+            apt.floor >= filters.floorRange[0] &&
+            apt.floor <= filters.floorRange[1]);
+
+        const statusMatch =
+          filters.status === "all" || apt.status === filters.status;
+
+        return blockMatch && floorMatch && statusMatch;
       });
     },
     [filters]
   );
-
   const filteredApartments = useMemo(
     () => filterApartments(apartments),
     [apartments, filterApartments]
@@ -112,31 +117,12 @@ export default function ApartmentList() {
     fetchData();
   }, []);
 
-  const handleFilterChange = useCallback((field, value) => {
-    setFilters((prev) => ({ ...prev, [field]: value }));
-    setVisibleItems(ITEMS_PER_PAGE);
-  }, []);
-
-  const getUniqueValues = useCallback(
-    (field, numeric = false) => {
-      const values = [...new Set(apartments.map((apt) => apt[field]))];
-      return numeric ? values.sort((a, b) => a - b) : values.sort();
-    },
-    [apartments]
-  );
-
   if (loading) return <LoadingIndicator />;
   if (error) return <ErrorDisplay message={error} />;
 
   return (
     <section className="section pt-16 bg-gray-50">
       <div className="container mx-auto px-4">
-        <FilterSection
-          filters={filters}
-          onChange={handleFilterChange}
-          getValues={getUniqueValues}
-        />
-
         <HeaderSection
           count={filteredApartments.length}
           activeView={activeView}
@@ -158,7 +144,6 @@ export default function ApartmentList() {
   );
 }
 
-// Sub-components
 const LoadingIndicator = () => (
   <div className="min-h-[400px] flex items-center justify-center">
     <div className="text-lg">იტვირთება...</div>
@@ -168,90 +153,6 @@ const LoadingIndicator = () => (
 const ErrorDisplay = ({ message }) => (
   <div className="min-h-[400px] flex items-center justify-center">
     <div className="text-red-500">{message}</div>
-  </div>
-);
-
-const FilterSection = ({ filters, onChange, getValues }) => (
-  <div className="mb-8 bg-white p-6 rounded-xl shadow-sm">
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      <SelectFilter
-        label="ბლოკი"
-        value={filters.block}
-        options={["all", ...getValues("block_id")]}
-        format={(v) => `ბლოკი ${v}`}
-        onChange={(v) => onChange("block", v)}
-      />
-
-      <SelectFilter
-        label="სართული"
-        value={filters.floor}
-        options={["all", ...getValues("floor", true)]}
-        format={(v) => `სართული ${v}`}
-        onChange={(v) => onChange("floor", v)}
-      />
-
-      <SelectFilter
-        label="სტატუსი"
-        value={filters.status}
-        options={[
-          "all",
-          ...Object.keys(statusConfig).filter((k) => k !== "default"),
-        ]}
-        format={(v) => statusConfig[v].text}
-        onChange={(v) => onChange("status", v)}
-      />
-
-      <RangeFilter
-        label="ფართი (მ²)"
-        min={filters.areaMin}
-        max={filters.areaMax}
-        onMinChange={(v) => onChange("areaMin", v)}
-        onMaxChange={(v) => onChange("areaMax", v)}
-      />
-    </div>
-  </div>
-);
-
-const SelectFilter = ({ label, value, options, format, onChange }) => (
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-2">
-      {label}
-    </label>
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="w-full rounded-lg border border-gray-300 p-2"
-    >
-      {options.map((opt) => (
-        <option key={opt} value={opt}>
-          {opt === "all" ? `ყველა ${label.toLowerCase()}` : format(opt)}
-        </option>
-      ))}
-    </select>
-  </div>
-);
-
-const RangeFilter = ({ label, min, max, onMinChange, onMaxChange }) => (
-  <div>
-    <label className="block text-sm font-medium text-gray-700 mb-2">
-      {label}
-    </label>
-    <div className="flex gap-2">
-      <input
-        type="number"
-        placeholder="მინ"
-        value={min}
-        onChange={(e) => onMinChange(e.target.value)}
-        className="w-1/2 rounded-lg border border-gray-300 p-2"
-      />
-      <input
-        type="number"
-        placeholder="მაქს"
-        value={max}
-        onChange={(e) => onMaxChange(e.target.value)}
-        className="w-1/2 rounded-lg border border-gray-300 p-2"
-      />
-    </div>
   </div>
 );
 

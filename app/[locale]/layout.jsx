@@ -18,7 +18,7 @@ export default function LocaleLayout({ children, params: { locale } }) {
 
   useEffect(() => {
     // Load translations
-    import(`../../messages/${locale}.json`)
+    import(`../messages/${locale}.json`)
       .then((messages) => {
         setMessages(messages.default);
       })

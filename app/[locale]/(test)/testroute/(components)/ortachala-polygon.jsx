@@ -259,31 +259,73 @@ const InfoCard = memo(({ data, apartments, position }) => {
   );
 });
 
-const Controls = ({ zoomIn, zoomOut, resetTransform }) => (
-  <div className=" bottom-[400px]  justify-center items-center  flex-col gap-2 z-50">
-    <button
-      onClick={() => zoomIn()}
-      className="p-2 rounded-full bg-purple-500/90 backdrop-blur-sm text-white 
-               shadow-lg hover:bg-purple-600 active:bg-purple-700 transition-colors"
-    >
-      <Plus size={24} />
-    </button>
-    <button
-      onClick={() => zoomOut()}
-      className="p-2 rounded-full bg-purple-500/90 backdrop-blur-sm text-white 
-               shadow-lg hover:bg-purple-600 active:bg-purple-700 transition-colors"
-    >
-      <Minus size={24} />
-    </button>
-    <button
-      onClick={() => resetTransform()}
-      className="p-2 rounded-full bg-purple-500/90 backdrop-blur-sm text-white 
-               shadow-lg hover:bg-purple-600 active:bg-purple-700 transition-colors"
-    >
-      <RotateCcw size={24} />
-    </button>
-  </div>
-);
+const Controls = ({ zoomIn, zoomOut, resetTransform }) => {
+  // ზუმის step-ის კონტროლი უფრო ზუსტი მანიპულაციებისთვის
+  const handleZoomIn = () => zoomIn(0.3); // შემცირებული step ზუმისთვის
+  const handleZoomOut = () => zoomOut(0.3); // შემცირებული step ზუმისთვის
+
+  return (
+    <div className="fixed bottom-[50%] right-6 flex  gap-1.5 z-50">
+      <div className="relative">
+        <div
+          className="bg-black/20 backdrop-blur-xl rounded-2xl 
+                      border border-white/10 shadow-2xl
+                      p-1.5 overflow-hidden"
+        >
+          <div className="flex  gap-1">
+            <button
+              onClick={handleZoomIn}
+              className="p-3.5 rounded-xl bg-gradient-to-tr 
+                       from-white/5 to-white/10
+                       active:from-purple-500/20 active:to-blue-500/20
+                       transition-all duration-200"
+              aria-label="Zoom in"
+            >
+              <Plus
+                size={20}
+                className="text-white/90 transform active:scale-95
+                         transition-transform duration-200"
+              />
+            </button>
+
+            <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+
+            <button
+              onClick={handleZoomOut}
+              className="p-3.5 rounded-xl bg-gradient-to-tr 
+                       from-white/5 to-white/10
+                       active:from-purple-500/20 active:to-blue-500/20
+                       transition-all duration-200"
+              aria-label="Zoom out"
+            >
+              <Minus
+                size={20}
+                className="text-white/90 transform active:scale-95
+                         transition-transform duration-200"
+              />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button
+        onClick={resetTransform}
+        className="p-3.5 rounded-xl
+                 bg-black/20 backdrop-blur-xl
+                 border border-white/10 shadow-2xl
+                 active:bg-purple-500/20
+                 transition-all duration-200"
+        aria-label="Reset zoom"
+      >
+        <RotateCcw
+          size={20}
+          className="text-white/90 transform active:scale-95
+                   transition-transform duration-200"
+        />
+      </button>
+    </div>
+  );
+};
 
 const MobileView = ({ children }) => {
   return (
@@ -390,12 +432,13 @@ const OrtachalaPolygon = () => {
 
   const content = (
     <>
-      <div className="relative w-full h-full flex items-center justify-center">
+      <div className="relative w-full h-full flex items-center justify-center md:-mt-[180px]">
         <div className="w-full h-full relative overflow-hidden">
           <CldImage
             src={IMAGES.first}
             width={3906}
             height={2200}
+            quality={100}
             alt="Ortachala"
             className="w-full h-full object-contain md:object-cover"
             cloudName="formus"

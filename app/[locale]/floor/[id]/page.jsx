@@ -93,7 +93,7 @@ const InfoPanel = memo(({ data, onViewDetails }) => {
       <div className="relative w-full">
         <CldImage
           src={data.photo_3d || data.photo_2d}
-          width={800}
+          width={400}
           height={600}
           alt={`Apartment ${data.apartment_number}`}
           className="w-full h-48 md:h-56 lg:h-48 object-cover"
@@ -221,23 +221,27 @@ const FloorDetails = () => {
           <div className="flex-grow bg-white rounded-xl shadow-sm border-black overflow-hidden">
             <div className="relative w-full h-full">
               <div
-                className="w-full"
-                style={{ paddingTop: "60.89%", position: "relative" }}
+                className="relative w-full h-0"
+                style={{ paddingBottom: "59.89%" }}
               >
                 <div className="absolute inset-0">
                   <CldImage
-                    width={1115}
-                    height={678}
+                    width={1122}
+                    height={672}
                     src={floor.floor_plan_url}
                     alt={`Floor ${floor.floor_number}`}
                     cloudName="formus"
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain"
                     quality={50}
                     loading="lazy"
                   />
 
                   <svg
-                    viewBox="0 0 1115 678"
+                    viewBox={
+                      floor.block_id === "D"
+                        ? "690 0 2000 2000"
+                        : "0 0 1122 672"
+                    }
                     className="absolute inset-0 w-full h-full"
                     preserveAspectRatio="xMidYMid meet"
                   >

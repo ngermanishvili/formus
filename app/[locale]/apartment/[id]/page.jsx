@@ -121,7 +121,7 @@ const ApartmentDetails = () => {
 
               {/* Image Container with Hover Effect */}
               <div
-                className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-gray-100  group"
+                className="relative aspect-[1/1] w-full overflow-hidden rounded-xl bg-gray-100  group"
                 onClick={() => setIsImageOpen(true)}
               >
                 <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity z-10" />

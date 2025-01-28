@@ -29,7 +29,7 @@ export default function Faq() {
           <p className="text-gray-600 text-lg leading-relaxed mb-10">
             {t("description")}
           </p>
-          <Link href="/faq">
+          <Link href="/about-formus">
             <span className="inline-block text-lg text-white bg-black px-8 py-3 rounded-sm hover:bg-gray-800 transition-colors">
               {t("button")}
             </span>

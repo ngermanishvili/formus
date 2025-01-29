@@ -44,7 +44,7 @@ export default function Footer5() {
                 className="text-14-medium call-phone color-white hover-up d-inline-block mb-20"
                 href="tel:+41227157000"
               >
-                +41 22 715 7000
+                +(995) 593 93 90 93
               </a>
             </div>
             <div className="col-lg-3 width-25 mb-30 wow fadeInUp">

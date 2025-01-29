@@ -20,7 +20,7 @@ export default function Footer3() {
                 className="text-14-medium call-footer color-white hover-up d-inline-block mb-20"
                 href="tel:+41227157000"
               >
-                +41 22 715 7000
+                +(995) 593 93 90 93
               </a>
               <span className="text-14-medium address-footer color-white hover-up d-inline-block mb-20">
                 184 Main Collins Street West Victoria 8007

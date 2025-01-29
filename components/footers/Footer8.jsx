@@ -37,7 +37,7 @@ export default function Footer9() {
                       Call Our Office
                     </span>
                     <p className="text-18-medium color-text mt-5 call-footer">
-                      +41 22 715 7000
+                      +(995) 593 93 90 93
                     </p>
                   </div>
                 </div>

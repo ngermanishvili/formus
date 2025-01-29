@@ -30,7 +30,7 @@ export default function Footer7() {
                     className="text-14-medium call-phone color-white hover-up"
                     href="tel:+41227157000"
                   >
-                    +41 22 715 7000
+                    +(995) 593 93 90 93
                   </a>
                 </div>
               </div>

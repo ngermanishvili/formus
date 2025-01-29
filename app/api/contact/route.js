@@ -122,7 +122,7 @@ export async function POST(req) {
 
         const mailOptions = {
             from: 'nikagermanishvili5@gmail.com',
-            to: 'nikagermanishvili8@gmail.com',
+            to: 'info@formus.ge',
             subject: `ახალი შეტყობინება: ${sanitizedData.subject}`,
             html: `
             <!DOCTYPE html>

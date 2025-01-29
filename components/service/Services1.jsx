@@ -64,7 +64,7 @@ export default function Services1() {
     <section className="section pt-60">
       <div className="container-sub">
         <div className="row">
-          {projects.slice(0, 6).map((project) => (
+          {projects.slice(0, 10).map((project) => (
             <div
               key={project.id}
               className="col-lg-4 col-sm-6 mb-30 cursor-pointer"

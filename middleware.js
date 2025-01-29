@@ -18,7 +18,8 @@ const PUBLIC_APIS = [
     '/api/about',
     '/api/blog',
     '/api/projects/3',
-    'api/hero-content'
+    'api/hero-content',
+    '/api/contact',
 
 ];
 

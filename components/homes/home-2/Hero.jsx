@@ -24,7 +24,6 @@ export default function Hero() {
           </h2>
           <div className="mt-20">
             <Link className="btn btn-border wow fadeInUp" href="/fleet-list">
-              View Our Fleet
               <svg
                 className="icon-16"
                 fill="none"

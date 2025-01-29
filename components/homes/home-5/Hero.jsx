@@ -130,27 +130,6 @@ export default function Hero() {
                           ? slider.description_ge
                           : slider.description_en}
                       </h2>
-                      <div className="mt-30 wow fadeInUp">
-                        <Link className="btn btn-border" href="/fleet-list">
-                          {currentLang === "ge"
-                            ? "ავტოპარკის ნახვა"
-                            : "View Our Fleet"}
-                          <svg
-                            className="icon-16"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
-                            />
-                          </svg>
-                        </Link>
-                      </div>
                     </div>
                   </SwiperSlide>
                 ))}

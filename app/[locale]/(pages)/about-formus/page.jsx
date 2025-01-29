@@ -5,11 +5,30 @@ import { useParams } from "next/navigation";
 import Footer5 from "@/components/footers/Footer1";
 import Header1 from "@/components/headers/Header1";
 import MobailHeader1 from "@/components/headers/MobailHeader1";
+import { Check } from "lucide-react";
 
 const AboutFormus = () => {
   const [aboutData, setAboutData] = useState([]);
   const params = useParams();
   const locale = params.locale || "ka";
+
+  // სერვისების სია
+  const services = {
+    ge: [
+      "გადახდის ხელსაყრელი პირობები",
+      "დანაზოგის ეფექტური განთავსება",
+      "ენერგოეფექტური უძრავი ქონება მზარდი ღირებულებით",
+      "მშენებლობის მკაცრად დაცული ვადები",
+      "სრულად დაფინანსებული პროექტები",
+    ],
+    en: [
+      "Flexible payment terms",
+      "Effective placement of savings",
+      "Energy-efficient real estate with increasing value",
+      "Strict adherence to construction timelines",
+      "Fully funded projects",
+    ],
+  };
 
   const getLocalizedField = (item, field) => {
     if (!item) return "";
@@ -35,125 +54,157 @@ const AboutFormus = () => {
 
   return (
     <>
-      <Header1 /> <MobailHeader1 />
-      <div className="flex flex-col items-center w-full py-10">
-        <div className="w-full flex justify-center mb-8 px-4">
-          <div className="w-full max-w-[1100px]">
-            <img
-              src={
-                aboutData[0]?.image_url ||
-                "/assets/imgs/page/homepage5/banner.png"
-              }
-              alt="Formus Building Complex"
-              className="w-full max-h-[800px] object-cover rounded-lg"
-            />
-          </div>
-        </div>
+      <Header1 />
+      <MobailHeader1 />
 
-        <div className="w-full max-w-6xl px-4">
-          <h2 className="text-4xl font-bold mb-6">
-            {getLocalizedField(aboutData[0], "title")}
-          </h2>
-
-          <div className="mb-12">
-            <p className="text-gray-700 mb-4 text-lg leading-relaxed">
-              {getLocalizedField(aboutData[0], "description")}
-            </p>
-          </div>
-
-          <div className="flex flex-col md:flex-row items-center gap-8 mb-12">
-            <div className="flex-1">
-              <h3 className="text-2xl font-bold mb-4">
-                {getLocalizedField(aboutData[1], "title")}
-              </h3>
-              <p className="text-gray-700 mb-4 text-lg leading-relaxed">
-                {getLocalizedField(aboutData[1], "description")}
-              </p>
-            </div>
-            <div className="relative">
-              <div className="w-72 h-72 rounded-full overflow-hidden">
-                <img
-                  src={
-                    aboutData[1]?.image_url ||
-                    "/assets/imgs/page/homepage5/banner.png"
-                  }
-                  alt="Building Detail"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="absolute -top-4 right-0 bg-white p-2 rounded-full shadow-lg">
-                <div className="w-8 h-8 bg-yellow-400 rounded-full"></div>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="w-72 h-72 rounded-full overflow-hidden">
+      {/* Hero Section */}
+      <div className="relative w-full bg-gray-50 py-16">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="w-full mb-16">
               <img
                 src={
-                  aboutData[2]?.image_url ||
+                  aboutData[0]?.image_url ||
                   "/assets/imgs/page/homepage5/banner.png"
                 }
-                alt="Building Detail"
-                className="w-full h-full object-cover"
+                alt="Formus Building Complex"
+                className="w-full h-[500px] object-cover rounded-2xl shadow-lg"
               />
             </div>
-            <div className="flex-1">
-              <h3 className="text-2xl font-bold mb-4">
-                {getLocalizedField(aboutData[2], "title")}
-              </h3>
-              <p className="text-gray-700 mb-4 text-lg leading-relaxed">
-                {getLocalizedField(aboutData[2], "description")}
+
+            {/* First Section */}
+            <div className="mb-20">
+              <h1 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900">
+                {getLocalizedField(aboutData[0], "title")}
+              </h1>
+              <p className="text-lg text-gray-700 leading-relaxed">
+                {getLocalizedField(aboutData[0], "description")}
               </p>
             </div>
-          </div>
 
-          {aboutData[0]?.address_ge && (
-            <div className="mt-12 p-6 bg-gray-50 rounded-lg">
-              <h3 className="text-2xl font-bold mb-4">
-                {locale === "en"
-                  ? "Contact Information"
-                  : "საკონტაქტო ინფორმაცია"}
-              </h3>
-              <div className="space-y-2">
-                <p className="text-gray-700">
-                  <span className="font-semibold">
-                    {locale === "en" ? "Address:" : "მისამართი:"}
-                  </span>{" "}
-                  {getLocalizedField(aboutData[0], "address")}
+            {/* Second Section with circular image */}
+            <div className="flex flex-col md:flex-row items-center gap-16 mb-20">
+              <div className="flex-1">
+                <h2 className="text-3xl font-bold mb-6 text-gray-900">
+                  {getLocalizedField(aboutData[1], "title")}
+                </h2>
+                <p className="text-lg text-gray-700 leading-relaxed">
+                  {getLocalizedField(aboutData[1], "description")}
                 </p>
-                {aboutData[0].phone && (
-                  <p className="text-gray-700">
-                    <span className="font-semibold">
-                      {locale === "en" ? "Phone:" : "ტელეფონი:"}
-                    </span>{" "}
-                    {aboutData[0].phone}
-                  </p>
-                )}
-                {aboutData[0].email && (
-                  <p className="text-gray-700">
-                    <span className="font-semibold">
-                      {locale === "en" ? "Email:" : "ელ-ფოსტა:"}
-                    </span>{" "}
-                    {aboutData[0].email}
-                  </p>
-                )}
               </div>
-              {aboutData[0].map_url && (
-                <div className="mt-4 h-[300px] rounded-lg overflow-hidden">
-                  <iframe
-                    src={aboutData[0].map_url}
-                    width="100%"
-                    height="100%"
-                    style={{ border: 0 }}
-                    allowFullScreen=""
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                  ></iframe>
+              <div className="w-full md:w-1/3 relative">
+                <div className="aspect-square rounded-full overflow-hidden shadow-xl">
+                  <img
+                    src={
+                      aboutData[1]?.image_url ||
+                      "/assets/imgs/page/homepage5/banner.png"
+                    }
+                    alt="Building Quality"
+                    className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
+                  />
                 </div>
-              )}
+                <div className="absolute -top-4 -right-4 bg-white p-3 rounded-full shadow-lg">
+                  <div className="w-8 h-8 bg-yellow-400 rounded-full"></div>
+                </div>
+              </div>
             </div>
-          )}
+
+            {/* Third Section with Services List */}
+            <div className="flex flex-col md:flex-row-reverse items-center gap-16 mb-20">
+              <div className="flex-1">
+                <h2 className="text-3xl font-bold mb-6 text-gray-900">
+                  {getLocalizedField(aboutData[2], "title")}
+                </h2>
+                <p className="text-lg text-gray-700 leading-relaxed mb-8">
+                  {getLocalizedField(aboutData[2], "description")}
+                </p>
+                {/* Services List */}
+                <div className="bg-white rounded-xl p-8 shadow-lg">
+                  <ul className="space-y-4">
+                    {services[locale === "en" ? "en" : "ge"].map(
+                      (service, index) => (
+                        <li key={index} className="flex items-center gap-4">
+                          <div className="flex-shrink-0">
+                            <Check className="h-6 w-6 text-green-500" />
+                          </div>
+                          <span className="text-gray-700">{service}</span>
+                        </li>
+                      )
+                    )}
+                  </ul>
+                </div>
+              </div>
+              <div className="w-full md:w-1/3 relative">
+                <div className="aspect-square rounded-full overflow-hidden shadow-xl">
+                  <img
+                    src={
+                      aboutData[2]?.image_url ||
+                      "/assets/imgs/page/homepage5/banner.png"
+                    }
+                    alt="Our Services"
+                    className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Contact Information Section */}
+            {aboutData[0]?.address_ge && (
+              <div className="bg-white rounded-2xl shadow-lg p-8 mb-16">
+                <h3 className="text-2xl font-bold mb-6 text-gray-900">
+                  {locale === "en"
+                    ? "Contact Information"
+                    : "საკონტაქტო ინფორმაცია"}
+                </h3>
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="space-y-4">
+                    <p className="flex items-center gap-3">
+                      <span className="font-semibold min-w-[100px]">
+                        {locale === "en" ? "Address:" : "მისამართი:"}
+                      </span>
+                      <span className="text-gray-600">
+                        {getLocalizedField(aboutData[0], "address")}
+                      </span>
+                    </p>
+                    {aboutData[0].phone && (
+                      <p className="flex items-center gap-3">
+                        <span className="font-semibold min-w-[100px]">
+                          {locale === "en" ? "Phone:" : "ტელეფონი:"}
+                        </span>
+                        <span className="text-gray-600">
+                          {aboutData[0].phone}
+                        </span>
+                      </p>
+                    )}
+                    {aboutData[0].email && (
+                      <p className="flex items-center gap-3">
+                        <span className="font-semibold min-w-[100px]">
+                          {locale === "en" ? "Email:" : "ელ-ფოსტა:"}
+                        </span>
+                        <span className="text-gray-600">
+                          {aboutData[0].email}
+                        </span>
+                      </p>
+                    )}
+                  </div>
+                  {aboutData[0].map_url && (
+                    <div className="h-[300px] rounded-xl overflow-hidden shadow-inner">
+                      <iframe
+                        src={aboutData[0].map_url}
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0 }}
+                        allowFullScreen=""
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        className="w-full h-full"
+                      ></iframe>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
       <Footer5 />

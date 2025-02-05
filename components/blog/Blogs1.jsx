@@ -80,7 +80,10 @@ export default function Blogs1() {
                     locale === "ka" ? blog.title_ge : blog.title_en
                   )}-${blog.id}`}
                 >
-                  <div className="cardImage">
+                  <div
+                    className="cardImage"
+                    style={{ height: "250px", position: "relative" }}
+                  >
                     <div className="datePost">
                       <div className="heading-52-medium color-white">
                         {new Date(blog.created_at).getDate()}.
@@ -94,11 +97,11 @@ export default function Blogs1() {
                     </div>
                     {blog.image_url && (
                       <Image
-                        width={1104}
-                        height={780}
-                        style={{ height: "fit-content" }}
+                        fill
                         src={blog.image_url}
                         alt={locale === "ka" ? blog.title_ge : blog.title_en}
+                        style={{ objectFit: "cover" }}
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                     )}
                   </div>

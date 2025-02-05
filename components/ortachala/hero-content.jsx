@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { FaLeaf, FaShoppingCart, FaChild, FaShieldAlt } from "react-icons/fa"; // Example icons
 
 export default function ProjectContent({ id }) {
   const [loading, setLoading] = useState(true);
@@ -156,12 +157,18 @@ export default function ProjectContent({ id }) {
                     className="p-4 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow"
                   >
                     <div className="relative w-16 h-16 mx-auto mb-4">
-                      <Image
-                        src={projectData.main_image_url}
-                        alt={feature.title}
-                        fill
-                        className="rounded-full object-cover"
-                      />
+                      {index === 0 && (
+                        <FaLeaf className="text-green-500 h-10 w-10 mr-4" />
+                      )}
+                      {index === 1 && (
+                        <FaShoppingCart className="text-blue-500 h-10 w-10 mr-4" />
+                      )}
+                      {index === 2 && (
+                        <FaChild className="text-orange-500 h-10 w-10 mr-4" />
+                      )}
+                      {index === 3 && (
+                        <FaShieldAlt className="text-red-500 h-10 w-10 mr-4" />
+                      )}
                     </div>
                     <h3 className="text-xl font-semibold text-center mb-2">
                       {feature.title}

@@ -1,113 +1,108 @@
-"use client";
+import React, { useState, useEffect } from "react";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Home, BedDouble, Sofa, DoorOpen, MapPin } from "lucide-react";
+import { CldImage } from "next-cloudinary";
 
-import React, { useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
-import PropertyResults from "@/components/search/search-table";
-import Header1 from "@/components/headers/Header1";
-import Footer5 from "@/components/footers/Footer1";
-import { DetailedSearchFilter } from "@/components/search/detailed-search";
+export default function PropertyResults() {
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-export default function SearchForm() {
-  const [showResults, setShowResults] = useState(false);
-  const locations = ["თბილისი", "ბათუმი", "ქუთაისი", "რუსთავი", "გორი"];
-  const propertyTypes = ["ბინა", "სახლი", "კომერციული ფართი", "მიწის ნაკვეთი"];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("/api/apartments");
+        const { data } = await response.json();
+        const availableProperties = data
+          .filter((property) => property.status !== "sold")
+          .slice(0, 5);
+        setProperties(availableProperties);
+      } catch (error) {
+        console.error("შეცდომა:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const handleSearch = () => {
-    setShowResults(true);
-  };
+    fetchData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
 
   return (
-    <>
-      <Header1 />
-      <div className="w-full justify-center mx-auto align-middle bg-[#abc123] p-60">
-        <div className="flex flex-col gap-4">
-          <div className="w-full backdrop-blur-md bg-white/90 rounded-2xl shadow-xl p-4 md:p-6 flex flex-col md:flex-row items-center gap-4 max-w-6xl mx-auto transition-all">
-            <div className="flex-1 w-full">
-              <p className="text-gray-500 text-sm mb-1 text-left w-[250px]">
-                საძიებო სიტყვა
-              </p>
-              <Input
-                type="text"
-                placeholder="Search keyword"
-                className="h-12 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-green-400 transition-all text-black"
-              />
-            </div>
-
-            <div className="flex-1 w-full">
-              <p className="text-gray-500 text-sm mb-1 text-left">მდებარეობა</p>
-              <Select>
-                <SelectTrigger className="h-12 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-green-400 transition-all">
-                  <SelectValue
-                    placeholder={
-                      <span className="font-bold text-black">
-                        მდებარეობის არჩევა
-                      </span>
-                    }
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  {locations.map((location) => (
-                    <SelectItem
-                      key={location}
-                      value={location.toLowerCase()}
-                      className="hover:bg-green-50"
-                    >
-                      {location}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="flex-1 w-full">
-              <p className="text-gray-500 text-sm mb-1 text-left">ტიპი</p>
-              <Select>
-                <SelectTrigger className="h-12 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-green-400 transition-all">
-                  <SelectValue
-                    placeholder={
-                      <span className="font-bold text-black">ყველა</span>
-                    }
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  {propertyTypes.map((type) => (
-                    <SelectItem
-                      key={type}
-                      value={type.toLowerCase()}
-                      className="hover:bg-green-50"
-                    >
-                      {type}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="flex items-center gap-2 w-full md:w-auto">
-              <DetailedSearchFilter />
-              <Button
-                className="bg-black hover:bg-gray-800 text-white rounded-xl h-12 px-8 w-full md:w-auto flex items-center gap-2 transition-all"
-                onClick={handleSearch}
-              >
-                <Search className="w-5 h-5" />
-                ძიება
-              </Button>
-            </div>
+    <div className="space-y-6">
+      <Card className="p-6 mt-4 bg-gradient-to-b from-white to-gray-50">
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-4">
+            <h2 className="text-2xl font-bold bg-black bg-clip-text text-transparent">
+              ხელმისაწვდომი ბინები
+            </h2>
+            <Badge
+              variant="secondary"
+              className="bg-green-100 text-green-800 px-4 py-1"
+            >
+              {properties.length} შედეგი
+            </Badge>
           </div>
-
-          {showResults && <PropertyResults />}
         </div>
-      </div>
-      <Footer5 />
-    </>
+
+        <div className="grid gap-6">
+          {properties.map((property) => (
+            <div
+              key={property.apartment_id}
+              className="group relative bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden"
+            >
+              <div className="grid md:grid-cols-[300px,1fr] gap-6">
+                <div className="relative h-48 md:h-full overflow-hidden">
+                  <CldImage
+                    width={400}
+                    height={300}
+                    quality={70}
+                    src={property.home_3d || "/api/placeholder/400/300"}
+                    alt={`ბინა ${property.apartment_id}`}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+
+                <div className="p-6">
+                  <div className="flex justify-between items-start mb-4">
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 group-hover:text-green-600 transition-colors">
+                        ბლოკი {property.block_id}
+                      </h3>
+                      <div className="flex items-center gap-2 mt-1 text-gray-500">
+                        <MapPin className="w-4 h-4" />
+                        <span>სართული {property.floor}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="flex items-center gap-2 text-gray-600">
+                      <Home className="w-4 h-4" />
+                      <span>{property.total_area} მ²</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-600">
+                      <BedDouble className="w-4 h-4" />
+                      <span>სართული {property.floor}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-gray-600">
+                      <Sofa className="w-4 h-4" />
+                      <span>ბლოკი {property.block_id}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
+    </div>
   );
 }

@@ -21,6 +21,7 @@ export default function PropertyResults() {
         const { data } = await response.json();
         const blockAProperties = data
           .filter((property) => property.block_id === "A")
+          .filter((property) => property.status !== "sold")
           .slice(0, 5);
         setProperties(blockAProperties);
       } catch (error) {
@@ -75,16 +76,6 @@ export default function PropertyResults() {
             >
               {properties.length} შედეგი
             </Badge>
-          </div>
-
-          <div className="flex items-center gap-3 bg-white p-2 rounded-xl shadow-sm border border-gray-100">
-            <span className="text-sm font-medium text-gray-600">USD</span>
-            <Switch
-              checked={showGEL}
-              onCheckedChange={setShowGEL}
-              className="data-[state=checked]:bg-green-500"
-            />
-            <span className="text-sm font-medium text-gray-600">GEL</span>
           </div>
         </div>
 

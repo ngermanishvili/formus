@@ -45,7 +45,7 @@ export default function Nav() {
   }
 
   return (
-    <div className="flex space-x-2 my-4">
+    <div className="flex space-x-2 my-4 uppercase">
       {routes.map((route) => (
         <li key={route.id} className="list-none">
           <Link

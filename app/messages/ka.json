@@ -29,12 +29,11 @@
     "chooseType": "აირჩიეთ ტიპი",
     "detailed": "დეტალური",
     "search": "ძიება",
-    "soon": "მალე",
+
     "apartment": "ბინა",
     "commercial": "კომერციული ფართი",
     "ortachalaHills": "ორთაჭალა ჰილს",
-    "tbilisi": "თბილისი",
-    "batumi": "ბათუმი"
+    "tbilisi": "თბილისი"
   },
 
   "Breadcrumb": {

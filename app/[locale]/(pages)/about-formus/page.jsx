@@ -12,7 +12,6 @@ const AboutFormus = () => {
   const params = useParams();
   const locale = params.locale || "ka";
 
-  // სერვისების სია
   const services = {
     ge: [
       "გადახდის ხელსაყრელი პირობები",
@@ -57,7 +56,6 @@ const AboutFormus = () => {
       <Header1 />
       <MobailHeader1 />
 
-      {/* Hero Section */}
       <div className="relative w-full bg-gray-50 py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
@@ -74,9 +72,9 @@ const AboutFormus = () => {
 
             {/* First Section */}
             <div className="mb-20">
-              <h1 className="text-4xl md:text-5xl font-bold mb-8 text-gray-900">
+              <h2 className="text-3xl font-bold mb-8 text-gray-900">
                 {getLocalizedField(aboutData[0], "title")}
-              </h1>
+              </h2>
               <p className="text-lg text-gray-700 leading-relaxed">
                 {getLocalizedField(aboutData[0], "description")}
               </p>
@@ -118,7 +116,6 @@ const AboutFormus = () => {
                 <p className="text-lg text-gray-700 leading-relaxed mb-8">
                   {getLocalizedField(aboutData[2], "description")}
                 </p>
-                {/* Services List */}
                 <div className="bg-white rounded-xl p-8 shadow-lg">
                   <ul className="space-y-4">
                     {services[locale === "en" ? "en" : "ge"].map(

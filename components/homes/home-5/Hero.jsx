@@ -5,11 +5,9 @@ import { Autoplay, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import { slugify, transliterate } from "@/utils/slugify";
 
-// Swiper settings outside component to avoid re-creation
 const baseSettings = {
   modules: [Navigation, Autoplay],
   autoplay: {
@@ -18,13 +16,32 @@ const baseSettings = {
   },
 };
 
+// Updated breakpoints for better responsiveness
 const breakpoints = {
-  1399: { slidesPerView: 4 },
-  800: { slidesPerView: 3 },
-  500: { slidesPerView: 2 },
-  400: { slidesPerView: 1 },
-  350: { slidesPerView: 1 },
-  150: { slidesPerView: 1 },
+  0: {
+    slidesPerView: 1,
+    spaceBetween: 10,
+  },
+  480: {
+    slidesPerView: 1,
+    spaceBetween: 15,
+  },
+  640: {
+    slidesPerView: 2,
+    spaceBetween: 20,
+  },
+  768: {
+    slidesPerView: 2,
+    spaceBetween: 25,
+  },
+  1024: {
+    slidesPerView: 3,
+    spaceBetween: 30,
+  },
+  1280: {
+    slidesPerView: 4,
+    spaceBetween: 30,
+  },
 };
 
 export default function Hero() {
@@ -34,6 +51,7 @@ export default function Hero() {
       currentLang === "ge" ? transliterate(title) : title;
     return slugify(transliteratedTitle);
   };
+
   const [mounted, setMounted] = useState(false);
   const [data, setData] = useState({
     sliders: [],
@@ -77,7 +95,6 @@ export default function Hero() {
     fetchData();
   }, []);
 
-  // Don't render anything until component is mounted
   if (!mounted) return null;
 
   if (loading) {
@@ -100,6 +117,8 @@ export default function Hero() {
               "/assets/imgs/page/homepage5/banner.png"
             })`,
             transition: "background-image 0.3s ease-in-out",
+            backgroundPosition: "center",
+            backgroundSize: "cover",
           }}
         />
         <div className="box-banner-info">
@@ -114,18 +133,20 @@ export default function Hero() {
                   prevEl: ".snbp11",
                 }}
                 onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-                style={{ maxWidth: "100%", overflow: "hidden" }}
                 className="swiper-container swiper-banner-1 pb-0"
               >
                 {data.sliders.map((slider) => (
                   <SwiperSlide key={slider.id} className="swiper-slide">
-                    <div suppressHydrationWarning>
-                      <p className="heading-52-medium color-white wow fadeInUp">
+                    <div
+                      suppressHydrationWarning
+                      className="px-4 md:px-8 lg:px-12"
+                    >
+                      <p className="heading-52-medium color-white wow fadeInUp text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
                         {currentLang === "ge"
                           ? slider.title_ge
                           : slider.title_en}
                       </p>
-                      <h2 className="text-16 color-white wow fadeInUp">
+                      <h2 className="text-base md:text-lg lg:text-xl color-white wow fadeInUp mt-4">
                         {currentLang === "ge"
                           ? slider.description_ge
                           : slider.description_en}
@@ -139,6 +160,7 @@ export default function Hero() {
             <div className="box-pagination-button box-pagination-button-2">
               <div className="swiper-button-prev swiper-button-prev-banner swiper-button-prev-banner-2 snbp11">
                 <svg
+                  className="w-6 h-6 md:w-8 md:h-8"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="1.5"
@@ -154,6 +176,7 @@ export default function Hero() {
               </div>
               <div className="swiper-button-next swiper-button-next-banner swiper-button-next-banner-2 snbn11">
                 <svg
+                  className="w-6 h-6 md:w-8 md:h-8"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="1.5"
@@ -171,21 +194,18 @@ export default function Hero() {
           </div>
         </div>
         <div className="box-services-banner">
-          <div className="container-sub">
+          <div className="container-sub px-4 md:px-8">
             <div className="box-swiper">
               {data.projects.length > 0 && (
                 <Swiper
                   {...baseSettings}
-                  spaceBetween={30}
-                  slidesPerView={4}
-                  slidesPerGroup={1}
-                  loop={data.projects.length > 4}
                   breakpoints={breakpoints}
+                  loop={data.projects.length > 4}
                   className="swiper-container swiper-group-4 pb-0"
                 >
                   {data.projects.map((project) => (
                     <SwiperSlide key={project.id} className="swiper-slide">
-                      <div className="cardService cardServiceStyle3  ">
+                      <div className="cardService cardServiceStyle3">
                         <Link
                           href={`/projects/${project.id}/${getProjectSlug(
                             project
@@ -202,12 +222,13 @@ export default function Hero() {
                                   : project.title_en
                               }
                               priority
+                              className="w-full h-full object-cover"
                             />
                           </div>
                           <div className="cardInfo">
                             <h3
                               suppressHydrationWarning
-                              className="cardTitle text-20-medium color-white mb-10"
+                              className="cardTitle text-base md:text-lg lg:text-xl color-white mb-2 md:mb-3"
                             >
                               {currentLang === "ge"
                                 ? project.title_ge

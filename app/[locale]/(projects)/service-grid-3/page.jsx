@@ -5,10 +5,9 @@ import Breadcumb from "@/components/service/Breadcumb";
 import Services3 from "@/components/service/Services3";
 
 export const metadata = {
-  title:
-    "Service Grid 3 || Lixride Chauffeur Limousine Transport and Car Hire Nextjs Template",
+  title: "FORMUS | ფორმუსი - სამშენებლო კომპანია ",
   description:
-    "Lixride Chauffeur Limousine Transport and Car Hire Nextjs Template",
+    "ფორმუსი სამშენებლო კომპანია, რომელიც გთავაზობთ სრულყოფილ სამშენებლო მომსახურებას და სამშენებლო პროექტებს სრულყოფილი სამშენებლო მომსახურების სფეროში.",
 };
 
 export default function page() {

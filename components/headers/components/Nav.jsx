@@ -2,6 +2,7 @@
 import { Link, usePathname } from "@/src/i18n/routing";
 import { useEffect, useState } from "react";
 import { useLocale } from "next-intl";
+import { routing } from "@/src/i18n/routing";
 
 export default function Nav() {
   const pathname = usePathname();

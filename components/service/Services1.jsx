@@ -3,28 +3,37 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Loader2 } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { Loader2, X } from "lucide-react";
+import { useLocale } from "next-intl";
 import { slugify, transliterate } from "@/utils/slugify";
 
 export default function Services1() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  const pathname = usePathname();
-  const currentLang = pathname?.includes("/ka") ? "ge" : "en";
+  const locale = useLocale();
+  const currentLang = locale === "ka" ? "ge" : "en";
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
+        setLoading(true);
         const response = await fetch("/api/projects");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
 
-        if (data.status === "success") {
+        if (data.status === "success" && Array.isArray(data.data)) {
           setProjects(data.data);
+        } else {
+          setError("Invalid data format received");
         }
       } catch (error) {
         console.error("Error fetching projects:", error);
+        setError(error.message);
       } finally {
         setLoading(false);
       }
@@ -34,10 +43,51 @@ export default function Services1() {
   }, []);
 
   const getProjectSlug = (project) => {
-    const title = currentLang === "ge" ? project.title_ge : project.title_en;
+    if (!project) return "";
+
+    const title =
+      currentLang === "ge"
+        ? project.title_ge || project.title || ""
+        : project.title_en || project.title || "";
+
     const transliteratedTitle =
       currentLang === "ge" ? transliterate(title) : title;
     return slugify(transliteratedTitle);
+  };
+
+  const handleProjectClick = (project, e) => {
+    e.preventDefault();
+    if (project.id === 1) {
+      // ID 1-ზე გადავამისამართოთ Ortachala Hills-ის გვერდზე
+      window.location.href = `/${locale}/projects/1/ortachala-hilsi`;
+    } else {
+      // სხვა პროექტებზე გამოვაჩინოთ მოდალი
+      setSelectedImage(project.main_image_url);
+    }
+  };
+
+  const ImageModal = ({ imageUrl, onClose }) => {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
+        <div className="relative max-w-4xl w-full">
+          <button
+            onClick={onClose}
+            className="absolute -top-12 right-0 text-white hover:text-gray-300"
+          >
+            <X size={24} />
+          </button>
+          <div className="relative w-full pt-[75%]">
+            <Image
+              src={imageUrl}
+              alt="Project Image"
+              layout="fill"
+              objectFit="contain"
+              className="rounded-lg"
+            />
+          </div>
+        </div>
+      </div>
+    );
   };
 
   if (loading) {
@@ -48,7 +98,19 @@ export default function Services1() {
     );
   }
 
-  if (projects.length === 0) {
+  if (error) {
+    return (
+      <div className="container mx-auto px-4 py-12">
+        <p className="text-center text-lg text-red-500">
+          {currentLang === "ge"
+            ? "შეცდომა მონაცემების ჩატვირთვისას"
+            : "Error loading projects"}
+        </p>
+      </div>
+    );
+  }
+
+  if (!projects || projects.length === 0) {
     return (
       <div className="container mx-auto px-4 py-12">
         <p className="text-center text-lg">
@@ -64,62 +126,76 @@ export default function Services1() {
     <section className="section pt-60">
       <div className="container-sub">
         <div className="row">
-          {projects.slice(0, 10).map((project) => (
-            <div
-              key={project.id}
-              className="col-lg-4 col-sm-6 mb-30 cursor-pointer"
-            >
-              <div className="cardService wow fadeInUp">
-                <div className="cardInfo">
-                  <h3 className="cardTitle text-20-medium color-white mb-10">
-                    {currentLang === "ge" ? project.title_ge : project.title_en}
-                  </h3>
-                  <div className="box-inner-info">
-                    <p className="cardDesc text-14 color-white mb-30">
-                      {currentLang === "ge"
-                        ? project.description_ge
-                        : project.description_en}
-                    </p>
-                    <Link
-                      className="cardLink btn btn-arrow-up"
-                      href={`/projects/${project.id}/${getProjectSlug(
-                        project
-                      )}`}
-                    >
-                      <svg
-                        className="icon-16"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="1.5"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
-                        />
-                      </svg>
-                    </Link>
+          {projects.map(
+            (project) =>
+              project && (
+                <div
+                  key={project.id || Math.random()}
+                  className="col-lg-4 col-sm-6 mb-30"
+                >
+                  <div
+                    className="cardService wow fadeInUp cursor-pointer"
+                    onClick={(e) => handleProjectClick(project, e)}
+                  >
+                    <div className="cardInfo">
+                      <h3 className="cardTitle text-20-medium color-white mb-10">
+                        {currentLang === "ge"
+                          ? project.title_ge || project.title || "უსათაურო"
+                          : project.title_en || project.title || "Untitled"}
+                      </h3>
+                      <div className="">
+                        <p className="cardDesc text-14 color-white mb-30">
+                          {project.id === 1
+                            ? currentLang === "ge"
+                              ? "სულიკო თორთლაძის ქუჩა"
+                              : "Suliko Tortladze Street"
+                            : currentLang === "ge"
+                            ? project.description_ge ||
+                              project.description ||
+                              ""
+                            : project.description_en ||
+                              project.description ||
+                              ""}
+                        </p>
+                        <p className="text-14 color-white mb-15">
+                          {currentLang === "ge"
+                            ? project.address_ge || project.address || ""
+                            : project.address_en || project.address || ""}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="cardImage">
+                      <Image
+                        width={570}
+                        height={500}
+                        style={{ height: "fit-content" }}
+                        src={project.main_image_url || "/placeholder-image.jpg"}
+                        alt={
+                          currentLang === "ge"
+                            ? project.title_ge ||
+                              project.title ||
+                              "პროექტის სურათი"
+                            : project.title_en ||
+                              project.title ||
+                              "Project image"
+                        }
+                        priority
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="cardImage">
-                  <Image
-                    width={570}
-                    height={500}
-                    style={{ height: "fit-content" }}
-                    src={project.main_image_url}
-                    alt={
-                      currentLang === "ge" ? project.title_ge : project.title_en
-                    }
-                    priority
-                  />
-                </div>
-              </div>
-            </div>
-          ))}
+              )
+          )}
         </div>
       </div>
+
+      {/* მოდალის კომპონენტი */}
+      {selectedImage && (
+        <ImageModal
+          imageUrl={selectedImage}
+          onClose={() => setSelectedImage(null)}
+        />
+      )}
     </section>
   );
 }

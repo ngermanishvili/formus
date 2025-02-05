@@ -5,6 +5,12 @@ import Hero from "@/components/homes/home-5/Hero";
 import Faq from "@/components/homes/home-5/Faq";
 import DownloadApp from "@/components/common/downloadApp/DownloadApp";
 
+export const metadata = {
+  title: "FORMUS | ფორმუსი - სამშენებლო კომპანია ",
+  description:
+    "ფორმუსი სამშენებლო კომპანია, რომელიც გთავაზობთ სრულყოფილ სამშენებლო მომსახურებას და სამშენებლო პროექტებს სრულყოფილი სამშენებლო მომსახურების სფეროში.",
+};
+
 export default function Page() {
   return (
     <>

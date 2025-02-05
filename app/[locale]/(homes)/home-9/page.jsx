@@ -12,10 +12,9 @@ import Process from "@/components/homes/home-9/Process";
 import Service from "@/components/homes/home-9/Service";
 import MobailHeader1 from "@/components/headers/MobailHeader1";
 export const metadata = {
-  title:
-    "Home 9 || Lixride Chauffeur Limousine Transport and Car Hire Nextjs Template",
+  title: "FORMUS | ფორმუსი - სამშენებლო კომპანია ",
   description:
-    "Lixride Chauffeur Limousine Transport and Car Hire Nextjs Template",
+    "ფორმუსი სამშენებლო კომპანია, რომელიც გთავაზობთ სრულყოფილ სამშენებლო მომსახურებას და სამშენებლო პროექტებს სრულყოფილი სამშენებლო მომსახურების სფეროში.",
 };
 
 export default function page() {

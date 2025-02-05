@@ -18,10 +18,9 @@ import Footer1 from "@/components/footers/Footer1";
 import ProjectContent from "@/components/ortachala/hero-content";
 
 export const metadata = {
-  title:
-    "Home 5 || Lixride Chauffeur Limousine Transport and Car Hire Nextjs Template",
+  title: "FORMUS | ფორმუსი - სამშენებლო კომპანია ",
   description:
-    "Lixride Chauffeur Limousine Transport and Car Hire Nextjs Template",
+    "ფორმუსი სამშენებლო კომპანია, რომელიც გთავაზობთ სრულყოფილ სამშენებლო მომსახურებას და სამშენებლო პროექტებს სრულყოფილი სამშენებლო მომსახურების სფეროში.",
 };
 
 export default function page({ params }) {

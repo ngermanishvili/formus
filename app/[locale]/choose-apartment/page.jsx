@@ -51,7 +51,6 @@ const ChooseApartment = () => {
       <main className="flex-1 w-full relative">
         <OrtachalaPolygon />
         <div className="w-full gap-4 ">
-          <span className="text-white text-2xl">აირჩიეთ ბინა</span>
           <ApartmentFilters onFilterChange={handleFilterChange} />
         </div>{" "}
       </main>

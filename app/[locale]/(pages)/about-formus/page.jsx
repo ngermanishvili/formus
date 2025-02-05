@@ -147,63 +147,6 @@ const AboutFormus = () => {
                 </div>
               </div>
             </div>
-
-            {/* Contact Information Section */}
-            {aboutData[0]?.address_ge && (
-              <div className="bg-white rounded-2xl shadow-lg p-8 mb-16">
-                <h3 className="text-2xl font-bold mb-6 text-gray-900">
-                  {locale === "en"
-                    ? "Contact Information"
-                    : "საკონტაქტო ინფორმაცია"}
-                </h3>
-                <div className="grid md:grid-cols-2 gap-8">
-                  <div className="space-y-4">
-                    <p className="flex items-center gap-3">
-                      <span className="font-semibold min-w-[100px]">
-                        {locale === "en" ? "Address:" : "მისამართი:"}
-                      </span>
-                      <span className="text-gray-600">
-                        {getLocalizedField(aboutData[0], "address")}
-                      </span>
-                    </p>
-                    {aboutData[0].phone && (
-                      <p className="flex items-center gap-3">
-                        <span className="font-semibold min-w-[100px]">
-                          {locale === "en" ? "Phone:" : "ტელეფონი:"}
-                        </span>
-                        <span className="text-gray-600">
-                          {aboutData[0].phone}
-                        </span>
-                      </p>
-                    )}
-                    {aboutData[0].email && (
-                      <p className="flex items-center gap-3">
-                        <span className="font-semibold min-w-[100px]">
-                          {locale === "en" ? "Email:" : "ელ-ფოსტა:"}
-                        </span>
-                        <span className="text-gray-600">
-                          {aboutData[0].email}
-                        </span>
-                      </p>
-                    )}
-                  </div>
-                  {aboutData[0].map_url && (
-                    <div className="h-[300px] rounded-xl overflow-hidden shadow-inner">
-                      <iframe
-                        src={aboutData[0].map_url}
-                        width="100%"
-                        height="100%"
-                        style={{ border: 0 }}
-                        allowFullScreen=""
-                        loading="lazy"
-                        referrerPolicy="no-referrer-when-downgrade"
-                        className="w-full h-full"
-                      ></iframe>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>

@@ -12,17 +12,16 @@ export default function Faq() {
     <section className="relative bg-white">
       <div className="flex flex-col lg:flex-row items-stretch">
         {/* Left Image */}
-        <div className="w-full lg:w-1/2 relative h-[400px] group overflow-hidden">
+        <div className="w-full lg:w-1/2 relative h-[400px] ">
           <CldImage
             src="1.ფორმუსის_მოკლე_About_us_rmogdh"
             alt={t("title")}
             width={960}
             height={400}
             quality={80}
-            className="object-cover transition-transform duration-700 group-hover:scale-110"
+            className="object-cover scale-105"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
         </div>
 
         {/* Right Content */}

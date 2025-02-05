@@ -179,7 +179,7 @@ export default function ProjectContent({ id }) {
         {/* Second Section */}
         <section className="relative bg-white">
           <div className="flex flex-col lg:flex-row items-stretch">
-            <div className="w-full lg:w-1/2 relative h-[400px] group overflow-hidden">
+            <div className="w-full lg:w-1/2 relative h-[400px] group overflow-hidden mb-[5">
               <Image
                 src={
                   projectData.second_section_img ||

@@ -12,17 +12,10 @@ export default function Nav() {
   useEffect(() => {
     const fetchRoutes = async () => {
       try {
-        const response = await fetch("/api/navigation", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
+        const response = await fetch("/api/navigation");
         if (!response.ok) {
           throw new Error("Failed to fetch navigation");
         }
-
         const data = await response.json();
         setRoutes(data.data || []);
       } catch (error) {
@@ -35,10 +28,13 @@ export default function Nav() {
     fetchRoutes();
   }, []);
 
-  // Modified to preserve language prefix
   const getPathWithoutLocale = (path) => {
+    // Remove locale prefix if present
     const segments = path.split("/");
-    return segments.length > 2 ? segments.slice(2).join("/") : "";
+    if (segments.length > 2 && routing.locales.includes(segments[1])) {
+      return segments.slice(2).join("/");
+    }
+    return segments.slice(1).join("/");
   };
 
   const currentPath = getPathWithoutLocale(pathname);
@@ -52,7 +48,7 @@ export default function Nav() {
       {routes.map((route) => (
         <li key={route.id} className="list-none">
           <Link
-            href={`/${locale}/${route.path}`} // Modified to include locale
+            href={route.path} // Let next-intl handle locale prefixing
             className={`${
               currentPath === route.path ? "active-link" : ""
             } whitespace-nowrap`}

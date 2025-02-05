@@ -263,7 +263,11 @@
   &:hover {
     .cardImage {
       &::before {
-        background-image: url(/assets/imgs/page/homepage5/bg-trans-pink.png);
+        background: linear-gradient(
+          to top,
+          rgba(190, 84, 197, 0.5) 40%,
+          transparent 100%
+        );
       }
     }
   }

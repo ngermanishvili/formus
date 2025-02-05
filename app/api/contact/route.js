@@ -71,7 +71,7 @@ export async function POST(req) {
         }
 
         // Get and validate request data
-        const { fullname, email, phone, subject, message } = await req.json();
+        const { fullname, email, phone, message } = await req.json();
 
         // Input validation
         if (!fullname || fullname.length < 4 || fullname.length > 100) {
@@ -92,11 +92,7 @@ export async function POST(req) {
             }, { status: 400 });
         }
 
-        if (!subject || subject.length < 2 || subject.length > 200) {
-            return NextResponse.json({
-                error: 'არასწორი თემა'
-            }, { status: 400 });
-        }
+
 
         if (!message || message.length > MAX_MESSAGE_LENGTH) {
             return NextResponse.json({
@@ -105,7 +101,7 @@ export async function POST(req) {
         }
 
         // Check for spam content
-        if (!checkForSpam(message) || !checkForSpam(subject)) {
+        if (!checkForSpam(message)) {
             return NextResponse.json({
                 error: 'შეტყობინება შეიცავს აკრძალულ კონტენტს'
             }, { status: 400 });
@@ -116,14 +112,13 @@ export async function POST(req) {
             fullname: sanitizeInput(fullname),
             email: sanitizeInput(email),
             phone: sanitizeInput(phone),
-            subject: sanitizeInput(subject),
             message: sanitizeInput(message)
         };
 
         const mailOptions = {
             from: 'nikagermanishvili5@gmail.com',
             to: 'info@formus.ge',
-            subject: `ახალი შეტყობინება: ${sanitizedData.subject}`,
+            subject: `ახალი შეტყობინება: ${sanitizedData.message.substring(0, 50)}`,
             html: `
             <!DOCTYPE html>
             <html>
@@ -203,10 +198,7 @@ export async function POST(req) {
                                 <div class="info-label">ტელეფონი</div>
                                 <div class="info-value">${sanitizedData.phone}</div>
                             </div>
-                            <div class="info-item">
-                                <div class="info-label">თემა</div>
-                                <div class="info-value">${sanitizedData.subject}</div>
-                            </div>
+                          
                             <div class="message-section">
                                 <div class="info-label">შეტყობინება</div>
                                 <div class="message-content">${sanitizedData.message}</div>

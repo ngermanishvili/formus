@@ -7,7 +7,7 @@ export default function ContactForm() {
     fullname: "",
     email: "",
     phone: "",
-    subject: "",
+
     message: "",
   });
 
@@ -15,7 +15,7 @@ export default function ContactForm() {
     fullname: "",
     email: "",
     phone: "",
-    subject: "",
+
     message: "",
   });
 
@@ -54,12 +54,6 @@ export default function ContactForm() {
           error = "ტელეფონის ნომერი უნდა შეიცავდეს მხოლოდ ციფრებს";
         } else if (value.trim().length < 9) {
           error = "ტელეფონის ნომერი უნდა შეიცავდეს მინიმუმ 9 ციფრს";
-        }
-        break;
-
-      case "subject":
-        if (!value.trim()) {
-          error = "თემის შევსება სავალდებულოა";
         }
         break;
 
@@ -132,14 +126,14 @@ export default function ContactForm() {
           fullname: "",
           email: "",
           phone: "",
-          subject: "",
+
           message: "",
         });
         setErrors({
           fullname: "",
           email: "",
           phone: "",
-          subject: "",
+
           message: "",
         });
       } else {
@@ -226,24 +220,7 @@ export default function ContactForm() {
                   </div>
                 </div>
                 <div className="col-lg-6 col-md-6">
-                  <div className="form-group">
-                    <label className="form-label" htmlFor="subject">
-                      Subject *
-                    </label>
-                    <input
-                      className={`form-control ${
-                        errors.subject ? "is-invalid" : ""
-                      }`}
-                      id="subject"
-                      type="text"
-                      value={formData.subject}
-                      onChange={handleChange}
-                      required
-                    />
-                    {errors.subject && (
-                      <div className="invalid-feedback">{errors.subject}</div>
-                    )}
-                  </div>
+                  <div className="form-group"></div>
                 </div>
                 <div className="col-lg-12">
                   <div className="form-group">
@@ -266,7 +243,7 @@ export default function ContactForm() {
                 </div>
                 <div className="col-lg-12">
                   <button
-                    className="btn btn-primary"
+                    className="btn btn-primary w-full"
                     type="submit"
                     disabled={loading}
                   >

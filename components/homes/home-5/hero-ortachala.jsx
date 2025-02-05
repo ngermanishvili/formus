@@ -206,9 +206,10 @@ export default function HeroOrtachala() {
               >
                 {projects.map((project) => (
                   <SwiperSlide key={project.id} className="swiper-slide">
-                    <div className="cardService cardServiceStyle3 wow fadeInUp">
+                    <div className="cardService h-72 rounded-2xl overflow-hidden relative group">
                       <Link href={`/project-details/${project.id}`}>
-                        <div className="cardImage">
+                        <div className="cardImage relative w-full h-full">
+                          <div className="absolute inset-0 z-10 transition-colors duration-300 group-hover:bg-green-300/50" />
                           <Image
                             width={370}
                             height={400}
@@ -218,10 +219,11 @@ export default function HeroOrtachala() {
                                 ? project.title_ge
                                 : project.title_en
                             }
+                            className="w-full h-full object-cover"
                           />
                         </div>
-                        <div className="cardInfo">
-                          <h3 className="cardTitle text-20-medium color-white mb-10">
+                        <div className="cardInfo absolute bottom-0 left-0 p-4 z-20">
+                          <h3 className="text-20-medium text-white mb-10">
                             {currentLang === "ge"
                               ? project.title_ge
                               : project.title_en}

@@ -185,7 +185,7 @@ export default function Hero() {
                 >
                   {data.projects.map((project) => (
                     <SwiperSlide key={project.id} className="swiper-slide">
-                      <div className="cardService cardServiceStyle3 wow fadeInUp">
+                      <div className="cardService cardServiceStyle3  ">
                         <Link
                           href={`/projects/${project.id}/${getProjectSlug(
                             project

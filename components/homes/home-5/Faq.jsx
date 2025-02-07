@@ -1,31 +1,16 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { CldImage } from "next-cloudinary";
+import Link from "next/link";
 
 export default function Faq() {
   const t = useTranslations("faq");
 
   return (
-    <section className="relative bg-white">
+    <section className="relative bg-white -mt-4">
       <div className="flex flex-col lg:flex-row items-stretch">
-        {/* Left Image */}
-        <div className="w-full lg:w-1/2 relative h-[400px] ">
-          <CldImage
-            src="1.ფორმუსის_მოკლე_About_us_rmogdh"
-            alt={t("title")}
-            width={960}
-            height={400}
-            quality={80}
-            className="object-cover scale-105"
-            priority
-          />
-        </div>
-
-        {/* Right Content */}
-        <div className="w-full lg:w-1/2 px-8 lg:px-16 py-16 flex flex-col justify-center">
+        <div className="w-full lg:w-1/2 px-8 lg:px-16 flex flex-col justify-center">
           <h2 className="text-4xl font-bold text-black mb-8 leading-tight">
             {t("title")}
           </h2>
@@ -37,6 +22,17 @@ export default function Faq() {
               {t("button")}
             </span>
           </Link>
+        </div>
+        <div className="w-full lg:w-1/2 h-[400px] lg:h-[800px] overflow-hidden">
+          <CldImage
+            src="1.ფორმუსის_მოკლე_About_us_rmogdh"
+            alt={t("title")}
+            width={960}
+            height={800}
+            quality={80}
+            className="object-cover w-full h-full"
+            priority
+          />
         </div>
       </div>
     </section>

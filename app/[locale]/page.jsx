@@ -18,8 +18,10 @@ export default function Page() {
       <MobailHeader1 />
       <main className="main">
         <Hero />
-        <Faq />
-        <DownloadApp />
+        <div>
+          <Faq />
+        </div>
+        {/* <DownloadApp /> */}
       </main>
       <Footer1 />
     </>

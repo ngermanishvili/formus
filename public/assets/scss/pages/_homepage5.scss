@@ -154,7 +154,7 @@
       top: 0px;
       left: 0px;
 
-      background-image: url(/assets/imgs/page/homepage5/bg-banner.png);
+      background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5));
       background-position: top center;
       background-repeat: no-repeat;
       background-size: cover;
@@ -169,7 +169,7 @@
   .box-banner-homepage-2 {
     z-index: 2;
     .box-cover-image {
-      height: 800px;
+      height: 700px;
     }
   }
 }

@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { slugify, transliterate } from "@/utils/slugify";
+import LeftomBottomShape from "@/public/assets/shapes/home/1.png";
 
 const baseSettings = {
   modules: [Navigation, Autoplay],
@@ -16,42 +16,7 @@ const baseSettings = {
   },
 };
 
-// Updated breakpoints for better responsiveness
-const breakpoints = {
-  0: {
-    slidesPerView: 1,
-    spaceBetween: 10,
-  },
-  480: {
-    slidesPerView: 1,
-    spaceBetween: 15,
-  },
-  640: {
-    slidesPerView: 2,
-    spaceBetween: 20,
-  },
-  768: {
-    slidesPerView: 2,
-    spaceBetween: 25,
-  },
-  1024: {
-    slidesPerView: 3,
-    spaceBetween: 30,
-  },
-  1280: {
-    slidesPerView: 4,
-    spaceBetween: 30,
-  },
-};
-
 export default function Hero() {
-  const getProjectSlug = (project) => {
-    const title = currentLang === "ge" ? project.title_ge : project.title_en;
-    const transliteratedTitle =
-      currentLang === "ge" ? transliterate(title) : title;
-    return slugify(transliteratedTitle);
-  };
-
   const [mounted, setMounted] = useState(false);
   const [data, setData] = useState({
     sliders: [],
@@ -113,7 +78,7 @@ export default function Hero() {
           suppressHydrationWarning
           style={{
             backgroundImage: `url(${
-              data.sliders[activeIndex]?.image_url ||
+              data.projects[0]?.image_url ||
               "/assets/imgs/page/homepage5/banner.png"
             })`,
             transition: "background-image 0.3s ease-in-out",
@@ -139,7 +104,7 @@ export default function Hero() {
                   <SwiperSlide key={slider.id} className="swiper-slide">
                     <div
                       suppressHydrationWarning
-                      className="px-4 md:px-8 lg:px-12"
+                      className="px-8 md:px-16 lg:px-24"
                     >
                       <p className="heading-52-medium color-white wow fadeInUp text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
                         {currentLang === "ge"
@@ -157,7 +122,7 @@ export default function Hero() {
               </Swiper>
             )}
 
-            <div className="box-pagination-button box-pagination-button-2">
+            <div className="box-pagination-button box-pagination-button-2 px-8 md:px-16 lg:px-24">
               <div className="swiper-button-prev swiper-button-prev-banner swiper-button-prev-banner-2 snbp11">
                 <svg
                   className="w-6 h-6 md:w-8 md:h-8"
@@ -195,6 +160,16 @@ export default function Hero() {
         </div>
         <div className="box-services-banner">
           <div className="container-sub px-4 md:px-8"></div>
+        </div>
+        <div className="absolute bottom-0 right-0 z-10">
+          <Image
+            src={LeftomBottomShape}
+            alt="Bottom shape"
+            width={500}
+            height={400}
+            className="w-auto h-auto transform-none"
+            priority
+          />
         </div>
       </div>
     </section>

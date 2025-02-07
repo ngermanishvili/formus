@@ -5,24 +5,26 @@ import Image from "next/image";
 
 export default function DownloadApp() {
   return (
-    <div className="flex justify-center items-center my-8 mb-[100px]  ">
-      <section className="min-h-[400px] max-w-[1200px] rounded-lg bg-[#abc188] relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/pattern.svg')] opacity-10" />
-
-        <div className="container mx-auto px-4 py-20 relative z-10">
+    <div className="flex justify-center items-center my-[30px] sm:my-[40px] lg:my-[100px] px-4 sm:px-6 lg:px-8">
+      <section className="min-h-[200px] sm:min-h-[220px] lg:min-h-[250px] w-full max-w-[1100px] rounded-lg bg-[#abc188] relative overflow-hidden">
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 hidden sm:block">
+          <Image
+            src="/left-shape.svg"
+            alt="Decorative shape"
+            width={300}
+            height={300}
+            className="opacity-20"
+          />
+        </div>
+        <div className="container mx-auto px-4 py-12 sm:py-16 lg:py-20 relative z-10">
           <div className="max-w-5xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-12 animate-fade-in">
-              Find Your Dream House
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-8 sm:mb-10 lg:mb-12 animate-fade-in">
+              Select an Apartment
             </h2>
-
-            <div className="p-8 rounded-2xl">
+            <div className="p-4 sm:p-6 lg:p-8 rounded-2xl relative">
               <SearchForm />
             </div>
           </div>
-
-          {/* Decorative elements */}
-          <div className="absolute -bottom-16 -left-16 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
-          <div className="absolute -top-8 -right-8 w-48 h-48 bg-white/10 rounded-full blur-2xl" />
         </div>
       </section>
     </div>

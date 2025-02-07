@@ -3,14 +3,19 @@ import { useEffect, useState } from "react";
 import { Link, usePathname } from "@/src/i18n/routing";
 import { useLocale } from "next-intl";
 import { routing } from "@/src/i18n/routing";
-import Language from "./components/Language";
-import { Globe, Menu } from "lucide-react";
+import { Globe, Menu, ChevronDown } from "lucide-react";
 import MobileHeader1 from "@/components/headers/MobailHeader1";
+
+const languageNames = {
+  ka: "GE",
+  en: "ENG",
+};
 
 export default function Header5() {
   const [scrolled, setScrolled] = useState(false);
   const [routes, setRoutes] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
+  const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const pathname = usePathname();
   const locale = useLocale();
 
@@ -45,6 +50,17 @@ export default function Header5() {
     fetchRoutes();
   }, []);
 
+  // დროფდაუნის დახურვა გარეთ დაკლიკვისას
+  useEffect(() => {
+    const closeDropdown = (e) => {
+      if (!e.target.closest(".language-dropdown")) {
+        setIsLanguageOpen(false);
+      }
+    };
+    document.addEventListener("click", closeDropdown);
+    return () => document.removeEventListener("click", closeDropdown);
+  }, []);
+
   const getPathWithoutLocale = (path) => {
     const segments = path.split("/");
     return segments.length > 2 && routing.locales.includes(segments[1])
@@ -60,7 +76,7 @@ export default function Header5() {
 
   return (
     <header
-      className={`fixed w-full top-0 z-50 bg-[#00326B] ${
+      className={`fixed w-full top-0 z-50 bg-[#00326B] transition-all duration-300 ${
         scrolled ? "shadow-lg" : ""
       }`}
     >
@@ -88,8 +104,42 @@ export default function Header5() {
           </Link>
 
           <div className="flex items-center space-x-4 -mr-[-100px]">
-            <Language />
-            <Globe className="w-5 h-5 text-white" />
+            <div className="relative language-dropdown">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsLanguageOpen(!isLanguageOpen);
+                }}
+                className="flex items-center space-x-1 text-white hover:text-[#f94011] transition-colors"
+              >
+                <Globe className="w-5 h-5" />
+                <span>{languageNames[locale]}</span>
+                <ChevronDown
+                  className={`w-4 h-4 transition-transform duration-200 ${
+                    isLanguageOpen ? "rotate-180" : ""
+                  }`}
+                />
+              </button>
+
+              {isLanguageOpen && (
+                <div className="absolute right-0 mt-2 py-2 w-24 bg-white rounded-lg shadow-xl border border-gray-100 animate-slide-up">
+                  {routing.locales.map((l) => (
+                    <Link
+                      key={l}
+                      href={`/${l}${pathname.substring(3)}`}
+                      className={`block px-4 py-2 text-sm ${
+                        l === locale
+                          ? "bg-gray-100 text-[#00326B]"
+                          : "text-gray-700 hover:bg-gray-50"
+                      } transition-colors`}
+                      onClick={() => setIsLanguageOpen(false)}
+                    >
+                      {languageNames[l]}
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -1,11 +1,11 @@
 import Footer1 from "@/components/footers/Footer1";
-import Header1 from "@/components/headers/Header1";
 import MobailHeader1 from "@/components/headers/MobailHeader1";
 import Hero from "@/components/homes/home-5/Hero";
 import Faq from "@/components/homes/home-5/Faq";
 import DownloadApp from "@/components/common/downloadApp/DownloadApp";
 import Image from "next/image";
 import Shape from "@/public/assets/shapes/home/3.png";
+import Header5 from "@/components/headers/Header5";
 
 export const metadata = {
   title: "FORMUS | ფორმუსი - სამშენებლო კომპანია ",
@@ -16,9 +16,9 @@ export const metadata = {
 export default function Page() {
   return (
     <>
-      <Header1 />
+      <Header5 />
       <MobailHeader1 />
-      <main className="main">
+      <main className="main font-normal">
         <Hero />
         <div className="relative">
           <Faq />

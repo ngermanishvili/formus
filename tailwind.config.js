@@ -16,8 +16,22 @@ module.exports = {
 			}
 		},
 		extend: {
-			sans: ['Gilroy', 'sans-serif'], // დეფოლტ ფონტად დაყენება
-			gilroy: ['Gilroy', 'sans-serif'], // ცალკე კლასად გამოყენებისთვის
+			fontFamily: {
+				sans: ['var(--font-firago)'], // ეს გახდის FiraGO-ს default ფონტად
+				firago: ['var(--font-firago)'], // ეს დაგჭირდებათ კონკრეტული კლასებისთვის
+			},
+			fontWeight: {
+				thin: '100',
+				extralight: '200',
+				light: '300',
+				normal: '400',
+				medium: '500',
+				semibold: '600',
+				bold: '700',
+				extrabold: '800',
+				black: '900',
+			},
+
 			keyframes: {
 				'accordion-down': {
 					from: {

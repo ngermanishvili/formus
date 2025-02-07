@@ -1,15 +1,107 @@
+// app/[locale]/layout.js
 "use client";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { Toaster } from "sonner";
 import Providers from "@/components/progressbar/progress-bar";
-import { DM_Sans } from "next/font/google";
+import localFont from "next/font/local";
 
-const DM_SansFont = DM_Sans({
-  weight: ["400", "500", "700"],
-  subsets: ["latin"],
-  variable: "--dm-saans-font",
+const firaGO = localFont({
+  src: [
+    {
+      path: "../../public/fonts/firago-latin-100-normal.ttf",
+      weight: "100",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/firago-latin-100-italic.ttf",
+      weight: "100",
+      style: "italic",
+    },
+    {
+      path: "../../public/fonts/firago-latin-200-normal.ttf",
+      weight: "200",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/firago-latin-200-italic.ttf",
+      weight: "200",
+      style: "italic",
+    },
+    {
+      path: "../../public/fonts/firago-latin-300-normal.ttf",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/firago-latin-300-italic.ttf",
+      weight: "300",
+      style: "italic",
+    },
+    {
+      path: "../../public/fonts/firago-latin-400-normal.ttf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/firago-latin-400-italic.ttf",
+      weight: "400",
+      style: "italic",
+    },
+    {
+      path: "../../public/fonts/firago-latin-500-normal.ttf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/firago-latin-500-italic.ttf",
+      weight: "500",
+      style: "italic",
+    },
+    {
+      path: "../../public/fonts/firago-latin-600-normal.ttf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/firago-latin-600-italic.ttf",
+      weight: "600",
+      style: "italic",
+    },
+    {
+      path: "../../public/fonts/firago-latin-700-normal.ttf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/firago-latin-700-italic.ttf",
+      weight: "700",
+      style: "italic",
+    },
+    {
+      path: "../../public/fonts/firago-latin-800-normal.ttf",
+      weight: "800",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/firago-latin-800-italic.ttf",
+      weight: "800",
+      style: "italic",
+    },
+    {
+      path: "../../public/fonts/firago-latin-900-normal.ttf",
+      weight: "900",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/firago-latin-900-italic.ttf",
+      weight: "900",
+      style: "italic",
+    },
+  ],
+  variable: "--font-firago",
+  display: "swap",
 });
 
 export default function LocaleLayout({ children, params: { locale } }) {
@@ -17,7 +109,6 @@ export default function LocaleLayout({ children, params: { locale } }) {
   const path = usePathname();
 
   useEffect(() => {
-    // Load translations
     import(`../messages/${locale}.json`)
       .then((messages) => {
         setMessages(messages.default);
@@ -26,12 +117,10 @@ export default function LocaleLayout({ children, params: { locale } }) {
         console.error(`Failed to load messages for locale: ${locale}`);
       });
 
-    // Bootstrap loading
     if (typeof window !== "undefined") {
       import("bootstrap/dist/js/bootstrap.esm");
     }
 
-    // WOW.js initialization
     const { WOW } = require("wowjs");
     const wow = new WOW({
       live: false,
@@ -42,7 +131,7 @@ export default function LocaleLayout({ children, params: { locale } }) {
 
   return (
     <html lang={locale}>
-      <body className={DM_SansFont.variable}>
+      <body className={firaGO.variable}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>{children}</Providers>
           <Toaster />

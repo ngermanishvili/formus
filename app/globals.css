@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -29,6 +30,7 @@
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -55,14 +57,38 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+  html,
+  body {
+    font-family: var(--font-firago), system-ui, sans-serif;
+  }
+
+  /* ყველა ძირითადი HTML ელემენტისთვის */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p,
+  span,
+  div,
+  button,
+  input,
+  select,
+  textarea {
+    font-family: var(--font-firago), system-ui, sans-serif;
+  }
 }
+
 @layer base {
   * {
     @apply border-border;
-    font-family: "Gilroy", sans-serif !important;
   }
+
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-firago);
   }
 }
 
@@ -78,4 +104,3 @@
 .animate-slide-up {
   animation: slide-up 0.3s ease-out forwards;
 }
-

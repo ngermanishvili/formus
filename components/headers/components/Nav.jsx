@@ -30,7 +30,6 @@ export default function Nav() {
   }, []);
 
   const getPathWithoutLocale = (path) => {
-    // Remove locale prefix if present
     const segments = path.split("/");
     if (segments.length > 2 && routing.locales.includes(segments[1])) {
       return segments.slice(2).join("/");
@@ -45,14 +44,14 @@ export default function Nav() {
   }
 
   return (
-    <div className="flex space-x-2 my-4 uppercase">
-      {routes.map((route) => (
+    <div className="flex my-4 uppercase">
+      {routes.map((route, index) => (
         <li key={route.id} className="list-none">
           <Link
-            href={route.path} // Let next-intl handle locale prefixing
+            href={route.path}
             className={`${
               currentPath === route.path ? "active-link" : ""
-            } whitespace-nowrap`}
+            } whitespace-nowrap ${index !== routes.length - 1 ? "mr-1" : ""}`}
           >
             {route.translations[locale]}
           </Link>

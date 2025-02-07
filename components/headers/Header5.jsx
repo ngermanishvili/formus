@@ -1,100 +1,95 @@
 "use client";
 import { useEffect, useState } from "react";
-import Nav from "./components/Nav";
-
-import Image from "next/image";
-import Link from "next/link";
+import { Link, usePathname } from "@/src/i18n/routing";
+import { useLocale } from "next-intl";
+import { routing } from "@/src/i18n/routing";
 import Language from "./components/Language";
-import { socials } from "@/data/socials";
+import { Globe, Menu } from "lucide-react";
+import MobileHeader1 from "@/components/headers/MobailHeader1";
 
 export default function Header5() {
   const [scrolled, setScrolled] = useState(false);
+  const [routes, setRoutes] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
+  const pathname = usePathname();
+  const locale = useLocale();
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 200) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
+      setScrolled(window.scrollY > 200);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const fetchRoutes = async () => {
+      try {
+        const response = await fetch("/api/navigation");
+        const data = await response.json();
+        setRoutes(data.data || []);
+      } catch (error) {
+        console.error("Error fetching navigation:", error);
       }
     };
-
-    window.addEventListener("scroll", handleScroll);
-
-    // Clean up the event listener when component unmounts
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    fetchRoutes();
   }, []);
+
+  const getPathWithoutLocale = (path) => {
+    const segments = path.split("/");
+    return segments.length > 2 && routing.locales.includes(segments[1])
+      ? segments.slice(2).join("/")
+      : segments.slice(1).join("/");
+  };
+
+  const currentPath = getPathWithoutLocale(pathname);
+
+  if (isMobile) {
+    return <MobileHeader1 />;
+  }
+
   return (
     <header
-      className={`header header-homepage5 sticky-bar ${
-        scrolled ? "stick" : ""
+      className={`fixed w-full top-0 z-50 bg-[#00326B] ${
+        scrolled ? "shadow-lg" : ""
       }`}
     >
-      <div className="header-top-main">
-        <div className="container-sub">
-          <div className="header-top">
-            <div className="header-top-1">
-              <div className="d-inline-block align-middle">
-                <a
-                  className="text-14-medium call-phone color-white hover-up"
-                  href="tel:+41227157000"
-                >
-                  +(995) 593 93 90 93
-                </a>
-              </div>
-            </div>
-            <div className="header-top-2">
-              <Link href="/" className="d-flex">
-                <span className="text-white text-2xl font-bold">FORMUS</span>
+      <div className="container mx-auto">
+        <div className="flex items-center justify-between py-4">
+          <nav className="flex items-center space-x-1 -ml-4 uppercase">
+            {routes.map((route) => (
+              <Link
+                key={route.id}
+                href={route.path}
+                className={`${
+                  currentPath === route.path ? "text-white" : "text-gray-200"
+                } px-2 py-1 text-sm hover:text-[#f94011] rounded transition-colors`}
+              >
+                {route.translations[locale]}
               </Link>
-            </div>
-            <div className="header-top-3">
-              <div className="d-inline-block box-dropdown-cart align-middle mr-15">
-                <Language />
-              </div>
-              <div className="d-inline-block box-socials-header">
-                {socials.map((elm, i) => (
-                  <a key={i} className={elm.className} href={elm.href}></a>
-                ))}
-              </div>
-              <div className="burger-icon burger-icon-white">
-                <span className="burger-icon-mid"></span>
-                <span className="burger-icon-bottom"></span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="header-top-sub">
-        <div className="container-sub">
-          <div className="main-header">
-            <div className="header-left">
-              <div className="header-nav">
-                <nav className="nav-main-menu d-none d-xl-block">
-                  <ul className="main-menu">
-                    <Nav />
-                  </ul>
-                </nav>
-                <div className="burger-icon burger-icon-white">
-                  <span className="burger-icon-mid"></span>
-                  <span className="burger-icon-bottom"></span>
-                </div>
-              </div>
-              <div className="header-right">
-                <div className="box-button-login d-inline-block mr-10 align-middle">
-                  <Link className="btn btn-default" href="/login">
-                    Log In
-                  </Link>
-                </div>
-                <div className="box-button-login d-none2 d-inline-block align-middle">
-                  <Link className="btn btn-white" href="/register">
-                    Sign Up
-                  </Link>
-                </div>
-              </div>
-            </div>
+            ))}
+          </nav>
+
+          <Link
+            href="/"
+            className="text-white text-2xl font-bold absolute left-1/2 -translate-x-1/2"
+          >
+            FORMUS
+          </Link>
+
+          <div className="flex items-center space-x-4 -mr-[-100px]">
+            <Language />
+            <Globe className="w-5 h-5 text-white" />
           </div>
         </div>
       </div>

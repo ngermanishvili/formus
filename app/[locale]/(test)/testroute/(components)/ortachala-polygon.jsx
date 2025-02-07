@@ -432,7 +432,7 @@ const OrtachalaPolygon = () => {
 
   const content = (
     <>
-      <div className="relative w-full h-full flex items-center justify-center md:-mt-[180px]">
+      <div className="relative w-full h-full flex items-center justify-center ">
         <div className="w-full h-full relative overflow-hidden">
           <CldImage
             src={IMAGES.first}

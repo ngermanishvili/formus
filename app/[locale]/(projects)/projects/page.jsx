@@ -1,5 +1,5 @@
 import Footer1 from "@/components/footers/Footer1";
-import Header1 from "@/components/headers/Header1";
+import Header5 from "@/components/headers/Header5";
 import MobailHeader1 from "@/components/headers/MobailHeader1";
 import Breadcumb from "@/components/service/Breadcumb";
 import Services1 from "@/components/service/Services1";
@@ -13,7 +13,7 @@ export const metadata = {
 export default function page() {
   return (
     <>
-      <Header1 /> <MobailHeader1 />
+      <Header5 /> <MobailHeader1 />
       <main className="main">
         <Breadcumb />
         <Services1 />

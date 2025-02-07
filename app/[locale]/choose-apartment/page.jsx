@@ -5,6 +5,7 @@ import OrtachalaPolygon from "../(test)/testroute/(components)/ortachala-polygon
 import Footer1 from "@/components/footers/Footer1";
 import Header1 from "@/components/headers/Header1";
 import ApartmentFilters from "@/components/apartment/filters";
+import Header5 from "@/components/headers/Header5";
 
 const ChooseApartment = () => {
   const handleFilterChange = (filterValues) => {
@@ -47,7 +48,7 @@ const ChooseApartment = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-black">
-      <Header1 />
+      <Header5 />
       <main className="flex-1 w-full relative">
         <OrtachalaPolygon />
         <div className="w-full gap-4 ">

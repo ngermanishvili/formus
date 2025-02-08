@@ -2,18 +2,17 @@ import React, { useState, useCallback, useEffect } from "react";
 import { ChevronDown, X, Search, Check, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-
 const FilterButton = ({ label, children, isActive, isOpen, onToggle }) => {
   return (
     <div className="relative">
       <button
         className={`flex items-center gap-2 px-4 py-2 rounded-lg 
-                   border transition-all duration-200
-                   ${
-                     isActive
-                       ? "bg-[#FBB200] border-[#FBB200] text-black"
-                       : "bg-transparent border-white/30 text-white hover:border-white"
-                   }`}
+                     border transition-all duration-200
+                     ${
+                       isActive
+                         ? "bg-[#FBB200] border-[#FBB200] text-black"
+                         : "bg-transparent border-black/30 text-black hover:border-black"
+                     }`}
         onClick={onToggle}
       >
         {label}
@@ -28,8 +27,8 @@ const FilterButton = ({ label, children, isActive, isOpen, onToggle }) => {
       {isOpen && (
         <div
           className="absolute top-full mt-2 w-48 
-                      bg-transparent backdrop-blur-sm rounded-lg 
-                      border border-white/30 shadow-xl z-50"
+                       bg-white rounded-lg 
+                       border border-black/30 shadow-xl z-50"
         >
           {children}
         </div>
@@ -38,7 +37,7 @@ const FilterButton = ({ label, children, isActive, isOpen, onToggle }) => {
   );
 };
 
-const ApartmentFilters = () => {
+const FloorFilters = () => {
   const router = useRouter();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [openFilter, setOpenFilter] = useState(null);
@@ -164,19 +163,20 @@ const ApartmentFilters = () => {
   return (
     <>
       {/* Main Filters Bar */}
-      <div className="relative z-50 backdrop-blur-sm border-b border-white/30">
+      <div className="relative  bg-white border-b border-black/30 ">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center gap-3">
             <button
-              className="flex items-center gap-2 px-4 py-2 rounded-lg
-                           bg-transparent  font-medium
-                           transition-colors duration-200
-                           border border-white text-white"
+              className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg
+            bg-[#FBB200] font-medium
+            transition-colors duration-200
+            border border-[#FBB200] text-black"
+              onClick={() => router.back()}
             >
               <span>← Back</span>
             </button>
 
-            <div className="h-6 w-px bg-white/30" />
+            <div className="hidden md:block h-6 w-px bg-black/30" />
 
             <div className="hidden md:flex items-center gap-2">
               <FilterButton
@@ -198,10 +198,9 @@ const ApartmentFilters = () => {
                     <label
                       key={block}
                       className="flex items-center gap-2 px-2 py-1.5 
-                                hover:bg-white/10 rounded cursor-pointer
+                                hover:bg-black/5 rounded cursor-pointer
                                 disabled:opacity-50 disabled:cursor-not-allowed"
                       onClick={(e) => {
-                        // Prevent label click from triggering checkbox click
                         e.preventDefault();
                         handleFilterToggle("blocks", block, true);
                       }}
@@ -223,7 +222,7 @@ const ApartmentFilters = () => {
                             filters.blocks.includes("D"))
                         }
                       />
-                      <span className="text-white/90">ბლოკი {block}</span>
+                      <span className="text-black">ბლოკი {block}</span>
                     </label>
                   ))}
                 </div>
@@ -247,7 +246,7 @@ const ApartmentFilters = () => {
                     <label
                       key={floor}
                       className="flex items-center gap-2 px-2 py-1.5 
-                                hover:bg-white/10 rounded cursor-pointer"
+                                hover:bg-black/5 rounded cursor-pointer"
                       onClick={(e) => {
                         e.preventDefault();
                         handleFilterToggle("floors", floor, true);
@@ -262,7 +261,7 @@ const ApartmentFilters = () => {
                           handleFilterToggle("floors", floor, false);
                         }}
                       />
-                      <span className="text-white/90">{floor} სართული</span>
+                      <span className="text-black">{floor} სართული</span>
                     </label>
                   ))}
                 </div>
@@ -302,7 +301,7 @@ const ApartmentFilters = () => {
                     <label
                       key={value}
                       className="flex items-center gap-2 px-2 py-1.5 
-                                hover:bg-white/10 rounded cursor-pointer"
+                                hover:bg-black/5 rounded cursor-pointer"
                       onClick={(e) => {
                         e.preventDefault();
                         handleFilterToggle("statuses", value, true);
@@ -317,11 +316,13 @@ const ApartmentFilters = () => {
                           handleFilterToggle("statuses", value, false);
                         }}
                       />
-                      <span className="text-white/90">{label}</span>
+                      <span className="text-black">{label}</span>
                     </label>
                   ))}
                 </div>
               </FilterButton>
+
+              {/* Rest of the component remains the same */}
 
               {activeFiltersCount > 0 && (
                 <Button
@@ -332,7 +333,7 @@ const ApartmentFilters = () => {
                 >
                   <span
                     className="absolute inset-0 bg-red-500/10 group-hover:bg-red-500 
-                                 transition-colors duration-300 -z-10 rounded-lg"
+                              transition-colors duration-300 -z-10 rounded-lg"
                   />
                   <Trash2 size={18} />
                 </Button>
@@ -350,7 +351,7 @@ const ApartmentFilters = () => {
                 {activeFiltersCount > 0 && (
                   <span
                     className="flex items-center justify-center w-5 h-5 text-xs 
-                                 bg-black text-[#FBB200] rounded-full ml-1"
+                              bg-black text-[#FBB200] rounded-full ml-1"
                   >
                     {activeFiltersCount}
                   </span>
@@ -513,4 +514,4 @@ const ApartmentFilters = () => {
   );
 };
 
-export default ApartmentFilters;
+export default FloorFilters;

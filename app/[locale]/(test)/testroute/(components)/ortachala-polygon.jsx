@@ -66,18 +66,18 @@ const Polygon = memo(({ data, isHovered, onHover, onClick }) => {
   const getHoverClass = () => {
     if (isSold(data.status)) {
       return `
-        hover:fill-red-500/40 
-        hover:stroke-red-500 
-        stroke-[1.5]
-        lg:stroke-[1]
-      `;
-    }
-    return `
-      hover:fill-green-500/40 
-      hover:stroke-green-500 
+      hover:fill-red-500/40 
+      hover:stroke-red-500 
       stroke-[1.5]
       lg:stroke-[1]
     `;
+    }
+    return `
+    hover:fill-[#FBB200]/40 
+    hover:stroke-[#FBB200] 
+    stroke-[1.5]
+    lg:stroke-[1]
+  `;
   };
 
   const handleClick = () => {
@@ -126,7 +126,7 @@ const Polygon = memo(({ data, isHovered, onHover, onClick }) => {
         <polygon
           points={data.points}
           className={`
-            ${isSold(data.status) ? "stroke-red-500" : "stroke-green-500"}
+            ${isSold(data.status) ? "stroke-red-500" : "stroke-[#FBB200]"}
             stroke-2 
             fill-none 
             animate-pulse
@@ -138,121 +138,35 @@ const Polygon = memo(({ data, isHovered, onHover, onClick }) => {
   );
 });
 
-const InfoCard = memo(({ data, apartments, position }) => {
+const InfoCard = memo(({ data, position }) => {
   if (!data) return null;
-
-  const floorApartments =
-    apartments?.filter((apt) => {
-      const isMatchingFloor = apt.floor.toString() === data.floor;
-      const isMatchingBlock = apt.block_id === data.block_id;
-      return isMatchingFloor && isMatchingBlock;
-    }) || [];
-
-  const statusCounts = {
-    available: 0,
-    sold: 0,
-    reserved: 0,
-  };
-
-  floorApartments.forEach((apt) => {
-    statusCounts[apt.status] = (statusCounts[apt.status] || 0) + 1;
-  });
-
-  const averageArea = floorApartments.length
-    ? (
-        floorApartments.reduce((sum, apt) => sum + Number(apt.total_area), 0) /
-        floorApartments.length
-      ).toFixed(1)
-    : 0;
 
   const isMobile = typeof window !== "undefined" && window.innerWidth <= 1024;
 
   if (isMobile) {
-    return (
-      <div
-        className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur-lg z-50 
-                    border-t border-blue-500/50 shadow-xl animate-slide-up"
-      >
-        <div className="max-w-3xl mx-auto">
-          <div className="p-4 md:p-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="col-span-2 md:col-span-4">
-                <h3 className="text-lg md:text-xl font-bold text-white">
-                  {data.block_id} ბლოკი, სართული {data.floor}
-                </h3>
-              </div>
-              <div className="bg-white/10 rounded-lg p-3">
-                <div className="text-sm text-gray-400">სულ ბინა</div>
-                <div className="text-lg font-semibold text-white">
-                  {floorApartments.length}
-                </div>
-              </div>
-              <div className="bg-white/10 rounded-lg p-3">
-                <div className="text-sm text-gray-400">ხელმისაწვდომი</div>
-                <div className="text-lg font-semibold text-green-400">
-                  {statusCounts.available}
-                </div>
-              </div>
-              <div className="bg-white/10 rounded-lg p-3">
-                <div className="text-sm text-gray-400">გაყიდული</div>
-                <div className="text-lg font-semibold text-red-400">
-                  {statusCounts.sold}
-                </div>
-              </div>
-              <div className="bg-white/10 rounded-lg p-3">
-                <div className="text-sm text-gray-400">საშუალო ფართი</div>
-                <div className="text-lg font-semibold text-blue-400">
-                  {averageArea} მ²
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   return (
     <div
-      className="fixed bg-black/90 backdrop-blur-sm rounded-lg p-4 
-                border border-blue-500/50 shadow-xl z-50
-                text-white min-w-[240px]"
+      className="fixed bg-[#FBB200] rounded-lg shadow-xl z-50 
+                p-2 min-w-[160px] text-center"
       style={{
         left: `${position.x}px`,
         top: `${position.y - 10}px`,
         transform: "translateY(-100%)",
       }}
     >
-      <div className="text-lg font-bold mb-3">
-        {data.block_id} ბლოკი, სართული {data.floor}
-      </div>
-      <div className="space-y-2">
-        <div className="text-gray-300">სულ ბინა: {floorApartments.length}</div>
-        <div className="space-y-1">
-          <div className="flex items-center justify-between">
-            <span className="text-gray-400">ხელმისაწვდომი:</span>
-            <span className="text-green-400 font-medium">
-              {statusCounts.available}
-            </span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-gray-400">გაყიდული:</span>
-            <span className="text-red-400 font-medium">
-              {statusCounts.sold}
-            </span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-gray-400">დაჯავშნილი:</span>
-            <span className="text-yellow-400 font-medium">
-              {statusCounts.reserved}
-            </span>
-          </div>
+      <div className="flex items-center justify-center gap-4">
+        <div>
+          <div className="text-[10px] text-black/60">Floor</div>
+          <div className="text-5xl font-bold text-black">{data.floor}</div>
         </div>
-        <div className="pt-2 border-t border-gray-700">
-          <div className="flex items-center justify-between">
-            <span className="text-gray-400">საშუალო ფართი:</span>
-            <span className="text-blue-400 font-medium">{averageArea} მ²</span>
-          </div>
+
+        <div className="w-px h-[50px] bg-black/20" />
+        <div>
+          <div className="text-[10px] text-black/60">Block</div>
+          <div className="text-5xl  font-bold text-black">{data.block_id}</div>
         </div>
       </div>
     </div>

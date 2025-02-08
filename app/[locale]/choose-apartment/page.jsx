@@ -1,11 +1,9 @@
-//app/choose-apartment/page.jsx
 "use client";
 import React from "react";
 import OrtachalaPolygon from "../(test)/testroute/(components)/ortachala-polygon";
 import Footer1 from "@/components/footers/Footer1";
-import Header1 from "@/components/headers/Header1";
-import ApartmentFilters from "@/components/apartment/filters";
 import Header5 from "@/components/headers/Header5";
+import ApartmentFilters from "@/components/apartment/filters";
 
 const ChooseApartment = () => {
   const handleFilterChange = (filterValues) => {
@@ -16,7 +14,6 @@ const ChooseApartment = () => {
       const blockMatch =
         !filterValues.blockId || polygon.block_id === filterValues.blockId;
 
-      // Filter by apartment properties
       const polygonApartments = apartments.filter(
         (apt) =>
           apt.floor.toString() === polygon.floor &&
@@ -47,16 +44,19 @@ const ChooseApartment = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-black">
+    <div className="flex flex-col h-screen bg-black">
       <Header5 />
-      <main className="flex-1 w-full relative">
-        <OrtachalaPolygon />
-        <div className="w-full gap-4 ">
+      <main className="flex-1 relative">
+        <div className="absolute inset-0">
+          <OrtachalaPolygon />
+        </div>
+        <div className="absolute left-[500px] top-[100px] right-4 z-10">
           <ApartmentFilters onFilterChange={handleFilterChange} />
-        </div>{" "}
+        </div>
       </main>
       <Footer1 />
     </div>
   );
 };
+
 export default ChooseApartment;

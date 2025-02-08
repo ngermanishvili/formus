@@ -1,3 +1,5 @@
+"use client";
+import { useState, useEffect } from "react";
 import Footer1 from "@/components/footers/Footer1";
 import MobailHeader1 from "@/components/headers/MobailHeader1";
 import Hero from "@/components/homes/home-5/Hero";
@@ -7,17 +9,27 @@ import Image from "next/image";
 import Shape from "@/public/assets/shapes/home/3.png";
 import Header5 from "@/components/headers/Header5";
 
-export const metadata = {
-  title: "FORMUS | ფორმუსი - სამშენებლო კომპანია ",
-  description:
-    "ფორმუსი სამშენებლო კომპანია, რომელიც გთავაზობთ სრულყოფილ სამშენებლო მომსახურებას და სამშენებლო პროექტებს სრულყოფილი სამშენებლო მომსახურების სფეროში.",
-};
-
 export default function Page() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Initial check
+    checkMobile();
+
+    // Add resize listener
+    window.addEventListener("resize", checkMobile);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   return (
     <>
-      <Header5 />
-      <MobailHeader1 />
+      {isMobile ? <MobailHeader1 /> : <Header5 />}
       <main className="main font-normal">
         <Hero />
         <div className="relative">

@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+// SearchForm.jsx
+import React, { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -8,13 +10,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import PropertyResults from "./search-table";
 
 export default function SearchForm() {
+  const router = useRouter();
   const t = useTranslations("SearchForm");
-
   const [showResults, setShowResults] = useState(false);
+  const [apartments, setApartments] = useState([]);
+  const [filteredApartments, setFilteredApartments] = useState([]);
   const [searchParams, setSearchParams] = useState({
     project: "ortachala_hills",
     location: "tbilisi",
@@ -22,15 +26,54 @@ export default function SearchForm() {
   });
 
   const areaRanges = [
-    { value: "20-60", label: "20-60 მ²" },
-    { value: "60-100", label: "60-100 მ²" },
-    { value: "100-150", label: "100-150 მ²" },
-    { value: "150-200", label: "150-200 მ²" },
-    { value: "200-250", label: "200-250 მ²" },
+    { value: "20-40", label: "20-40 მ²" },
+    { value: "40-60", label: "40-60 მ²" },
+    { value: "60-80", label: "60-80 მ²" },
+    { value: "80-100", label: "80-100 მ²" },
+    { value: "100-120", label: "100-120 მ²" },
+    { value: "120-150", label: "120-150 მ²" },
   ];
 
+  useEffect(() => {
+    const fetchApartments = async () => {
+      try {
+        const response = await fetch("/api/apartments");
+        const data = await response.json();
+        setApartments(data.data || []);
+      } catch (error) {
+        console.error("Error fetching apartments:", error);
+      }
+    };
+    fetchApartments();
+  }, []);
+
   const handleSearch = () => {
+    if (!searchParams.areaRange) {
+      setFilteredApartments(
+        apartments
+          .filter((apt) => apt.block_id !== "D" && apt.status === "available")
+          .slice(0, 5)
+      );
+    } else {
+      const [minArea, maxArea] = searchParams.areaRange.split("-").map(Number);
+      const filtered = apartments
+        .filter(
+          (apt) =>
+            apt.block_id !== "D" &&
+            apt.status === "available" &&
+            apt.total_area >= minArea &&
+            apt.total_area <= maxArea
+        )
+        .slice(0, 5);
+      setFilteredApartments(filtered);
+    }
     setShowResults(true);
+    document.body.style.overflow = "hidden";
+  };
+
+  const handleCloseResults = () => {
+    setShowResults(false);
+    document.body.style.overflow = "unset";
   };
 
   const handleSelect = (value, type) => {
@@ -40,9 +83,33 @@ export default function SearchForm() {
     }));
   };
 
+  const handleViewMore = () => {
+    const queryParams = new URLSearchParams();
+    if (searchParams.areaRange) {
+      const [minArea, maxArea] = searchParams.areaRange.split("-");
+      queryParams.set("total_area_min", minArea);
+      queryParams.set("total_area_max", maxArea);
+    }
+    router.push(`/homes-list?${queryParams.toString()}`);
+    handleCloseResults();
+  };
+
+  // Click outside handler
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showResults && !event.target.closest(".results-container")) {
+        handleCloseResults();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [showResults]);
+
   return (
     <div className="flex flex-col gap-4">
       <div className="w-full backdrop-blur-md bg-white/90 rounded-2xl shadow-xl p-4 md:p-6 flex flex-col md:flex-row items-center gap-4 max-w-6xl mx-auto transition-all">
+        {/* Project Select */}
         <div className="flex-1 w-full">
           <p className="text-gray-500 text-sm mb-1">{t("project")}</p>
           <Select
@@ -61,6 +128,7 @@ export default function SearchForm() {
           </Select>
         </div>
 
+        {/* Location Select */}
         <div className="flex-1 w-full">
           <p className="text-gray-500 text-sm mb-1">{t("location")}</p>
           <Select
@@ -77,6 +145,7 @@ export default function SearchForm() {
           </Select>
         </div>
 
+        {/* Area Select */}
         <div className="flex-1 w-full">
           <p className="text-gray-500 text-sm mb-1">{t("area")}</p>
           <Select onValueChange={(value) => handleSelect(value, "areaRange")}>
@@ -93,6 +162,7 @@ export default function SearchForm() {
           </Select>
         </div>
 
+        {/* Search Button */}
         <div className="flex items-center gap-2 w-full md:w-auto">
           <Button
             className="bg-black hover:bg-gray-800 text-white rounded-xl h-12 px-8 w-full md:w-auto flex items-center gap-2 transition-all"
@@ -104,10 +174,51 @@ export default function SearchForm() {
         </div>
       </div>
 
+      {/* Results Overlay */}
       {showResults && (
-        <div className="animate-in slide-in-from-top duration-500">
-          <PropertyResults searchParams={searchParams} />
-        </div>
+        <>
+          <div
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+            onClick={handleCloseResults}
+          />
+          <div className="fixed inset-0 z-50 overflow-y-auto">
+            <div className="min-h-screen px-4 py-8 md:py-20">
+              <div className="results-container bg-white rounded-2xl w-full max-w-6xl mx-auto p-4 md:p-6 relative">
+                <button
+                  onClick={handleCloseResults}
+                  className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 p-2"
+                >
+                  <X size={24} />
+                </button>
+                <div className="mb-4">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <h2 className="text-2xl font-semibold">
+                        ნაპოვნია {filteredApartments.length} ბინა
+                      </h2>
+                      {searchParams.areaRange && (
+                        <p className="text-gray-500">
+                          ფართი: {searchParams.areaRange} მ²
+                        </p>
+                      )}
+                    </div>
+                    {filteredApartments.length === 5 && (
+                      <Button
+                        onClick={handleViewMore}
+                        className="bg-black hover:bg-gray-800 text-white"
+                      >
+                        მეტის ნახვა
+                      </Button>
+                    )}
+                  </div>
+                </div>
+                <div className="animate-in slide-in-from-top duration-500 max-h-[70vh] overflow-y-auto">
+                  <PropertyResults apartments={filteredApartments} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

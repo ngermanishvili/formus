@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import Link from "next/link";
 import { CldImage } from "next-cloudinary";
 import { useSearchParams } from "next/navigation";
+import FloorFilters from "../apartment/floor-filters";
 
 const ITEMS_PER_PAGE = 12;
 const CACHE_TTL = 1000 * 60 * 30; // 30 minutes
@@ -37,36 +38,36 @@ export default function ApartmentList() {
   const [visibleItems, setVisibleItems] = useState(ITEMS_PER_PAGE);
   const searchParams = useSearchParams();
 
+  // Updated filters to match URL structure
   const filters = useMemo(
     () => ({
-      block: searchParams.get("blockId") || "all",
-      floor: searchParams.get("floor") || "all", // Add this
-      floorRange: searchParams.get("floor")?.split("-").map(Number) || null, // Add this
-      status: searchParams.get("status") || "all",
+      blocks: searchParams.get("blocks")?.split(",") || [],
+      floors: searchParams.get("floors")?.split(",").map(Number) || [],
+      statuses: searchParams.get("statuses")?.split(",") || [],
     }),
     [searchParams]
   );
 
+  // Updated filter function
   const filterApartments = useCallback(
     (apts) => {
       return apts.filter((apt) => {
         const blockMatch =
-          filters.block === "all" || apt.block_id === filters.block;
+          filters.blocks.length === 0 || filters.blocks.includes(apt.block_id);
 
         const floorMatch =
-          filters.floor === "all" ||
-          (filters.floorRange &&
-            apt.floor >= filters.floorRange[0] &&
-            apt.floor <= filters.floorRange[1]);
+          filters.floors.length === 0 || filters.floors.includes(apt.floor);
 
         const statusMatch =
-          filters.status === "all" || apt.status === filters.status;
+          filters.statuses.length === 0 ||
+          filters.statuses.includes(apt.status);
 
         return blockMatch && floorMatch && statusMatch;
       });
     },
     [filters]
   );
+
   const filteredApartments = useMemo(
     () => filterApartments(apartments),
     [apartments, filterApartments]
@@ -121,26 +122,31 @@ export default function ApartmentList() {
   if (error) return <ErrorDisplay message={error} />;
 
   return (
-    <section className="section pt-16 bg-gray-50">
-      <div className="container mx-auto px-4">
-        <HeaderSection
-          count={filteredApartments.length}
-          activeView={activeView}
-          setView={setActiveView}
-        />
+    <>
+      <section className="section pt-16 bg-gray-50 mb-16">
+        <div className="container mx-auto px-4 flex justify-center items-center mt-[100px] ">
+          <FloorFilters />
+        </div>
+        <div className="container mx-auto px-4">
+          <HeaderSection
+            count={filteredApartments.length}
+            activeView={activeView}
+            setView={setActiveView}
+          />
 
-        {currentItems.length === 0 ? (
-          <EmptyState />
-        ) : (
-          <>
-            <ApartmentGrid items={currentItems} activeView={activeView} />
-            {hasMore && (
-              <LoadMoreButton onClick={() => setVisibleItems((p) => p + 8)} />
-            )}
-          </>
-        )}
-      </div>
-    </section>
+          {currentItems.length === 0 ? (
+            <EmptyState />
+          ) : (
+            <>
+              <ApartmentGrid items={currentItems} activeView={activeView} />
+              {hasMore && (
+                <LoadMoreButton onClick={() => setVisibleItems((p) => p + 8)} />
+              )}
+            </>
+          )}
+        </div>
+      </section>
+    </>
   );
 }
 

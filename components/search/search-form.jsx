@@ -1,4 +1,3 @@
-// SearchForm.jsx
 import React, { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
@@ -19,6 +18,8 @@ export default function SearchForm() {
   const [showResults, setShowResults] = useState(false);
   const [apartments, setApartments] = useState([]);
   const [filteredApartments, setFilteredApartments] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(5);
+
   const [searchParams, setSearchParams] = useState({
     project: "ortachala_hills",
     location: "tbilisi",
@@ -48,32 +49,35 @@ export default function SearchForm() {
   }, []);
 
   const handleSearch = () => {
+    let filtered;
     if (!searchParams.areaRange) {
-      setFilteredApartments(
-        apartments
-          .filter((apt) => apt.block_id !== "D" && apt.status === "available")
-          .slice(0, 5)
+      filtered = apartments.filter(
+        (apt) => apt.block_id !== "D" && apt.status === "available"
       );
     } else {
       const [minArea, maxArea] = searchParams.areaRange.split("-").map(Number);
-      const filtered = apartments
-        .filter(
-          (apt) =>
-            apt.block_id !== "D" &&
-            apt.status === "available" &&
-            apt.total_area >= minArea &&
-            apt.total_area <= maxArea
-        )
-        .slice(0, 5);
-      setFilteredApartments(filtered);
+      filtered = apartments.filter(
+        (apt) =>
+          apt.block_id !== "D" &&
+          apt.status === "available" &&
+          apt.total_area >= minArea &&
+          apt.total_area <= maxArea
+      );
     }
+    setFilteredApartments(filtered);
+    setVisibleCount(5);
     setShowResults(true);
     document.body.style.overflow = "hidden";
+  };
+
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + 5);
   };
 
   const handleCloseResults = () => {
     setShowResults(false);
     document.body.style.overflow = "unset";
+    setVisibleCount(5);
   };
 
   const handleSelect = (value, type) => {
@@ -83,18 +87,6 @@ export default function SearchForm() {
     }));
   };
 
-  const handleViewMore = () => {
-    const queryParams = new URLSearchParams();
-    if (searchParams.areaRange) {
-      const [minArea, maxArea] = searchParams.areaRange.split("-");
-      queryParams.set("total_area_min", minArea);
-      queryParams.set("total_area_max", maxArea);
-    }
-    router.push(`/homes-list?${queryParams.toString()}`);
-    handleCloseResults();
-  };
-
-  // Click outside handler
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (showResults && !event.target.closest(".results-container")) {
@@ -105,6 +97,9 @@ export default function SearchForm() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [showResults]);
+
+  const visibleApartments = filteredApartments.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredApartments.length;
 
   return (
     <div className="flex flex-col gap-4">
@@ -202,18 +197,21 @@ export default function SearchForm() {
                         </p>
                       )}
                     </div>
-                    {filteredApartments.length === 5 && (
-                      <Button
-                        onClick={handleViewMore}
-                        className="bg-black hover:bg-gray-800 text-white"
-                      >
-                        მეტის ნახვა
-                      </Button>
-                    )}
                   </div>
                 </div>
                 <div className="animate-in slide-in-from-top duration-500 max-h-[70vh] overflow-y-auto">
-                  <PropertyResults apartments={filteredApartments} />
+                  <PropertyResults apartments={visibleApartments} />
+
+                  {hasMore && (
+                    <div className="mt-6 flex justify-center">
+                      <Button
+                        onClick={handleLoadMore}
+                        className="bg-black hover:bg-gray-800 text-white rounded-xl px-8 py-2"
+                      >
+                        მეტის ნახვა
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

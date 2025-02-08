@@ -167,16 +167,15 @@ const FloorFilters = () => {
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center gap-3">
             <button
-              className="hidden md:flex items-center gap-2 px-4 py-2 rounded-lg
-            bg-[#FBB200] font-medium
-            transition-colors duration-200
-            border border-[#FBB200] text-black"
-              onClick={() => router.back()}
+              className="flex items-center gap-2 px-4 py-2 rounded-lg
+                        bg-[#FBB200] font-medium
+                        transition-colors duration-200
+                        border border-[#FBB200] text-black"
             >
               <span>← Back</span>
             </button>
 
-            <div className="hidden md:block h-6 w-px bg-black/30" />
+            <div className="h-6 w-px bg-black/30" />
 
             <div className="hidden md:flex items-center gap-2">
               <FilterButton

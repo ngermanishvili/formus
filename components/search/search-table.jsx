@@ -20,6 +20,10 @@ export default function PropertyResults({ apartments = [] }) {
     });
   };
 
+  const navigateToDetails = (id) => {
+    window.location.href = `/apartment/${id}`;
+  };
+
   // სორტირება total_area-ს მიხედვით
   const sortedApartments = [...apartments].sort(
     (a, b) => a.total_area - b.total_area
@@ -95,6 +99,14 @@ export default function PropertyResults({ apartments = [] }) {
                     </div>
                   </div>
                 </div>
+              </div>
+              <div>
+                <Button
+                  variant="ghost"
+                  onClick={() => navigateToDetails(property.apartment_id)}
+                >
+                  <span className="text-gray-500">დეტალებზე გადასვლა</span>
+                </Button>
               </div>
             </div>
           ))}

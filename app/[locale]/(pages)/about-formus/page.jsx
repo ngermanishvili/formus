@@ -6,6 +6,10 @@ import Footer5 from "@/components/footers/Footer1";
 import Header1 from "@/components/headers/Header1";
 import MobailHeader1 from "@/components/headers/MobailHeader1";
 import { Check } from "lucide-react";
+import Header5 from "@/components/headers/Header5";
+import Image from "next/image";
+import NewsShape1 from "@/public/assets/shapes/home/3.png";
+import NewsShape2 from "@/public/assets/shapes/news/1.png";
 
 const AboutFormus = () => {
   const [aboutData, setAboutData] = useState([]);
@@ -53,10 +57,27 @@ const AboutFormus = () => {
 
   return (
     <>
-      <Header1 />
+      <Header5 />
       <MobailHeader1 />
-
-      <div className="relative w-full bg-gray-50 py-16">
+      <div className="relative w-full bg-gray-50 py-40">
+        <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:top-[100px]  right-0 z-0">
+          <Image
+            src={NewsShape2}
+            alt="Decorative shape"
+            width={200}
+            height={200}
+            className="mt-[50px]"
+          />
+        </div>
+        <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:bottom-[600px] left-[-20px] right-0 z-0">
+          <Image
+            src={NewsShape1}
+            alt="Decorative shape"
+            width={200}
+            height={200}
+            className="mt-[50px]"
+          />
+        </div>
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="w-full mb-16">
@@ -91,7 +112,7 @@ const AboutFormus = () => {
                 </p>
               </div>
               <div className="w-full md:w-1/3 relative">
-                <div className="aspect-square rounded-full overflow-hidden shadow-xl">
+                <div className="aspect-square rounded-md overflow-hidden shadow-xl">
                   <img
                     src={
                       aboutData[1]?.image_url ||
@@ -132,7 +153,7 @@ const AboutFormus = () => {
                 </div>
               </div>
               <div className="w-full md:w-1/3 relative">
-                <div className="aspect-square rounded-full overflow-hidden shadow-xl">
+                <div className="aspect-square rounded-md overflow-hidden shadow-xl">
                   <img
                     src={
                       aboutData[2]?.image_url ||

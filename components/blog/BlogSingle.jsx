@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import LoadingOverlay from "../loader/loader";
 
 export default function BlogSingle() {
   const [blog, setBlog] = useState(null);
@@ -50,7 +51,7 @@ export default function BlogSingle() {
     return (
       <section className="section pt-60 bg-white latest-new-white">
         <div className="container-sub">
-          <div className="text-center">Loading...</div>
+          <LoadingOverlay />
         </div>
       </section>
     );

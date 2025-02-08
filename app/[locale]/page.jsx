@@ -8,6 +8,8 @@ import DownloadApp from "@/components/common/downloadApp/DownloadApp";
 import Image from "next/image";
 import Shape from "@/public/assets/shapes/home/3.png";
 import Header5 from "@/components/headers/Header5";
+import StickySocial from "@/components/socials/sticky-socials";
+import ContactModal from "@/components/socials/contact-modal";
 
 export default function Page() {
   const [isMobile, setIsMobile] = useState(false);
@@ -48,6 +50,7 @@ export default function Page() {
           </div>
         </div>
       </main>
+      <StickySocial />
       <Footer1 />
     </>
   );

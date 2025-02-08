@@ -1,37 +1,33 @@
-//app/[locale]/(services)/project-details/[id]/page.jsx
-import Footer5 from "@/components/footers/Footer5";
+// app/[locale]/(services)/project-details/[id]/page.jsx
+"use client";
+import { useState, useEffect } from "react";
 import Header5 from "@/components/headers/Header5";
-import Partners from "@/components/common/partners/Partners";
-import Blogs from "@/components/homes/home-5/Blogs";
-import Cities from "@/components/homes/home-5/Cities";
-import Faq from "@/components/homes/home-5/Faq";
-import Feet from "@/components/homes/home-5/Feet";
-import Hero from "@/components/homes/home-5/Hero";
-import Service from "@/components/homes/home-5/Service";
-import Testimonials from "@/components/homes/home-5/Testimonials";
 import MobailHeader1 from "@/components/headers/MobailHeader1";
 import DownloadApp from "@/components/common/downloadApp/DownloadApp";
-import HeroOrtachala from "@/components/homes/home-5/hero-ortachala";
-import FaqLeft from "@/components/ortachala/hero-content-faq";
+
 import GreenSection from "@/components/ortachala/3d-photo";
 import Footer1 from "@/components/footers/Footer1";
 import ProjectContent from "@/components/ortachala/hero-content";
 
-export const metadata = {
-  title: "FORMUS | ფორმუსი - სამშენებლო კომპანია ",
-  description:
-    "ფორმუსი სამშენებლო კომპანია, რომელიც გთავაზობთ სრულყოფილ სამშენებლო მომსახურებას და სამშენებლო პროექტებს სრულყოფილი სამშენებლო მომსახურების სფეროში.",
-};
+export default function Page({ params }) {
+  const [isMobile, setIsMobile] = useState(false);
 
-export default function page({ params }) {
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   return (
     <>
-      <Header5 /> <MobailHeader1 />
+      {isMobile ? <MobailHeader1 /> : <Header5 />}
       <main className="main" style={{ maxWidth: "100vw", overflow: "hidden" }}>
-        {/* <HeroOrtachala /> */}
         <div className="border-bottom"></div>
         <ProjectContent id={params.id} />
-        {/* <FaqLeft /> */}
         <GreenSection />
         <DownloadApp />
       </main>

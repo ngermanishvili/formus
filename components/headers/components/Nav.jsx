@@ -3,6 +3,7 @@ import { Link, usePathname } from "@/src/i18n/routing";
 import { useEffect, useState } from "react";
 import { useLocale } from "next-intl";
 import { routing } from "@/src/i18n/routing";
+import LoadingOverlay from "@/components/loader/loader";
 
 export default function Nav() {
   const pathname = usePathname();
@@ -40,7 +41,7 @@ export default function Nav() {
   const currentPath = getPathWithoutLocale(pathname);
 
   if (loading) {
-    return <div>Loading...</div>;
+    <LoadingOverlay />;
   }
 
   return (

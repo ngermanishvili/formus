@@ -1,20 +1,16 @@
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
 import { headers } from 'next/headers';
+import nodemailer from 'nodemailer';
 
 // Rate limiting 
-const RATE_LIMIT_WINDOW = 3600000;
+const RATE_LIMIT_WINDOW = 3600000; // 1 hour
 const MAX_REQUESTS_PER_WINDOW = 5;
 const requestLog = new Map();
 
 // Validation 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_REGEX = /^\d{9,}$/;
-const MAX_MESSAGE_LENGTH = 1000;
-const BLOCKED_DOMAINS = ['tempmail.com', 'throwawaymail.com'];
-const SPAM_KEYWORDS = ['casino', 'lottery', 'viagra', 'crypto'];
 
-// transporter 
+// Nodemailer transporter
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -26,16 +22,19 @@ const transporter = nodemailer.createTransport({
 function checkRateLimit(ip) {
     const now = Date.now();
     const windowStart = now - RATE_LIMIT_WINDOW;
+
+    // Clear old entries
     for (const [savedIp, { timestamp }] of requestLog.entries()) {
         if (timestamp < windowStart) {
             requestLog.delete(savedIp);
         }
     }
-    // Check current IP's requests
+
     const ipData = requestLog.get(ip) || { count: 0, timestamp: now };
     if (ipData.count >= MAX_REQUESTS_PER_WINDOW) {
         return false;
     }
+
     requestLog.set(ip, {
         count: ipData.count + 1,
         timestamp: now
@@ -43,84 +42,55 @@ function checkRateLimit(ip) {
     return true;
 }
 
-function validateEmail(email) {
-    if (!EMAIL_REGEX.test(email)) return false;
-    const domain = email.split('@')[1];
-    return !BLOCKED_DOMAINS.includes(domain);
-}
-
-function checkForSpam(text) {
-    const lowerText = text.toLowerCase();
-    return !SPAM_KEYWORDS.some(keyword => lowerText.includes(keyword.toLowerCase()));
-}
-
 function sanitizeInput(str) {
-    return str
-        .replace(/[<>]/g, '')
-        .trim();
+    if (!str) return '';
+    return str.replace(/[<>]/g, '').trim();
 }
 
 export async function POST(req) {
     try {
         const headersList = headers();
         const ip = headersList.get('x-forwarded-for') || 'unknown';
+
         if (!checkRateLimit(ip)) {
             return NextResponse.json({
                 error: 'გთხოვთ სცადოთ მოგვიანებით'
             }, { status: 429 });
         }
 
-        // Get and validate request data
-        const { fullname, email, phone, message } = await req.json();
+        const { fullname, phone, terms_accepted, marketing_accepted } = await req.json();
 
         // Input validation
-        if (!fullname || fullname.length < 4 || fullname.length > 100) {
+        if (!fullname || fullname.length < 2 || fullname.length > 100) {
             return NextResponse.json({
                 error: 'არასწორი სახელი'
             }, { status: 400 });
         }
 
-        if (!validateEmail(email)) {
-            return NextResponse.json({
-                error: 'არასწორი ემაილი'
-            }, { status: 400 });
-        }
-
-        if (!PHONE_REGEX.test(phone)) {
+        if (!phone || !PHONE_REGEX.test(phone)) {
             return NextResponse.json({
                 error: 'არასწორი ტელეფონის ნომერი'
             }, { status: 400 });
         }
 
-
-
-        if (!message || message.length > MAX_MESSAGE_LENGTH) {
+        if (!terms_accepted || !marketing_accepted) {
             return NextResponse.json({
-                error: 'შეტყობინება ძალიან გრძელია'
+                error: 'გთხოვთ დაეთანხმოთ წესებს და პირობებს'
             }, { status: 400 });
         }
 
-        // Check for spam content
-        if (!checkForSpam(message)) {
-            return NextResponse.json({
-                error: 'შეტყობინება შეიცავს აკრძალულ კონტენტს'
-            }, { status: 400 });
-        }
-
-        // Sanitize all inputs
+        // Sanitize inputs
         const sanitizedData = {
             fullname: sanitizeInput(fullname),
-            email: sanitizeInput(email),
             phone: sanitizeInput(phone),
-            message: sanitizeInput(message)
         };
 
         const mailOptions = {
             from: 'nikagermanishvili5@gmail.com',
-            to: 'info@formus.ge',
-            subject: `ახალი შეტყობინება: ${sanitizedData.message.substring(0, 50)}`,
+            to: 'nikagermanishvili5@gmail.com',
+            subject: `ზარის მოთხოვნა: ${sanitizedData.fullname}`,
             html: `
-            <!DOCTYPE html>
+            <!DOCTYPE html> 
             <html>
                 <head>
                     <style>
@@ -161,15 +131,11 @@ export async function POST(req) {
                             font-size: 16px;
                             font-weight: 500;
                         }
-                        .message-section {
+                        .terms-section {
                             background: #f9fafb;
                             padding: 20px;
                             border-radius: 4px;
                             margin-top: 20px;
-                        }
-                        .message-content {
-                            line-height: 1.6;
-                            color: #374151;
                         }
                         .footer {
                             background: #f3f4f6;
@@ -183,25 +149,23 @@ export async function POST(req) {
                 <body>
                     <div class="ticket-container">
                         <div class="ticket-header">
-                            <h2>ახალი შეტყობინება</h2>
+                            <h2>ზარის მოთხოვნა</h2>
                         </div>
                         <div class="ticket-content">
                             <div class="info-item">
-                                <div class="info-label">გამომგზავნი</div>
+                                <div class="info-label">სახელი</div>
                                 <div class="info-value">${sanitizedData.fullname}</div>
-                            </div>
-                            <div class="info-item">
-                                <div class="info-label">ელ-ფოსტა</div>
-                                <div class="info-value">${sanitizedData.email}</div>
                             </div>
                             <div class="info-item">
                                 <div class="info-label">ტელეფონი</div>
                                 <div class="info-value">${sanitizedData.phone}</div>
                             </div>
-                          
-                            <div class="message-section">
-                                <div class="info-label">შეტყობინება</div>
-                                <div class="message-content">${sanitizedData.message}</div>
+                            <div class="terms-section">
+                                <div class="info-label">დამატებითი ინფორმაცია</div>
+                                <div class="info-value">
+                                    • წესები და პირობები: ${terms_accepted ? 'დათანხმდა' : 'არ დათანხმებულა'}<br>
+                                    • მარკეტინგული კომუნიკაცია: ${marketing_accepted ? 'დათანხმდა' : 'არ დათანხმებულა'}
+                                </div>
                             </div>
                         </div>
                         <div class="footer">
@@ -217,7 +181,7 @@ export async function POST(req) {
         console.log('Email sent successfully:', info);
 
         return NextResponse.json({
-            message: 'Email sent successfully',
+            message: 'მონაცემები წარმატებით გაიგზავნა',
             info: info
         }, { status: 200 });
 

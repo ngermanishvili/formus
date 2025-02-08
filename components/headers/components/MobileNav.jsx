@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, usePathname } from "@/src/i18n/routing";
 import { useLocale } from "next-intl";
 import { Languages } from "lucide-react";
+import LoadingOverlay from "@/components/loader/loader";
 
 export default function MobileNav() {
   const [routes, setRoutes] = useState([]);
@@ -34,7 +35,12 @@ export default function MobileNav() {
     fetchRoutes();
   }, []);
 
-  if (loading) return <div className="flex justify-center p-4">Loading...</div>;
+  if (loading)
+    return (
+      <div className="flex justify-center p-4">
+        <LoadingOverlay />
+      </div>
+    );
 
   return (
     <>

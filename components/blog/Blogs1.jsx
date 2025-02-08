@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Pagination from "../common/Pagination";
+import LoadingOverlay from "../loader/loader";
 
 export default function Blogs1() {
   const [blogs, setBlogs] = useState([]);
@@ -52,7 +53,7 @@ export default function Blogs1() {
     return (
       <section className="section pt-60 bg-white latest-new-white">
         <div className="container-sub">
-          <div className="text-center">Loading...</div>
+          <LoadingOverlay />
         </div>
       </section>
     );

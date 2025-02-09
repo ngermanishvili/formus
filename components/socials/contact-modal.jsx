@@ -1,5 +1,6 @@
 // ContactModal.jsx
 import React, { useState, useCallback } from "react";
+import Link from "next/link";
 
 const ContactModal = ({ isOpen, setIsOpen }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -144,8 +145,14 @@ const ContactModal = ({ isOpen, setIsOpen }) => {
                 }
               />
               <span className="text-xs sm:text-sm text-gray-600 leading-tight">
-                გავეცანი მარკეტინგის მიზნით მონაცემთა დამუშავების პირობებს და
-                ვეთანხმები
+                <Link
+                  href="/terms?section=marketing"
+                  target="_blank"
+                  className="text-blue-600 hover:underline"
+                >
+                  გავეცანი მარკეტინგის მიზნით მონაცემთა დამუშავების პირობებს და
+                  ვეთანხმები
+                </Link>{" "}
               </span>
             </label>
           </div>

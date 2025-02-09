@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { Loader2, X } from "lucide-react";
 import { useLocale } from "next-intl";
 

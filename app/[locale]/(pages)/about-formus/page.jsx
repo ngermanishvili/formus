@@ -38,14 +38,8 @@ const AboutFormus = () => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-
-    // Initial check
     checkMobile();
-
-    // Add resize listener
     window.addEventListener("resize", checkMobile);
-
-    // Cleanup
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
@@ -67,21 +61,20 @@ const AboutFormus = () => {
         console.error("Failed to fetch about data:", error);
       }
     };
-
     fetchAboutData();
   }, []);
 
   return (
     <>
       {isMobile ? <MobailHeader1 /> : <Header5 />}
-      <div className="relative w-full bg-gray-50 py-40">
-        <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:top-[100px]  right-0 z-0">
+      <div className="relative w-full bg-gray-50 py-40 font-firago">
+        <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:top-[100px] right-0 z-0">
           <Image
             src={NewsShape2}
             alt="Decorative shape"
             width={200}
             height={200}
-            className="mt-[50px]"
+            className="mt-12"
           />
         </div>
         <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:bottom-[600px] left-[-20px] right-0 z-0">
@@ -90,7 +83,7 @@ const AboutFormus = () => {
             alt="Decorative shape"
             width={200}
             height={200}
-            className="mt-[50px]"
+            className="mt-12"
           />
         </div>
         <div className="container mx-auto px-4">
@@ -106,23 +99,21 @@ const AboutFormus = () => {
               />
             </div>
 
-            {/* First Section */}
             <div className="mb-20">
-              <h2 className="text-3xl font-bold mb-8 text-gray-900">
+              <h2 className="text-3xl font-bold mb-8 text-gray-900 font-firago">
                 {getLocalizedField(aboutData[0], "title")}
               </h2>
-              <p className="text-lg text-gray-700 leading-relaxed">
+              <p className="text-lg text-gray-700 leading-relaxed font-normal">
                 {getLocalizedField(aboutData[0], "description")}
               </p>
             </div>
 
-            {/* Second Section with circular image */}
             <div className="flex flex-col md:flex-row items-center gap-16 mb-20">
               <div className="flex-1">
-                <h2 className="text-3xl font-bold mb-6 text-gray-900">
+                <h2 className="text-3xl font-bold mb-6 text-gray-900 font-firago">
                   {getLocalizedField(aboutData[1], "title")}
                 </h2>
-                <p className="text-lg text-gray-700 leading-relaxed">
+                <p className="text-lg text-gray-700 leading-relaxed font-normal">
                   {getLocalizedField(aboutData[1], "description")}
                 </p>
               </div>
@@ -143,13 +134,12 @@ const AboutFormus = () => {
               </div>
             </div>
 
-            {/* Third Section with Services List */}
             <div className="flex flex-col md:flex-row-reverse items-center gap-16 mb-20">
               <div className="flex-1">
-                <h2 className="text-3xl font-bold mb-6 text-gray-900">
+                <h2 className="text-3xl font-bold mb-6 text-gray-900 font-firago">
                   {getLocalizedField(aboutData[2], "title")}
                 </h2>
-                <p className="text-lg text-gray-700 leading-relaxed mb-8">
+                <p className="text-lg text-gray-700 leading-relaxed mb-8 font-normal">
                   {getLocalizedField(aboutData[2], "description")}
                 </p>
                 <div className="bg-white rounded-xl p-8 shadow-lg">
@@ -160,7 +150,9 @@ const AboutFormus = () => {
                           <div className="flex-shrink-0">
                             <Check className="h-6 w-6 text-green-500" />
                           </div>
-                          <span className="text-gray-700">{service}</span>
+                          <span className="text-gray-700 font-normal">
+                            {service}
+                          </span>
                         </li>
                       )
                     )}

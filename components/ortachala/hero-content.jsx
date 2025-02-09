@@ -153,7 +153,7 @@ const ProjectContent = ({ id }) => {
                   ? "პროექტის შესახებ"
                   : "About the Project"}
               </h2>
-              <p className="font-firago text-lg text-muted-foreground">
+              <p className="font-firago text-lg font-light ">
                 {projectData.description}
               </p>
             </div>
@@ -210,7 +210,7 @@ const ProjectContent = ({ id }) => {
                   <h2 className="font-firago font-bold text-3xl lg:text-4xl text-foreground mb-6 lg:mb-8 leading-tight">
                     {projectData.second_section_title}
                   </h2>
-                  <p className="font-firago text-muted-foreground text-base lg:text-lg leading-relaxed">
+                  <p className="font-firago font-light text-muted-foreground text-base lg:text-lg leading-relaxed">
                     {projectData.second_section_description}
                   </p>
                 </div>

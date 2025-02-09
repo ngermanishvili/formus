@@ -8,6 +8,7 @@ import DownloadApp from "@/components/common/downloadApp/DownloadApp";
 import GreenSection from "@/components/ortachala/3d-photo";
 import Footer1 from "@/components/footers/Footer1";
 import ProjectContent from "@/components/ortachala/hero-content";
+import GalleryComponent from "@/components/apartment/gallery";
 
 export default function Page({ params }) {
   const [isMobile, setIsMobile] = useState(false);
@@ -30,6 +31,7 @@ export default function Page({ params }) {
         <ProjectContent id={params.id} />
         <GreenSection />
         <DownloadApp />
+        <GalleryComponent />
       </main>
       <Footer1 />
     </>

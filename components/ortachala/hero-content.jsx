@@ -1,13 +1,13 @@
 "use client";
 
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import SecondShape1 from "@/public/assets/shapes/project/3.png";
 import SecondShape2 from "@/public/assets/shapes/project/1.png";
 
-export default function ProjectContent({ id }) {
+const ProjectContent = ({ id }) => {
   const [loading, setLoading] = useState(true);
   const [projectData, setProjectData] = useState(null);
 
@@ -34,7 +34,6 @@ export default function ProjectContent({ id }) {
           const project = data.data;
 
           if (id === "1") {
-            // სრული მონაცემების ჩატვირთვა ID 1-ისთვის
             const features =
               currentLang === "ge"
                 ? typeof project.features_ge === "string"
@@ -92,7 +91,7 @@ export default function ProjectContent({ id }) {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="h-8 w-8 animate-spin" />
+        <Loader2 className="h-8 w-8 animate-spin text-foreground" />
       </div>
     );
   }
@@ -100,10 +99,10 @@ export default function ProjectContent({ id }) {
   if (!projectData) {
     return (
       <div className="container mx-auto px-4 py-12">
-        <p className="text-center text-lg">
+        <p className="font-firago text-center text-lg">
           {currentLang === "ge" ? "პროექტი ვერ მოიძებნა" : "Project not found"}
         </p>
-        <p className="text-center text-sm text-gray-500">
+        <p className="font-firago text-center text-sm text-muted-foreground">
           {currentLang === "ge" ? "პროექტის ID: " + id : "Project ID: " + id}
         </p>
       </div>
@@ -132,13 +131,15 @@ export default function ProjectContent({ id }) {
               priority
             />
           </div>
-          <div className="absolute inset-0 bg-black bg-opacity-50" />
+          <div className="absolute inset-0 bg-black/50" />
           <div className="absolute inset-0 flex items-center">
             <div className="container mx-auto px-4">
-              <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+              <h1 className="font-firago font-bold text-4xl md:text-6xl text-white mb-4">
                 {projectData.title}
               </h1>
-              <p className="text-xl text-white">{projectData.location}</p>
+              <p className="font-firago text-xl text-white">
+                {projectData.location}
+              </p>
             </div>
           </div>
         </div>
@@ -147,16 +148,18 @@ export default function ProjectContent({ id }) {
         <div className="container mx-auto px-4 py-12">
           <div className="flex flex-col lg:flex-row gap-8">
             <div className="lg:w-1/2">
-              <h2 className="text-3xl font-bold mb-4">
+              <h2 className="font-firago font-bold text-3xl text-foreground mb-4">
                 {currentLang === "ge"
                   ? "პროექტის შესახებ"
                   : "About the Project"}
               </h2>
-              <p className="text-lg text-gray-600">{projectData.description}</p>
+              <p className="font-firago text-lg text-muted-foreground">
+                {projectData.description}
+              </p>
             </div>
 
             <div className="lg:w-1/2">
-              <h2 className="text-3xl font-bold mb-4">
+              <h2 className="font-firago font-bold text-3xl text-foreground mb-4">
                 {currentLang === "ge" ? "გალერეა" : "Gallery"}
               </h2>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -174,7 +177,7 @@ export default function ProjectContent({ id }) {
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-opacity duration-300" />
                   </div>
                 ))}
               </div>
@@ -183,7 +186,7 @@ export default function ProjectContent({ id }) {
         </div>
 
         {/* Second Section */}
-        <section className="relative bg-white">
+        <section className="relative bg-background">
           <div className="flex flex-col lg:flex-row">
             {/* Image Container */}
             <div className="w-full lg:w-1/2 relative h-[400px] lg:h-[500px] group overflow-hidden">
@@ -204,10 +207,10 @@ export default function ProjectContent({ id }) {
             <div className="w-full lg:w-1/2 relative">
               <div className="px-6 lg:px-12 xl:px-16 py-12 lg:py-16 h-full">
                 <div className="max-w-xl">
-                  <h2 className="text-3xl lg:text-4xl font-bold text-black mb-6 lg:mb-8 leading-tight">
+                  <h2 className="font-firago font-bold text-3xl lg:text-4xl text-foreground mb-6 lg:mb-8 leading-tight">
                     {projectData.second_section_title}
                   </h2>
-                  <p className="text-gray-600 text-base lg:text-lg leading-relaxed">
+                  <p className="font-firago text-muted-foreground text-base lg:text-lg leading-relaxed">
                     {projectData.second_section_description}
                   </p>
                 </div>
@@ -239,13 +242,15 @@ export default function ProjectContent({ id }) {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-black bg-opacity-50" />
+        <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 flex items-center">
           <div className="container mx-auto px-4">
-            <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
+            <h1 className="font-firago font-bold text-4xl md:text-6xl text-white mb-4">
               {projectData.title}
             </h1>
-            <p className="text-xl text-white">{projectData.location}</p>
+            <p className="font-firago text-xl text-white">
+              {projectData.location}
+            </p>
           </div>
         </div>
       </div>
@@ -264,4 +269,6 @@ export default function ProjectContent({ id }) {
       )}
     </>
   );
-}
+};
+
+export default ProjectContent;

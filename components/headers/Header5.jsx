@@ -19,8 +19,7 @@ export default function Header5() {
   const pathname = usePathname();
   const locale = useLocale();
 
-  // პროექტის გვერდზე ვართ თუ არა
-  const isProjectPage = pathname.match(/^\/[a-z]{2}\/projects\/\d+\/.+$/);
+  const isProjectPath = pathname.includes("/projects/1/ortachala-hilsi");
 
   useEffect(() => {
     const checkMobile = () => {
@@ -45,13 +44,22 @@ export default function Header5() {
       try {
         const response = await fetch("/api/navigation");
         const data = await response.json();
-        setRoutes(data.data || []);
+        // Filter routes to only show route with ID 5 on specific project paths
+        const filteredRoutes = data.data.filter((route) => {
+          if (route.id === 5) {
+            // მხოლოდ ორთაჭალა ჰილსის გვერდებზე გამოჩნდეს ID 5
+            return pathname.includes("/projects/1/ortachala-hilsi");
+          }
+          // სხვა ყველა route გამოჩნდეს თუ ID 5 არ არის
+          return route.id !== 5;
+        });
+        setRoutes(filteredRoutes || []);
       } catch (error) {
         console.error("Error fetching navigation:", error);
       }
     };
     fetchRoutes();
-  }, []);
+  }, [isProjectPath]);
 
   useEffect(() => {
     const closeDropdown = (e) => {
@@ -85,27 +93,17 @@ export default function Header5() {
       <div className="container mx-auto">
         <div className="flex items-center justify-between py-4">
           <nav className="flex items-center space-x-1 -ml-4 uppercase">
-            {routes.map((route) => {
-              // თუ მარშრუტის სახელია "აირჩიე ბინა" და არ ვართ პროექტის გვერდზე, არ გამოვაჩინოთ
-              if (
-                route.translations[locale] === "აირჩიე ბინა" &&
-                !isProjectPage
-              ) {
-                return null;
-              }
-
-              return (
-                <Link
-                  key={route.id}
-                  href={route.path}
-                  className={`${
-                    currentPath === route.path ? "text-white" : "text-gray-200"
-                  } px-2 py-1 text-sm hover:text-[#f94011] rounded transition-colors`}
-                >
-                  {route.translations[locale]}
-                </Link>
-              );
-            })}
+            {routes.map((route) => (
+              <Link
+                key={route.id}
+                href={route.path}
+                className={`${
+                  currentPath === route.path ? "text-white" : "text-gray-200"
+                } px-2 py-1 text-sm hover:text-[#f94011] rounded transition-colors`}
+              >
+                {route.translations[locale]}
+              </Link>
+            ))}
           </nav>
 
           <Link

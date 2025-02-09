@@ -2,8 +2,12 @@
 
 import SearchForm from "@/components/search/search-form";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function DownloadApp() {
+  const pathname = usePathname();
+  const chooseHomeText = pathname === "/ka" ? "ბინის არჩევა" : "Choose Home";
+
   return (
     <div className="flex justify-center items-center my-[30px] sm:my-[40px] lg:my-[100px] px-4 sm:px-6 lg:px-8">
       <section className="min-h-[200px] sm:min-h-[220px] lg:min-h-[250px] w-full max-w-[1100px] rounded-lg bg-[#abc188] relative overflow-hidden">
@@ -19,7 +23,7 @@ export default function DownloadApp() {
         <div className="container mx-auto px-4 py-12 sm:py-16 lg:py-20 relative z-10">
           <div className="max-w-5xl mx-auto text-center">
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-8 sm:mb-10 lg:mb-12 animate-fade-in">
-              Select an Apartment
+              {chooseHomeText}
             </h2>
             <div className="p-4 sm:p-6 lg:p-8 rounded-2xl relative">
               <SearchForm />

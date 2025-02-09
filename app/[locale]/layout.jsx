@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { Toaster } from "sonner";
 import Providers from "@/components/progressbar/progress-bar";
 import localFont from "next/font/local";
+import StickySocial from "@/components/socials/sticky-socials";
 
 const firaGO = localFont({
   src: [
@@ -134,6 +135,7 @@ export default function LocaleLayout({ children, params: { locale } }) {
       <body className={firaGO.variable}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>{children}</Providers>
+          <StickySocial />
           <Toaster />
         </NextIntlClientProvider>
       </body>

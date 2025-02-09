@@ -13,6 +13,7 @@ import NewsShape2 from "@/public/assets/shapes/news/1.png";
 
 const AboutFormus = () => {
   const [aboutData, setAboutData] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
   const params = useParams();
   const locale = params.locale || "ka";
 
@@ -32,6 +33,21 @@ const AboutFormus = () => {
       "Fully funded projects",
     ],
   };
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Initial check
+    checkMobile();
+
+    // Add resize listener
+    window.addEventListener("resize", checkMobile);
+
+    // Cleanup
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const getLocalizedField = (item, field) => {
     if (!item) return "";
@@ -57,8 +73,7 @@ const AboutFormus = () => {
 
   return (
     <>
-      <Header5 />
-      <MobailHeader1 />
+      {isMobile ? <MobailHeader1 /> : <Header5 />}
       <div className="relative w-full bg-gray-50 py-40">
         <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:top-[100px]  right-0 z-0">
           <Image

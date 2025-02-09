@@ -44,13 +44,10 @@ export default function Header5() {
       try {
         const response = await fetch("/api/navigation");
         const data = await response.json();
-        // Filter routes to only show route with ID 5 on specific project paths
         const filteredRoutes = data.data.filter((route) => {
           if (route.id === 5) {
-            // მხოლოდ ორთაჭალა ჰილსის გვერდებზე გამოჩნდეს ID 5
             return pathname.includes("/projects/1/ortachala-hilsi");
           }
-          // სხვა ყველა route გამოჩნდეს თუ ID 5 არ არის
           return route.id !== 5;
         });
         setRoutes(filteredRoutes || []);
@@ -71,14 +68,19 @@ export default function Header5() {
     return () => document.removeEventListener("click", closeDropdown);
   }, []);
 
-  const getPathWithoutLocale = (path) => {
-    const segments = path.split("/");
-    return segments.length > 2 && routing.locales.includes(segments[1])
-      ? segments.slice(2).join("/")
-      : segments.slice(1).join("/");
+  // სრული path-ის მიღება route-სთვის
+  const getFullPath = (routePath) => {
+    if (routePath.startsWith("/")) {
+      return routePath;
+    }
+    return `/${routePath}`;
   };
 
-  const currentPath = getPathWithoutLocale(pathname);
+  // მიმდინარე path-ის შემოწმება აქტიური ლინკისთვის
+  const isActivePath = (routePath) => {
+    const currentPath = pathname.split("/").slice(2).join("/");
+    return currentPath === routePath.replace(/^\//, "");
+  };
 
   if (isMobile) {
     return <MobileHeader1 />;
@@ -96,9 +98,9 @@ export default function Header5() {
             {routes.map((route) => (
               <Link
                 key={route.id}
-                href={route.path}
+                href={getFullPath(route.path)}
                 className={`${
-                  currentPath === route.path ? "text-white" : "text-gray-200"
+                  isActivePath(route.path) ? "text-white" : "text-gray-200"
                 } px-2 py-1 text-sm hover:text-[#f94011] rounded transition-colors`}
               >
                 {route.translations[locale]}
@@ -134,12 +136,14 @@ export default function Header5() {
               {isLanguageOpen && (
                 <div className="absolute right-0 mt-2 py-2 w-24 bg-white rounded-lg shadow-xl border border-gray-100 animate-slide-up">
                   {routing.locales.map((l) => {
-                    let newPath = pathname;
-                    if (pathname.includes("/projects")) {
-                      newPath = `/projects${
-                        pathname.split("/projects")[1] || ""
-                      }`;
-                    }
+                    // ვიღებთ მიმდინარე path-ს locale-ის გარეშე
+                    const pathWithoutLocale = pathname
+                      .split("/")
+                      .slice(2)
+                      .join("/");
+                    const newPath = pathWithoutLocale
+                      ? `/${pathWithoutLocale}`
+                      : "/";
 
                     return (
                       <Link

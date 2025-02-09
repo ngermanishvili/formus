@@ -5,13 +5,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { Loader2, X } from "lucide-react";
 import { useLocale } from "next-intl";
-import { slugify, transliterate } from "@/utils/slugify";
 
 export default function Services1() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isModalClosing, setIsModalClosing] = useState(false);
 
   const locale = useLocale();
   const currentLang = locale === "ka" ? "ge" : "en";
@@ -27,7 +27,6 @@ export default function Services1() {
         const data = await response.json();
 
         if (data.status === "success" && Array.isArray(data.data)) {
-          // Sort projects to ensure Ortachala Hills (ID: 1) appears first
           const sortedProjects = [...data.data].sort((a, b) => {
             if (a.id === 1) return -1;
             if (b.id === 1) return 1;
@@ -53,9 +52,34 @@ export default function Services1() {
     if (project.id === 1) {
       window.location.href = `/${locale}/projects/1/ortachala-hilsi`;
     } else {
-      setSelectedImage(project.main_image_url);
+      openModal(project.main_image_url);
     }
   };
+
+  const openModal = (imageUrl) => {
+    setSelectedImage(imageUrl);
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeModal = () => {
+    setIsModalClosing(true);
+    document.body.style.overflow = "unset";
+    setTimeout(() => {
+      setSelectedImage(null);
+      setIsModalClosing(false);
+    }, 300);
+  };
+
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      if (e.key === "Escape" && selectedImage) {
+        closeModal();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [selectedImage]);
 
   const ImageModal = ({ imageUrl, onClose }) => {
     const handleOverlayClick = (e) => {
@@ -66,26 +90,32 @@ export default function Services1() {
 
     return (
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4"
+        className={`fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity duration-300 ${
+          isModalClosing ? "opacity-0" : "opacity-100"
+        }`}
         onClick={handleOverlayClick}
       >
-        <div className="relative max-w-4xl w-full">
-          <button
-            onClick={onClose}
-            className="absolute -top-12 right-0 text-white hover:text-gray-300 bg-black bg-opacity-50 rounded-full p-2"
-            aria-label="Close modal"
-          >
-            <X size={24} />
-          </button>
-          <div className="relative w-full pt-[75%]">
-            <Image
-              src={imageUrl}
-              alt="Project Image"
-              layout="fill"
-              objectFit="contain"
-              className="rounded-lg"
-            />
-          </div>
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 z-50 p-2 text-white hover:text-gray-300 transition-colors"
+          aria-label="Close modal"
+        >
+          <X className="w-8 h-8" />
+        </button>
+
+        <div
+          className={`relative w-full max-w-7xl mx-4 aspect-[16/9] transition-transform duration-300 ${
+            isModalClosing ? "scale-95" : "scale-100"
+          }`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <Image
+            src={imageUrl}
+            alt="Project Image"
+            fill
+            className="object-contain"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+          />
         </div>
       </div>
     );
@@ -135,11 +165,11 @@ export default function Services1() {
                   className="col-lg-4 col-sm-6 mb-30"
                 >
                   <div
-                    className="cardService wow fadeInUp cursor-pointer mt-4"
+                    className="cardService wow fadeInUp cursor-pointer mt-4 group"
                     onClick={(e) => handleProjectClick(project, e)}
                   >
                     <div className="cardInfo">
-                      <h3 className="cardTitle text-bold color-white ">
+                      <h3 className="cardTitle text-bold color-white">
                         {currentLang === "ge"
                           ? project.title_ge || project.title || "უსათაურო"
                           : project.title_en || project.title || "Untitled"}
@@ -165,7 +195,7 @@ export default function Services1() {
                         </p>
                       </div>
                     </div>
-                    <div className="cardImage">
+                    <div className="cardImage overflow-hidden">
                       <Image
                         width={570}
                         height={500}
@@ -180,6 +210,7 @@ export default function Services1() {
                               project.title ||
                               "Project image"
                         }
+                        className="transition-transform duration-500 group-hover:scale-105"
                         priority
                       />
                     </div>
@@ -191,10 +222,7 @@ export default function Services1() {
       </div>
 
       {selectedImage && (
-        <ImageModal
-          imageUrl={selectedImage}
-          onClose={() => setSelectedImage(null)}
-        />
+        <ImageModal imageUrl={selectedImage} onClose={closeModal} />
       )}
     </section>
   );

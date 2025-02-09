@@ -3,11 +3,16 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import Photo from "@/public/assets/imgs/ortachala/ortachala-hills.jpg";
 
 const GalleryGrid = () => {
   const [activeCategory, setActiveCategory] = useState("exterior");
   const [currentLang, setCurrentLang] = useState("en");
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const pathname = usePathname();
 
@@ -89,105 +94,223 @@ const GalleryGrid = () => {
 
   const currentImages = images[activeCategory];
 
+  const openModal = (index) => {
+    setCurrentImageIndex(index);
+    setSelectedImage(currentImages[index]);
+    setIsModalOpen(true);
+    document.body.style.overflow = "hidden";
+  };
+
+  const closeModal = () => {
+    setIsClosing(true);
+    document.body.style.overflow = "unset";
+    setTimeout(() => {
+      setIsModalOpen(false);
+      setSelectedImage(null);
+      setIsClosing(false);
+    }, 300);
+  };
+
+  const nextImage = (e) => {
+    e.stopPropagation();
+    const newIndex = (currentImageIndex + 1) % currentImages.length;
+    setCurrentImageIndex(newIndex);
+    setSelectedImage(currentImages[newIndex]);
+  };
+
+  const prevImage = (e) => {
+    e.stopPropagation();
+    const newIndex =
+      (currentImageIndex - 1 + currentImages.length) % currentImages.length;
+    setCurrentImageIndex(newIndex);
+    setSelectedImage(currentImages[newIndex]);
+  };
+
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      if (!isModalOpen) return;
+      if (e.key === "Escape") closeModal();
+      if (e.key === "ArrowRight") nextImage(e);
+      if (e.key === "ArrowLeft") prevImage(e);
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [isModalOpen, currentImageIndex]);
+
   return (
-    <div className="container mx-auto px-4 py-16">
-      {/* Title */}
-      <h2 className="font-firago font-bold text-4xl text-center mb-12">
-        {texts[currentLang].title}
-      </h2>
+    <>
+      <div className="mx-auto py-16">
+        {/* Title */}
+        <h2 className="font-firago font-bold text-4xl text-center mb-12">
+          {texts[currentLang].title}
+        </h2>
 
-      {/* Category Filter */}
-      <div className="flex justify-center gap-12 mb-16">
-        <button
-          onClick={() => setActiveCategory("exterior")}
-          className={`font-firago text-lg transition-colors hover:text-foreground ${
-            activeCategory === "exterior"
-              ? "text-foreground font-medium"
-              : "text-muted-foreground font-light"
-          }`}
-        >
-          {texts[currentLang].exterior}
-        </button>
-        <button
-          onClick={() => setActiveCategory("interior")}
-          className={`font-firago text-lg transition-colors hover:text-foreground ${
-            activeCategory === "interior"
-              ? "text-foreground font-medium"
-              : "text-muted-foreground font-light"
-          }`}
-        >
-          {texts[currentLang].interior}
-        </button>
-      </div>
-
-      {/* Gallery Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* First Gallery Section */}
-        <div className="space-y-8">
-          <div className="w-full">
-            <div className="relative aspect-video rounded-lg overflow-hidden">
-              <Image
-                src={currentImages[0].src}
-                alt={currentImages[0].alt}
-                fill
-                className="object-cover transition-transform duration-500 hover:scale-105"
-                priority
-              />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-8">
-            <div className="relative aspect-video rounded-lg overflow-hidden">
-              <Image
-                src={currentImages[1].src}
-                alt={currentImages[1].alt}
-                fill
-                className="object-cover transition-transform duration-500 hover:scale-105"
-              />
-            </div>
-            <div className="relative aspect-video rounded-lg overflow-hidden">
-              <Image
-                src={currentImages[2].src}
-                alt={currentImages[2].alt}
-                fill
-                className="object-cover transition-transform duration-500 hover:scale-105"
-              />
-            </div>
-          </div>
+        {/* Category Filter */}
+        <div className="flex justify-center gap-12 mb-16">
+          <button
+            onClick={() => setActiveCategory("exterior")}
+            className={`font-firago text-lg transition-colors hover:text-foreground ${
+              activeCategory === "exterior"
+                ? "text-foreground font-medium"
+                : "text-muted-foreground font-light"
+            }`}
+          >
+            {texts[currentLang].exterior}
+          </button>
+          <button
+            onClick={() => setActiveCategory("interior")}
+            className={`font-firago text-lg transition-colors hover:text-foreground ${
+              activeCategory === "interior"
+                ? "text-foreground font-medium"
+                : "text-muted-foreground font-light"
+            }`}
+          >
+            {texts[currentLang].interior}
+          </button>
         </div>
 
-        {/* Second Gallery Section */}
-        <div className="space-y-8">
-          <div className="grid grid-cols-2 gap-8">
-            <div className="relative aspect-video rounded-lg overflow-hidden">
-              <Image
-                src={currentImages[3].src}
-                alt={currentImages[3].alt}
-                fill
-                className="object-cover transition-transform duration-500 hover:scale-105"
-              />
+        {/* Gallery Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* First Gallery Section */}
+          <div className="space-y-8">
+            <div className="w-full">
+              <div
+                className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
+                onClick={() => openModal(0)}
+              >
+                <Image
+                  src={currentImages[0].src}
+                  alt={currentImages[0].alt}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  priority
+                />
+                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+              </div>
             </div>
-            <div className="relative aspect-video rounded-lg overflow-hidden">
-              <Image
-                src={currentImages[4].src}
-                alt={currentImages[4].alt}
-                fill
-                className="object-cover transition-transform duration-500 hover:scale-105"
-              />
+            <div className="grid grid-cols-2 gap-8">
+              <div
+                className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
+                onClick={() => openModal(1)}
+              >
+                <Image
+                  src={currentImages[1].src}
+                  alt={currentImages[1].alt}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+              </div>
+              <div
+                className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
+                onClick={() => openModal(2)}
+              >
+                <Image
+                  src={currentImages[2].src}
+                  alt={currentImages[2].alt}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+              </div>
             </div>
           </div>
-          <div className="w-full">
-            <div className="relative aspect-video rounded-lg overflow-hidden">
+
+          {/* Second Gallery Section */}
+          <div className="space-y-8">
+            <div className="grid grid-cols-2 gap-8">
+              <div
+                className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
+                onClick={() => openModal(3)}
+              >
+                <Image
+                  src={currentImages[3].src}
+                  alt={currentImages[3].alt}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+              </div>
+              <div
+                className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
+                onClick={() => openModal(4)}
+              >
+                <Image
+                  src={currentImages[4].src}
+                  alt={currentImages[4].alt}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+              </div>
+            </div>
+            <div
+              className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
+              onClick={() => openModal(5)}
+            >
               <Image
                 src={currentImages[5].src}
                 alt={currentImages[5].alt}
                 fill
-                className="object-cover transition-transform duration-500 hover:scale-105"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
+              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
             </div>
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div
+          className={`fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity duration-300 ${
+            isClosing ? "opacity-0" : "opacity-100"
+          }`}
+          onClick={closeModal}
+        >
+          {/* Close Button */}
+          <button
+            className="absolute top-4 right-4 z-50 p-2 text-white hover:text-gray-300 transition-colors"
+            onClick={closeModal}
+          >
+            <X className="w-8 h-8" />
+          </button>
+
+          {/* Navigation Buttons */}
+          <button
+            className="absolute left-4 md:left-8 z-50 p-2 text-white hover:text-gray-300 transition-colors"
+            onClick={prevImage}
+          >
+            <ChevronLeft className="w-8 h-8" />
+          </button>
+          <button
+            className="absolute right-4 md:right-8 z-50 p-2 text-white hover:text-gray-300 transition-colors"
+            onClick={nextImage}
+          >
+            <ChevronRight className="w-8 h-8" />
+          </button>
+
+          {/* Image Container */}
+          <div
+            className={`relative w-full max-w-7xl mx-4 aspect-[16/9] transition-transform duration-300 ${
+              isClosing ? "scale-95" : "scale-100"
+            }`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {selectedImage && (
+              <Image
+                src={selectedImage.src}
+                alt={selectedImage.alt}
+                fill
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+              />
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

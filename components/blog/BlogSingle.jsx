@@ -70,7 +70,7 @@ export default function BlogSingle() {
   }
 
   return (
-    <section className="section pt-60 bg-white latest-new-white">
+    <section className="section pt-60 bg-white latest-new-white mt-[50px]">
       <div className="container-sub">
         <div className="box-frature-image mb-60 wow fadeInUp">
           <div className="cardImage">
@@ -87,11 +87,17 @@ export default function BlogSingle() {
             </div>
             {blog.image_url && (
               <Image
-                width={1170}
-                height={600}
-                style={{ height: "fit-content" }}
                 src={blog.image_url}
                 alt={locale === "ka" ? blog.title_ge : blog.title_en}
+                width={1170} // Keep your original intended width
+                height={600} // Keep your original intended height
+                style={{
+                  width: "100%", // Make the image responsive within its container
+                  height: "650px", // Maintain aspect ratio
+                  objectFit: "cover", // Fill the container
+                }}
+                priority={true} //  Help to improve the Largest Contentful Paint (LCP).
+                quality={75} // Adjust as needed (50-75 is a good starting point)
               />
             )}
           </div>

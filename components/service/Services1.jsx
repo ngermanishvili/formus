@@ -27,7 +27,13 @@ export default function Services1() {
         const data = await response.json();
 
         if (data.status === "success" && Array.isArray(data.data)) {
-          setProjects(data.data);
+          // Sort projects to ensure Ortachala Hills (ID: 1) appears first
+          const sortedProjects = [...data.data].sort((a, b) => {
+            if (a.id === 1) return -1;
+            if (b.id === 1) return 1;
+            return 0;
+          });
+          setProjects(sortedProjects);
         } else {
           setError("Invalid data format received");
         }
@@ -42,37 +48,32 @@ export default function Services1() {
     fetchProjects();
   }, []);
 
-  const getProjectSlug = (project) => {
-    if (!project) return "";
-
-    const title =
-      currentLang === "ge"
-        ? project.title_ge || project.title || ""
-        : project.title_en || project.title || "";
-
-    const transliteratedTitle =
-      currentLang === "ge" ? transliterate(title) : title;
-    return slugify(transliteratedTitle);
-  };
-
   const handleProjectClick = (project, e) => {
     e.preventDefault();
     if (project.id === 1) {
-      // ID 1-ზე გადავამისამართოთ Ortachala Hills-ის გვერდზე
       window.location.href = `/${locale}/projects/1/ortachala-hilsi`;
     } else {
-      // სხვა პროექტებზე გამოვაჩინოთ მოდალი
       setSelectedImage(project.main_image_url);
     }
   };
 
   const ImageModal = ({ imageUrl, onClose }) => {
+    const handleOverlayClick = (e) => {
+      if (e.target === e.currentTarget) {
+        onClose();
+      }
+    };
+
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4"
+        onClick={handleOverlayClick}
+      >
         <div className="relative max-w-4xl w-full">
           <button
             onClick={onClose}
-            className="absolute -top-12 right-0 text-white hover:text-gray-300"
+            className="absolute -top-12 right-0 text-white hover:text-gray-300 bg-black bg-opacity-50 rounded-full p-2"
+            aria-label="Close modal"
           >
             <X size={24} />
           </button>
@@ -134,11 +135,11 @@ export default function Services1() {
                   className="col-lg-4 col-sm-6 mb-30"
                 >
                   <div
-                    className="cardService wow fadeInUp cursor-pointer"
+                    className="cardService wow fadeInUp cursor-pointer mt-4"
                     onClick={(e) => handleProjectClick(project, e)}
                   >
                     <div className="cardInfo">
-                      <h3 className="cardTitle text-20-medium color-white mb-10">
+                      <h3 className="cardTitle text-bold color-white ">
                         {currentLang === "ge"
                           ? project.title_ge || project.title || "უსათაურო"
                           : project.title_en || project.title || "Untitled"}
@@ -189,7 +190,6 @@ export default function Services1() {
         </div>
       </div>
 
-      {/* მოდალის კომპონენტი */}
       {selectedImage && (
         <ImageModal
           imageUrl={selectedImage}

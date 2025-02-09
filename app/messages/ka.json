@@ -33,7 +33,8 @@
     "apartment": "ბინა",
     "commercial": "კომერციული ფართი",
     "ortachalaHills": "ორთაჭალა ჰილს",
-    "tbilisi": "თბილისი"
+    "tbilisi": "თბილისი",
+    "area": "კვადრატულობა"
   },
 
   "Breadcrumb": {

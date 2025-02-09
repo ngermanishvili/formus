@@ -4,7 +4,8 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Loader2 } from "lucide-react";
-import { FaLeaf, FaShoppingCart, FaChild, FaShieldAlt } from "react-icons/fa"; // Example icons
+import SecondShape1 from "@/public/assets/shapes/project/3.png";
+import SecondShape2 from "@/public/assets/shapes/project/1.png";
 
 export default function ProjectContent({ id }) {
   const [loading, setLoading] = useState(true);
@@ -66,7 +67,6 @@ export default function ProjectContent({ id }) {
                   : project.second_section_description_en,
             });
           } else {
-            // მხოლოდ hero სექციისთვის საჭირო მონაცემების ჩატვირთვა სხვა ID-ებისთვის
             setProjectData({
               title: currentLang === "ge" ? project.title_ge : project.title_en,
               main_image_url: project.main_image_url,
@@ -111,7 +111,6 @@ export default function ProjectContent({ id }) {
   }
 
   if (id === "1") {
-    // სრული ლეიაუთი ID 1-ისთვის
     return (
       <>
         {/* Hero Section */}
@@ -123,6 +122,16 @@ export default function ProjectContent({ id }) {
             className="object-cover"
             priority
           />
+          <div className="absolute bottom-0 left-0 z-10">
+            <Image
+              src={SecondShape2}
+              alt="Bottom shape"
+              width={300}
+              height={300}
+              className="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[250px] md:h-[250px] lg:w-[300px] lg:h-[300px] object-contain"
+              priority
+            />
+          </div>
           <div className="absolute inset-0 bg-black bg-opacity-50" />
           <div className="absolute inset-0 flex items-center">
             <div className="container mx-auto px-4">
@@ -148,34 +157,24 @@ export default function ProjectContent({ id }) {
 
             <div className="lg:w-1/2">
               <h2 className="text-3xl font-bold mb-4">
-                {currentLang === "ge" ? "მახასიათებლები" : "Features"}
+                {currentLang === "ge" ? "გალერეა" : "Gallery"}
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {projectData.features?.map((feature, index) => (
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                {[1, 2, 3, 4].map((index) => (
                   <div
                     key={index}
-                    className="p-4 bg-white rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+                    className="relative h-52 lg:h-64 group overflow-hidden rounded-lg"
                   >
-                    <div className="relative w-16 h-16 mx-auto mb-4">
-                      {index === 0 && (
-                        <FaLeaf className="text-green-500 h-10 w-10 mr-4" />
-                      )}
-                      {index === 1 && (
-                        <FaShoppingCart className="text-blue-500 h-10 w-10 mr-4" />
-                      )}
-                      {index === 2 && (
-                        <FaChild className="text-orange-500 h-10 w-10 mr-4" />
-                      )}
-                      {index === 3 && (
-                        <FaShieldAlt className="text-red-500 h-10 w-10 mr-4" />
-                      )}
-                    </div>
-                    <h3 className="text-xl font-semibold text-center mb-2">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-600 text-center">
-                      {feature.description}
-                    </p>
+                    <Image
+                      src={
+                        projectData.second_section_img ||
+                        "/assets/imgs/page/homepage5/banner.png"
+                      }
+                      alt={`Gallery image ${index}`}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-opacity duration-300" />
                   </div>
                 ))}
               </div>
@@ -185,8 +184,9 @@ export default function ProjectContent({ id }) {
 
         {/* Second Section */}
         <section className="relative bg-white">
-          <div className="flex flex-col lg:flex-row items-stretch">
-            <div className="w-full lg:w-1/2 relative h-[400px] group overflow-hidden mb-[5">
+          <div className="flex flex-col lg:flex-row">
+            {/* Image Container */}
+            <div className="w-full lg:w-1/2 relative h-[400px] lg:h-[500px] group overflow-hidden">
               <Image
                 src={
                   projectData.second_section_img ||
@@ -200,13 +200,27 @@ export default function ProjectContent({ id }) {
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
             </div>
 
-            <div className="w-full lg:w-1/2 px-8 lg:px-16 py-16 flex flex-col justify-center">
-              <h2 className="text-4xl font-bold text-black mb-8 leading-tight">
-                {projectData.second_section_title}
-              </h2>
-              <p className="text-gray-600 text-lg leading-relaxed mb-10">
-                {projectData.second_section_description}
-              </p>
+            {/* Content Container */}
+            <div className="w-full lg:w-1/2 relative">
+              <div className="px-6 lg:px-12 xl:px-16 py-12 lg:py-16 h-full">
+                <div className="max-w-xl">
+                  <h2 className="text-3xl lg:text-4xl font-bold text-black mb-6 lg:mb-8 leading-tight">
+                    {projectData.second_section_title}
+                  </h2>
+                  <p className="text-gray-600 text-base lg:text-lg leading-relaxed">
+                    {projectData.second_section_description}
+                  </p>
+                </div>
+              </div>
+
+              {/* Decorative Shape */}
+              <div className="hidden lg:block absolute bottom-0 right-0 w-[200px] xl:w-[300px]">
+                <Image
+                  src={SecondShape1}
+                  alt="Shape"
+                  className="object-contain"
+                />
+              </div>
             </div>
           </div>
         </section>

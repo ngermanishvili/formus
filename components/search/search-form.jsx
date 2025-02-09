@@ -145,7 +145,7 @@ export default function SearchForm() {
           <p className="text-gray-500 text-sm mb-1">{t("area")}</p>
           <Select onValueChange={(value) => handleSelect(value, "areaRange")}>
             <SelectTrigger className="h-12 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-green-400 transition-all">
-              <SelectValue placeholder={t("chooseArea")} />
+              <SelectValue placeholder="არჩევა  " />
             </SelectTrigger>
             <SelectContent>
               {areaRanges.map((range) => (

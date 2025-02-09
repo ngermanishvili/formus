@@ -133,20 +133,30 @@ export default function Header5() {
 
               {isLanguageOpen && (
                 <div className="absolute right-0 mt-2 py-2 w-24 bg-white rounded-lg shadow-xl border border-gray-100 animate-slide-up">
-                  {routing.locales.map((l) => (
-                    <Link
-                      key={l}
-                      href={`/${l}${pathname.substring(3)}`}
-                      className={`block px-4 py-2 text-sm ${
-                        l === locale
-                          ? "bg-gray-100 text-[#00326B]"
-                          : "text-gray-700 hover:bg-gray-50"
-                      } transition-colors`}
-                      onClick={() => setIsLanguageOpen(false)}
-                    >
-                      {languageNames[l]}
-                    </Link>
-                  ))}
+                  {routing.locales.map((l) => {
+                    let newPath = pathname;
+                    if (pathname.includes("/projects")) {
+                      newPath = `/projects${
+                        pathname.split("/projects")[1] || ""
+                      }`;
+                    }
+
+                    return (
+                      <Link
+                        key={l}
+                        href={newPath}
+                        locale={l}
+                        className={`block px-4 py-2 text-sm ${
+                          l === locale
+                            ? "bg-gray-100 text-[#00326B]"
+                            : "text-gray-700 hover:bg-gray-50"
+                        } transition-colors`}
+                        onClick={() => setIsLanguageOpen(false)}
+                      >
+                        {languageNames[l]}
+                      </Link>
+                    );
+                  })}
                 </div>
               )}
             </div>

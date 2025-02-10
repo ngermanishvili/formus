@@ -7,35 +7,46 @@ export async function POST(request) {
         const data = await request.json();
         console.log("Received data:", data);
 
-        // ჩავსვათ apartment type და დავაბრუნოთ მისი ID
         const typeResult = await db.query(
             `INSERT INTO apartment_types (
                 total_area,
                 studio_area,
                 bedroom_area,
                 bedroom2_area,
+                bedroom3_area,
                 bathroom_area,
                 bathroom2_area,
                 living_room_area,
                 balcony_area,
-                balcony2_area
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                balcony2_area,
+                polygon_coords,
+                type_name,
+                room_details
+            ) VALUES (
+                $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, 
+                $11, $12, $13
+            )
             RETURNING type_id`,
             [
                 parseFloat(data.total_area) || 0,
-                parseFloat(data.studio_area) || 0,
-                parseFloat(data.bedroom_area) || 0,
-                parseFloat(data.bedroom2_area) || 0,
-                parseFloat(data.bathroom_area) || 0,
-                parseFloat(data.bathroom2_area) || 0,
-                parseFloat(data.living_room_area) || 0,
-                parseFloat(data.balcony_area) || 0,
-                parseFloat(data.balcony2_area) || 0
+                parseFloat(data.studio_area) || null,
+                parseFloat(data.bedroom_area) || null,
+                parseFloat(data.bedroom2_area) || null,
+                null, // bedroom3_area
+                parseFloat(data.bathroom_area) || null,
+                parseFloat(data.bathroom2_area) || null,
+                parseFloat(data.living_room_area) || null,
+                parseFloat(data.balcony_area) || null,
+                parseFloat(data.balcony2_area) || null,
+                null, // polygon_coords
+                null, // type_name
+                null  // room_details
             ]
         );
 
         console.log("Type creation result:", typeResult);
 
+        // შევცვალეთ typeId-ის მიღების ლოგიკა
         const typeId = typeResult[0]?.type_id;
         console.log("Created type with ID:", typeId);
 
@@ -43,41 +54,40 @@ export async function POST(request) {
             throw new Error("Failed to create apartment type");
         }
 
-        // ჩავსვათ apartment და დავაბრუნოთ მისი ID
+        // In your POST route handler
         const apartmentResult = await db.query(
             `INSERT INTO apartments (
-                block_id,
-                apartment_number,
-                floor,
-                type_id,
-                status,
-                   home_2d,    // დამატებული
-        home_3d     // დამატებული
-            ) VALUES ($1, $2, $3, $4, $5)
-            RETURNING apartment_id`,
+      block_id,
+      apartment_number,
+      floor,
+      type_id,
+      status,
+      home_2d,
+      home_3d
+    ) VALUES ($1, $2, $3, $4, $5, $6, $7)
+    RETURNING apartment_id`,
             [
                 data.block_id,
-                data.home_2d,    // დამატებული
-                data.home_3d,    // დამატებული
-                data.apartment_number.toString(), // PostgreSQL-ში apartment_number არის varchar
+                data.apartment_number.toString(),
                 parseInt(data.floor),
                 typeId,
-                'available'
+                data.status || 'available',
+                data.home_2d || null,
+                data.home_3d || null
             ]
         );
 
         console.log("Apartment creation result:", apartmentResult);
 
+        // შევცვალეთ apartmentId-ის მიღების ლოგიკაც
         const apartmentId = apartmentResult[0]?.apartment_id;
         console.log("Created apartment with ID:", apartmentId);
 
         if (!apartmentId) {
-            // თუ apartment-ის შექმნა ვერ მოხერხდა, წავშალოთ ახლახანს შექმნილი type
             await db.query('DELETE FROM apartment_types WHERE type_id = $1', [typeId]);
             throw new Error("Failed to create apartment");
         }
 
-        // წამოვიღოთ სრული ინფორმაცია ახალ ბინაზე
         const newApartment = await db.query(`
             SELECT 
                 a.*,
@@ -89,15 +99,12 @@ export async function POST(request) {
                 t.bathroom2_area,
                 t.living_room_area,
                 t.balcony_area,
-                t.balcony2_area,
-                      a.home_2d,     // დამატებული
-        a.home_3d      // დამატებული
+                t.balcony2_area
             FROM apartments a
             JOIN apartment_types t ON a.type_id = t.type_id
             WHERE a.apartment_id = $1
         `, [apartmentId]);
 
-        // დავაბრუნოთ წარმატებული პასუხი
         return NextResponse.json({
             status: "success",
             message: "ბინა წარმატებით დაემატა",
@@ -109,23 +116,12 @@ export async function POST(request) {
         });
 
     } catch (error) {
-        console.error("Error creating apartment:", {
-            message: error.message,
-            code: error.code,
-            detail: error.detail,
-            hint: error.hint
-        });
-
+        console.error("Error creating apartment:", error);
         return NextResponse.json(
             {
                 status: "error",
                 message: "შეცდომა ბინის დამატებისას",
-                details: process.env.NODE_ENV === 'development' ? {
-                    message: error.message,
-                    code: error.code,
-                    detail: error.detail,
-                    hint: error.hint
-                } : undefined
+                details: process.env.NODE_ENV === 'development' ? error.message : undefined
             },
             { status: 500 }
         );

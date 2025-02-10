@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import Header5 from "@/components/headers/Header5";
 import MobileHeader1 from "@/components/headers/MobailHeader1";
@@ -30,7 +30,7 @@ const TermsConditions = () => {
   return (
     <>
       {isMobile ? <MobileHeader1 /> : <Header5 />}
-      <div className="max-w-4xl mx-auto p-6 space-y-8">
+      <div className="max-w-4xl mx-auto p-6 space-y-8 mt-[80px]">
         <h1 className="text-2xl font-bold">წესები და პირობები</h1>
 
         <div className="space-y-6">

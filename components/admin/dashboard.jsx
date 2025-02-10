@@ -1,10 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import {
   LayoutGrid,
   Building2,
-  Save,
-  X,
   Plus,
   Search,
   Filter,
@@ -17,7 +16,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -48,7 +46,8 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function AdminPanel() {
-  // სტატუსების მასივი
+  const router = useRouter();
+
   const apartmentStatuses = [
     { value: "available", label: "თავისუფალი" },
     { value: "sold", label: "გაყიდული" },
@@ -56,11 +55,9 @@ export default function AdminPanel() {
     { value: "in_progress", label: "მშენებარე" },
   ];
 
-  // State-ები
   const [blocks, setBlocks] = useState([]);
   const [selectedBlock, setSelectedBlock] = useState(null);
   const [apartments, setApartments] = useState([]);
-  const [editingApartment, setEditingApartment] = useState(null);
   const [notification, setNotification] = useState(null);
   const [sortConfig, setSortConfig] = useState({
     key: "floor",
@@ -81,10 +78,9 @@ export default function AdminPanel() {
     living_room_area: "",
     balcony_area: "",
     balcony2_area: "",
-    status: "available", // საწყისი სტატუსი
+    status: "available",
   });
 
-  // კორპუსების ჩამოტვირთვა
   useEffect(() => {
     fetch("/api/buildings")
       .then((res) => res.json())
@@ -96,7 +92,6 @@ export default function AdminPanel() {
       });
   }, []);
 
-  // ბინების ჩამოტვირთვა
   useEffect(() => {
     if (selectedBlock) {
       fetch(`/api/buildings/${selectedBlock}/apartments`)
@@ -109,7 +104,6 @@ export default function AdminPanel() {
     }
   }, [selectedBlock]);
 
-  // სორტირების ფუნქცია
   const handleSort = (key) => {
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {
@@ -118,7 +112,6 @@ export default function AdminPanel() {
     setSortConfig({ key, direction });
   };
 
-  // ფილტრაცია და სორტირება
   const filteredAndSortedApartments = [...apartments]
     .filter((apt) => {
       const matchesSearch =
@@ -138,7 +131,6 @@ export default function AdminPanel() {
       return a[sortConfig.key] < b[sortConfig.key] ? 1 : -1;
     });
 
-  // ბინის განახლების ფუნქცია
   const handleUpdateApartment = async (apartmentId, updatedData) => {
     try {
       const response = await fetch(`/api/apartments/${apartmentId}`, {
@@ -154,7 +146,6 @@ export default function AdminPanel() {
           apt.apartment_id === apartmentId ? { ...apt, ...updatedData } : apt
         );
         setApartments(updatedApartments);
-        setEditingApartment(null);
         setNotification({
           type: "success",
           message: "ბინის მონაცემები წარმატებით განახლდა",
@@ -169,7 +160,6 @@ export default function AdminPanel() {
     }
   };
 
-  // ახალი ბინის დამატების ფუნქცია
   const handleAddApartment = async () => {
     try {
       const response = await fetch("/api/apartments", {
@@ -190,7 +180,6 @@ export default function AdminPanel() {
         });
         setIsAddDialogOpen(false);
 
-        // ბინების სიის განახლება
         const updatedResponse = await fetch(
           `/api/buildings/${selectedBlock}/apartments`
         );
@@ -199,7 +188,6 @@ export default function AdminPanel() {
           setApartments(updatedData.data);
         }
 
-        // ფორმის გასუფთავება
         setNewApartment({
           apartment_number: "",
           floor: "",
@@ -223,7 +211,6 @@ export default function AdminPanel() {
     }
   };
 
-  // სტატუსის ფერის განსაზღვრა
   const getStatusColor = (status) => {
     switch (status) {
       case "available":
@@ -239,10 +226,13 @@ export default function AdminPanel() {
     }
   };
 
+  const handleEditClick = (apartmentId) => {
+    router.push(`/admin/dashboard/apartments/${apartmentId}/edit`);
+  };
+
   return (
     <div className="bg-gray-50">
       <div className="pt-20 px-6 pb-6">
-        {/* შეტყობინებები */}
         {notification && (
           <Alert
             className={`mb-4 ${
@@ -263,7 +253,6 @@ export default function AdminPanel() {
           </Alert>
         )}
 
-        {/* კორპუსების არჩევა */}
         <div className="mb-8">
           <div className="flex justify-between mb-4">
             <div className="flex items-center space-x-2">
@@ -274,14 +263,18 @@ export default function AdminPanel() {
             </div>
             {selectedBlock && (
               <Button
-                onClick={() => setIsAddDialogOpen(true)}
+                onClick={() =>
+                  router.push(
+                    `/admin/dashboard/apartments/create?blockId=${selectedBlock}`
+                  )
+                }
                 className="bg-blue-600 hover:bg-blue-700"
               >
                 <Plus className="h-4 w-4 mr-2" />
                 ახალი ბინის დამატება
               </Button>
             )}
-          </div>
+          </div>{" "}
           <div className="flex flex-wrap gap-3">
             {blocks.map((block) => (
               <TooltipProvider key={block.block_id}>
@@ -309,12 +302,14 @@ export default function AdminPanel() {
             ))}
           </div>
         </div>
+        <span className="text-xs text-red-500 py-2">
+          ახალი ბინის დამატების დროს ბლოკი განისაზღვება იმის მიხედვით თუ რომელი
+          ბლოკი გაქვთ ზემოთ მონიშნული.{" "}
+        </span>
 
-        {/* ბინების ცხრილი */}
         {selectedBlock && (
           <Card className="overflow-hidden border-none shadow-lg">
             <CardContent className="p-0">
-              {/* ძებნა და ფილტრაცია */}
               <div className="p-6 bg-white border-b">
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                   <div className="flex items-center space-x-2 w-full sm:w-auto">
@@ -362,7 +357,6 @@ export default function AdminPanel() {
                 </div>
               </div>
 
-              {/* ცხრილი */}
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
@@ -410,155 +404,75 @@ export default function AdminPanel() {
                         key={apt.apartment_id}
                         className="hover:bg-blue-50/50 transition-colors"
                       >
-                        {editingApartment?.apartment_id === apt.apartment_id ? (
-                          <>
-                            {Object.keys(apt)
-                              .filter(
-                                (key) =>
-                                  key !== "apartment_id" && key !== "actions"
-                              )
-                              .map((key) => (
-                                <TableCell key={key} className="py-3">
-                                  {key === "status" ? (
-                                    <select
-                                      value={editingApartment[key]}
-                                      onChange={(e) =>
-                                        setEditingApartment({
-                                          ...editingApartment,
-                                          [key]: e.target.value,
-                                        })
-                                      }
-                                      className="w-full rounded-md border border-gray-200 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    >
-                                      {apartmentStatuses.map((status) => (
-                                        <option
-                                          key={status.value}
-                                          value={status.value}
-                                        >
-                                          {status.label}
-                                        </option>
-                                      ))}
-                                    </select>
-                                  ) : (
-                                    <Input
-                                      type="number"
-                                      step={key.includes("area") ? "0.01" : "1"}
-                                      value={editingApartment[key] || ""}
-                                      onChange={(e) =>
-                                        setEditingApartment({
-                                          ...editingApartment,
-                                          [key]: e.target.value,
-                                        })
-                                      }
-                                      className="w-full border-gray-200 focus:ring-blue-500"
-                                    />
-                                  )}
-                                </TableCell>
-                              ))}
-                            <TableCell>
-                              <div className="flex justify-end space-x-2">
-                                <Button
-                                  size="sm"
-                                  onClick={() =>
-                                    handleUpdateApartment(
-                                      apt.apartment_id,
-                                      editingApartment
-                                    )
-                                  }
-                                  className="bg-green-600 hover:bg-green-700"
-                                >
-                                  <Save className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                  size="sm"
+                        {Object.keys(apt)
+                          .filter(
+                            (key) => key !== "apartment_id" && key !== "actions"
+                          )
+                          .map((key) => (
+                            <TableCell key={key} className="py-3">
+                              {key === "status" ? (
+                                <Badge
                                   variant="outline"
-                                  onClick={() => setEditingApartment(null)}
-                                  className="border-gray-200"
+                                  className={getStatusColor(apt[key])}
                                 >
-                                  <X className="h-4 w-4" />
-                                </Button>
-                              </div>
+                                  {apartmentStatuses.find(
+                                    (s) => s.value === apt[key]
+                                  )?.label || "უცნობი"}
+                                </Badge>
+                              ) : key.includes("area") ? (
+                                <Badge
+                                  variant="outline"
+                                  className="bg-blue-50 text-blue-700 border-blue-200"
+                                >
+                                  {apt[key]} მ²
+                                </Badge>
+                              ) : (
+                                <span className="font-medium text-gray-700">
+                                  {apt[key]}
+                                </span>
+                              )}
                             </TableCell>
-                          </>
-                        ) : (
-                          <>
-                            {Object.keys(apt)
-                              .filter(
-                                (key) =>
-                                  key !== "apartment_id" && key !== "actions"
-                              )
-                              .map((key) => (
-                                <TableCell key={key} className="py-3">
-                                  {key === "status" ? (
-                                    <Badge
-                                      variant="outline"
-                                      className={getStatusColor(apt[key])}
-                                    >
-                                      {apartmentStatuses.find(
-                                        (s) => s.value === apt[key]
-                                      )?.label || "უცნობი"}
-                                    </Badge>
-                                  ) : key.includes("area") ? (
-                                    <Badge
-                                      variant="outline"
-                                      className="bg-blue-50 text-blue-700 border-blue-200"
-                                    >
-                                      {apt[key]} მ²
-                                    </Badge>
-                                  ) : (
-                                    <span className="font-medium text-gray-700">
-                                      {apt[key]}
-                                    </span>
-                                  )}
-                                </TableCell>
+                          ))}
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button
+                                variant="ghost"
+                                className="h-8 w-8 p-0 hover:bg-blue-50"
+                              >
+                                <MoreVertical className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-48">
+                              <DropdownMenuItem
+                                onClick={() =>
+                                  handleEditClick(apt.apartment_id)
+                                }
+                                className="cursor-pointer hover:bg-blue-50"
+                              >
+                                რედაქტირება
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <span className="text-green-400 font-medium p-2">
+                                სტატუსის შეცვლა
+                              </span>
+                              {apartmentStatuses.map((status) => (
+                                <DropdownMenuItem
+                                  key={status.value}
+                                  onClick={() =>
+                                    handleUpdateApartment(apt.apartment_id, {
+                                      ...apt,
+                                      status: status.value,
+                                    })
+                                  }
+                                  className="cursor-pointer hover:bg-blue-50"
+                                >
+                                  {status.label}
+                                </DropdownMenuItem>
                               ))}
-                            <TableCell>
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                  <Button
-                                    variant="ghost"
-                                    className="h-8 w-8 p-0 hover:bg-blue-50"
-                                  >
-                                    <MoreVertical className="h-4 w-4" />
-                                  </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent
-                                  align="end"
-                                  className="w-48"
-                                >
-                                  <DropdownMenuItem
-                                    onClick={() => setEditingApartment(apt)}
-                                    className="cursor-pointer hover:bg-blue-50"
-                                  >
-                                    რედაქტირება
-                                  </DropdownMenuItem>
-                                  <DropdownMenuSeparator />
-                                  <span className="text-green-400 font-medium p-2">
-                                    {" "}
-                                    სტატუსის შეცვლა
-                                  </span>
-                                  {apartmentStatuses.map((status) => (
-                                    <DropdownMenuItem
-                                      key={status.value}
-                                      onClick={() =>
-                                        handleUpdateApartment(
-                                          apt.apartment_id,
-                                          {
-                                            ...apt,
-                                            status: status.value,
-                                          }
-                                        )
-                                      }
-                                      className="cursor-pointer hover:bg-blue-50"
-                                    >
-                                      {status.label}
-                                    </DropdownMenuItem>
-                                  ))}
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                            </TableCell>
-                          </>
-                        )}
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -568,7 +482,6 @@ export default function AdminPanel() {
           </Card>
         )}
 
-        {/* ახალი ბინის დამატების დიალოგი */}
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
@@ -581,7 +494,7 @@ export default function AdminPanel() {
               <div className="space-y-2">
                 <label className="text-sm font-medium">ბინის ნომერი</label>
                 <Input
-                  type="number"
+                  type="text"
                   value={newApartment.apartment_number}
                   onChange={(e) =>
                     setNewApartment({

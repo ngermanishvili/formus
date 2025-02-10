@@ -167,7 +167,7 @@ export default function Hero() {
             alt="Bottom shape"
             width={500}
             height={400}
-            className="w-auto h-auto transform-none"
+            className=" h-auto md:w-[500px] sm:w-[300px] w-[200px] transform-none"
             priority
           />
         </div>

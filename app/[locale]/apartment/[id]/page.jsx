@@ -17,6 +17,22 @@ const ApartmentDetails = () => {
   const params = useParams();
   const apartmentId = params.id.split("-")[0];
 
+  const downloadPDF = async () => {
+    try {
+      const response = await fetch(
+        `/api/generate-pdf?block=${data.block_id}&apartment=${data.apartment_number}`
+      );
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `apartment-${data.block_id}-${data.apartment_number}.pdf`;
+      a.click();
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -161,9 +177,10 @@ const ApartmentDetails = () => {
 
             {/* Download Button */}
             <button
+              onClick={downloadPDF}
               className="px-6 py-2.5 bg-[#91B48C] text-black text-sm 
-                       hover:bg-[#91B48C]/90 transition-colors uppercase 
-                       rounded-lg font-medium"
+           hover:bg-[#91B48C]/90 transition-colors uppercase 
+           rounded-lg font-medium"
             >
               Download PDF
             </button>

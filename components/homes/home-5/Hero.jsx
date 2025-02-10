@@ -78,7 +78,7 @@ export default function Hero() {
           suppressHydrationWarning
           style={{
             backgroundImage: `url(${
-              data.projects[0]?.image_url ||
+              data.sliders[0]?.image_url ||
               "/assets/imgs/page/homepage5/banner.png"
             })`,
             transition: "background-image 0.3s ease-in-out",
@@ -89,40 +89,43 @@ export default function Hero() {
         <div className="box-banner-info">
           <div className="box-swiper">
             {data.sliders.length > 0 && (
-              <Swiper
-                {...baseSettings}
-                slidesPerView={1}
-                loop={data.sliders.length > 1}
-                navigation={{
-                  nextEl: ".snbn11",
-                  prevEl: ".snbp11",
-                }}
-                onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-                className="swiper-container swiper-banner-1 pb-0"
-              >
-                {data.sliders.map((slider) => (
-                  <SwiperSlide key={slider.id} className="swiper-slide">
-                    <div
-                      suppressHydrationWarning
-                      className="px-8 md:px-16 lg:px-24"
-                    >
-                      <p className="heading-52-medium color-white wow fadeInUp text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
-                        {currentLang === "ge"
-                          ? slider.title_ge
-                          : slider.title_en}
-                      </p>
-                      <h2 className="text-base md:text-lg lg:text-xl color-white wow fadeInUp mt-4">
-                        {currentLang === "ge"
-                          ? slider.description_ge
-                          : slider.description_en}
-                      </h2>
-                    </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+              <>
+                <Swiper
+                  {...baseSettings}
+                  slidesPerView={1}
+                  loop={data.projects.length > 1}
+                  navigation={{
+                    nextEl: ".snbn11",
+                    prevEl: ".snbp11",
+                  }}
+                  onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
+                  className="swiper-container swiper-banner-1 pb-0"
+                >
+                  {data.sliders.map((slider) => (
+                    <SwiperSlide key={slider.id} className="swiper-slide">
+                      <div
+                        suppressHydrationWarning
+                        className="px-8 md:px-16 lg:px-24"
+                      />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+                <div className="px-8 md:px-16 lg:px-24 absolute top-0 left-0 right-0">
+                  <p className="heading-52-medium color-white wow fadeInUp text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
+                    {currentLang === "ge"
+                      ? data.sliders[0]?.title_ge
+                      : data.sliders[0]?.title_en}
+                  </p>
+                  <h2 className="text-base md:text-lg lg:text-xl color-white wow fadeInUp mt-4">
+                    {currentLang === "ge"
+                      ? data.sliders[0]?.description_ge
+                      : data.sliders[0]?.description_en}
+                  </h2>
+                </div>
+              </>
             )}
 
-            <div className="box-pagination-button box-pagination-button-2 px-8 md:px-16 lg:px-24">
+            <div className="box-pagination-button box-pagination-button-2 px-8 md:px-16 lg:px-24 ">
               <div className="swiper-button-prev swiper-button-prev-banner swiper-button-prev-banner-2 snbp11">
                 <svg
                   className="w-6 h-6 md:w-8 md:h-8"
@@ -167,7 +170,7 @@ export default function Hero() {
             alt="Bottom shape"
             width={500}
             height={400}
-            className=" h-auto md:w-[500px] sm:w-[300px] w-[200px] transform-none"
+            className="h-auto md:w-[500px] sm:w-[300px] w-[200px] transform-none"
             priority
           />
         </div>

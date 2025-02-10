@@ -1,4 +1,3 @@
-// app/(admin)/admin/dashboard/hero-content/create/page.jsx
 "use client";
 
 import { useState } from "react";
@@ -20,7 +19,6 @@ export default function CreateHeroContent() {
     description_en: "",
     description_ge: "",
   });
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -35,11 +33,11 @@ export default function CreateHeroContent() {
       const data = await res.json();
 
       if (data.status === "success") {
-        toast.success("Hero კონტენტი წარმატებით დაემატა");
+        toast.success(data.message);
         router.push("/admin/dashboard/hero-content");
         router.refresh();
       } else {
-        toast.error(data.message || "დამატებისას დაფიქსირდა შეცდომა");
+        toast.error(data.message);
       }
     } catch (error) {
       toast.error("დამატებისას დაფიქსირდა შეცდომა");
@@ -62,9 +60,9 @@ export default function CreateHeroContent() {
               <Label>სურათის URL</Label>
               <Input
                 required
-                value={formData.image}
+                value={formData.image_url}
                 onChange={(e) =>
-                  setFormData({ ...formData, image: e.target.value })
+                  setFormData({ ...formData, image_url: e.target.value })
                 }
               />
             </div>

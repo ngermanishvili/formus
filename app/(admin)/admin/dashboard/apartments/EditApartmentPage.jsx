@@ -4,10 +4,10 @@ import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CldUploadWidget } from "next-cloudinary";
 import { ImagePlus, Loader2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import { DeleteApartment } from "./DeleteApartment";
 import { useToast } from "@/hooks/use-toast";
 // ImageUpload კომპონენტი
 const ImageUpload = ({ value, onChange, title }) => {
@@ -321,6 +321,20 @@ export default function EditApartmentPage({ params }) {
                   ))}
                 </select>
               </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium">ბლოკი</label>
+                <Input
+                  type="text"
+                  value={apartment.block_id}
+                  onChange={(e) =>
+                    setApartment({
+                      ...apartment,
+                      block_id: e.target.value,
+                    })
+                  }
+                />
+              </div>
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-4">ბინის ვიზუალები</h3>
@@ -341,7 +355,7 @@ export default function EditApartmentPage({ params }) {
                 />
               </div>
             </div>
-
+            <DeleteApartment apartmentId={params.id} />
             <Button type="submit" loading={loading}>
               განახლება
             </Button>

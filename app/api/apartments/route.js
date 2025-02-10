@@ -167,3 +167,39 @@ export async function GET() {
         );
     }
 }
+
+export async function DELETE(request) {
+    try {
+        // Assuming the ID is passed as a query parameter
+        const id = request.nextUrl.searchParams.get('id');
+
+        if (!id) {
+            return NextResponse.json({ status: "error", message: "Apartment ID is required" }, { status: 400 });
+        }
+
+        // First, delete the apartment
+        const result = await db.query(
+            'DELETE FROM apartments WHERE apartment_id = $1',
+            [id]
+        );
+
+        // Then delete from apartment_types
+        await db.query(`
+        DELETE FROM apartment_types
+        WHERE type_id IN (
+          SELECT type_id
+          FROM apartments
+          WHERE apartment_id = $1
+        )
+      `, [id]);
+
+
+        return NextResponse.json({ status: "success", message: "Apartment deleted" });
+    } catch (error) {
+        console.error('Error deleting apartment:', error);
+        return NextResponse.json(
+            { status: "error", message: "Failed to delete apartment", details: error.message },
+            { status: 500 }
+        );
+    }
+}

@@ -1,132 +1,88 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { toast } from "sonner";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import Link from "next/link";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-export default function CreateHeroContent() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    image_url: "",
-    title_en: "",
-    title_ge: "",
-    description_en: "",
-    description_ge: "",
-  });
+export default function HeroContentPage() {
+  const [heroContent, setHeroContent] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const res = await fetch("/api/hero-content", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await res.json();
-
-      if (data.status === "success") {
-        toast.success("Hero კონტენტი წარმატებით დაემატა");
-        router.push("/admin/dashboard/hero-content");
-        router.refresh();
-      } else {
-        toast.error(data.message || "დამატებისას დაფიქსირდა შეცდომა");
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const res = await fetch("/api/hero-content");
+        const data = await res.json();
+        setHeroContent(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      toast.error("დამატებისას დაფიქსირდა შეცდომა");
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+    fetchData();
+  }, []);
+
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="container mx-auto py-8">
-      <Card className="max-w-2xl mx-auto">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">
-            Hero კონტენტის დამატება
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Label>სურათის URL</Label>
-              <Input
-                required
-                value={formData.image_url}
-                onChange={(e) =>
-                  setFormData({ ...formData, image_url: e.target.value })
-                }
-              />
-            </div>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Hero კონტენტი</h1>
+        <Link href="/admin/dashboard/hero-content/create">
+          <Button>დამატება</Button>
+        </Link>
+      </div>
 
-            <div className="space-y-2">
-              <Label>სათაური (ქართულად)</Label>
-              <Input
-                required
-                value={formData.title_ge}
-                onChange={(e) =>
-                  setFormData({ ...formData, title_ge: e.target.value })
-                }
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label>სათაური (ინგლისურად)</Label>
-              <Input
-                required
-                value={formData.title_en}
-                onChange={(e) =>
-                  setFormData({ ...formData, title_en: e.target.value })
-                }
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label>აღწერა (ქართულად)</Label>
-              <Textarea
-                required
-                value={formData.description_ge}
-                onChange={(e) =>
-                  setFormData({ ...formData, description_ge: e.target.value })
-                }
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label>აღწერა (ინგლისურად)</Label>
-              <Textarea
-                required
-                value={formData.description_en}
-                onChange={(e) =>
-                  setFormData({ ...formData, description_en: e.target.value })
-                }
-              />
-            </div>
-
-            <div className="flex gap-4">
-              <Button type="submit" disabled={loading}>
-                {loading ? "მიმდინარეობს..." : "დამატება"}
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => router.push("/admin/dashboard/hero-content")}
-              >
-                გაუქმება
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>სურათი</TableHead>
+            <TableHead>სათაური (GE)</TableHead>
+            <TableHead>სათაური (EN)</TableHead>
+            <TableHead>აღწერა (GE)</TableHead>
+            <TableHead>აღწერა (EN)</TableHead>
+            <TableHead>მოქმედებები</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {heroContent.map((item) => (
+            <TableRow key={item.id}>
+              <TableCell>
+                <img
+                  src={item.image_url}
+                  alt={item.title_ge}
+                  className="w-20 h-20 object-cover rounded"
+                />
+              </TableCell>
+              <TableCell>{item.title_ge}</TableCell>
+              <TableCell>{item.title_en}</TableCell>
+              <TableCell className="max-w-xs truncate">
+                {item.description_ge}
+              </TableCell>
+              <TableCell className="max-w-xs truncate">
+                {item.description_en}
+              </TableCell>
+              <TableCell>
+                <Link href={`/admin/dashboard/hero-content/${item.id}/edit`}>
+                  <Button variant="outline" size="sm">
+                    რედაქტირება
+                  </Button>
+                </Link>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }

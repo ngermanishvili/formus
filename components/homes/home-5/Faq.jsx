@@ -1,14 +1,30 @@
 "use client";
-
 import { useTranslations } from "next-intl";
 import { CldImage } from "next-cloudinary";
 import Link from "next/link";
 import Image from "next/image";
 import Shape from "@/public/assets/shapes/home/3.png";
 import TitleShape from "@/public/assets/shapes/home/2.png";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
-export default function Faq() {
-  const t = useTranslations("faq");
+export default function HeroSection() {
+  const [heroContent, setHeroContent] = useState([]);
+  const pathname = usePathname();
+  const isGeorgian = pathname.includes("/ka");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("/api/hero-content");
+        const data = await res.json();
+        setHeroContent(data[0]);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <section className="relative bg-white -mt-4 sm:-mt-4 md:mt-0 lg:-mt-4">
@@ -22,24 +38,21 @@ export default function Faq() {
               height={70}
             />
           </div>
-
-          <h2 className="text-3xl sm:text-4xl font-bold text-black mb-6 sm:mb-8 leading-tight ml-4 sm:ml-[100px] lg:ml-[270px] relative z-10">
-            {t("title")}
+          <h2 className="text-3xl sm:text-4xl mt-2 font-bold text-black mb-6 sm:mb-8 leading-tight ml-4 sm:ml-[100px] lg:ml-[270px] relative z-10">
+            {isGeorgian ? "ფორმუსი" : "FORMUS"}
+          </h2>
+          <h2 className="text-2xl sm:text-4xl font-thin text-black mb-6 sm:mb-8 leading-tight ml-4 sm:ml-[100px] lg:ml-[270px] relative z-10">
+            {heroContent?.title_ge}
           </h2>
           <p className="text-gray-600 text-base sm:text-lg leading-relaxed mb-8 sm:mb-10 ml-4 sm:ml-[100px] lg:ml-[270px] relative z-10">
-            {t("description")}
+            {heroContent?.description_ge}
           </p>
-          <Link href="/about-formus">
-            <span className="inline-block text-base sm:text-lg text-white bg-[#fbb200] px-6 sm:px-8 py-3 rounded-sm hover:bg-[#ec9946] transition-colors ml-4 sm:ml-[100px] lg:ml-[270px] relative z-10">
-              {t("button")}
-            </span>
-          </Link>
         </div>
 
         <div className="w-full lg:w-1/2 h-[300px] sm:h-[400px] lg:h-[800px] overflow-hidden">
           <CldImage
-            src="1.ფორმუსის_მოკლე_About_us_rmogdh"
-            alt={t("title")}
+            src={heroContent?.image_url}
+            alt={heroContent?.title_ge}
             width={960}
             height={800}
             quality={80}

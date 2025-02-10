@@ -3,8 +3,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Footer5 from "@/components/footers/Footer1";
-import Header1 from "@/components/headers/Header1";
-import MobailHeader1 from "@/components/headers/MobailHeader1";
 import { Check } from "lucide-react";
 import Header5 from "@/components/headers/Header5";
 import Image from "next/image";
@@ -13,7 +11,6 @@ import NewsShape2 from "@/public/assets/shapes/news/1.png";
 
 const AboutFormus = () => {
   const [aboutData, setAboutData] = useState([]);
-  const [isMobile, setIsMobile] = useState(false);
   const params = useParams();
   const locale = params.locale || "ka";
 
@@ -33,15 +30,6 @@ const AboutFormus = () => {
       "Fully funded projects",
     ],
   };
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   const getLocalizedField = (item, field) => {
     if (!item) return "";
@@ -66,7 +54,7 @@ const AboutFormus = () => {
 
   return (
     <>
-      {isMobile ? <MobailHeader1 /> : <Header5 />}
+      <Header5 />
       <div className="relative w-full bg-gray-50 py-40 font-firago">
         <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:top-[100px] right-0 z-0">
           <Image

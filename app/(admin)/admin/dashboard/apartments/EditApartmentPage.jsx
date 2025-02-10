@@ -87,7 +87,6 @@ export default function EditApartmentPage({ params }) {
         const response = await fetch(`/api/apartments/${params.id}`);
         const data = await response.json();
         if (data.status === "success") {
-          console.log("Fetched apartment data:", data.data); // დავამატოთ ეს ლოგი
           setApartment(data.data);
         }
       } catch (error) {

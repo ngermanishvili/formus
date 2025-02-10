@@ -100,13 +100,10 @@ async function migrate() {
         const tables = ['building_blocks', 'apartment_types', 'apartments', 'floors', 'admin'];
 
         for (const table of tables) {
-            console.log(`Migrating ${table}...`);
             const [rows] = await mysqlConn.query(`SELECT * FROM ${table}`);
 
             if (rows.length > 0) {
-                console.log(`First row of ${table}:`, rows[0]);
                 const columns = Object.keys(rows[0]);
-                console.log(`Columns for ${table}:`, columns);
 
                 const values = rows.map(row => {
                     const rowValues = Object.values(row).map((val, index) => {
@@ -128,7 +125,6 @@ async function migrate() {
 
                 try {
                     await pgClient.query(insertQuery);
-                    console.log(`Successfully migrated ${table}`);
                 } catch (error) {
                     console.error(`Error migrating ${table}. Query was:`, insertQuery.substring(0, 1000) + '...');
                     throw error;

@@ -66,7 +66,7 @@ export async function middleware(request) {
 export const config = {
     matcher: [
         '/',
-        '/((?!api|_next|_vercel|.*\\..*).*)',
+        '/((?!api|_next|_vercel|static|favicon|.*\\..*).*)',
         '/admin/:path*',
         '/api/:path*',
         '/login'

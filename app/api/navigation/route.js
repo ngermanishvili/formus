@@ -25,8 +25,6 @@ export async function GET() {
             ORDER BY r.id ASC
         `);
 
-        console.log('Raw database results:', routes);
-
         return NextResponse.json({
             status: "success",
             data: routes

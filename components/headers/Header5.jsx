@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, usePathname } from "@/src/i18n/routing";
 import { useLocale } from "next-intl";
 import { routing } from "@/src/i18n/routing";
-import { Globe, Menu, ChevronDown } from "lucide-react";
+import { Globe, ChevronDown } from "lucide-react";
 import MobileHeader1 from "@/components/headers/MobailHeader1";
 
 const languageNames = {
@@ -12,9 +12,9 @@ const languageNames = {
 };
 
 export default function Header5() {
+  const [isMobile, setIsMobile] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [routes, setRoutes] = useState([]);
-  const [isMobile, setIsMobile] = useState(false);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const pathname = usePathname();
   const locale = useLocale();
@@ -25,7 +25,6 @@ export default function Header5() {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
@@ -68,25 +67,18 @@ export default function Header5() {
     return () => document.removeEventListener("click", closeDropdown);
   }, []);
 
-  // სრული path-ის მიღება route-სთვის
   const getFullPath = (routePath) => {
-    if (routePath.startsWith("/")) {
-      return routePath;
-    }
-    return `/${routePath}`;
+    return routePath.startsWith("/") ? routePath : `/${routePath}`;
   };
 
-  // მიმდინარე path-ის შემოწმება აქტიური ლინკისთვის
   const isActivePath = (routePath) => {
     const currentPath = pathname.split("/").slice(2).join("/");
     return currentPath === routePath.replace(/^\//, "");
   };
 
-  if (isMobile) {
-    return <MobileHeader1 />;
-  }
-
-  return (
+  return isMobile ? (
+    <MobileHeader1 />
+  ) : (
     <header
       className={`fixed w-full top-0 z-50 bg-[#00326B] transition-all duration-300 ${
         scrolled ? "shadow-lg" : ""
@@ -136,7 +128,6 @@ export default function Header5() {
               {isLanguageOpen && (
                 <div className="absolute right-0 mt-2 py-2 w-24 bg-white rounded-lg shadow-xl border border-gray-100 animate-slide-up">
                   {routing.locales.map((l) => {
-                    // ვიღებთ მიმდინარე path-ს locale-ის გარეშე
                     const pathWithoutLocale = pathname
                       .split("/")
                       .slice(2)

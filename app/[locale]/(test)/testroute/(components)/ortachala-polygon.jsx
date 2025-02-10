@@ -179,65 +179,66 @@ const Controls = ({ zoomIn, zoomOut, resetTransform }) => {
   const handleZoomOut = () => zoomOut(0.3); // შემცირებული step ზუმისთვის
 
   return (
-    <div className="fixed bottom-[50%] right-6 flex  gap-1.5 z-50">
-      <div className="relative">
-        <div
-          className="bg-black/20 backdrop-blur-xl rounded-2xl 
-                      border border-white/10 shadow-2xl
-                      p-1.5 overflow-hidden"
-        >
-          <div className="flex  gap-1">
-            <button
-              onClick={handleZoomIn}
-              className="p-3.5 rounded-xl bg-gradient-to-tr 
-                       from-white/5 to-white/10
-                       active:from-purple-500/20 active:to-blue-500/20
-                       transition-all duration-200"
-              aria-label="Zoom in"
-            >
-              <Plus
-                size={20}
-                className="text-white/90 transform active:scale-95
-                         transition-transform duration-200"
-              />
-            </button>
+    // <div className="fixed bottom-[50%] right-6 flex  gap-1.5 z-50">
+    //   <div className="relative">
+    //     <div
+    //       className="bg-black/20 backdrop-blur-xl rounded-2xl
+    //                   border border-white/10 shadow-2xl
+    //                   p-1.5 overflow-hidden"
+    //     >
+    //       <div className="flex  gap-1">
+    //         <button
+    //           onClick={handleZoomIn}
+    //           className="p-3.5 rounded-xl bg-gradient-to-tr
+    //                    from-white/5 to-white/10
+    //                    active:from-purple-500/20 active:to-blue-500/20
+    //                    transition-all duration-200"
+    //           aria-label="Zoom in"
+    //         >
+    //           <Plus
+    //             size={20}
+    //             className="text-white/90 transform active:scale-95
+    //                      transition-transform duration-200"
+    //           />
+    //         </button>
 
-            <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+    //         <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
 
-            <button
-              onClick={handleZoomOut}
-              className="p-3.5 rounded-xl bg-gradient-to-tr 
-                       from-white/5 to-white/10
-                       active:from-purple-500/20 active:to-blue-500/20
-                       transition-all duration-200"
-              aria-label="Zoom out"
-            >
-              <Minus
-                size={20}
-                className="text-white/90 transform active:scale-95
-                         transition-transform duration-200"
-              />
-            </button>
-          </div>
-        </div>
-      </div>
+    //         <button
+    //           onClick={handleZoomOut}
+    //           className="p-3.5 rounded-xl bg-gradient-to-tr
+    //                    from-white/5 to-white/10
+    //                    active:from-purple-500/20 active:to-blue-500/20
+    //                    transition-all duration-200"
+    //           aria-label="Zoom out"
+    //         >
+    //           <Minus
+    //             size={20}
+    //             className="text-white/90 transform active:scale-95
+    //                      transition-transform duration-200"
+    //           />
+    //         </button>
+    //       </div>
+    //     </div>
+    //   </div>
 
-      <button
-        onClick={resetTransform}
-        className="p-3.5 rounded-xl
-                 bg-black/20 backdrop-blur-xl
-                 border border-white/10 shadow-2xl
-                 active:bg-purple-500/20
-                 transition-all duration-200"
-        aria-label="Reset zoom"
-      >
-        <RotateCcw
-          size={20}
-          className="text-white/90 transform active:scale-95
-                   transition-transform duration-200"
-        />
-      </button>
-    </div>
+    //   <button
+    //     onClick={resetTransform}
+    //     className="p-3.5 rounded-xl
+    //              bg-black/20 backdrop-blur-xl
+    //              border border-white/10 shadow-2xl
+    //              active:bg-purple-500/20
+    //              transition-all duration-200"
+    //     aria-label="Reset zoom"
+    //   >
+    //     <RotateCcw
+    //       size={20}
+    //       className="text-white/90 transform active:scale-95
+    //                transition-transform duration-200"
+    //     />
+    //   </button>
+    // </div>
+    <div></div>
   );
 };
 
@@ -415,29 +416,42 @@ const OrtachalaPolygon = () => {
           onClick={() => setSelectedPolygon(null)}
         >
           <div
-            className="fixed bottom-0 left-0 right-0 bg-black/95 backdrop-blur-lg z-50 
-                border-t border-blue-500/50 shadow-xl animate-slide-up"
+            className={`
+              fixed bottom-0 left-0 right-0
+              lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 
+              bg-black/95 backdrop-blur-lg z-50 
+              border-t border-blue-500/50 lg:border
+              lg:rounded-xl w-full lg:max-w-2xl
+              translate-y-0 transition-transform duration-300
+              ${selectedPolygon ? "translate-y-0" : "translate-y-full"}
+            `}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="max-w-3xl mx-auto relative">
-              <button
-                onClick={() => setSelectedPolygon(null)}
-                className="absolute top-2 right-2 text-white/60 hover:text-white p-2"
-              >
-                ✕
-              </button>
-              <div className="p-4 md:p-6">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="col-span-2 md:col-span-4">
-                    <h3 className="text-lg md:text-xl font-bold text-white">
+            <div className="relative max-h-[90vh] overflow-y-auto">
+              <div className="sticky top-0 w-full bg-black/95 pt-2 px-2">
+                <div className="w-12 h-1 bg-gray-600 rounded-full mx-auto mb-2 lg:hidden" />
+                <button
+                  onClick={() => setSelectedPolygon(null)}
+                  className="absolute top-2 right-2 text-white/60 hover:text-white p-2"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="p-4 lg:p-6">
+                <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
+                  <div className="col-span-2 lg:col-span-4">
+                    <h3 className="text-lg lg:text-xl font-bold text-white">
                       {selectedPolygon.block_id} ბლოკი, სართული{" "}
                       {selectedPolygon.floor}
                     </h3>
                   </div>
 
-                  <div className="bg-white/10 rounded-lg p-3">
-                    <div className="text-sm text-gray-400">სულ ბინა</div>
-                    <div className="text-lg font-semibold text-white">
+                  <div className="bg-white/10 rounded-lg p-3 lg:p-4">
+                    <div className="text-xs lg:text-sm text-gray-400">
+                      სულ ბინა
+                    </div>
+                    <div className="text-base lg:text-lg font-semibold text-white">
                       {
                         apartments.filter(
                           (apt) =>
@@ -448,9 +462,11 @@ const OrtachalaPolygon = () => {
                     </div>
                   </div>
 
-                  <div className="bg-white/10 rounded-lg p-3">
-                    <div className="text-sm text-gray-400">ხელმისაწვდომი</div>
-                    <div className="text-lg font-semibold text-green-400">
+                  <div className="bg-white/10 rounded-lg p-3 lg:p-4">
+                    <div className="text-xs lg:text-sm text-gray-400">
+                      ხელმისაწვდომი
+                    </div>
+                    <div className="text-base lg:text-lg font-semibold text-green-400">
                       {
                         apartments.filter(
                           (apt) =>
@@ -462,9 +478,11 @@ const OrtachalaPolygon = () => {
                     </div>
                   </div>
 
-                  <div className="bg-white/10 rounded-lg p-3">
-                    <div className="text-sm text-gray-400">გაყიდული</div>
-                    <div className="text-lg font-semibold text-red-400">
+                  <div className="bg-white/10 rounded-lg p-3 lg:p-4">
+                    <div className="text-xs lg:text-sm text-gray-400">
+                      გაყიდული
+                    </div>
+                    <div className="text-base lg:text-lg font-semibold text-red-400">
                       {
                         apartments.filter(
                           (apt) =>
@@ -476,9 +494,11 @@ const OrtachalaPolygon = () => {
                     </div>
                   </div>
 
-                  <div className="bg-white/10 rounded-lg p-3">
-                    <div className="text-sm text-gray-400">საშუალო ფართი</div>
-                    <div className="text-lg font-semibold text-blue-400">
+                  <div className="bg-white/10 rounded-lg p-3 lg:p-4">
+                    <div className="text-xs lg:text-sm text-gray-400">
+                      საშუალო ფართი
+                    </div>
+                    <div className="text-base lg:text-lg font-semibold text-blue-400">
                       {(
                         apartments
                           .filter(
@@ -500,14 +520,16 @@ const OrtachalaPolygon = () => {
                     </div>
                   </div>
                 </div>
-                <div className="mt-4">
+
+                <div className="mt-4 lg:mt-6 pb-4">
                   <button
                     onClick={() => {
-                      handlePolygonClick(selectedPolygon);
+                      const slug = `${selectedPolygon.id}-floor-${selectedPolygon.floor}-block-${selectedPolygon.block_id}`;
+                      router.push(`/floor/${slug}`);
                       setSelectedPolygon(null);
                     }}
                     className="w-full bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 rounded-lg
-                        transition-colors duration-200 flex items-center justify-center"
+                             transition-colors duration-200 flex items-center justify-center"
                   >
                     დეტალების ნახვა
                   </button>

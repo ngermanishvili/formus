@@ -17,14 +17,11 @@ async function checkMigration() {
 
         for (const table of tables) {
             const result = await client.query(`SELECT COUNT(*) FROM ${table}`);
-            console.log(`${table}: ${result.rows[0].count} ჩანაწერი`);
 
             // პირველი ჩანაწერის ნახვა
             const firstRow = await client.query(`SELECT * FROM ${table} LIMIT 1`);
             if (firstRow.rows.length > 0) {
-                console.log(`${table}-ის პირველი ჩანაწერი:`, firstRow.rows[0]);
             }
-            console.log('------------------------');
         }
 
     } catch (error) {

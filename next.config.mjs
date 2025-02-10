@@ -1,8 +1,20 @@
+// next.config.js
 import createNextIntlPlugin from 'next-intl/plugin';
 
 const withNextIntl = createNextIntlPlugin('./src/i18n/request.js');
 
 const nextConfig = {
+    webpack: (config) => {
+        config.infrastructureLogging = { level: 'error' };
+        config.module.rules.push({
+            test: /\.(woff|woff2|eot|ttf|otf)$/i,
+            type: 'asset/resource',
+            generator: {
+                filename: 'static/fonts/[hash][ext][query]'
+            }
+        });
+        return config;
+    },
     images: {
         domains: ['res.cloudinary.com'],
         minimumCacheTTL: 31536000,
@@ -18,9 +30,7 @@ const nextConfig = {
                 pathname: '/**',
             },
         ],
-    },
+    }
 };
-
-
 
 export default withNextIntl(nextConfig);

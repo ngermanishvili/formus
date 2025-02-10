@@ -50,15 +50,19 @@ export default function HeroSection() {
         </div>
 
         <div className="w-full lg:w-1/2 h-[300px] sm:h-[400px] lg:h-[800px] overflow-hidden">
-          <CldImage
-            src={heroContent?.image_url}
-            alt={heroContent?.title_ge}
-            width={960}
-            height={800}
-            quality={80}
-            className="object-cover w-full h-full"
-            priority
-          />
+          {heroContent?.image_url ? (
+            <CldImage
+              src={heroContent.image_url}
+              alt={heroContent?.title_ge || ""}
+              width={960}
+              height={800}
+              quality={80}
+              className="object-cover w-full h-full"
+              priority
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-100" />
+          )}
         </div>
       </div>
     </section>

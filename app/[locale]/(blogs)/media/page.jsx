@@ -17,7 +17,7 @@ export const metadata = {
 export default function page() {
   return (
     <>
-      <Header5 /> <MobailHeader1 />
+      <Header5 />
       <main className="main">
         <BreadCumb />
         <Blogs1 />

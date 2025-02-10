@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import {
   Select,
   SelectContent,
@@ -12,19 +11,43 @@ import { Button } from "@/components/ui/button";
 import { Search, X } from "lucide-react";
 import PropertyResults from "./search-table";
 
+const translations = {
+  ka: {
+    project: "პროექტი",
+    location: "მდებარეობა",
+    area: "ფართი",
+    search: "ძებნა",
+    ortachalaHills: "ორთაჭალა ჰილს",
+    tbilisi: "თბილისი",
+    foundApartments: "ნაპოვნია",
+    units: "ბინა",
+    areaLabel: "ფართი",
+    loadMore: "მეტის ნახვა",
+    choose: "არჩევა",
+  },
+  en: {
+    project: "Project",
+    location: "Location",
+    area: "Area",
+    search: "Search",
+    ortachalaHills: "Ortachala Hills",
+    tbilisi: "Tbilisi",
+    foundApartments: "Found",
+    units: "Apartments",
+    areaLabel: "Area",
+    loadMore: "Load More",
+    choose: "Choose",
+  },
+};
+
 export default function SearchForm() {
-  const router = useRouter();
-  const t = useTranslations("SearchForm");
+  const { locale = "ka" } = useParams() || {};
+  const t = translations[locale] || translations.ka;
+
   const [showResults, setShowResults] = useState(false);
   const [apartments, setApartments] = useState([]);
   const [filteredApartments, setFilteredApartments] = useState([]);
   const [visibleCount, setVisibleCount] = useState(5);
-
-  const [searchParams, setSearchParams] = useState({
-    project: "ortachala_hills",
-    location: "tbilisi",
-    areaRange: "",
-  });
 
   const areaRanges = [
     { value: "20-40", label: "20-40 მ²" },
@@ -34,6 +57,12 @@ export default function SearchForm() {
     { value: "100-120", label: "100-120 მ²" },
     { value: "120-150", label: "120-150 მ²" },
   ];
+
+  const [searchParams, setSearchParams] = useState({
+    project: "ortachala_hills",
+    location: "tbilisi",
+    areaRange: "",
+  });
 
   useEffect(() => {
     const fetchApartments = async () => {
@@ -49,29 +78,25 @@ export default function SearchForm() {
   }, []);
 
   const handleSearch = () => {
-    let filtered;
-    if (!searchParams.areaRange) {
-      filtered = apartments.filter(
-        (apt) => apt.block_id !== "D" && apt.status === "available"
-      );
-    } else {
+    let filtered = apartments.filter(
+      (apt) => apt.block_id !== "D" && apt.status === "available"
+    );
+
+    if (searchParams.areaRange) {
       const [minArea, maxArea] = searchParams.areaRange.split("-").map(Number);
-      filtered = apartments.filter(
-        (apt) =>
-          apt.block_id !== "D" &&
-          apt.status === "available" &&
-          apt.total_area >= minArea &&
-          apt.total_area <= maxArea
+      filtered = filtered.filter(
+        (apt) => apt.total_area >= minArea && apt.total_area <= maxArea
       );
     }
+
     setFilteredApartments(filtered);
     setVisibleCount(5);
     setShowResults(true);
     document.body.style.overflow = "hidden";
   };
 
-  const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + 5);
+  const handleSelect = (value, type) => {
+    setSearchParams((prev) => ({ ...prev, [type]: value }));
   };
 
   const handleCloseResults = () => {
@@ -80,11 +105,8 @@ export default function SearchForm() {
     setVisibleCount(5);
   };
 
-  const handleSelect = (value, type) => {
-    setSearchParams((prev) => ({
-      ...prev,
-      [type]: value,
-    }));
+  const handleLoadMore = () => {
+    setVisibleCount((prev) => prev + 5);
   };
 
   useEffect(() => {
@@ -104,48 +126,45 @@ export default function SearchForm() {
   return (
     <div className="flex flex-col gap-4">
       <div className="w-full backdrop-blur-md bg-white/90 rounded-2xl shadow-xl p-4 md:p-6 flex flex-col md:flex-row items-center gap-4 max-w-6xl mx-auto transition-all">
-        {/* Project Select */}
         <div className="flex-1 w-full">
-          <p className="text-gray-500 text-sm mb-1">{t("project")}</p>
+          <p className="text-gray-500 text-sm mb-1">{t.project}</p>
           <Select
             value="ortachala_hills"
             disabled
             onValueChange={(value) => handleSelect(value, "project")}
           >
             <SelectTrigger className="h-12 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-green-400 transition-all">
-              <SelectValue placeholder={t("ortachalaHills")} />
+              <SelectValue placeholder={t.ortachalaHills} />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="ortachala_hills">
-                {t("ortachalaHills")}
+                {t.ortachalaHills}
               </SelectItem>
             </SelectContent>
           </Select>
         </div>
 
-        {/* Location Select */}
         <div className="flex-1 w-full">
-          <p className="text-gray-500 text-sm mb-1">{t("location")}</p>
+          <p className="text-gray-500 text-sm mb-1">{t.location}</p>
           <Select
             value="tbilisi"
             disabled
             onValueChange={(value) => handleSelect(value, "location")}
           >
             <SelectTrigger className="h-12 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-green-400 transition-all">
-              <SelectValue placeholder={t("tbilisi")} />
+              <SelectValue placeholder={t.tbilisi} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="tbilisi">{t("tbilisi")}</SelectItem>
+              <SelectItem value="tbilisi">{t.tbilisi}</SelectItem>
             </SelectContent>
           </Select>
         </div>
 
-        {/* Area Select */}
         <div className="flex-1 w-full">
-          <p className="text-gray-500 text-sm mb-1">{t("area")}</p>
+          <p className="text-gray-500 text-sm mb-1">{t.area}</p>
           <Select onValueChange={(value) => handleSelect(value, "areaRange")}>
             <SelectTrigger className="h-12 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-green-400 transition-all">
-              <SelectValue placeholder="არჩევა  " />
+              <SelectValue placeholder={t.choose} />
             </SelectTrigger>
             <SelectContent>
               {areaRanges.map((range) => (
@@ -157,19 +176,17 @@ export default function SearchForm() {
           </Select>
         </div>
 
-        {/* Search Button */}
         <div className="flex items-center gap-2 w-full md:w-auto">
           <Button
             className="bg-black hover:bg-gray-800 text-white rounded-xl h-12 px-8 w-full md:w-auto flex items-center gap-2 transition-all"
             onClick={handleSearch}
           >
             <Search className="w-5 h-5" />
-            {t("search")}
+            {t.search}
           </Button>
         </div>
       </div>
 
-      {/* Results Overlay */}
       {showResults && (
         <>
           <div
@@ -189,11 +206,12 @@ export default function SearchForm() {
                   <div className="flex justify-between items-center">
                     <div>
                       <h2 className="text-2xl font-semibold">
-                        ნაპოვნია {filteredApartments.length} ბინა
+                        {t.foundApartments} {filteredApartments.length}{" "}
+                        {t.units}
                       </h2>
                       {searchParams.areaRange && (
                         <p className="text-gray-500">
-                          ფართი: {searchParams.areaRange} მ²
+                          {t.areaLabel}: {searchParams.areaRange} მ²
                         </p>
                       )}
                     </div>
@@ -201,14 +219,13 @@ export default function SearchForm() {
                 </div>
                 <div className="animate-in slide-in-from-top duration-500 max-h-[70vh] overflow-y-auto">
                   <PropertyResults apartments={visibleApartments} />
-
                   {hasMore && (
                     <div className="mt-6 flex justify-center">
                       <Button
                         onClick={handleLoadMore}
                         className="bg-black hover:bg-gray-800 text-white rounded-xl px-8 py-2"
                       >
-                        მეტის ნახვა
+                        {t.loadMore}
                       </Button>
                     </div>
                   )}

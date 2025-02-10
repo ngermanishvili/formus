@@ -96,11 +96,11 @@ const AdminLayout = ({ children }) => {
       icon: <Building className="w-5 h-5" />,
     },
 
-    {
-      title: "როუტების მართვა",
-      href: "/admin/dashboard/navigation",
-      icon: <Navigation className="w-5 h-5" />,
-    },
+    // {
+    //   title: "როუტების მართვა",
+    //   href: "/admin/dashboard/navigation",
+    //   icon: <Navigation className="w-5 h-5" />,
+    // },
   ];
 
   return (

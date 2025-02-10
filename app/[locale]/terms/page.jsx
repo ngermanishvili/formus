@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import Header5 from "@/components/headers/Header5";
 import MobileHeader1 from "@/components/headers/MobailHeader1";
@@ -7,16 +7,6 @@ import MobileHeader1 from "@/components/headers/MobailHeader1";
 const TermsConditions = () => {
   const searchParams = useSearchParams();
   const marketingTermsRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   useEffect(() => {
     // თუ URL-ში არის section=marketing, დავსქროლოთ მესამე სექციაზე
@@ -29,7 +19,7 @@ const TermsConditions = () => {
 
   return (
     <>
-      {isMobile ? <MobileHeader1 /> : <Header5 />}
+      <Header5 />
       <div className="max-w-4xl mx-auto p-6 space-y-8 mt-[80px]">
         <h1 className="text-2xl font-bold">წესები და პირობები</h1>
 

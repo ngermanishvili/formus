@@ -8,6 +8,7 @@ import Shape from "@/public/assets/shapes/home/3.png";
 import Header5 from "@/components/headers/Header5";
 import StickySocial from "@/components/socials/sticky-socials";
 
+//
 export default function Page() {
   return (
     <>

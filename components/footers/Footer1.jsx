@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { MapPin, Phone, Clock } from "lucide-react";
 import FooterLogo from "@/public/assets/shapes/home/footer-logo.png";
@@ -7,18 +9,12 @@ import { useLocale } from "next-intl";
 
 const translations = {
   en: {
-    address: "Address",
-    addressText: "5, Sulkhan Tsintsadze Street, Tbilisi, Georgia",
-    phoneEmail: "Phone/E-mail",
     workingHours: "Working Hours",
     monToFri: "Mon- Sat: 10:00 - 18:00",
     saturday: "Sat: 11:00 - 17:00",
     termsAndConditions: "Terms and Conditions",
   },
   ka: {
-    address: "მისამართი",
-    addressText: "სულხან ცინცაძის ქ. 5, თბილისი, საქართველო",
-    phoneEmail: "ტელეფონი/ელ-ფოსტა",
     workingHours: "სამუშაო საათები",
     monToFri: "ორშ-პარ: 10:00 - 18:00",
     saturday: "შაბ: 11:00 - 17:00",
@@ -29,6 +25,23 @@ const translations = {
 export default function Footer() {
   const locale = useLocale();
   const t = translations[locale];
+  const [contactInfo, setContactInfo] = useState(null);
+
+  useEffect(() => {
+    const fetchContactInfo = async () => {
+      try {
+        const response = await fetch("/api/contactinfo");
+        const data = await response.json();
+        if (data.status === "success") {
+          setContactInfo(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching contact info:", error);
+      }
+    };
+
+    fetchContactInfo();
+  }, []);
 
   const socialLinks = [
     {
@@ -59,6 +72,16 @@ export default function Footer() {
       ),
     },
   ];
+
+  if (!contactInfo) {
+    return null; // ან Loading კომპონენტი
+  }
+
+  const getLocalizedAddress = () => {
+    return locale === "ka"
+      ? contactInfo.address_line_ge
+      : contactInfo.address_line_en;
+  };
 
   return (
     <footer className="bg-[#003366] w-full">
@@ -92,33 +115,33 @@ export default function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             <div>
               <h6 className="text-white/60 text-sm font-medium mb-4">
-                {t.address}
+                {locale === "ka" ? "მისამართი" : "Address"}
               </h6>
               <div className="flex items-center">
                 <MapPin className="text-white mr-2 flex-shrink-0" size={20} />
-                <p className="text-white">{t.addressText}</p>
+                <p className="text-white">{getLocalizedAddress()}</p>
               </div>
             </div>
 
             <div>
               <h6 className="text-white/60 text-sm font-medium mb-4">
-                {t.phoneEmail}
+                {locale === "ka" ? "ტელეფონი/ელ-ფოსტა" : "Phone/E-mail"}
               </h6>
               <div className="flex flex-col space-y-2">
                 <div className="flex items-center">
                   <Phone className="text-white mr-2" size={20} />
                   <a
-                    href="tel:+995593939093"
+                    href={`tel:${contactInfo.phone_number}`}
                     className="text-white text-sm hover:opacity-80"
                   >
-                    +(995) 593 93 90 93
+                    {contactInfo.phone_number}
                   </a>
                 </div>
                 <a
-                  href="mailto:info@formus.ge"
+                  href={`mailto:${contactInfo.email}`}
                   className="text-white hover:opacity-80 ml-7"
                 >
-                  info@formus.ge
+                  {contactInfo.email}
                 </a>
               </div>
             </div>

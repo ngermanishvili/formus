@@ -3,7 +3,7 @@ import Header5 from "@/components/headers/Header5";
 import Breadcumb from "@/components/service/Breadcumb";
 import Services1 from "@/components/service/Services1";
 export const metadata = {
-  title: "FORMUS | ფორმუსი - სამშენებლო კომპანია ",
+  title: "FORMUS | პროექტები - სამშენებლო კომპანია ",
   description:
     "ფორმუსი სამშენებლო კომპანია, რომელიც გთავაზობთ სრულყოფილ სამშენებლო მომსახურებას და სამშენებლო პროექტებს სრულყოფილი სამშენებლო მომსახურების სფეროში.",
 };

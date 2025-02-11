@@ -11,8 +11,8 @@ import {
   Images,
   Folders,
   Building,
-  Navigation,
   LogOut,
+  Contact2Icon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -94,6 +94,11 @@ const AdminLayout = ({ children }) => {
       title: "ჩვენს შესახებ",
       href: "/admin/dashboard/about",
       icon: <Building className="w-5 h-5" />,
+    },
+    {
+      title: "კონტაქტი",
+      href: "/admin/dashboard/contact",
+      icon: <Contact2Icon className="w-5 h-5" />,
     },
 
     // {

@@ -1,5 +1,10 @@
+import { Suspense } from "react";
 import CreateApartmentPage from "../CreateApartmentPage";
 
 export default function CreatePage() {
-  return <CreateApartmentPage />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <CreateApartmentPage />
+    </Suspense>
+  );
 }

@@ -28,11 +28,7 @@ const Polygon = memo(({ data, isHovered, onHover, onClick, isMobile }) => {
   const center = getCenterPoint(data.polygon_coords);
 
   const handleClick = () => {
-    if (isMobile) {
-      onHover(data); // On mobile, first click shows info
-    } else {
-      onClick(data); // On desktop, direct click navigates
-    }
+    onClick(data);
   };
 
   return (

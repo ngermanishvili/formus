@@ -76,6 +76,57 @@ export default function Header5() {
     return currentPath === routePath.replace(/^\//, "");
   };
 
+  const getLocalizedPath = (targetLocale) => {
+    // Split the current pathname into segments
+    const segments = pathname.split("/");
+
+    // Handle floor pages
+    if (pathname.includes("/floor/")) {
+      const floorIndex = segments.findIndex((seg) => seg === "floor");
+      if (floorIndex !== -1) {
+        return `/${targetLocale}/floor/${segments
+          .slice(floorIndex + 1)
+          .join("/")}`;
+      }
+    }
+
+    // Handle apartment pages
+    if (pathname.includes("/apartment/")) {
+      const apartmentIndex = segments.findIndex((seg) => seg === "apartment");
+      if (apartmentIndex !== -1) {
+        return `/${targetLocale}/apartment/${segments
+          .slice(apartmentIndex + 1)
+          .join("/")}`;
+      }
+    }
+
+    // Handle media-single pages
+    if (pathname.includes("/media-single/")) {
+      const mediaIndex = segments.findIndex((seg) => seg === "media-single");
+      if (mediaIndex !== -1) {
+        return `/${targetLocale}/media-single/${segments
+          .slice(mediaIndex + 1)
+          .join("/")}`;
+      }
+    }
+
+    // Handle projects pages
+    if (pathname.includes("/projects/")) {
+      const projectsIndex = segments.findIndex((seg) => seg === "projects");
+      if (projectsIndex !== -1) {
+        return `/${targetLocale}/projects/${segments
+          .slice(projectsIndex + 1)
+          .join("/")}`;
+      }
+    }
+
+    // For other pages, use the standard path construction
+    const pathWithoutLocale = segments.slice(2).join("/");
+    return pathWithoutLocale
+      ? `/${targetLocale}/${pathWithoutLocale}`
+      : `/${targetLocale}`;
+  };
+
   return isMobile ? (
     <MobileHeader1 />
   ) : (
@@ -127,31 +178,21 @@ export default function Header5() {
 
               {isLanguageOpen && (
                 <div className="absolute right-0 mt-2 py-2 w-24 bg-white rounded-lg shadow-xl border border-gray-100 animate-slide-up">
-                  {routing.locales.map((l) => {
-                    const pathWithoutLocale = pathname
-                      .split("/")
-                      .slice(2)
-                      .join("/");
-                    const newPath = pathWithoutLocale
-                      ? `/${pathWithoutLocale}`
-                      : "/";
-
-                    return (
-                      <Link
-                        key={l}
-                        href={newPath}
-                        locale={l}
-                        className={`block px-4 py-2 text-sm ${
-                          l === locale
-                            ? "bg-gray-100 text-[#00326B]"
-                            : "text-gray-700 hover:bg-gray-50"
-                        } transition-colors`}
-                        onClick={() => setIsLanguageOpen(false)}
-                      >
-                        {languageNames[l]}
-                      </Link>
-                    );
-                  })}
+                  {routing.locales.map((l) => (
+                    <Link
+                      key={l}
+                      href={getLocalizedPath(l)}
+                      locale={l}
+                      className={`block px-4 py-2 text-sm ${
+                        l === locale
+                          ? "bg-gray-100 text-[#00326B]"
+                          : "text-gray-700 hover:bg-gray-50"
+                      } transition-colors`}
+                      onClick={() => setIsLanguageOpen(false)}
+                    >
+                      {languageNames[l]}
+                    </Link>
+                  ))}
                 </div>
               )}
             </div>

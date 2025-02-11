@@ -1,11 +1,27 @@
 import React from "react";
 import { MapPin, Phone, Mail } from "lucide-react";
+import { useLocale } from "next-intl";
 
 export default function Offices() {
-  const contactCards = [
-    {
+  const locale = useLocale();
+
+  const translations = {
+    en: {
+      city: "Tbilisi",
+      address: "Suliko Tortladze Street, Tbilisi, Georgia",
+    },
+    ka: {
       city: "თბილისი",
       address: "სულიკო ტორტლაძის ქუჩა, თბილისი, საქართველო",
+    },
+  };
+
+  const t = translations[locale];
+
+  const contactCards = [
+    {
+      city: t.city,
+      address: t.address,
       phone: "+(995) 593 93 90 93",
       email: "info@formus.ge",
     },

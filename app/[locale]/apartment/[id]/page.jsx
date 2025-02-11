@@ -1,14 +1,50 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, usePathname } from "next/navigation";
 import Header5 from "@/components/headers/Header5";
 import LoadingOverlay from "@/components/loader/loader";
 import { CldImage } from "next-cloudinary";
 import FloorFilters from "@/components/apartment/floor-filters";
 import Footer from "@/components/footers/Footer1";
 
+const translations = {
+  en: {
+    features: "Features:",
+    hall: "Hall",
+    block: "BLOCK",
+    livingRoom: "Living Room",
+    bedroom: "Bedroom",
+    wc: "WC",
+    terrace: "Terrace",
+    apartment: "Apartment",
+    floor: "Floor",
+    totalArea: "Total Area",
+    downloadPDF: "Download PDF",
+    threeDRender: "3D Render",
+    twoDPlan: "2D Plan",
+    view360: "360°",
+  },
+  ka: {
+    features: "მახასიათებლები:",
+    hall: "ჰოლი",
+    block: "ბლოკი",
+    livingRoom: "მისაღები ოთახი",
+    bedroom: "საძინებელი",
+    wc: "სველი წერტილი",
+    terrace: "აივანი",
+    apartment: "ბინა",
+    floor: "სართული",
+    totalArea: "საერთო ფართი",
+    downloadPDF: "PDF-ის გადმოწერა",
+    threeDRender: "3D რენდერი",
+    twoDPlan: "2D გეგმა",
+    view360: "360°",
+  },
+};
+
 const ApartmentDetails = () => {
   const router = useRouter();
+  const pathname = usePathname();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,6 +52,8 @@ const ApartmentDetails = () => {
 
   const params = useParams();
   const apartmentId = params.id.split("-")[0];
+  const lang = pathname.includes("/ka") ? "ka" : "en";
+  const t = translations[lang];
 
   const downloadPDF = async () => {
     try {
@@ -66,22 +104,16 @@ const ApartmentDetails = () => {
     <div className="min-h-screen bg-white mt-[100px]">
       <Header5 />
 
-      {/* Main Content with Centered FloorFilters */}
-      <div className="container mx-auto px-4 relative  mb-8">
-        {/* Centered FloorFilters */}
+      <div className="container mx-auto px-4 relative mb-8">
         <div className="flex justify-center w-full my-8">
           <FloorFilters />
         </div>
 
-        {/* Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 mt-8">
-          {/* Left Side - Image and Toggle */}
           <div>
-            {/* View Toggle */}
             <div className=""></div>
 
-            {/* Image */}
-            <div className="relative  bg-white rounded-lg overflow-hidden">
+            <div className="relative bg-white rounded-lg overflow-hidden">
               <CldImage
                 src={activeView === "2D" ? data.home_2d : data.home_3d}
                 width={800}
@@ -94,61 +126,60 @@ const ApartmentDetails = () => {
             </div>
           </div>
 
-          {/* Right Side - Details */}
           <div className="space-y-8 lg:space-y-12 mt-8 lg:mt-[6rem]">
-            {/* Apartment Info */}
             <h2 className="text-xl">
               <span className="font-bold">
-                {activeView === "3D" ? "3D Render" : "2D Plan"}
+                {activeView === "3D" ? t.threeDRender : t.twoDPlan}
               </span>
               <span className="text-gray-400 mx-2">|</span>
               <button
                 onClick={() => setActiveView(activeView === "3D" ? "2D" : "3D")}
                 className="text-gray-400 hover:text-[#91b48c] font-bold"
               >
-                {activeView === "3D" ? "2D Plan" : "3D Render"}
+                {activeView === "3D" ? t.twoDPlan : t.threeDRender}
               </button>
               <span className="text-gray-400 mx-2">|</span>
-              <span className="text-gray-400">360°</span>
+              <span className="text-gray-400">{t.view360}</span>
             </h2>
             <div className="flex items-start border-b border-gray-200">
               <div>
                 <h3 className="text-base font-light gap-2">
-                  Apartment
+                  {t.apartment}
                   <span className="font-bold gap-2 mx-2 mt-1">
                     {data.apartment_number}
                   </span>
                 </h3>
                 <p className="font-normal mt-2">
-                  Floor{" "}
+                  {t.floor}{" "}
                   <span className="font-bold text-base">{data.floor}</span>
                 </p>
               </div>
               <div className="h-12 w-px bg-black mx-6" />
               <div>
-                <h3 className="text-lg font-normal mb-1">Total Area</h3>
+                <h3 className="text-lg font-normal mb-1">{t.totalArea}</h3>
                 <p className="text-base">{data.total_area} m²</p>
               </div>
             </div>
 
-            {/* Features */}
             <div>
-              <h3 className="text-lg font-bold mb-6">Features:</h3>
+              <h3 className="text-lg font-bold mb-6">{t.features}</h3>
               <div className="space-y-4">
                 {data.hall_area > 0 && (
                   <div className="flex gap-2">
-                    <span className="text-base font-light">Hall /</span>
+                    <span className="text-base font-light">{t.hall} /</span>
                     <span className="text-base">{data.hall_area} m²</span>
                   </div>
                 )}
                 <div className="flex gap-2">
-                  <span className="text-base font-light">BLOCK /</span>
+                  <span className="text-base font-light">{t.block} /</span>
                   <span className="text-base">{data.block_id}</span>
                 </div>
 
                 {data.living_room_area > 0 && (
                   <div className="flex gap-2">
-                    <span className="text-base font-light">Living Room /</span>
+                    <span className="text-base font-light">
+                      {t.livingRoom} /
+                    </span>
                     <span className="text-base">
                       {data.living_room_area} m²
                     </span>
@@ -156,33 +187,32 @@ const ApartmentDetails = () => {
                 )}
                 {data.bedroom_area > 0 && (
                   <div className="flex gap-2">
-                    <span className="text-base font-light">Bedroom /</span>
+                    <span className="text-base font-light">{t.bedroom} /</span>
                     <span className="text-base">{data.bedroom_area} m²</span>
                   </div>
                 )}
                 {data.bathroom_area > 0 && (
                   <div className="flex gap-2">
-                    <span className="text-base font-light">WC /</span>
+                    <span className="text-base font-light">{t.wc} /</span>
                     <span className="text-base">{data.bathroom_area} m²</span>
                   </div>
                 )}
                 {data.balcony_area > 0 && (
                   <div className="flex gap-2">
-                    <span className="text-base font-light">Terrace /</span>
+                    <span className="text-base font-light">{t.terrace} /</span>
                     <span className="text-base">{data.balcony_area} m²</span>
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Download Button */}
             <button
               onClick={downloadPDF}
               className="px-6 py-2.5 bg-[#91B48C] text-black text-sm 
            hover:bg-[#91B48C]/90 transition-colors uppercase 
            rounded-lg font-medium"
             >
-              Download PDF
+              {t.downloadPDF}
             </button>
           </div>
         </div>

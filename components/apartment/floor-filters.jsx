@@ -1,7 +1,43 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { ChevronDown, X, Search, Check, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import { useLocale } from "next-intl";
+import { Link } from "@/src/i18n/routing";
+
+const translations = {
+  en: {
+    back: "Back",
+    block: "Block",
+    blocks: "Blocks",
+    floor: "Floor",
+    floors: "Floors",
+    status: "Status",
+    search: "Search",
+    filter: "Filter",
+    filters: "Filters",
+    clear: "Clear",
+    available: "Available",
+    reserved: "Reserved",
+    sold: "Sold",
+  },
+  ka: {
+    back: "← უკან",
+    block: "ბლოკი",
+    blocks: "ბლოკები",
+    floor: "სართული",
+    floors: "სართული",
+    status: "სტატუსი",
+    search: "ძებნა",
+    filter: "ფილტრი",
+    filters: "ფილტრები",
+    clear: "გასუფთავება",
+    available: "თავისუფალი",
+    reserved: "დაჯავშნული",
+    sold: "გაყიდული",
+  },
+};
+
 const FilterButton = ({ label, children, isActive, isOpen, onToggle }) => {
   return (
     <div className="relative">
@@ -25,11 +61,7 @@ const FilterButton = ({ label, children, isActive, isOpen, onToggle }) => {
       </button>
 
       {isOpen && (
-        <div
-          className="absolute top-full mt-2 w-48 
-                       bg-white rounded-lg 
-                       border border-black/30 shadow-xl z-50"
-        >
+        <div className="absolute top-full mt-2 w-48 bg-white rounded-lg border border-black/30 shadow-xl z-50">
           {children}
         </div>
       )}
@@ -39,6 +71,10 @@ const FilterButton = ({ label, children, isActive, isOpen, onToggle }) => {
 
 const FloorFilters = () => {
   const router = useRouter();
+  const pathname = usePathname();
+  const locale = useLocale();
+  const t = translations[locale];
+
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [openFilter, setOpenFilter] = useState(null);
   const [filters, setFilters] = useState({
@@ -53,7 +89,6 @@ const FloorFilters = () => {
     D: Array.from({ length: 15 }, (_, i) => i + 1),
   };
 
-  // Effect for body scroll lock
   useEffect(() => {
     if (isDrawerOpen) {
       document.body.style.overflow = "hidden";
@@ -71,11 +106,9 @@ const FloorFilters = () => {
         let newValues = [...prev.blocks];
 
         if (entireRow) {
-          // If clicking the entire row
           if (prev.blocks.includes(value)) {
             newValues = newValues.filter((v) => v !== value);
           } else {
-            // Check if trying to add D block when A or B exists, or vice versa
             if (value === "D") {
               if (newValues.some((v) => v === "A" || v === "B")) {
                 return prev;
@@ -90,7 +123,6 @@ const FloorFilters = () => {
             }
           }
         } else {
-          // If clicking just the checkbox
           if (prev.blocks.includes(value)) {
             newValues = newValues.filter((v) => v !== value);
           } else {
@@ -142,16 +174,10 @@ const FloorFilters = () => {
       queryParams.set("blocks", filters.blocks.join(","));
     }
 
-    router.push(`/homes-list?${queryParams.toString()}`);
+    router.push(`/${locale}/homes-list?${queryParams.toString()}`);
     setIsDrawerOpen(false);
   };
 
-  const activeFiltersCount = Object.values(filters).reduce(
-    (count, arr) => count + arr.length,
-    0
-  );
-
-  // Get available floors based on selected blocks
   const getAvailableFloors = () => {
     if (filters.blocks.length === 0) return [];
     const maxFloor = Math.max(
@@ -160,20 +186,29 @@ const FloorFilters = () => {
     return Array.from({ length: maxFloor }, (_, i) => i + 1);
   };
 
+  const activeFiltersCount = Object.values(filters).reduce(
+    (count, arr) => count + arr.length,
+    0
+  );
+
+  const getStatusLabel = (status) => {
+    return t[status] || status;
+  };
+
   return (
     <>
-      {/* Main Filters Bar */}
-      <div className="relative  bg-white border-b border-black/30 ">
+      <div className="relative bg-white border-b border-black/30">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center gap-3">
-            <button
+            <Link
+              href={`/choose-apartment`}
               className="flex items-center gap-2 px-4 py-2 rounded-lg
                         bg-[#FBB200] font-medium
                         transition-colors duration-200
                         border border-[#FBB200] text-black"
             >
-              <span>← Back</span>
-            </button>
+              <span>{t.back}</span>
+            </Link>
 
             <div className="h-6 w-px bg-black/30" />
 
@@ -182,9 +217,9 @@ const FloorFilters = () => {
                 label={
                   filters.blocks.length > 0
                     ? filters.blocks.length === 1
-                      ? `${filters.blocks[0]} ბლოკი`
-                      : `${filters.blocks.join(" & ")} ბლოკი`
-                    : "ბლოკი"
+                      ? `${filters.blocks[0]} ${t.block}`
+                      : `${filters.blocks.join(" & ")} ${t.block}`
+                    : t.block
                 }
                 isActive={filters.blocks.length > 0}
                 isOpen={openFilter === "block"}
@@ -221,7 +256,9 @@ const FloorFilters = () => {
                             filters.blocks.includes("D"))
                         }
                       />
-                      <span className="text-black">ბლოკი {block}</span>
+                      <span className="text-black">
+                        {t.block} {block}
+                      </span>
                     </label>
                   ))}
                 </div>
@@ -230,15 +267,14 @@ const FloorFilters = () => {
               <FilterButton
                 label={
                   filters.floors.length > 0
-                    ? `${filters.floors.length} სართული`
-                    : "სართული"
+                    ? `${filters.floors.length} ${t.floors}`
+                    : t.floor
                 }
                 isActive={filters.floors.length > 0}
                 isOpen={openFilter === "floor"}
                 onToggle={() =>
                   setOpenFilter(openFilter === "floor" ? null : "floor")
                 }
-                disabled={filters.blocks.length === 0}
               >
                 <div className="space-y-1">
                   {getAvailableFloors().map((floor) => (
@@ -260,7 +296,9 @@ const FloorFilters = () => {
                           handleFilterToggle("floors", floor, false);
                         }}
                       />
-                      <span className="text-black">{floor} სართული</span>
+                      <span className="text-black">
+                        {floor} {t.floor}
+                      </span>
                     </label>
                   ))}
                 </div>
@@ -270,20 +308,9 @@ const FloorFilters = () => {
                 label={
                   filters.statuses.length > 0
                     ? filters.statuses
-                        .map((status) => {
-                          switch (status) {
-                            case "available":
-                              return "თავისუფალი";
-                            case "reserved":
-                              return "დაჯავშნული";
-                            case "sold":
-                              return "გაყიდული";
-                            default:
-                              return status;
-                          }
-                        })
+                        .map((status) => getStatusLabel(status))
                         .join(" & ")
-                    : "სტატუსი"
+                    : t.status
                 }
                 isActive={filters.statuses.length > 0}
                 isOpen={openFilter === "status"}
@@ -293,9 +320,9 @@ const FloorFilters = () => {
               >
                 <div className="space-y-1">
                   {[
-                    { value: "available", label: "თავისუფალი" },
-                    { value: "reserved", label: "დაჯავშნული" },
-                    { value: "sold", label: "გაყიდული" },
+                    { value: "available", label: t.available },
+                    { value: "reserved", label: t.reserved },
+                    { value: "sold", label: t.sold },
                   ].map(({ value, label }) => (
                     <label
                       key={value}
@@ -321,8 +348,6 @@ const FloorFilters = () => {
                 </div>
               </FilterButton>
 
-              {/* Rest of the component remains the same */}
-
               {activeFiltersCount > 0 && (
                 <Button
                   variant="ghost"
@@ -346,7 +371,7 @@ const FloorFilters = () => {
                 disabled={activeFiltersCount === 0}
               >
                 <Search size={18} />
-                ძებნა
+                {t.search}
                 {activeFiltersCount > 0 && (
                   <span
                     className="flex items-center justify-center w-5 h-5 text-xs 
@@ -370,7 +395,7 @@ const FloorFilters = () => {
                   flex items-center gap-2"
       >
         <Search size={20} />
-        <span className="font-medium">ფილტრი</span>
+        <span className="font-medium">{t.filter}</span>
         {activeFiltersCount > 0 && (
           <span
             className="flex items-center justify-center w-5 h-5 text-xs 
@@ -393,7 +418,7 @@ const FloorFilters = () => {
                         z-50 transform transition-all duration-300 ease-out p-4"
           >
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold text-white">ფილტრები</h2>
+              <h2 className="text-xl font-semibold text-white">{t.filters}</h2>
               <Button
                 variant="ghost"
                 className="text-white/70 hover:text-white"
@@ -407,7 +432,7 @@ const FloorFilters = () => {
             <div className="space-y-6">
               {/* Blocks */}
               <div>
-                <h3 className="text-white/90 mb-3">ბლოკი</h3>
+                <h3 className="text-white/90 mb-3">{t.block}</h3>
                 <div className="grid grid-cols-3 gap-2">
                   {["A", "B", "D"].map((block) => (
                     <button
@@ -420,7 +445,7 @@ const FloorFilters = () => {
                                     : "bg-white/10 text-white/90"
                                 }`}
                     >
-                      ბლოკი {block}
+                      {t.block} {block}
                     </button>
                   ))}
                 </div>
@@ -428,7 +453,7 @@ const FloorFilters = () => {
 
               {/* Floors */}
               <div>
-                <h3 className="text-white/90 mb-3">სართული</h3>
+                <h3 className="text-white/90 mb-3">{t.floor}</h3>
                 <div className="grid grid-cols-4 gap-2">
                   {getAvailableFloors().map((floor) => (
                     <button
@@ -449,12 +474,12 @@ const FloorFilters = () => {
 
               {/* Statuses */}
               <div>
-                <h3 className="text-white/90 mb-3">სტატუსი</h3>
+                <h3 className="text-white/90 mb-3">{t.status}</h3>
                 <div className="grid grid-cols-2 gap-2">
                   {[
-                    { value: "available", label: "თავისუფალი" },
-                    { value: "reserved", label: "დაჯავშნული" },
-                    { value: "sold", label: "გაყიდული" },
+                    { value: "available", label: t.available },
+                    { value: "reserved", label: t.reserved },
+                    { value: "sold", label: t.sold },
                   ].map(({ value, label }) => (
                     <button
                       key={value}
@@ -485,7 +510,7 @@ const FloorFilters = () => {
                     className="flex-1 border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
                     onClick={handleClearFilters}
                   >
-                    გასუფთავება
+                    {t.clear}
                   </Button>
                 )}
                 <Button
@@ -494,7 +519,7 @@ const FloorFilters = () => {
                   disabled={activeFiltersCount === 0}
                 >
                   <Search size={18} className="mr-2" />
-                  ძებნა
+                  {t.search}
                   {activeFiltersCount > 0 && (
                     <span
                       className="ml-1 flex items-center justify-center w-5 h-5 

@@ -3,8 +3,33 @@ import Link from "next/link";
 import { MapPin, Phone, Clock } from "lucide-react";
 import FooterLogo from "@/public/assets/shapes/home/footer-logo.png";
 import Image from "next/image";
+import { useLocale } from "next-intl";
+
+const translations = {
+  en: {
+    address: "Address",
+    addressText: "5, Sulkhan Tsintsadze Street, Tbilisi, Georgia",
+    phoneEmail: "Phone/E-mail",
+    workingHours: "Working Hours",
+    monToFri: "Mon- Sat: 10:00 - 18:00",
+    saturday: "Sat: 11:00 - 17:00",
+    termsAndConditions: "Terms and Conditions",
+  },
+  ka: {
+    address: "მისამართი",
+    addressText: "სულხან ცინცაძის ქ. 5, თბილისი, საქართველო",
+    phoneEmail: "ტელეფონი/ელ-ფოსტა",
+    workingHours: "სამუშაო საათები",
+    monToFri: "ორშ-პარ: 10:00 - 18:00",
+    saturday: "შაბ: 11:00 - 17:00",
+    termsAndConditions: "წესები და პირობები",
+  },
+};
 
 export default function Footer() {
+  const locale = useLocale();
+  const t = translations[locale];
+
   const socialLinks = [
     {
       name: "Facebook",
@@ -41,7 +66,7 @@ export default function Footer() {
         <div className="min-h-[58vh] flex flex-col justify-end pb-8">
           {/* Logo and Social Links */}
           <div className="flex flex-col md:flex-row justify-between items-center mb-16">
-            <Link href="/" className="mb-6 md:mb-0">
+            <Link href={`/${locale}`} className="mb-6 md:mb-0">
               <Image
                 src={FooterLogo}
                 alt="Formus Logo"
@@ -67,19 +92,17 @@ export default function Footer() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
             <div>
               <h6 className="text-white/60 text-sm font-medium mb-4">
-                Address
+                {t.address}
               </h6>
               <div className="flex items-center">
                 <MapPin className="text-white mr-2 flex-shrink-0" size={20} />
-                <p className="text-white">
-                  5, Sulkhan Tsintsadze Street, Tbilisi, Georgia
-                </p>
+                <p className="text-white">{t.addressText}</p>
               </div>
             </div>
 
             <div>
               <h6 className="text-white/60 text-sm font-medium mb-4">
-                Phone/E-mail
+                {t.phoneEmail}
               </h6>
               <div className="flex flex-col space-y-2">
                 <div className="flex items-center">
@@ -103,18 +126,18 @@ export default function Footer() {
             <div className="flex justify-between items-start">
               <div>
                 <h6 className="text-white/60 text-sm font-medium mb-4">
-                  Working Hours
+                  {t.workingHours}
                 </h6>
                 <div className="flex items-center">
                   <Clock className="text-white mr-2 flex-shrink-0" size={20} />
                   <div className="text-white text-sm">
-                    <p className="firago-thin">Mon- Sat: 10:00 - 18:00</p>
-                    <p>Sat: 11:00 - 17:00</p>
+                    <p className="firago-thin">{t.monToFri}</p>
+                    <p>{t.saturday}</p>
                   </div>
                 </div>
               </div>
               <div className="text-white text-sm ml-8 mt-[44px]">
-                Terms and Conditions
+                {t.termsAndConditions}
               </div>
             </div>
           </div>

@@ -3,13 +3,28 @@ import React, { useState, memo, useEffect } from "react";
 import { useParams } from "next/navigation";
 import LoadingOverlay from "@/components/loader/loader";
 import { useRouter } from "next/navigation";
+import { useLocale } from "next-intl";
 import RoomAreas from "../(components)/room-area";
 import { CldImage } from "next-cloudinary";
 import FloorFilters from "@/components/apartment/floor-filters";
 import Header5 from "@/components/headers/Header5";
 
-const Polygon = memo(({ data, isHovered, onHover, onClick, isMobile }) => {
-  // Calculate center point for text positioning
+const translations = {
+  en: {
+    chooseApartment: "Choose Apartment",
+    sold: "Sold",
+    floorError: "Floor ID is not specified",
+    dataError: "Error receiving data",
+  },
+  ka: {
+    chooseApartment: "აირჩიე აპარტამენტი",
+    sold: "გაყიდულია",
+    floorError: "სართულის ID არ არის მითითებული",
+    dataError: "შეცდომა მონაცემების მიღებისას",
+  },
+};
+
+const Polygon = memo(({ data, isHovered, onHover, onClick, isMobile, t }) => {
   const getCenterPoint = (coords) => {
     const points = coords.split(" ").map((point) => {
       const [x, y] = point.split(",").map(Number);
@@ -71,7 +86,7 @@ const Polygon = memo(({ data, isHovered, onHover, onClick, isMobile }) => {
             textShadow: "1px 1px 2px rgba(255, 255, 255, 0.8)",
           }}
         >
-          გაყიდულია
+          {t.sold}
         </text>
       )}
 
@@ -97,6 +112,9 @@ const Polygon = memo(({ data, isHovered, onHover, onClick, isMobile }) => {
 const FloorDetails = () => {
   const router = useRouter();
   const params = useParams();
+  const locale = useLocale();
+  const t = translations[locale];
+
   const [floorData, setFloorData] = useState(null);
   const [hoveredApartment, setHoveredApartment] = useState(null);
   const [selectedApartment, setSelectedApartment] = useState(null);
@@ -119,7 +137,7 @@ const FloorDetails = () => {
       try {
         setLoading(true);
         if (!params.id || params.id === "undefined") {
-          throw new Error("სართულის ID არ არის მითითებული");
+          throw new Error(t.floorError);
         }
 
         const floorId = params.id.split("-")[0];
@@ -127,7 +145,7 @@ const FloorDetails = () => {
         const result = await response.json();
 
         if (result.status !== "success") {
-          throw new Error(result.message || "შეცდომა მონაცემების მიღებისას");
+          throw new Error(result.message || t.dataError);
         }
 
         const apartmentResponses = await Promise.all(
@@ -160,7 +178,7 @@ const FloorDetails = () => {
     if (params.id) {
       fetchData();
     }
-  }, [params.id]);
+  }, [params.id, t]);
 
   const handlePolygonClick = (data) => {
     if (!data.apartment_id) {
@@ -168,7 +186,7 @@ const FloorDetails = () => {
       return;
     }
     const slug = `${data.apartment_id}-apartment-${data.apartment_number}-floor-${data.floor}`;
-    router.push(`/apartment/${slug}`);
+    router.push(`/${locale}/apartment/${slug}`);
   };
 
   if (loading) return <LoadingOverlay />;
@@ -181,13 +199,13 @@ const FloorDetails = () => {
   return (
     <>
       <Header5 />
-      <div className="flex flex-col  mt-[100px]">
+      <div className="flex flex-col mt-[100px]">
         <div className="container mx-auto px-4 py-4">
           <div className="max-w-3xl mx-auto mb-6">
             <FloorFilters />
           </div>
           <h2 className="text-2xl font-bold text-center mb-4">
-            აირჩიე აპარტამენტი
+            {t.chooseApartment}
           </h2>
           <div className="flex flex-col lg:flex-row gap-8 max-w-5xl mx-auto">
             <div className="flex-grow bg-gray-200 rounded-xl shadow-sm border-black overflow-hidden">
@@ -231,6 +249,7 @@ const FloorDetails = () => {
                           }}
                           onClick={handlePolygonClick}
                           isMobile={isMobile}
+                          t={t}
                         />
                       ))}
                     </svg>

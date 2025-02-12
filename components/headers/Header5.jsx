@@ -77,54 +77,29 @@ export default function Header5() {
   };
 
   const getLocalizedPath = (targetLocale) => {
-    // Split the current pathname into segments
+    // თუ მთავარ გვერდზე ვართ
+    if (pathname === `/${locale}`) {
+      return `/${targetLocale}`;
+    }
+
+    // მიმდინარე გზის სეგმენტები
     const segments = pathname.split("/");
 
-    // Handle floor pages
-    if (pathname.includes("/floor/")) {
-      const floorIndex = segments.findIndex((seg) => seg === "floor");
-      if (floorIndex !== -1) {
-        return `/${targetLocale}/floor/${segments
-          .slice(floorIndex + 1)
-          .join("/")}`;
-      }
+    // წავშალოთ ცარიელი სეგმენტები
+    const filteredSegments = segments.filter((segment) => segment !== "");
+
+    // მოვაშოროთ მიმდინარე locale
+    if (filteredSegments[0] === locale) {
+      filteredSegments.shift();
     }
 
-    // Handle apartment pages
-    if (pathname.includes("/apartment/")) {
-      const apartmentIndex = segments.findIndex((seg) => seg === "apartment");
-      if (apartmentIndex !== -1) {
-        return `/${targetLocale}/apartment/${segments
-          .slice(apartmentIndex + 1)
-          .join("/")}`;
-      }
-    }
+    // ავაწყოთ ახალი გზა
+    const newPath = `/${targetLocale}/${filteredSegments.join("/")}`;
 
-    // Handle media-single pages
-    if (pathname.includes("/media-single/")) {
-      const mediaIndex = segments.findIndex((seg) => seg === "media-single");
-      if (mediaIndex !== -1) {
-        return `/${targetLocale}/media-single/${segments
-          .slice(mediaIndex + 1)
-          .join("/")}`;
-      }
-    }
+    console.log("Current pathname:", pathname);
+    console.log("New path:", newPath);
 
-    // Handle projects pages
-    if (pathname.includes("/projects/")) {
-      const projectsIndex = segments.findIndex((seg) => seg === "projects");
-      if (projectsIndex !== -1) {
-        return `/${targetLocale}/projects/${segments
-          .slice(projectsIndex + 1)
-          .join("/")}`;
-      }
-    }
-
-    // For other pages, use the standard path construction
-    const pathWithoutLocale = segments.slice(2).join("/");
-    return pathWithoutLocale
-      ? `/${targetLocale}/${pathWithoutLocale}`
-      : `/${targetLocale}`;
+    return newPath;
   };
 
   return isMobile ? (

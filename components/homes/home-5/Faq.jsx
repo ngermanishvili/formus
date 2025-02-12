@@ -58,7 +58,7 @@ export default function HeroSection() {
             className="block lg:absolute lg:bottom-4 lg:left-[370px] lg:-translate-x-1/2 w-40 mx-auto sm:ml-[100px] lg:ml-0"
           >
             <Button className="w-full h-10 bg-[#Fcb203] text-black font-bold text-lg rounded-md right-0 shadow-lg hover:shadow-xl transition duration-300 ease-in-out">
-              Learn More
+              {isGeorgian ? "ვრცლად" : "Read More"}
             </Button>
           </Link>
         </div>

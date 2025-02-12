@@ -12,6 +12,36 @@ export default function BlogSingle() {
   const pathname = usePathname();
   const locale = pathname?.startsWith("/en") ? "en" : "ka";
 
+  // Georgian months array
+  const georgianMonths = [
+    "იანვარი",
+    "თებერვალი",
+    "მარტი",
+    "აპრილი",
+    "მაისი",
+    "ივნისი",
+    "ივლისი",
+    "აგვისტო",
+    "სექტემბერი",
+    "ოქტომბერი",
+    "ნოემბერი",
+    "დეკემბერი",
+  ];
+
+  const formatDate = (date) => {
+    const d = new Date(date);
+    if (locale === "ka") {
+      const month = georgianMonths[d.getMonth()];
+      const year = d.getFullYear();
+      return `${month}, ${year}`;
+    } else {
+      return d.toLocaleString("en", {
+        month: "long",
+        year: "numeric",
+      });
+    }
+  };
+
   useEffect(() => {
     const fetchBlog = async () => {
       try {
@@ -79,25 +109,22 @@ export default function BlogSingle() {
                 {new Date(blog.created_at).getDate()}.
               </div>
               <p className="text-14 color-white">
-                {new Date(blog.created_at).toLocaleString(locale, {
-                  month: "long",
-                  year: "numeric",
-                })}
+                {formatDate(blog.created_at)}
               </p>
             </div>
             {blog.image_url && (
               <Image
                 src={blog.image_url}
                 alt={locale === "ka" ? blog.title_ge : blog.title_en}
-                width={1170} // Keep your original intended width
-                height={600} // Keep your original intended height
+                width={1170}
+                height={600}
                 style={{
-                  width: "100%", // Make the image responsive within its container
-                  height: "650px", // Maintain aspect ratio
-                  objectFit: "cover", // Fill the container
+                  width: "100%",
+                  height: "650px",
+                  objectFit: "cover",
                 }}
-                priority={true} //  Help to improve the Largest Contentful Paint (LCP).
-                quality={75} // Adjust as needed (50-75 is a good starting point)
+                priority={true}
+                quality={75}
               />
             )}
           </div>

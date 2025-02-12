@@ -52,13 +52,26 @@ const ChooseApartment = () => {
         <div className="absolute inset-0">
           <OrtachalaPolygon />
         </div>
-        <div className="absolute md:left-[500px] top-[100px] right-4 z-10">
+
+        {/* Filters Container */}
+        <div
+          className="absolute z-10 
+          w-full px-4
+          sm:w-auto sm:right-4 sm:px-0
+          md:left-[30%] md:transform md:-translate-x-1/2
+          lg:left-[35%] lg:transform-none
+          xl:left-[25%]
+          2xl:left-[30%]
+          top-[100px]"
+        >
           <ApartmentFilters onFilterChange={handleFilterChange} />
         </div>
+
+        {/* Mobile Formus Logo */}
         <div
           className="absolute left-1/2 transform -translate-x-1/2 
-                          sm:bottom-[-80px]  mt-[500px]
-                              md:hidden z-0"
+            sm:bottom-[-80px] mt-[500px] 
+            md:hidden z-0"
         >
           <Image
             src={FormusLogo}

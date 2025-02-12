@@ -7,6 +7,8 @@ import { CldImage } from "next-cloudinary";
 import { Minus, Plus, RotateCcw } from "lucide-react";
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import ApartmentFilters from "@/components/apartment/filters";
+import FormusLogo from "@/public/assets/imgs/ortachala/formus.svg";
+import Image from "next/image";
 
 const IMAGES = {
   first:
@@ -175,70 +177,89 @@ const InfoCard = memo(({ data, position }) => {
 
 const Controls = ({ zoomIn, zoomOut, resetTransform }) => {
   // ზუმის step-ის კონტროლი უფრო ზუსტი მანიპულაციებისთვის
-  const handleZoomIn = () => zoomIn(0.3); // შემცირებული step ზუმისთვის
-  const handleZoomOut = () => zoomOut(0.3); // შემცირებული step ზუმისთვის
+  const handleZoomIn = () => zoomIn(0.3);
+  const handleZoomOut = () => zoomOut(0.3);
 
   return (
-    // <div className="fixed bottom-[50%] right-6 flex  gap-1.5 z-50">
-    //   <div className="relative">
-    //     <div
-    //       className="bg-black/20 backdrop-blur-xl rounded-2xl
-    //                   border border-white/10 shadow-2xl
-    //                   p-1.5 overflow-hidden"
-    //     >
-    //       <div className="flex  gap-1">
-    //         <button
-    //           onClick={handleZoomIn}
-    //           className="p-3.5 rounded-xl bg-gradient-to-tr
-    //                    from-white/5 to-white/10
-    //                    active:from-purple-500/20 active:to-blue-500/20
-    //                    transition-all duration-200"
-    //           aria-label="Zoom in"
-    //         >
-    //           <Plus
-    //             size={20}
-    //             className="text-white/90 transform active:scale-95
-    //                      transition-transform duration-200"
-    //           />
-    //         </button>
+    <>
+      <div className="relative w-full">
+        {/* Zoom Controls */}
 
-    //         <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+        <div className="fixed bottom-[50%] right-6 flex gap-1.5 z-50">
+          <div className="relative">
+            <div
+              className=" backdrop-blur-xl rounded-md 
+                      border border-white/10 shadow-md
+                      p-1.5 overflow-hidden"
+            >
+              <div className="flex gap-1">
+                <button
+                  onClick={handleZoomIn}
+                  className="p-3.5 rounded-xl bg-gradient-to-tr
+                         from-white/5 to-white/10
+                         active:from-purple-500/20 active:to-blue-500/20
+                         transition-all duration-200 "
+                  aria-label="Zoom in"
+                >
+                  <Plus
+                    size={20}
+                    className="text-white/90 transform active:scale-95
+                           transition-transform duration-200"
+                  />
+                </button>
 
-    //         <button
-    //           onClick={handleZoomOut}
-    //           className="p-3.5 rounded-xl bg-gradient-to-tr
-    //                    from-white/5 to-white/10
-    //                    active:from-purple-500/20 active:to-blue-500/20
-    //                    transition-all duration-200"
-    //           aria-label="Zoom out"
-    //         >
-    //           <Minus
-    //             size={20}
-    //             className="text-white/90 transform active:scale-95
-    //                      transition-transform duration-200"
-    //           />
-    //         </button>
-    //       </div>
-    //     </div>
-    //   </div>
+                <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
 
-    //   <button
-    //     onClick={resetTransform}
-    //     className="p-3.5 rounded-xl
-    //              bg-black/20 backdrop-blur-xl
-    //              border border-white/10 shadow-2xl
-    //              active:bg-purple-500/20
-    //              transition-all duration-200"
-    //     aria-label="Reset zoom"
-    //   >
-    //     <RotateCcw
-    //       size={20}
-    //       className="text-white/90 transform active:scale-95
-    //                transition-transform duration-200"
-    //     />
-    //   </button>
-    // </div>
-    <div></div>
+                <button
+                  onClick={handleZoomOut}
+                  className="p-3.5 rounded-xl bg-gradient-to-tr
+                         from-white/5 to-white/10
+                         active:from-purple-500/20 active:to-blue-500/20
+                         transition-all duration-200"
+                  aria-label="Zoom out"
+                >
+                  <Minus
+                    size={20}
+                    className="text-white/90 transform active:scale-95
+                           transition-transform duration-200"
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="w-[90px]"></div>
+          <button
+            onClick={resetTransform}
+            className="p-3.5 rounded-md
+                   bg-black/20 backdrop-blur-xl
+                   border border-white/10 shadow-2xl
+                   active:bg-purple-500/20
+                   transition-all duration-200"
+            aria-label="Reset zoom"
+          >
+            <RotateCcw
+              size={20}
+              className="text-white/90 transform active:scale-95 w-[100px]
+                     transition-transform duration-200"
+            />
+          </button>
+        </div>
+        {/* Formus Logo - Centered and only visible on mobile/tablet */}
+        <div
+          className="absolute left-1/2 transform -translate-x-1/2 
+                      bottom-[-200px] sm:bottom-[-80px] md:bottom-[80px] 
+                      md:hidden z-0"
+        >
+          <Image
+            src={FormusLogo}
+            alt="Decorative shape"
+            width={200}
+            height={200}
+            className="mt-12"
+          />
+        </div>
+      </div>
+    </>
   );
 };
 
@@ -347,7 +368,7 @@ const OrtachalaPolygon = () => {
 
   const content = (
     <>
-      <div className="relative w-full h-full flex items-center justify-center ">
+      <div className="relative w-full h-full flex items-center justify-center md:mt-0 mt-[50px]">
         <div className="w-full h-full relative overflow-hidden">
           <CldImage
             src={IMAGES.first}

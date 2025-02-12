@@ -9,7 +9,6 @@ const Test = () => {
       <Header1 />
       <div className="flex-1 w-full">
         <OrtachalaPolygon />
-
       </div>
       <Footer1 />
     </div>

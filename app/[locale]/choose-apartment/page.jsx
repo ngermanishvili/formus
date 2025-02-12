@@ -4,6 +4,8 @@ import OrtachalaPolygon from "../(test)/testroute/(components)/ortachala-polygon
 import Footer1 from "@/components/footers/Footer1";
 import Header5 from "@/components/headers/Header5";
 import ApartmentFilters from "@/components/apartment/filters";
+import Image from "next/image";
+import FormusLogo from "@/public/assets/imgs/ortachala/formus.svg";
 
 const ChooseApartment = () => {
   const handleFilterChange = (filterValues) => {
@@ -50,11 +52,24 @@ const ChooseApartment = () => {
         <div className="absolute inset-0">
           <OrtachalaPolygon />
         </div>
-        <div className="absolute left-[500px] top-[100px] right-4 z-10">
+        <div className="absolute md:left-[500px] top-[100px] right-4 z-10">
           <ApartmentFilters onFilterChange={handleFilterChange} />
         </div>
+        <div
+          className="absolute left-1/2 transform -translate-x-1/2 
+                          sm:bottom-[-80px]  mt-[500px]
+                              md:hidden z-0"
+        >
+          <Image
+            src={FormusLogo}
+            alt="Decorative shape"
+            width={200}
+            height={200}
+            className="mt-12"
+          />
+          <div />
+        </div>
       </main>
-      <Footer1 />
     </div>
   );
 };

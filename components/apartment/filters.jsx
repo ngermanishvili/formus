@@ -202,10 +202,11 @@ const FloorFilters = () => {
           <div className="flex items-center gap-3">
             <Link
               href={`/choose-apartment`}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg
-                        bg-[#FBB200] font-medium
-                        transition-colors duration-200
-                        border border-[#FBB200] text-white"
+              className=" items-center gap-2 px-4 py-2 rounded-lg
+              bg-[#FBB200] font-medium
+              transition-colors duration-200
+              border border-[#FBB200] text-white 
+              hidden md:flex"
             >
               <span>{t.back}</span>
             </Link>

@@ -40,13 +40,17 @@ export default function Blogs1() {
 
   const createSlug = (text) => {
     if (!text) return "";
-
     return text
       .toLowerCase()
       .replace(/[^a-zა-ჰ0-9\s-]/g, "")
       .replace(/\s+/g, "-")
       .replace(/-+/g, "-")
       .trim();
+  };
+
+  const truncateTitle = (title) => {
+    if (!title) return "";
+    return title.length > 35 ? title.substring(0, 35) + "..." : title;
   };
 
   if (loading) {
@@ -115,7 +119,9 @@ export default function Blogs1() {
                     )}-${blog.id}`}
                   >
                     <h3 className="text-20-medium color-white mb-20">
-                      {locale === "ka" ? blog.title_ge : blog.title_en}
+                      {truncateTitle(
+                        locale === "ka" ? blog.title_ge : blog.title_en
+                      )}
                     </h3>
                   </Link>
                   <p className="color-white mb-20">

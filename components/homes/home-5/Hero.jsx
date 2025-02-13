@@ -18,6 +18,7 @@ const baseSettings = {
 
 export default function Hero() {
   const [mounted, setMounted] = useState(false);
+
   const [data, setData] = useState({
     sliders: [],
     projects: [],
@@ -123,7 +124,9 @@ export default function Hero() {
                   </p>
 
                   <Link className="btn btn-border mt-2" href="/projects">
-                    Ongoing Projects
+                    {currentLang === "ge"
+                      ? "მიმდინარე პროექტები"
+                      : "Ongoing Projects"}
                     <svg
                       className="icon-16"
                       fill="none"

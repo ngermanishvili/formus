@@ -174,7 +174,7 @@ export default function Services1() {
                           : project.title_en || project.title || "Untitled"}
                       </h3>
                       <div className="">
-                        <p className="cardDesc text-14 color-white mb-30">
+                        <p className="cardDesc text-14 color-white ">
                           {project.id === 1
                             ? currentLang === "ge"
                               ? "სულიკო თორთლაძის ქუჩა"
@@ -187,7 +187,7 @@ export default function Services1() {
                               project.description ||
                               ""}
                         </p>
-                        <p className="text-14 color-white mb-15">
+                        <p className="text-14 color-white ">
                           {currentLang === "ge"
                             ? project.address_ge || project.address || ""
                             : project.address_en || project.address || ""}

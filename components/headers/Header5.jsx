@@ -41,7 +41,7 @@ const routes = [
   },
   {
     id: 5,
-    path: "/news",
+    path: "/media",
     translations: {
       ka: "სიახლეები",
       en: "News",

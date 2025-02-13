@@ -111,22 +111,41 @@ export default function Hero() {
                   ))}
                 </Swiper>
                 <div className="px-8 md:px-16 lg:px-24 absolute top-0 left-0 right-0">
-                  <p className="heading-52-medium color-white wow fadeInUp text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
-                    {currentLang === "ge"
-                      ? data.sliders[0]?.title_ge
-                      : data.sliders[0]?.title_en}
-                  </p>
                   <h2 className="text-base md:text-lg lg:text-xl color-white wow fadeInUp mt-4">
                     {currentLang === "ge"
                       ? data.sliders[0]?.description_ge
                       : data.sliders[0]?.description_en}
                   </h2>
+                  <p className="heading-52-medium color-white wow fadeInUp text-2xl md:text-3xl lg:text-6xl xl:text-6xl">
+                    {currentLang === "ge"
+                      ? data.sliders[0]?.title_ge
+                      : data.sliders[0]?.title_en}
+                  </p>
+
+                  <Link className="btn btn-border mt-2" href="/projects">
+                    Ongoing Projects
+                    <svg
+                      className="icon-16"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                      aria-hidden="true"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
+                      ></path>
+                    </svg>
+                  </Link>
                 </div>
               </>
             )}
 
-            <div className="box-pagination-button box-pagination-button-2 px-8 md:px-16 lg:px-24 ">
-              <div className="swiper-button-prev swiper-button-prev-banner swiper-button-prev-banner-2 snbp11">
+            <div className="box-pagination-button box-pagination-button-2  md:px-16 lg:px-24 ">
+              <div className="swiper-button-prev swiper-button-prev-banner swiper-button-prev-banner-2 snbp11 flex items-center justify-center">
                 <svg
                   className="w-6 h-6 md:w-8 md:h-8"
                   fill="none"
@@ -142,7 +161,7 @@ export default function Hero() {
                   />
                 </svg>
               </div>
-              <div className="swiper-button-next swiper-button-next-banner swiper-button-next-banner-2 snbn11">
+              <div className="swiper-button-prev swiper-button-prev-banner swiper-button-prev-banner-2 snbp11 flex items-center justify-center">
                 <svg
                   className="w-6 h-6 md:w-8 md:h-8"
                   fill="none"

@@ -7,7 +7,7 @@ export async function GET() {
     try {
         console.log('API request received');
 
-        // დავამატოთ უფრო დეტალური SELECT
+        // შევცვალოთ SQL query, რომ გამოვრიცხოთ ID 7 და 8
         const routes = await db.query(`
             SELECT 
                 r.id,
@@ -21,6 +21,7 @@ export async function GET() {
                 ) as translations
             FROM routes r
             LEFT JOIN route_translations rt ON r.id = rt.route_id
+            WHERE r.id NOT IN (7, 8)  -- დავამატეთ ეს პირობა
             GROUP BY r.id, r.path, r.is_active, r.created_at, r.updated_at
             ORDER BY r.id ASC
         `);

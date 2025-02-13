@@ -17,16 +17,16 @@ export default function Page() {
         <Hero />
         <div className="relative">
           <Faq />
-          <div className="absolute bottom-[-200px] sm:bottom-[-150px] md:bottom-[-180px] lg:bottom-[-200px] left-0 right-0 z-10">
+          <div className="absolute bottom-[-200px] sm:bottom-[-150px] md:bottom-[-180px] lg:bottom-[-250px] left-[90px] right-0 z-10">
             <DownloadApp />
           </div>
-          <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:bottom-[50px] left-[-20px] right-0 z-0">
+          <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:bottom-[50px] left-[-20px] right-0 z-0 xl-w-[300px] xl-w-[300px] 4xl-w-[400px] 4xl-h-[600px]">
             <Image
               src={Shape}
               alt="Decorative shape"
               width={200}
               height={200}
-              className="mt-[50px]"
+              className="mt-[50px] xl-w-[300px] xl-w-[300px] 2xl-w-[400px] 2xl-h-[600px]"
             />
           </div>
         </div>

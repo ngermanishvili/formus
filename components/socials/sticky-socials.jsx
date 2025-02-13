@@ -20,7 +20,7 @@ const StickySocial = () => {
         </a>
         <button
           onClick={() => setIsModalOpen(true)}
-          className="bg-[#FBB200] hover:bg-[#ed6a42] text-white p-3 sm:p-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
+          className="bg-[#FBB200] hover:bg-[#ffcc3f] text-white p-3 sm:p-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
         >
           <IoLogoWechat className="w-6 h-6 sm:w-8 sm:h-8" />
         </button>

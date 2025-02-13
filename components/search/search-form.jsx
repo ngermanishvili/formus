@@ -124,67 +124,87 @@ export default function SearchForm() {
   const hasMore = visibleCount < filteredApartments.length;
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="w-full backdrop-blur-md bg-white/90 rounded-2xl shadow-xl p-4 md:p-6 flex flex-col md:flex-row items-center gap-4 max-w-6xl mx-auto transition-all">
-        <div className="flex-1 w-full">
-          <p className="text-gray-500 text-sm mb-1">{t.project}</p>
-          <Select
-            value="ortachala_hills"
-            disabled
-            onValueChange={(value) => handleSelect(value, "project")}
-          >
-            <SelectTrigger className="h-12 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-green-400 transition-all">
-              <SelectValue placeholder={t.ortachalaHills} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="ortachala_hills">
-                {t.ortachalaHills}
-              </SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex-1 w-full">
-          <p className="text-gray-500 text-sm mb-1">{t.location}</p>
-          <Select
-            value="tbilisi"
-            disabled
-            onValueChange={(value) => handleSelect(value, "location")}
-          >
-            <SelectTrigger className="h-12 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-green-400 transition-all">
-              <SelectValue placeholder={t.tbilisi} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="tbilisi">{t.tbilisi}</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex-1 w-full">
-          <p className="text-gray-500 text-sm mb-1">{t.area}</p>
-          <Select onValueChange={(value) => handleSelect(value, "areaRange")}>
-            <SelectTrigger className="h-12 bg-gray-50 border-none rounded-xl focus:ring-2 focus:ring-green-400 transition-all">
-              <SelectValue placeholder={t.choose} />
-            </SelectTrigger>
-            <SelectContent>
-              {areaRanges.map((range) => (
-                <SelectItem key={range.value} value={range.value}>
-                  {range.label}
+    <div className="flex flex-col gap-4 px-4 md:px-6 lg:px-8">
+      <div className="flex flex-col md:flex-row w-full">
+        <div
+          className="w-full backdrop-blur-md bg-white/90 shadow-xl p-4 md:p-6 
+                      flex flex-col md:flex-row items-stretch gap-4 md:gap-2 
+                      max-w-6xl rounded-t-xl md:rounded-l-xl md:rounded-tr-none"
+        >
+          <div className="flex-1 min-w-0">
+            <p className="text-gray-500 text-sm mb-1 text-left">{t.project}</p>
+            <Select
+              value="ortachala_hills"
+              disabled
+              onValueChange={(value) => handleSelect(value, "project")}
+            >
+              <SelectTrigger
+                className="h-12 bg-gray-50 border-none rounded-xl 
+                                     focus:ring-2 focus:ring-green-400 transition-all text-left"
+              >
+                <SelectValue placeholder={t.ortachalaHills} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ortachala_hills">
+                  {t.ortachalaHills}
                 </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex-1 min-w-0">
+            <p className="text-gray-500 text-sm mb-1 text-left">{t.location}</p>
+            <Select
+              value="tbilisi"
+              disabled
+              onValueChange={(value) => handleSelect(value, "location")}
+            >
+              <SelectTrigger
+                className="h-12 bg-gray-50 border-none rounded-xl 
+                                     focus:ring-2 focus:ring-green-400 transition-all text-left"
+              >
+                <SelectValue placeholder={t.tbilisi} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="tbilisi">{t.tbilisi}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex-1 min-w-0">
+            <p className="text-gray-500 text-sm mb-1 text-left">{t.area}</p>
+            <Select onValueChange={(value) => handleSelect(value, "areaRange")}>
+              <SelectTrigger
+                className="h-12 bg-gray-50 border-none rounded-xl 
+                                     focus:ring-2 focus:ring-green-400 transition-all text-left"
+              >
+                <SelectValue placeholder={t.choose} className="text-left" />
+              </SelectTrigger>
+              <SelectContent align="start">
+                {areaRanges.map((range) => (
+                  <SelectItem
+                    key={range.value}
+                    value={range.value}
+                    className="text-left"
+                  >
+                    {range.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
-        <div className="flex items-center gap-2 w-full md:w-auto">
-          <Button
-            className="bg-black hover:bg-gray-800 text-white rounded-xl h-12 px-8 w-full md:w-auto flex items-center gap-2 transition-all"
-            onClick={handleSearch}
-          >
-            <Search className="w-5 h-5" />
-            {t.search}
-          </Button>
-        </div>
+        <button
+          onClick={handleSearch}
+          className="w-full md:w-[200px] bg-[#FBB200] p-4 md:p-6 
+                   flex items-center justify-center gap-2
+                   text-center transition-all cursor-pointer
+                   hover:bg-[#e6a300] rounded-b-xl md:rounded-r-xl md:rounded-bl-none"
+        >
+          <Search className="w-5 h-5" />
+          <span>{t.search}</span>
+        </button>
       </div>
 
       {showResults && (
@@ -203,9 +223,9 @@ export default function SearchForm() {
                   <X size={24} />
                 </button>
                 <div className="mb-4">
-                  <div className="flex justify-between items-center">
+                  <div className="flex items-center">
                     <div>
-                      <h2 className="text-2xl font-semibold">
+                      <h2 className="text-xl md:text-2xl font-semibold">
                         {t.foundApartments} {filteredApartments.length}{" "}
                         {t.units}
                       </h2>

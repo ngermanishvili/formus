@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
-export default function HeroSection() {
+export default function Faq() {
   const [heroContent, setHeroContent] = useState([]);
   const pathname = usePathname();
   const isGeorgian = pathname.includes("/ka");
@@ -30,37 +30,39 @@ export default function HeroSection() {
 
   return (
     <section className="relative bg-white -mt-4 sm:-mt-4 md:mt-0 lg:-mt-4">
-      <div className="flex flex-col lg:flex-row items-stretch">
-        <div className="w-full lg:w-1/2 px-4 sm:px-6 lg:px-16 flex flex-col justify-center ml-0 sm:ml-[50px] lg:ml-[100px] mb-[200px] sm:mb-[250px] lg:mb-[350px] relative pt-12 sm:pt-16 lg:pt-0">
-          <div className="absolute left-[20px] sm:left-[150px] lg:left-[280px] top-[85px] sm:top-[95px] lg:top-[70px] -translate-y-1/2">
+      <div className="flex flex-col lg:flex-row items-stretch relative">
+        <div className="w-full lg:w-1/2 relative h-[600px] lg:h-[800px]">
+          <div className="absolute right-[424px] top-[100px] sm:top-[95px] lg:top-[95px] -translate-y-1/2 font-bold">
             <Image
               src={TitleShape}
               alt="Decorative shape"
-              width={70}
-              height={70}
+              width={80}
+              height={80}
             />
           </div>
-          <h2 className="text-3xl sm:text-4xl mt-2 font-bold text-black mb-6 sm:mb-8 leading-tight ml-4 sm:ml-[100px] lg:ml-[270px] relative z-10">
-            {isGeorgian ? "ფორმუსი" : "FORMUS"}
-          </h2>
-          <h2 className="text-2xl sm:text-4xl font-thin text-black mb-6 sm:mb-8 leading-tight ml-4 sm:ml-[100px] lg:ml-[270px] relative z-10">
-            {isGeorgian ? heroContent?.title_ge : heroContent?.title_en}
-          </h2>
-          <div className="relative">
-            <p className="text-gray-600 text-base sm:text-lg leading-relaxed mt-2 mb-8 sm:mb-10 ml-4 sm:ml-[100px] lg:ml-[270px] relative z-10">
+
+          <div className="absolute right-20 top-[120px] sm:top-[140px] lg:top-[70px] max-w-[400px]">
+            <h2 className="text-black text-xs">About us</h2>
+
+            <h2 className="text-3xl sm:text-4xl font-bold text-black mb-2 leading-tight relative z-10">
+              {isGeorgian ? "ფორმუსი" : "FORMUS"}
+            </h2>
+            <h2 className="text-2xl sm:text-4xl font-thin text-black mb-4 relative z-10">
+              {isGeorgian ? heroContent?.title_ge : heroContent?.title_en}
+            </h2>
+
+            <p className="text-gray-600 text-base sm:text-lg leading-relaxed mb-6 relative z-10 max-w-[500px]">
               {isGeorgian
                 ? heroContent?.description_ge
                 : heroContent?.description_en}
             </p>
+
+            <Link href="/about-formus" className="block w-40">
+              <Button className="w-full h-10 bg-[#Fcb203] text-black font-normal text-lg rounded-md right-0 shadow-lg hover:shadow-xl transition duration-300 ease-in-out p-4">
+                {isGeorgian ? "გაიგეთ მეტი" : "Learn More"}
+              </Button>
+            </Link>
           </div>
-          <Link
-            href="/about-formus"
-            className="block lg:absolute lg:bottom-4 lg:left-[370px] lg:-translate-x-1/2 w-40 mx-auto sm:ml-[100px] lg:ml-0"
-          >
-            <Button className="w-full h-10 bg-[#Fcb203] text-black font-bold text-lg rounded-md right-0 shadow-lg hover:shadow-xl transition duration-300 ease-in-out">
-              {isGeorgian ? "ვრცლად" : "Read More"}
-            </Button>
-          </Link>
         </div>
 
         <div className="w-full lg:w-1/2 h-[300px] sm:h-[400px] lg:h-[800px] overflow-hidden">

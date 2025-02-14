@@ -228,11 +228,11 @@ const FloorFilters = () => {
                   setOpenFilter(openFilter === "block" ? null : "block")
                 }
               >
-                <div className="space-y-1">
+                <div className="space-y-1 p-2">
                   {["A", "B", "D"].map((block) => (
                     <label
                       key={block}
-                      className="flex items-center gap-2 px-2 py-1.5 
+                      className="flex items-center gap-2 px-2 py-1.5
                                 hover:bg-black/5 rounded cursor-pointer
                                 disabled:opacity-50 disabled:cursor-not-allowed"
                       onClick={(e) => {

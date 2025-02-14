@@ -2,6 +2,7 @@
 import { DM_Sans } from "next/font/google";
 import "../public/assets/scss/style.scss";
 import "./globals.css";
+import { firaGO } from "./[locale]/fonts";
 
 const DM_SansFont = DM_Sans({
   weight: ["400", "500", "700"],
@@ -11,7 +12,7 @@ const DM_SansFont = DM_Sans({
 
 export default function RootLayout({ children }) {
   return (
-    <html className={DM_SansFont.variable}>
+    <html className={firaGO.variable}>
       <body>{children}</body>
     </html>
   );

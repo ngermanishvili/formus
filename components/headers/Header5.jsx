@@ -124,7 +124,7 @@ export default function Header5() {
     >
       <div className="container mx-auto">
         <div className="flex items-center justify-between py-4">
-          <nav className="flex items-center space-x-1 -ml-4 uppercase">
+          <nav className="flex items-center space-x-1 -ml-4 uppercase font-firago">
             {routes.map((route) => (
               <Link
                 key={route.id}
@@ -140,12 +140,12 @@ export default function Header5() {
 
           <Link
             href="/"
-            className="text-white text-2xl font-bold absolute left-1/2 -translate-x-1/2"
+            className="text-white text-2xl font-bold absolute left-1/2 -translate-x-1/2 font-firago"
           >
             FORMUS
           </Link>
 
-          <div className="flex items-center space-x-4 -mr-[-100px]">
+          <div className="flex items-center space-x-4 -mr-[-100px] font-firago">
             <button
               onClick={toggleLanguage}
               className="flex items-center space-x-1 text-white hover:text-[#f94011] transition-colors"

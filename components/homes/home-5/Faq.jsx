@@ -41,7 +41,7 @@ export default function Faq() {
             />
           </div>
 
-          <div className="absolute right-20 top-[120px] sm:top-[140px] lg:top-[70px] max-w-[400px]">
+          <div className="absolute right-20 top-[120px] sm:top-[140px] lg:top-[70px] max-w-[400px] ">
             <h2 className="text-black text-xs">About us</h2>
 
             <h2 className="text-3xl sm:text-4xl font-bold text-black mb-2 leading-tight relative z-10">

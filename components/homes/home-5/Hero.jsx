@@ -104,14 +104,11 @@ export default function Hero() {
                 >
                   {data.sliders.map((slider) => (
                     <SwiperSlide key={slider.id} className="swiper-slide">
-                      <div
-                        suppressHydrationWarning
-                        className="px-8 md:px-16 lg:px-24"
-                      />
+                      <div className=" mx-auto" />
                     </SwiperSlide>
                   ))}
                 </Swiper>
-                <div className="px-8 md:px-16 lg:px-24 absolute top-0 left-0 right-0">
+                <div className="  absolute ">
                   <h2 className="text-base md:text-lg lg:text-xl color-white wow fadeInUp mt-4">
                     {currentLang === "ge"
                       ? data.sliders[0]?.description_ge

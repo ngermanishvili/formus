@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import SecondShape1 from "@/public/assets/shapes/project/3.png";
 import SecondShape2 from "@/public/assets/shapes/project/1.png";
+import InteractiveSection from "./interactive-section";
 
 const ProjectContent = ({ id }) => {
   const [loading, setLoading] = useState(true);
@@ -145,15 +146,15 @@ const ProjectContent = ({ id }) => {
         </div>
 
         {/* Content Section */}
-        <div className="container mx-auto px-4 py-12">
-          <div className="flex flex-col lg:flex-row gap-8">
-            <div className="lg:w-1/2">
+        <div className=" mx-auto px-4 py-12">
+          <div className="flex flex-col lg:flex-row gap-[100px] justify-end">
+            <div className="lg:w-[500px] ">
               <h2 className="font-firago font-bold text-3xl text-foreground mb-4">
                 {currentLang === "ge"
                   ? "პროექტის შესახებ"
                   : "About the Project"}
               </h2>
-              <p className="font-firago text-lg font-light ">
+              <p className="font-firago text-lg font-light">
                 {projectData.description}
               </p>
             </div>
@@ -166,7 +167,7 @@ const ProjectContent = ({ id }) => {
                 {[1, 2, 3, 4].map((index) => (
                   <div
                     key={index}
-                    className="relative h-52 lg:h-64 group overflow-hidden rounded-lg"
+                    className="relative h-52 lg:h-80 xl:h-96 2xl:h-[24rem] group overflow-hidden rounded-lg"
                   >
                     <Image
                       src={
@@ -187,45 +188,7 @@ const ProjectContent = ({ id }) => {
 
         {/* Second Section */}
         <section className="relative bg-background">
-          <div className="flex flex-col lg:flex-row">
-            {/* Image Container */}
-            <div className="w-full lg:w-1/2 relative h-[400px] lg:h-[500px] group overflow-hidden">
-              <Image
-                src={
-                  projectData.second_section_img ||
-                  "/assets/imgs/page/homepage5/banner.png"
-                }
-                alt={projectData.second_section_title}
-                fill
-                className="object-cover transition-transform duration-700 group-hover:scale-110"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-            </div>
-
-            {/* Content Container */}
-            <div className="w-full lg:w-1/2 relative">
-              <div className="px-6 lg:px-12 xl:px-16 py-12 lg:py-16 h-full">
-                <div className="max-w-xl">
-                  <h2 className="font-firago font-bold text-3xl lg:text-4xl text-foreground mb-6 lg:mb-8 leading-tight">
-                    {projectData.second_section_title}
-                  </h2>
-                  <p className="font-firago font-light text-muted-foreground text-base lg:text-lg leading-relaxed">
-                    {projectData.second_section_description}
-                  </p>
-                </div>
-              </div>
-
-              {/* Decorative Shape */}
-              <div className="hidden lg:block absolute bottom-0 right-0 w-[200px] xl:w-[300px]">
-                <Image
-                  src={SecondShape1}
-                  alt="Shape"
-                  className="object-contain"
-                />
-              </div>
-            </div>
-          </div>
+          <InteractiveSection projectData={projectData} />
         </section>
       </>
     );

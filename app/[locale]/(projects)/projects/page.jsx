@@ -18,7 +18,9 @@ export default function Page() {
       <Header5 />
       <main className="main">
         <Breadcumb />
-        <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:top-[100px] right-0 z-0">
+        <div className="hidden lg:block absolute top-[100px] right-0 z-0">
+          {" "}
+          {/* დავამატეთ hidden და lg:block */}
           <Image
             src={NewsShape2}
             alt="Decorative shape"
@@ -27,7 +29,9 @@ export default function Page() {
             className="mt-12"
           />
         </div>
-        <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:bottom-[600px] left-[-20px] right-0 z-0">
+        <div className="hidden lg:block absolute bottom-[600px] left-[-20px] z-0">
+          {" "}
+          {/* დავამატეთ hidden და lg:block */}
           <Image
             src={NewsShape1}
             alt="Decorative shape"

@@ -16,7 +16,7 @@ const routes = [
   },
   {
     id: 2,
-    path: "/about",
+    path: "/about-formus",
     translations: {
       ka: "ჩვენ შესახებ",
       en: "About",

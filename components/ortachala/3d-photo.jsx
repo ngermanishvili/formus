@@ -11,7 +11,7 @@ export default function GreenSection() {
   return (
     <section className="relative flex flex-col items-center justify-center min-h-[500px] bg-[#ABC188] py-16 px-4 overflow-hidden">
       <div className="container mx-auto max-w-4xl text-center mb-12 relative z-10">
-        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">
+        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-black">
           {currentLang === "ka" ? "მზის ლოკაცია" : "Sun Location"}
         </h2>
 
@@ -21,8 +21,8 @@ export default function GreenSection() {
             alt={currentLang === "ka" ? "მზის ლოკაცია" : "Sun Location"}
             fill
             unoptimized
-            className="object-cover rounded-lg shadow-xl"
-            sizes="(max-width: 768px) 100vw, (min-width: 769px) 50vw"
+            className="object-cover rounded-3xl shadow-xl "
+            sizes="(max-width: 768px) 100vw, (min-width: 769px) 50vw "
           />
         </div>
       </div>

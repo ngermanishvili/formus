@@ -84,7 +84,7 @@ export default function Footer() {
       <div className="container mx-auto px-4">
         {/* Logo and Social Links */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 xl:mb-12"></div>
-        <div className="flex justify-between mt-[120px]">
+        <div className="flex justify-between">
           <Link href={`/${locale}`} className="mb-6 md:mb-0">
             <Image
               src={FooterLogo}

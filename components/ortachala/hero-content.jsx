@@ -7,6 +7,7 @@ import { Loader2 } from "lucide-react";
 import SecondShape1 from "@/public/assets/shapes/project/3.png";
 import SecondShape2 from "@/public/assets/shapes/project/1.png";
 import InteractiveSection from "./interactive-section";
+import BreadCumpShape from "@/public/assets/shapes/home/2.png";
 
 const ProjectContent = ({ id }) => {
   const [loading, setLoading] = useState(true);
@@ -148,26 +149,50 @@ const ProjectContent = ({ id }) => {
         {/* Content Section */}
         <div className=" mx-auto px-4 py-12">
           <div className="flex flex-col lg:flex-row gap-[100px] justify-end">
-            <div className="lg:w-[500px] ">
-              <h2 className="font-firago font-bold text-3xl text-foreground mb-4">
-                {currentLang === "ge"
-                  ? "პროექტის შესახებ"
-                  : "About the Project"}
-              </h2>
-              <p className="font-firago text-lg font-light">
-                {projectData.description}
-              </p>
+            <div className="lg:w-[500px] relative">
+              {/* Content container */}
+              <div className="relative z-20">
+                <p className="font-firago text-sm text-foreground mb-2">
+                  {currentLang === "ge" ? "ჩვენს შესახებ" : "About Us"}
+                </p>
+                <h2 className="font-firago font-bold text-3xl text-foreground mb-4">
+                  {currentLang === "ge" ? (
+                    <>
+                      ორთაჭალა ჰილს
+                      <br />
+                      დაფინანსებულია თი-ბი-სი ბანკის მიერ.
+                    </>
+                  ) : (
+                    <>
+                      Ortachala Hills
+                      <br />
+                      Financed by TBC Bank.
+                    </>
+                  )}
+                </h2>
+                <p className="font-firago text-lg font-light">
+                  {projectData.description}
+                </p>
+              </div>
+
+              {/* Decorative shape - positioned below content */}
+              <div className="absolute left-[-14px] bottom-[200px] z-10">
+                <Image
+                  src={BreadCumpShape}
+                  alt="Decorative shape"
+                  width={90}
+                  height={90}
+                  className="w-[90px] h-[90px]"
+                />
+              </div>
             </div>
 
             <div className="lg:w-1/2">
-              <h2 className="font-firago font-bold text-3xl text-foreground mb-4">
-                {currentLang === "ge" ? "გალერეა" : "Gallery"}
-              </h2>
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 {[1, 2, 3, 4].map((index) => (
                   <div
                     key={index}
-                    className="relative h-52 lg:h-80 xl:h-96 2xl:h-[24rem] group overflow-hidden rounded-lg"
+                    className="relative h-52 lg:h-80 xl:h-96 2xl:h-[17rem] group overflow-hidden rounded-lg"
                   >
                     <Image
                       src={

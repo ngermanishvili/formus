@@ -70,7 +70,7 @@ const InteractiveSection = ({ projectData, currentLang }) => {
                 </p>
               </div>
             </div>
-            <div className="flex flex-col items-center gap-8 mr-8">
+            <div className="flex flex-col items-center gap-2 mr-8">
               {sections.map((_, index) => (
                 <button
                   key={index}
@@ -78,7 +78,7 @@ const InteractiveSection = ({ projectData, currentLang }) => {
                   className={cn(
                     "w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all z-10",
                     activeIndex === index
-                      ? "border-primary bg-primary text-white"
+                      ? "border-transparent bg-primary text-white"
                       : "border-gray-300 hover:border-primary"
                   )}
                 >
@@ -89,7 +89,7 @@ const InteractiveSection = ({ projectData, currentLang }) => {
           </div>
 
           <div
-            className="hidden lg:block absolute bottom-[-12px] right-0 w-[500px] xl:w-[500px]"
+            className="hidden lg:block absolute  bottom-[-12px] right-0 w-[500px] xl:w-[500px]"
             style={{ zIndex: 10, pointerEvents: "none" }}
           >
             <Image src={SecondShape1} alt="Shape" className="object-contain" />

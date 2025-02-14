@@ -4,9 +4,7 @@ import { useState, useEffect } from "react";
 import Header5 from "@/components/headers/Header5";
 import MobailHeader1 from "@/components/headers/MobailHeader1";
 import DownloadApp from "@/components/common/downloadApp/DownloadApp";
-
 import GreenSection from "@/components/ortachala/3d-photo";
-import Footer1 from "@/components/footers/Footer1";
 import ProjectContent from "@/components/ortachala/hero-content";
 import GalleryComponent from "@/components/apartment/gallery";
 
@@ -33,7 +31,6 @@ export default function Page({ params }) {
         <DownloadApp />
         <GalleryComponent />
       </main>
-      <Footer1 />
     </>
   );
 }

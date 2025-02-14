@@ -60,6 +60,14 @@ export default function Header5() {
   const pathname = usePathname();
   const locale = useLocale();
 
+  const scrollToFooter = (e) => {
+    e.preventDefault();
+    const footer = document.querySelector("footer");
+    if (footer) {
+      footer.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -146,6 +154,7 @@ export default function Header5() {
             </button>
 
             <a
+              onClick={scrollToFooter}
               href="tel:+995123456789"
               className="flex items-center space-x-1 text-white hover:text-[#f94011] transition-colors"
             >

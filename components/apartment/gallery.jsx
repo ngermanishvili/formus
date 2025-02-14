@@ -40,11 +40,11 @@ const GalleryGrid = () => {
   const images = {
     exterior: [
       {
-        src: Photo,
+        src: "https://res.cloudinary.com/ds9dsumwl/image/upload/v1739541169/5.4._%E1%83%9D%E1%83%A0%E1%83%97%E1%83%90%E1%83%AD%E1%83%90%E1%83%9A%E1%83%90_%E1%83%B0%E1%83%98%E1%83%9A%E1%83%A1%E1%83%98-%E1%83%9B%E1%83%9D%E1%83%99%E1%83%9A%E1%83%94_%E1%83%90%E1%83%A6%E1%83%AC%E1%83%94%E1%83%A0%E1%83%98%E1%83%97_e2v9rk.jpg",
         alt: currentLang === "ka" ? "ექსტერიერი 1" : "Exterior View 1",
       },
       {
-        src: Photo,
+        src: "https://res.cloudinary.com/ds9dsumwl/image/upload/v1739541169/7.2._%E1%83%A7%E1%83%9D%E1%83%95%E1%83%94%E1%83%9A%E1%83%93%E1%83%A6%E1%83%98%E1%83%A3%E1%83%A0%E1%83%98_%E1%83%AA%E1%83%AE%E1%83%9D%E1%83%95%E1%83%A0%E1%83%94%E1%83%91%E1%83%98%E1%83%A1%E1%83%97%E1%83%95%E1%83%98%E1%83%A1_%E1%83%90%E1%83%A3%E1%83%AA%E1%83%98%E1%83%9A%E1%83%94%E1%83%91%E1%83%94%E1%83%9A%E1%83%98_%E1%83%9D%E1%83%91%E1%83%98%E1%83%94%E1%83%A5%E1%83%A2%E1%83%94%E1%83%91%E1%83%98_%E1%83%94%E1%83%A0%E1%83%97_%E1%83%A1%E1%83%98%E1%83%95%E1%83%A0%E1%83%AA%E1%83%94%E1%83%A8%E1%83%98_rytck6.jpg",
         alt: currentLang === "ka" ? "ექსტერიერი 2" : "Exterior View 2",
       },
       {
@@ -142,7 +142,7 @@ const GalleryGrid = () => {
     <>
       <div className="mx-auto py-16">
         {/* Title */}
-        <h2 className="font-firago font-bold text-4xl text-center mb-12">
+        <h2 className="font-firago font-bold text-sm  mb-2 text-center">
           {texts[currentLang].title}
         </h2>
 
@@ -169,6 +169,9 @@ const GalleryGrid = () => {
             {texts[currentLang].interior}
           </button>
         </div>
+        <h2 className="font-firago font-bold text-4xl text-center mb-2">
+          {texts[currentLang].title}
+        </h2>
 
         {/* Gallery Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

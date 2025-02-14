@@ -32,36 +32,44 @@ export default function Faq() {
     <section className="relative bg-white -mt-4 sm:-mt-4 md:mt-0 lg:-mt-4">
       <div className="flex flex-col lg:flex-row items-stretch relative">
         <div className="w-full lg:w-1/2 relative h-[600px] lg:h-[800px]">
-          <div className="absolute right-[424px] top-[100px] sm:top-[95px] lg:top-[95px] -translate-y-1/2 font-bold">
-            <Image
-              src={TitleShape}
-              alt="Decorative shape"
-              width={80}
-              height={80}
-            />
-          </div>
+          <div className="absolute w-full h-full flex items-center justify-center lg:justify-end lg:pr-20 max-md:mt-28">
+            <div className="max-w-[400px] mb-[220px]  min-[2000px]:mb-52 min-[2000px]:mr-52 max-sm:p-10 max-sm:mt-32">
+              <div className="relative mb-4">
+                <div className="absolute left-[-30px] top-[0px]">
+                  <Image
+                    src={TitleShape}
+                    alt="Decorative shape"
+                    width={80}
+                    height={80}
+                  />
+                </div>
+                <h2 className="text-black text-xs relative top-[10px]">
+                  About us
+                </h2>
+              </div>
 
-          <div className="absolute right-20 top-[120px] sm:top-[140px] lg:top-[70px] max-w-[400px] ">
-            <h2 className="text-black text-xs">About us</h2>
+              <div className="space-y-6">
+                <h2 className="text-3xl sm:text-4xl font-bold text-black leading-tight relative z-10">
+                  {isGeorgian ? "ფორმუსი" : "FORMUS"}
+                </h2>
 
-            <h2 className="text-3xl sm:text-4xl font-bold text-black mb-2 leading-tight relative z-10">
-              {isGeorgian ? "ფორმუსი" : "FORMUS"}
-            </h2>
-            <h2 className="text-2xl sm:text-4xl font-thin text-black mb-4 relative z-10">
-              {isGeorgian ? heroContent?.title_ge : heroContent?.title_en}
-            </h2>
+                <h2 className="text-2xl sm:text-4xl font-thin text-black relative z-10">
+                  {isGeorgian ? heroContent?.title_ge : heroContent?.title_en}
+                </h2>
 
-            <p className="text-gray-600 text-base sm:text-lg leading-relaxed mb-6 relative z-10 max-w-[500px]">
-              {isGeorgian
-                ? heroContent?.description_ge
-                : heroContent?.description_en}
-            </p>
+                <p className="text-gray-600 text-base sm:text-lg leading-relaxed relative z-10">
+                  {isGeorgian
+                    ? heroContent?.description_ge
+                    : heroContent?.description_en}
+                </p>
 
-            <Link href="/about-formus" className="block w-40">
-              <Button className="w-full h-10 bg-[#Fcb203] text-black font-normal text-lg rounded-md right-0 shadow-lg hover:shadow-xl transition duration-300 ease-in-out p-4">
-                {isGeorgian ? "გაიგეთ მეტი" : "Learn More"}
-              </Button>
-            </Link>
+                <Link href="/about-formus" className="block w-40 ">
+                  <Button className="w-full h-10 bg-[#Fcb203] text-black font-normal text-lg rounded-md right-0 shadow-lg hover:shadow-xl transition duration-300 ease-in-out p-4 max-md:mb-[150px]">
+                    {isGeorgian ? "გაიგეთ მეტი" : "Learn More"}
+                  </Button>
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
 

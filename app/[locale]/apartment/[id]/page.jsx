@@ -102,8 +102,6 @@ const ApartmentDetails = () => {
 
   return (
     <div className="min-h-screen bg-white mt-[100px]">
-      <Header5 />
-
       <div className="container mx-auto px-4 relative mb-8">
         <div className="flex justify-center w-full my-8">
           <FloorFilters />
@@ -217,7 +215,6 @@ const ApartmentDetails = () => {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 };

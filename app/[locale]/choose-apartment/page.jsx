@@ -47,7 +47,6 @@ const ChooseApartment = () => {
 
   return (
     <div className="flex flex-col h-screen bg-black">
-      <Header5 />
       <main className="flex-1 relative">
         <div className="absolute inset-0">
           <OrtachalaPolygon />

@@ -54,7 +54,6 @@ const AboutFormus = () => {
 
   return (
     <>
-      <Header5 />
       <div className="relative w-full bg-gray-50 py-40 font-firago">
         <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:top-[100px] right-0 z-0">
           <Image
@@ -163,7 +162,6 @@ const AboutFormus = () => {
           </div>
         </div>
       </div>
-      <Footer5 />
     </>
   );
 };

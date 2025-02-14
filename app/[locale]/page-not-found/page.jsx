@@ -12,11 +12,9 @@ export const metadata = {
 export default function page() {
   return (
     <>
-      <Header1 /> <MobailHeader1 />
       <main className="main">
         <NotFound />
       </main>
-      <Footer1 />
     </>
   );
 }

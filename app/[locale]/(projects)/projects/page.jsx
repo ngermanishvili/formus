@@ -15,7 +15,6 @@ export const metadata = {
 export default function Page() {
   return (
     <>
-      <Header5 />
       <main className="main">
         <Breadcumb />
         <div className="hidden lg:block absolute top-[100px] right-0 z-0">
@@ -42,7 +41,6 @@ export default function Page() {
         </div>
         <Services1 />
       </main>
-      <Footer1 />
     </>
   );
 }

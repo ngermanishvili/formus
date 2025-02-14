@@ -12,7 +12,6 @@ import StickySocial from "@/components/socials/sticky-socials";
 export default function Page() {
   return (
     <>
-      <Header5 />
       <main className="main font-normal">
         <Hero />
         <div className="relative">
@@ -32,7 +31,6 @@ export default function Page() {
         </div>
       </main>
       <StickySocial />
-      <Footer1 />
     </>
   );
 }

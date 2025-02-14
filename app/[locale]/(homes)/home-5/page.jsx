@@ -18,7 +18,6 @@ export const metadata = {
 export default function page() {
   return (
     <>
-      <Header5 /> <MobailHeader1 />
       <main className="main" style={{ maxWidth: "100vw", overflow: "hidden" }}>
         <Hero />
         <Partners />
@@ -30,7 +29,6 @@ export default function page() {
         <Testimonials />
         <Blogs />
       </main>
-      <Footer5 />
     </>
   );
 }

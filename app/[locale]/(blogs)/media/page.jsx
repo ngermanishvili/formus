@@ -15,7 +15,6 @@ export const metadata = {
 export default function page() {
   return (
     <>
-      <Header5 />
       <main className="main">
         <BreadCumb />
         <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:top-[100px] right-0 z-0">
@@ -39,7 +38,6 @@ export default function page() {
 
         <Blogs1 />
       </main>
-      <Footer1 />
     </>
   );
 }

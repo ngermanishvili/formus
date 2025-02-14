@@ -45,11 +45,9 @@ export default function HomesListPage() {
 
   return (
     <>
-      {isMobile ? <MobailHeader1 /> : <Header5 />}
       <main className="main">
         <ApartmentList initialFilters={initialFilters} />
       </main>
-      <Footer1 />
     </>
   );
 }

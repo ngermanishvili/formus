@@ -33,7 +33,7 @@ const routes = [
   },
   {
     id: 4,
-    path: "/choose-home",
+    path: "/choose-apartment",
     translations: {
       ka: "აირჩიე ბინა",
       en: "Choose Home",

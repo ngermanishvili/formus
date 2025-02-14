@@ -25,7 +25,6 @@ export const metadata = {
 export default function page() {
   return (
     <>
-      <Header5 /> <MobailHeader1 />
       ortachala
       <main className="main" style={{ maxWidth: "100vw", overflow: "hidden" }}>
         <HeroOrtachala />
@@ -35,7 +34,6 @@ export default function page() {
         <GreenSection />
         <DownloadApp />
       </main>
-      <Footer1 />
     </>
   );
 }

@@ -19,7 +19,6 @@ const TermsConditions = () => {
 
   return (
     <>
-      <Header5 />
       <div className="max-w-4xl mx-auto p-6 space-y-8 mt-[80px]">
         <h1 className="text-2xl font-bold">წესები და პირობები</h1>
 

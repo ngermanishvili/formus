@@ -28,7 +28,7 @@ export default function Page({ params }) {
         <div className="border-bottom"></div>
         <ProjectContent id={params.id} />
         <GreenSection />
-        <DownloadApp />
+
         <GalleryComponent />
       </main>
     </>

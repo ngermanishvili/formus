@@ -9,12 +9,10 @@ export default function Page({ params }) {
 
   return (
     <>
-      <Header5 />
       <main className="main">
         <BlogSingle blog={blog} />
         {/* <RelatedBlogs /> */}
       </main>
-      <Footer1 />
     </>
   );
 }

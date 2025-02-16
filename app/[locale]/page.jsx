@@ -5,8 +5,6 @@ import Faq from "@/components/homes/home-5/Faq";
 import DownloadApp from "@/components/common/downloadApp/DownloadApp";
 import Image from "next/image";
 import Shape from "@/public/assets/shapes/home/3.png";
-import Header5 from "@/components/headers/Header5";
-import StickySocial from "@/components/socials/sticky-socials";
 
 //
 export default function Page() {

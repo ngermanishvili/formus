@@ -149,9 +149,9 @@ const ProjectContent = ({ id }) => {
         {/* Content Section */}
         <div className=" mx-auto px-4 py-12">
           <div className="flex flex-col lg:flex-row gap-[100px] justify-end">
-            <div className="lg:w-[500px] relative">
+            <div className="lg:w-[600px] relative">
               {/* Content container */}
-              <div className="relative z-20">
+              <div className="relative z-20 ">
                 <p className="font-firago text-sm text-foreground mb-2">
                   {currentLang === "ge" ? "ჩვენს შესახებ" : "About Us"}
                 </p>
@@ -176,7 +176,7 @@ const ProjectContent = ({ id }) => {
               </div>
 
               {/* Decorative shape - positioned below content */}
-              <div className="absolute left-[-14px] bottom-[200px] z-10">
+              <div className="absolute left-[-14px] bottom-[230px] z-10">
                 <Image
                   src={BreadCumpShape}
                   alt="Decorative shape"

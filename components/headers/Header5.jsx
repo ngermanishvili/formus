@@ -22,7 +22,6 @@ const routes = [
       en: "About",
     },
   },
-
   {
     id: 3,
     path: "/projects",
@@ -55,7 +54,6 @@ const languageNames = {
 };
 
 export default function Header5() {
-  const [isMobile, setIsMobile] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const locale = useLocale();
@@ -67,15 +65,6 @@ export default function Header5() {
       footer.scrollIntoView({ behavior: "smooth" });
     }
   };
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -114,55 +103,63 @@ export default function Header5() {
     window.location.href = getLocalizedPath(newLocale);
   };
 
-  return isMobile ? (
-    <MobileHeader1 />
-  ) : (
-    <header
-      className={`fixed w-full top-0 z-50 bg-[#00326B] transition-all duration-300 ${
-        scrolled ? "shadow-lg" : ""
-      }`}
-    >
-      <div className="container mx-auto">
-        <div className="flex items-center justify-between py-4">
-          <nav className="flex items-center space-x-1 -ml-4 uppercase font-firago">
-            {routes.map((route) => (
-              <Link
-                key={route.id}
-                href={getFullPath(route.path)}
-                className={`${
-                  isActivePath(route.path) ? "text-white" : "text-gray-200"
-                } px-2 py-1 text-sm hover:text-[#FBB102] rounded transition-colors`}
-              >
-                {route.translations[locale]}
-              </Link>
-            ))}
-          </nav>
-
-          <Link
-            href="/"
-            className="text-white text-2xl font-bold absolute left-1/2 -translate-x-1/2 font-firago"
-          >
-            FORMUS
-          </Link>
-
-          <div className="flex items-center space-x-4 -mr-[-100px] font-firago">
-            <button
-              onClick={toggleLanguage}
-              className="flex items-center space-x-1 text-white hover:text-[#f94011] transition-colors"
-            >
-              <span>{languageNames[locale]}</span>
-            </button>
-
-            <a
-              onClick={scrollToFooter}
-              href="tel:+995123456789"
-              className="flex items-center space-x-1 text-white hover:text-[#f94011] transition-colors"
-            >
-              <Phone className="w-4 h-4" />
-            </a>
-          </div>
-        </div>
+  return (
+    <>
+      {/* Mobile Header */}
+      <div className="block md:hidden">
+        <MobileHeader1 routes={routes} languageNames={languageNames} />
       </div>
-    </header>
+
+      {/* Desktop Header */}
+      <div className="hidden md:block">
+        <header
+          className={`fixed w-full top-0 z-50 bg-[#00326B] transition-all duration-300 ${
+            scrolled ? "shadow-lg" : ""
+          }`}
+        >
+          <div className="container mx-auto">
+            <div className="flex items-center justify-between py-4">
+              <nav className="flex items-center space-x-1 -ml-4 uppercase font-firago">
+                {routes.map((route) => (
+                  <Link
+                    key={route.id}
+                    href={getFullPath(route.path)}
+                    className={`${
+                      isActivePath(route.path) ? "text-white" : "text-gray-200"
+                    } px-2 py-1 text-sm hover:text-[#FBB102] rounded transition-colors`}
+                  >
+                    {route.translations[locale]}
+                  </Link>
+                ))}
+              </nav>
+
+              <Link
+                href="/"
+                className="text-white text-2xl font-bold absolute left-1/2 -translate-x-1/2 font-firago"
+              >
+                FORMUS
+              </Link>
+
+              <div className="flex items-center space-x-4 -mr-[-100px] font-firago">
+                <button
+                  onClick={toggleLanguage}
+                  className="flex items-center space-x-1 text-white hover:text-[#f94011] transition-colors"
+                >
+                  <span>{languageNames[locale]}</span>
+                </button>
+
+                <a
+                  onClick={scrollToFooter}
+                  href="tel:+995123456789"
+                  className="flex items-center space-x-1 text-white hover:text-[#f94011] transition-colors"
+                >
+                  <Phone className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+          </div>
+        </header>
+      </div>
+    </>
   );
 }

@@ -81,34 +81,28 @@ export default function Footer() {
 
   return (
     <footer className="bg-[#003366] w-full ">
+      <div className="flex justify-between ">
+        <Link href={`/${locale}`} className="mb-6 md:mb-0">
+          <Image src={FooterLogo} alt="Formus Logo" width={300} height={300} />
+        </Link>
+        <div className="flex justify-end -mr-8 ">
+          {socialLinks.map((link, index) => (
+            <a
+              key={index}
+              href={link.href}
+              className="hover:opacity-80 transition-opacity p-3"
+              aria-label={link.name}
+            >
+              {link.icon}
+            </a>
+          ))}
+        </div>
+      </div>
       <div className="container mx-auto px-4">
         {/* Logo and Social Links */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 xl:mb-12"></div>
-        <div className="flex justify-between">
-          <Link href={`/${locale}`} className="mb-6 md:mb-0">
-            <Image
-              src={FooterLogo}
-              alt="Formus Logo"
-              width={300}
-              height={300}
-            />
-          </Link>
-          <div className="flex justify-end -mr-8 mt-[80px]">
-            {socialLinks.map((link, index) => (
-              <a
-                key={index}
-                href={link.href}
-                className="hover:opacity-80 transition-opacity p-3"
-                aria-label={link.name}
-              >
-                {link.icon}
-              </a>
-            ))}
-          </div>
-        </div>
 
         {/* Contact Information */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 mt-[60px]">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 mt-[120px]">
           <div>
             <h6 className="text-white/60 text-sm font-medium mb-4">
               {locale === "ka" ? "მისამართი" : "Address"}

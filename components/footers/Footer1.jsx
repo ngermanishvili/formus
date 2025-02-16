@@ -2,18 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import {
-  MapPin,
-  Phone,
-  Clock,
-  Facebook,
-  Instagram,
-  Linkedin,
-  Mail,
-} from "lucide-react";
+import { MapPin, Phone, Clock, Mail } from "lucide-react";
 import FooterLogo from "@/public/assets/shapes/home/footer-logo.png";
 import Image from "next/image";
 import { useLocale } from "next-intl";
+import {
+  PiFacebookLogo,
+  PiInstagramLogo,
+  PiLinkedinLogo,
+} from "react-icons/pi";
 
 const translations = {
   en: {
@@ -51,24 +48,6 @@ export default function Footer() {
     fetchContactInfo();
   }, []);
 
-  const socialLinks = [
-    {
-      name: "Facebook",
-      href: "#",
-      icon: <Facebook className="w-6 h-6 text-white" />,
-    },
-    {
-      name: "Instagram",
-      href: "#",
-      icon: <Instagram className="w-6 h-6 text-white" />,
-    },
-    {
-      name: "LinkedIn",
-      href: "#",
-      icon: <Linkedin className="w-6 h-6 text-white" />,
-    },
-  ];
-
   if (!contactInfo) {
     return null;
   }
@@ -80,39 +59,49 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#003366] w-full ">
-      <div className="flex justify-between ">
-        <Link href={`/${locale}`} className="mb-6 md:mb-0">
-          <Image src={FooterLogo} alt="Formus Logo" width={300} height={300} />
-        </Link>
-        <div className="flex justify-end -mr-8 ">
-          {socialLinks.map((link, index) => (
-            <a
-              key={index}
-              href={link.href}
-              className="hover:opacity-80 transition-opacity p-3"
-              aria-label={link.name}
-            >
-              {link.icon}
+    <footer className="bg-[#003366] w-full">
+      <div className="mx-[50px] px-4 py-8">
+        {/* Logo and Social Links Container */}
+        <div className="flex flex-col md:flex-row justify-between items-center ">
+          <Link href={`/${locale}`} className="mb-6 md:mb-0">
+            <Image
+              src={FooterLogo}
+              alt="Formus Logo"
+              width={200}
+              height={200}
+              className="w-auto h-auto mr-8"
+            />
+          </Link>
+          <div className="flex gap-2">
+            <a href="#" className="hover:opacity-80 transition-opacity">
+              <PiFacebookLogo className="text-white" size={30} />
             </a>
-          ))}
+            <a href="#" className="hover:opacity-80 transition-opacity">
+              <PiInstagramLogo className="text-white" size={30} />
+            </a>
+            <a href="#" className="hover:opacity-80 transition-opacity">
+              <PiLinkedinLogo className="text-white" size={30} />
+            </a>
+          </div>
         </div>
-      </div>
-      <div className="container mx-auto px-4">
-        {/* Logo and Social Links */}
 
-        {/* Contact Information */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 mt-[120px]">
+        {/* Contact Information Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          {/* Address Section */}
           <div>
             <h6 className="text-white/60 text-sm font-medium mb-4">
               {locale === "ka" ? "მისამართი" : "Address"}
             </h6>
-            <div className="flex items-center">
-              <MapPin className="text-white mr-2 flex-shrink-0" size={20} />
+            <div className="flex items-start">
+              <MapPin
+                className="text-white mr-2 flex-shrink-0 mt-1"
+                size={20}
+              />
               <p className="text-white">{getLocalizedAddress()}</p>
             </div>
           </div>
 
+          {/* Contact Section */}
           <div>
             <h6 className="text-white/60 text-sm font-medium mb-4">
               {locale === "ka" ? "ტელეფონი/ელ-ფოსტა" : "Phone/E-mail"}
@@ -120,10 +109,9 @@ export default function Footer() {
             <div className="flex flex-col space-y-2">
               <div className="flex items-center">
                 <Phone className="text-white mr-2" size={20} />
-
                 <a
                   href={`tel:${contactInfo.phone_number}`}
-                  className="text-white text-sm hover:opacity-80"
+                  className="text-white text-sm hover:opacity-80 transition-opacity"
                 >
                   {contactInfo.phone_number}
                 </a>
@@ -132,7 +120,7 @@ export default function Footer() {
                 <Mail className="text-white mr-2" size={20} />
                 <a
                   href={`mailto:${contactInfo.email}`}
-                  className="text-white hover:opacity-80 text-sm"
+                  className="text-white text-sm hover:opacity-80 transition-opacity"
                 >
                   {contactInfo.email}
                 </a>
@@ -140,26 +128,32 @@ export default function Footer() {
             </div>
           </div>
 
-          <div className="flex justify-between items-start">
+          {/* Working Hours Section */}
+          <div className="flex flex-col md:flex-row justify-between">
             <div>
               <h6 className="text-white/60 text-sm font-medium mb-4">
                 {t.workingHours}
               </h6>
-              <div className="flex items-center">
-                <Clock className="text-white mr-2 flex-shrink-0" size={20} />
+              <div className="flex items-start">
+                <Clock
+                  className="text-white mr-2 flex-shrink-0 mt-1"
+                  size={20}
+                />
                 <div className="text-white text-sm">
                   <p className="firago-thin">{t.monToFri}</p>
                   <p>{t.saturday}</p>
                 </div>
               </div>
             </div>
-            <div className="text-white text-sm ml-8 mt-[44px]">
-              {t.termsAndConditions}
+            <div className="text-white text-sm mt-4 md:mt-[44px] md:ml-8">
+              <Link href="#" className="hover:opacity-80 transition-opacity">
+                {t.termsAndConditions}
+              </Link>
             </div>
           </div>
         </div>
 
-        {/* Footer Bottom */}
+        {/* Footer Bottom Border */}
         <div className="border-t border-white/10 pt-6"></div>
       </div>
     </footer>

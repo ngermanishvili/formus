@@ -127,8 +127,14 @@ const ContactModal = ({ isOpen, setIsOpen }) => {
                   })
                 }
               />
-              <span className="text-xs sm:text-sm text-gray-600 leading-tight">
-                გავეცანი და ვეთანხმები, წესებსა & პირობებს
+              <span className="text-xs sm:text-sm text-gray-600 leading-tight underline">
+                <Link
+                  href="/terms"
+                  target="_blank"
+                  className="hover:text-gray-800 text-gray-600 underline "
+                >
+                  გავეცანი და ვეთანხმები წესებს და პირობებს.
+                </Link>
               </span>
             </label>
 
@@ -148,7 +154,7 @@ const ContactModal = ({ isOpen, setIsOpen }) => {
                 <Link
                   href="/terms?section=marketing"
                   target="_blank"
-                  className="text-blue-600 hover:underline"
+                  className="hover:text-gray-800 text-gray-600 underline "
                 >
                   გავეცანი მარკეტინგის მიზნით მონაცემთა დამუშავების პირობებს და
                   ვეთანხმები

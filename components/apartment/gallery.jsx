@@ -141,11 +141,9 @@ const GalleryGrid = () => {
   return (
     <>
       <div className="mx-auto py-16">
-        {/* Title */}
-        <h2 className="font-firago font-bold text-sm  mb-2 text-center">
+        <h2 className="font-firago font-bold text-4xl text-center mb-4">
           {texts[currentLang].title}
         </h2>
-
         {/* Category Filter */}
         <div className="flex justify-center gap-12 mb-16">
           <button
@@ -169,10 +167,6 @@ const GalleryGrid = () => {
             {texts[currentLang].interior}
           </button>
         </div>
-        <h2 className="font-firago font-bold text-4xl text-center mb-2">
-          {texts[currentLang].title}
-        </h2>
-
         {/* Gallery Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* First Gallery Section */}

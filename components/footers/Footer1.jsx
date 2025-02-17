@@ -26,7 +26,6 @@ const translations = {
     termsAndConditions: "წესები და პირობები",
   },
 };
-
 export default function Footer() {
   const locale = useLocale();
   const t = translations[locale];
@@ -86,7 +85,7 @@ export default function Footer() {
         </div>
 
         {/* Contact Information Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 max-md:text-center max-md:mt-12">
           {/* Address Section */}
           <div>
             <h6 className="text-white/60 text-sm font-medium mb-4">
@@ -94,7 +93,7 @@ export default function Footer() {
             </h6>
             <div className="flex items-start">
               <MapPin
-                className="text-white mr-2 flex-shrink-0 mt-1"
+                className="text-white mr-2 flex-shrink-0 mt-1 max-md:ml-3"
                 size={20}
               />
               <p className="text-white">{getLocalizedAddress()}</p>
@@ -102,11 +101,11 @@ export default function Footer() {
           </div>
 
           {/* Contact Section */}
-          <div>
+          <div className="max-md:text-center max-md:flex max-md:flex-col max-md:items-center">
             <h6 className="text-white/60 text-sm font-medium mb-4">
               {locale === "ka" ? "ტელეფონი/ელ-ფოსტა" : "Phone/E-mail"}
             </h6>
-            <div className="flex flex-col space-y-2">
+            <div className="flex flex-col space-y-2 ">
               <div className="flex items-center">
                 <Phone className="text-white mr-2" size={20} />
                 <a
@@ -134,9 +133,9 @@ export default function Footer() {
               <h6 className="text-white/60 text-sm font-medium mb-4">
                 {t.workingHours}
               </h6>
-              <div className="flex items-start">
+              <div class="max-md:flex max-md:flex-row max-md:items-center max-md:text-center max-md:w-4/5 max-md:mx-auto max-md:gap-4">
                 <Clock
-                  className="text-white mr-2 flex-shrink-0 mt-1"
+                  className="text-white mr-2 flex-shrink-0 mt-1 ml-3"
                   size={20}
                 />
                 <div className="text-white text-sm">

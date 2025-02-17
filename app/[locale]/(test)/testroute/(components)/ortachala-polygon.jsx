@@ -176,93 +176,47 @@ const InfoCard = memo(({ data, position }) => {
 });
 
 const Controls = ({ zoomIn, zoomOut, resetTransform }) => {
-  // ზუმის step-ის კონტროლი უფრო ზუსტი მანიპულაციებისთვის
   const handleZoomIn = () => zoomIn(0.3);
   const handleZoomOut = () => zoomOut(0.3);
 
   return (
-    <>
-      <div className="relative w-full">
-        {/* Zoom Controls */}
-
-        <div className="fixed bottom-[50%] right-6 flex gap-1.5 z-50">
-          <div className="relative">
-            <div
-              className=" backdrop-blur-xl rounded-md 
-                      border border-white/10 shadow-md
-                      p-1.5 overflow-hidden"
-            >
-              <div className="flex gap-1">
-                <button
-                  onClick={handleZoomIn}
-                  className="p-3.5 rounded-xl bg-gradient-to-tr
-                         from-white/5 to-white/10
-                         active:from-purple-500/20 active:to-blue-500/20
-                         transition-all duration-200 "
-                  aria-label="Zoom in"
-                >
-                  <Plus
-                    size={20}
-                    className="text-white/90 transform active:scale-95
-                           transition-transform duration-200"
-                  />
-                </button>
-
-                <div className="h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-
-                <button
-                  onClick={handleZoomOut}
-                  className="p-3.5 rounded-xl bg-gradient-to-tr
-                         from-white/5 to-white/10
-                         active:from-purple-500/20 active:to-blue-500/20
-                         transition-all duration-200"
-                  aria-label="Zoom out"
-                >
-                  <Minus
-                    size={20}
-                    className="text-white/90 transform active:scale-95
-                           transition-transform duration-200"
-                  />
-                </button>
-              </div>
-            </div>
-          </div>
-          <div className="w-[90px]"></div>
+    <div className="fixed bottom-[250px] right-6 z-40 flex flex-col gap-2">
+      <div className="backdrop-blur-xl rounded-md border border-white/10 shadow-md p-1.5">
+        <div className="flex flex-col gap-1">
           <button
-            onClick={resetTransform}
-            className="p-3.5 rounded-md
-                   bg-black/20 backdrop-blur-xl
-                   border border-white/10 shadow-2xl
-                   active:bg-purple-500/20
-                   transition-all duration-200"
-            aria-label="Reset zoom"
+            onClick={handleZoomIn}
+            className="p-3 rounded-xl bg-gradient-to-tr from-white/5 to-white/10
+                     active:from-purple-500/20 active:to-blue-500/20
+                     transition-all duration-200"
+            aria-label="Zoom in"
           >
-            <RotateCcw
+            <Plus
               size={20}
-              className="text-white/90 transform active:scale-95 w-[100px]
-                     transition-transform duration-200"
+              className="text-white/90 transform active:scale-95
+                       transition-transform duration-200"
+            />
+          </button>
+
+          <div className="w-full h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+
+          <button
+            onClick={handleZoomOut}
+            className="p-3 rounded-xl bg-gradient-to-tr from-white/5 to-white/10
+                     active:from-purple-500/20 active:to-blue-500/20
+                     transition-all duration-200"
+            aria-label="Zoom out"
+          >
+            <Minus
+              size={20}
+              className="text-white/90 transform active:scale-95
+                       transition-transform duration-200"
             />
           </button>
         </div>
-        {/* Formus Logo - Centered and only visible on mobile/tablet */}
-        <div
-          className="absolute left-1/2 transform -translate-x-1/2 
-                      bottom-[-200px] sm:bottom-[-80px] md:bottom-[80px] 
-                      md:hidden z-0"
-        >
-          <Image
-            src={FormusLogo}
-            alt="Decorative shape"
-            width={200}
-            height={200}
-            className="mt-12"
-          />
-        </div>
       </div>
-    </>
+    </div>
   );
 };
-
 const MobileView = ({ children }) => {
   return (
     <TransformWrapper

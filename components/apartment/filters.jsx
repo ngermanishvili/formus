@@ -411,21 +411,21 @@ const FloorFilters = () => {
       {isDrawerOpen && (
         <>
           <div
-            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 mt-[150px]"
             onClick={() => setIsDrawerOpen(false)}
           />
           <div
             className="fixed inset-y-0 right-0 w-full max-w-md bg-gray-900 
                         z-50 transform transition-all duration-300 ease-out p-4"
           >
-            <div className="flex justify-between items-center mb-6">
+            <div className="flex justify-between items-center mb-6 mt-[70px]">
               <h2 className="text-xl font-semibold text-white">{t.filters}</h2>
               <Button
                 variant="ghost"
                 className="text-white/70 hover:text-white"
                 onClick={() => setIsDrawerOpen(false)}
               >
-                <X size={24} />
+                <X size={30} />
               </Button>
             </div>
 

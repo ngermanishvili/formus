@@ -1,8 +1,6 @@
 "use client";
 import React from "react";
 import OrtachalaPolygon from "../(test)/testroute/(components)/ortachala-polygon";
-import Footer1 from "@/components/footers/Footer1";
-import Header5 from "@/components/headers/Header5";
 import ApartmentFilters from "@/components/apartment/filters";
 import Image from "next/image";
 import FormusLogo from "@/public/assets/imgs/ortachala/formus.svg";
@@ -69,7 +67,7 @@ const ChooseApartment = () => {
         {/* Mobile Formus Logo */}
         <div
           className="absolute left-1/2 transform -translate-x-1/2 
-            sm:bottom-[-80px] mt-[500px] 
+            sm:bottom-[-80px] mt-[200px] 
             md:hidden z-0"
         >
           <Image

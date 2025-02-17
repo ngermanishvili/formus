@@ -8,6 +8,7 @@ import SecondShape1 from "@/public/assets/shapes/project/3.png";
 import SecondShape2 from "@/public/assets/shapes/project/1.png";
 import InteractiveSection from "./interactive-section";
 import BreadCumpShape from "@/public/assets/shapes/home/2.png";
+import Link from "next/link";
 
 const ProjectContent = ({ id }) => {
   const [loading, setLoading] = useState(true);
@@ -142,6 +143,26 @@ const ProjectContent = ({ id }) => {
               <p className="font-firago text-xl text-white">
                 {projectData.location}
               </p>
+              <Link className="btn btn-border mt-2" href="/projects">
+                {currentLang === "ge"
+                  ? "აირჩიე აპარტამენტი "
+                  : "Choose an apartament"}
+                <svg
+                  className="icon-16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
+                  ></path>
+                </svg>
+              </Link>
             </div>
           </div>
         </div>
@@ -155,6 +176,7 @@ const ProjectContent = ({ id }) => {
                 <p className="font-firago text-sm text-foreground mb-2">
                   {currentLang === "ge" ? "ჩვენს შესახებ" : "About Us"}
                 </p>
+
                 <h2 className="font-firago font-bold text-3xl text-foreground mb-4">
                   {currentLang === "ge" ? (
                     <>
@@ -170,6 +192,7 @@ const ProjectContent = ({ id }) => {
                     </>
                   )}
                 </h2>
+
                 <p className="font-firago text-lg font-light">
                   {projectData.description}
                 </p>

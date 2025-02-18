@@ -106,11 +106,8 @@ const ApartmentDetails = () => {
         <div className="flex justify-center w-full my-8">
           <FloorFilters />
         </div>
-
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 mt-8">
           <div>
-            <div className=""></div>
-
             <div className="relative bg-white rounded-lg overflow-hidden cursor-pointer">
               <CldImage
                 src={activeView === "2D" ? data.home_2d : data.home_3d}

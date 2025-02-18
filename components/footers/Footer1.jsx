@@ -130,18 +130,19 @@ export default function Footer() {
           {/* Working Hours Section */}
           <div className="flex flex-col md:flex-row justify-between">
             <div>
-              <h6 className="text-white/60 text-sm font-medium mb-4">
+              <h6 className="text-white/60 text-sm font-medium mb-4 ml-7">
                 {t.workingHours}
               </h6>
-              <div class="max-md:flex max-md:flex-row max-md:items-center max-md:text-center max-md:w-4/5 max-md:mx-auto max-md:gap-4">
-                <Clock
-                  className="text-white mr-2 flex-shrink-0 mt-1 ml-3"
-                  size={20}
-                />
-                <div className="text-white text-sm">
+
+              <div className="flex items-start">
+                <Clock className="text-white mr-2" size={20} />
+                <a
+                  href={`mailto:${contactInfo.email}`}
+                  className="text-white text-sm hover:opacity-80 transition-opacity"
+                >
                   <p className="firago-thin">{t.monToFri}</p>
                   <p>{t.saturday}</p>
-                </div>
+                </a>
               </div>
             </div>
             <div className="text-white text-sm mt-4 md:mt-[44px] md:ml-8">

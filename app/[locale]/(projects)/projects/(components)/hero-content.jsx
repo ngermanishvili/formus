@@ -143,7 +143,7 @@ const ProjectContent = ({ id }) => {
               <p className="font-firago text-xl text-white">
                 {projectData.location}
               </p>
-              <Link className="btn btn-border mt-2" href="/projects">
+              <Link className="btn btn-border mt-2" href="/choose-apartment">
                 {currentLang === "ge"
                   ? "აირჩიე აპარტამენტი "
                   : "Choose an apartament"}

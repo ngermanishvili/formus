@@ -111,12 +111,12 @@ const ApartmentDetails = () => {
           <div>
             <div className=""></div>
 
-            <div className="relative bg-white rounded-lg overflow-hidden">
+            <div className="relative bg-white rounded-lg overflow-hidden cursor-pointer">
               <CldImage
                 src={activeView === "2D" ? data.home_2d : data.home_3d}
                 width={800}
                 height={800}
-                className="object-contain w-full h-full"
+                className="object-contain w-full h-[550px]"
                 alt={`${activeView} visualization`}
                 cloudName="formus"
                 quality={80}

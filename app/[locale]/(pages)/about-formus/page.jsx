@@ -8,7 +8,6 @@ import NewsShape1 from "@/public/assets/shapes/home/3.png";
 import NewsShape2 from "@/public/assets/shapes/news/1.png";
 import ReactMarkdown from "react-markdown";
 import BreadCumpShape from "@/public/assets/shapes/home/2.png";
-import Header3 from "@/components/headers/Header3";
 
 const AboutFormus = () => {
   const [aboutData, setAboutData] = useState([]);
@@ -32,6 +31,53 @@ const AboutFormus = () => {
         {paragraph.trim()}
       </p>
     ));
+  };
+
+  const renderBenefits = () => {
+    const introText = {
+      en: "The investment in our projects is fully dedicated to creating environmentally friendly, safe and comfortable developments.",
+      ka: "ჩვენს პროექტებში ინვესტიცია სრულად ეძღვნება ეკოლოგიურად სუფთა, უსაფრთხო და კომფორტული განაშენიანების შექმნას.",
+    };
+
+    const benefits = {
+      en: [
+        "Flexible payment terms",
+        "Efficient placement of savings",
+        "Energy-efficient real estate with increasing value",
+        "Strict adherence to construction timelines",
+        "Fully funded projects",
+      ],
+      ka: [
+        "გადახდის ხელსაყრელი პირობები",
+        "დანაზოგის ეფექტური განთავსება",
+        "ენერგოეფექტური უძრავი ქონება მზარდი ღირებულებით",
+        "მშენებლობის მკაცრად დაცული ვადები",
+        "სრულად დაფინანსებული პროექტები",
+      ],
+    };
+
+    const companionText = {
+      en: 'For future residents, "Formus" serves as a guide and companion, from the very beginning of choosing a home to opening the door to their own apartment.',
+      ka: 'მომავალი მაცხოვრებლებისთვის "ფორმუსი" წარმოადგენს გზამკვლევს და თანამგზავრს, საცხოვრებლის არჩევიდან საკუთარი ბინის კარის გაღებამდე.',
+    };
+
+    return (
+      <div className="mb-12">
+        <p className="text-lg text-gray-700 leading-relaxed font-normal mb-6">
+          {introText[locale]}
+        </p>
+        <ul className="space-y-4 mb-6">
+          {benefits[locale].map((benefit, index) => (
+            <li key={index} className="flex items-center gap-4">
+              <div className="flex-shrink-0">
+                <Check className="h-6 w-6 text-green-500" />
+              </div>
+              <span className="text-gray-700 font-normal">{benefit}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
   };
 
   useEffect(() => {
@@ -59,88 +105,97 @@ const AboutFormus = () => {
   };
 
   return (
-    <>
-      <div className="relative w-full bg-gray-50 py-40 font-firago">
-        <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:top-[100px] right-0 z-0">
-          <Image
-            src={NewsShape2}
-            alt="Decorative shape"
-            width={200}
-            height={200}
-            className="mt-12"
-          />
-        </div>
-        <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:bottom-[600px] left-[-20px] right-0 z-0">
-          <Image
-            src={NewsShape1}
-            alt="Decorative shape"
-            width={200}
-            height={200}
-            className="mt-12"
-          />
-        </div>
-        <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="w-full mb-16">
-              <img
-                src={aboutData[0]?.image_url}
-                alt="Formus Building Complex"
-                className="w-full h-[800px] max-w-[1200px] object-cover object-bottom rounded-2xl shadow-lg"
-              />
-            </div>
+    <div className="relative w-full bg-gray-50 py-40 font-firago">
+      <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:top-[100px] right-0 z-0">
+        <Image
+          src={NewsShape2}
+          alt="Decorative shape"
+          width={200}
+          height={200}
+          className="mt-12"
+        />
+      </div>
+      <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:bottom-[600px] left-[-20px] right-0 z-0">
+        <Image
+          src={NewsShape1}
+          alt="Decorative shape"
+          width={200}
+          height={200}
+          className="mt-12"
+        />
+      </div>
+      <div className="container mx-auto px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="w-full mb-16">
+            <img
+              src={
+                aboutData[0]?.image_url ||
+                "/assets/imgs/page/homepage5/banner.png"
+              }
+              alt="Formus Building Complex"
+              className="w-full h-[800px] max-w-[1200px] object-cover object-bottom rounded-2xl shadow-lg"
+            />
+          </div>
 
-            <div className="mb-20">
-              <div className="relative mb-8">
-                <div className="absolute left-[-20px] top-[-10px] z-0">
-                  <Image
-                    src={BreadCumpShape}
-                    alt="Decorative shape"
-                    width={90}
-                    height={90}
-                    className="w-[90px] h-[90px]"
-                  />
-                </div>
-                <h2 className="text-4xl font-bold text-gray-900 font-firago whitespace-pre-line relative z-10">
-                  {formatTitle(getLocalizedField(aboutData[0], "title"))}
-                </h2>
+          <div className="mb-20">
+            <div className="relative mb-8">
+              <div className="absolute left-[-20px] top-[-10px] z-0">
+                <Image
+                  src={BreadCumpShape}
+                  alt="Decorative shape"
+                  width={90}
+                  height={90}
+                  className="w-[90px] h-[90px]"
+                />
               </div>
+              <h2 className="text-4xl font-bold text-gray-900 font-firago whitespace-pre-line relative z-10">
+                {formatTitle(getLocalizedField(aboutData[0], "title"))}
+              </h2>
+            </div>
+            <div className="space-y-4">
+              {renderParagraphs(getLocalizedField(aboutData[0], "description"))}
+            </div>
+            {renderBenefits()}
+          </div>
+
+          <div className="flex flex-col md:flex-row items-center gap-16 mb-20">
+            <div className="flex-1">
+              <h2 className="text-3xl font-bold mb-6 text-gray-900 font-firago">
+                {getLocalizedField(aboutData[1], "title")}
+              </h2>
               <div className="space-y-4">
                 {renderParagraphs(
-                  getLocalizedField(aboutData[0], "description")
+                  getLocalizedField(aboutData[1], "description")
                 )}
               </div>
             </div>
-            <div className="flex flex-col md:flex-row items-center gap-16 mb-20">
-              <div className="flex-1">
-                <h2 className="text-3xl font-bold mb-6 text-gray-900 font-firago">
-                  {getLocalizedField(aboutData[1], "title")}
-                </h2>
-                <div className="space-y-4">
-                  {renderParagraphs(
-                    getLocalizedField(aboutData[1], "description")
-                  )}
-                </div>
-              </div>
-              <div className="w-full md:w-[350px] flex justify-center">
-                <div className="w-full h-[350px] rounded-lg overflow-hidden shadow-xl">
-                  <img
-                    src={
-                      aboutData[1]?.image_url ||
-                      "/assets/imgs/page/homepage5/banner.png"
-                    }
-                    alt="Building Quality"
-                    className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
+            <div className="w-full md:w-[350px] flex justify-center">
+              <div className="w-full h-[350px] rounded-lg overflow-hidden shadow-xl">
+                <img
+                  src={
+                    aboutData[1]?.image_url ||
+                    "/assets/imgs/page/homepage5/banner.png"
+                  }
+                  alt="Building Quality"
+                  className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
+                />
               </div>
             </div>
+          </div>
 
-            <div className="flex flex-col md:flex-row-reverse items-center gap-16 mb-20">
-              <div className="flex-1">
-                <h2 className="text-3xl font-bold mb-6 text-gray-900 font-firago">
-                  {getLocalizedField(aboutData[2], "title")}
-                </h2>
-                <div className="prose max-w-none">
+          <div className="flex flex-col md:flex-row-reverse items-center gap-16 mb-20">
+            <div className="flex-1">
+              <h2 className="text-3xl font-bold mb-6 text-gray-900 font-firago">
+                {getLocalizedField(aboutData[2], "title")}
+              </h2>
+              <div className="prose max-w-none">
+                {locale === "ka" ? (
+                  <div className="space-y-4">
+                    {renderParagraphs(
+                      getLocalizedField(aboutData[2], "description")
+                    )}
+                  </div>
+                ) : (
                   <ReactMarkdown
                     components={{
                       p: ({ node, ...props }) => (
@@ -166,25 +221,25 @@ const AboutFormus = () => {
                   >
                     {getLocalizedField(aboutData[2], "description")}
                   </ReactMarkdown>
-                </div>
+                )}
               </div>
-              <div className="w-full md:w-[350px] flex justify-center">
-                <div className="w-full h-[350px] rounded-lg overflow-hidden shadow-xl">
-                  <img
-                    src={
-                      aboutData[2]?.image_url ||
-                      "/assets/imgs/page/homepage5/banner.png"
-                    }
-                    alt="Our Services"
-                    className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
+            </div>
+            <div className="w-full md:w-[350px] flex justify-center">
+              <div className="w-full h-[350px] rounded-lg overflow-hidden shadow-xl">
+                <img
+                  src={
+                    aboutData[2]?.image_url ||
+                    "/assets/imgs/page/homepage5/banner.png"
+                  }
+                  alt="Our Services"
+                  className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
+                />
               </div>
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,5 +1,3 @@
-import Footer1 from "@/components/footers/Footer1";
-import Header5 from "@/components/headers/Header5";
 import Breadcumb from "@/components/service/Breadcumb";
 import Services1 from "@/components/service/Services1";
 import NewsShape1 from "@/public/assets/shapes/home/3.png";

@@ -51,9 +51,11 @@ export default function Footer() {
   }
 
   const getLocalizedAddress = () => {
-    return locale === "ka"
-      ? contactInfo.address_line_ge
-      : contactInfo.address_line_en;
+    if (locale === "ka") {
+      return contactInfo.address_line_ge.replace("თბილისი", "\nთბილისი");
+    } else {
+      return contactInfo.address_line_en.replace("Tbilisi", "\nTbilisi");
+    }
   };
 
   return (
@@ -97,7 +99,9 @@ export default function Footer() {
             </h6>
             <div className="flex items-start justify-center max-md-items-end">
               <MapPin className="text-white mr-2 flex-shrink-0 " size={20} />
-              <p className="text-white text-sm">{getLocalizedAddress()}</p>
+              <p className="text-white text-sm whitespace-pre-line">
+                {getLocalizedAddress()}
+              </p>
             </div>
           </div>
 

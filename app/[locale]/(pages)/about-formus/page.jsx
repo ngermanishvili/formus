@@ -14,6 +14,33 @@ const AboutFormus = () => {
   const params = useParams();
   const locale = params.locale || "ka";
 
+  const introText = {
+    en: "The investment in our projects is fully dedicated to creating environmentally friendly, safe and comfortable developments.",
+    ka: "ჩვენს პროექტებში ინვესტიცია სრულად ეძღვნება ეკოლოგიურად სუფთა, უსაფრთხო და კომფორტული განაშენიანების შექმნას.",
+  };
+
+  const benefits = {
+    en: [
+      "Flexible payment terms",
+      "Efficient placement of savings",
+      "Energy-efficient real estate with increasing value",
+      "Strict adherence to construction timelines",
+      "Fully funded projects",
+    ],
+    ka: [
+      "გადახდის ხელსაყრელი პირობები",
+      "დანაზოგის ეფექტური განთავსება",
+      "ენერგოეფექტური უძრავი ქონება მზარდი ღირებულებით",
+      "მშენებლობის მკაცრად დაცული ვადები",
+      "სრულად დაფინანსებული პროექტები",
+    ],
+  };
+
+  const companionText = {
+    en: 'For future residents, "Formus" serves as a guide and companion, from the very beginning of choosing a home to opening the door to their own apartment.',
+    ka: 'მომავალი მაცხოვრებლებისთვის "ფორმუსი" წარმოადგენს გზამკვლევს და თანამგზავრს, საცხოვრებლის არჩევიდან საკუთარი ბინის კარის გაღებამდე.',
+  };
+
   const getLocalizedField = (item, field) => {
     if (!item) return "";
     const fieldSuffix = locale === "en" ? "en" : "ge";
@@ -128,10 +155,7 @@ const AboutFormus = () => {
         <div className="max-w-6xl mx-auto">
           <div className="w-full mb-16">
             <img
-              src={
-                aboutData[0]?.image_url ||
-                "/assets/imgs/page/homepage5/banner.png"
-              }
+              src={aboutData[0]?.image_url}
               alt="Formus Building Complex"
               className="w-full h-[800px] max-w-[1200px] object-cover object-bottom rounded-2xl shadow-lg"
             />
@@ -155,7 +179,6 @@ const AboutFormus = () => {
             <div className="space-y-4">
               {renderParagraphs(getLocalizedField(aboutData[0], "description"))}
             </div>
-            {renderBenefits()}
           </div>
 
           <div className="flex flex-col md:flex-row items-center gap-16 mb-20">
@@ -189,39 +212,24 @@ const AboutFormus = () => {
                 {getLocalizedField(aboutData[2], "title")}
               </h2>
               <div className="prose max-w-none">
-                {locale === "ka" ? (
-                  <div className="space-y-4">
-                    {renderParagraphs(
-                      getLocalizedField(aboutData[2], "description")
-                    )}
-                  </div>
-                ) : (
-                  <ReactMarkdown
-                    components={{
-                      p: ({ node, ...props }) => (
-                        <p
-                          className="text-lg text-gray-700 leading-relaxed font-normal mb-6"
-                          {...props}
-                        />
-                      ),
-                      strong: ({ node, ...props }) => (
-                        <strong className="font-bold text-xl" {...props} />
-                      ),
-                      li: ({ node, ...props }) => (
-                        <li className="flex items-center gap-4 mb-4">
-                          <div className="flex-shrink-0">
-                            <Check className="h-6 w-6 text-green-500" />
-                          </div>
-                          <span className="text-gray-700 font-normal">
-                            {props.children}
-                          </span>
-                        </li>
-                      ),
-                    }}
-                  >
-                    {getLocalizedField(aboutData[2], "description")}
-                  </ReactMarkdown>
-                )}
+                <p className="text-lg text-gray-700 leading-relaxed font-normal mb-6">
+                  {introText[locale]}
+                </p>
+                <ul className="space-y-4 mb-6">
+                  {benefits[locale].map((benefit, index) => (
+                    <li key={index} className="flex items-center gap-4">
+                      <div className="flex-shrink-0">
+                        <Check className="h-6 w-6 text-green-500" />
+                      </div>
+                      <span className="text-gray-700 font-normal">
+                        {benefit}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="text-lg text-gray-700 leading-relaxed font-normal">
+                  {companionText[locale]}
+                </p>
               </div>
             </div>
             <div className="w-full md:w-[350px] flex justify-center">

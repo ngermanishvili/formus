@@ -133,7 +133,7 @@ const AboutFormus = () => {
 
   return (
     <div className="relative w-full bg-gray-50 py-40 font-firago">
-      <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:top-[100px] right-0 z-0">
+      <div className="absolute bottom-[-200px] hidden sm:block sm:bottom-[-80px] md:bottom-[-80px] lg:top-[100px] right-0 z-0">
         <Image
           src={NewsShape2}
           alt="Decorative shape"
@@ -142,7 +142,7 @@ const AboutFormus = () => {
           className="mt-12"
         />
       </div>
-      <div className="absolute bottom-[-200px] sm:bottom-[-80px] md:bottom-[-80px] lg:bottom-[600px] left-[-20px] right-0 z-0">
+      <div className="absolute bottom-[-200px] hidden sm:block sm:bottom-[-80px] md:bottom-[-80px] lg:bottom-[600px] left-[-20px] right-0 z-0">
         <Image
           src={NewsShape1}
           alt="Decorative shape"

@@ -8,6 +8,7 @@ const client = new pg.Client({
     }
 });
 
+// 
 async function checkMigration() {
     try {
         await client.connect();

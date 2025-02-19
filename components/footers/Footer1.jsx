@@ -59,26 +59,26 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#003366] w-full">
-      <div className="container mx-auto max-w-7xl px-4">
-        <div className="py-4">
+    <footer className="bg-[#003366] w-full max-md:pt-64 ">
+      <div className=" mx-auto max-w-7xl max-2xl:max-w-none max-2xl:px-0">
+        <div className="pt-40 ">
           {/* Main Footer Content */}
-          <div className="flex justify-between items-center relative">
+          <div className="flex justify-between items-center relative max-2xl:mt-[100px] max-2xl:w-[72%] max-2xl:mx-auto max-md:flex-col max-md:mt-0">
             {/* Logo Section - Left */}
-            <div className="-ml-[120px] mt-[60px] min-[2000px]:mt-[100px]">
+            <div className="-ml-[120px] mt-[60px] min-[2000px]:mt-[100px]  max-2xl:m-0 ">
               <Link href={`/${locale}`}>
                 <Image
                   src={FooterLogo}
                   alt="Formus Logo"
-                  width={120}
-                  height={120}
+                  width={100}
+                  height={100}
                   className="w-auto h-auto min-[2000px]:w-[200px] min-[2000px]:h-[200px]"
                 />
               </Link>
             </div>
 
             {/* Social Icons - Right */}
-            <div className="flex gap-4 -mr-[-140px] min-[2000px]:mt-[100px] min-[2000px]:-mr-[-140px] mt-[60px] ">
+            <div className="flex gap-4 -mr-[-140px] min-[2000px]:mt-[100px] min-[2000px]:-mr-[-140px] mt-[60px] max-2xl:mr-0 max-2xl:mt-0 ">
               <a href="#" className="hover:opacity-80 transition-opacity">
                 <PiFacebookLogo className="text-white" size={24} />
               </a>
@@ -91,30 +91,34 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Contact Information Grid */}
-          <div className="grid grid-cols-12 gap-4 mt-16 mb-4">
+          <div className="grid grid-cols-12 gap-4 mt-16 mb-4 w-full max-2xl:flex max-2xl:flex-row max-2xl:grid-cols-none max-2xl:w-full max-2xl:justify-center max-2xl:gap-32 md:flex-row sm:flex-col sm:gap-8 sm:items-center max-md:flex max-md:flex-col">
             {/* Left Section - Address */}
-            <div className="col-span-2 flex flex-col -ml-20 w-[250px]">
-              <h6 className="text-white/60 text-sm font-medium mb-4">
-                {locale === "ka" ? "მისამართი" : "Address"}
-              </h6>
-              <div className="flex items-start">
-                <MapPin
-                  className="text-white mr-2 flex-shrink-0 mt-1"
-                  size={20}
-                />
-                <p className="text-white text-sm">{getLocalizedAddress()}</p>
+            <div className="col-span-2 flex flex-col -ml-20 w-[250px] text-center max-2xl:m-0 sm:w-full sm:items-center max-md:ml-0 max-md:w-auto">
+              <div className=" max-md:w-[250px] max-md:self-center max-md:flex max-md:flex-col">
+                <h6 className="text-white/60 text-sm font-medium mb-4">
+                  {locale === "ka" ? "მისამართი" : "Address"}
+                </h6>
+                <div className="flex items-start sm:justify-center sm:min-w-80">
+                  <MapPin
+                    className="text-white mr-2 flex-shrink-0 mt-1"
+                    size={20}
+                  />
+                  <p className="text-white text-sm md:mt-1">
+                    {getLocalizedAddress()}
+                  </p>
+                </div>
               </div>
             </div>
 
-            {/* Center Section - Contact */}
-            <div className="col-span-4 flex flex-col items-center">
+            <div className="col-span-4 flex flex-col items-center text-center sm:w-full">
               <h6 className="text-white/60 text-sm font-medium mb-4">
                 {locale === "ka" ? "ტელეფონი/ელ-ფოსტა" : "Phone/E-mail"}
               </h6>
               <div className="flex flex-col space-y-2">
                 <div className="flex items-center">
-                  <Phone className="text-white mr-2" size={20} />
+                  <div className="w-8 flex justify-center">
+                    <Phone className="text-white" size={20} />
+                  </div>
                   <a
                     href={`tel:${contactInfo.phone_number}`}
                     className="text-white text-sm hover:opacity-80 transition-opacity"
@@ -123,7 +127,9 @@ export default function Footer() {
                   </a>
                 </div>
                 <div className="flex items-center">
-                  <Mail className="text-white mr-2" size={20} />
+                  <div className="w-8 flex justify-center">
+                    <Mail className="text-white" size={20} />
+                  </div>
                   <a
                     href={`mailto:${contactInfo.email}`}
                     className="text-white text-sm hover:opacity-80 transition-opacity"
@@ -134,25 +140,18 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Right Section - Working Hours */}
-            <div className="col-span-4 flex flex-col items-center -mr-[170px]">
-              <h6 className="text-white/60 text-sm font-medium mb-4 -mr-[-200px]">
+            <div className="col-span-4 flex flex-col items-center -mr-[170px] text-center max-2xl:m-0 sm:w-full">
+              <h6 className="text-white/60 text-sm font-medium mb-4">
                 {t.workingHours}
               </h6>
-              <div className="flex items-start gap-14">
-                <div className="flex items-start">
-                  <Clock className="text-white mr-2" size={20} />
-                  <div className="text-white text-sm">
-                    <p>{t.monToFri}</p>
-                    <p>{t.saturday}</p>
-                  </div>
+              <div className="flex items-start">
+                <div className="w-8 flex justify-center">
+                  <Clock className="text-white" size={20} />
                 </div>
-                <Link
-                  href="#"
-                  className="text-white text-sm hover:opacity-80 transition-opacity"
-                >
-                  {t.termsAndConditions}
-                </Link>
+                <div className="text-white text-sm">
+                  <p>{t.monToFri}</p>
+                  <p className="mr-[40px]">{t.saturday}</p>
+                </div>
               </div>
             </div>
           </div>

@@ -43,7 +43,7 @@ export default function Faq() {
                     height={80}
                   />
                 </div>
-                <h2 className="text-black text-xs relative top-[10px]">
+                <h2 className="text-black text-xs relative top-[24px] font-normal">
                   About us
                 </h2>
               </div>
@@ -73,7 +73,7 @@ export default function Faq() {
           </div>
         </div>
 
-        <div className="w-full lg:w-1/2 h-[300px] sm:h-[400px] lg:h-[800px] overflow-hidden">
+        <div className="w-full lg:w-1/2 h-[300px] sm:h-[400px] lg:h-[900px] overflow-hidden">
           {heroContent?.image_url ? (
             <CldImage
               src={heroContent.image_url}

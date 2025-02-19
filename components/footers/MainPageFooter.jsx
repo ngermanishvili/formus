@@ -78,7 +78,7 @@ export default function Footer() {
             </div>
 
             {/* Social Icons - Right */}
-            <div className="flex gap-4 -mr-[-140px] min-[2000px]:mt-[100px] min-[2000px]:-mr-[-140px] mt-[60px] ">
+            <div className="flex gap-4 -mr-20 min-[2000px]:mt-[100px] min-[2000px]:-mr-[-140px] mt-[60px]">
               <a href="#" className="hover:opacity-80 transition-opacity">
                 <PiFacebookLogo className="text-white" size={24} />
               </a>

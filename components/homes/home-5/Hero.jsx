@@ -145,7 +145,7 @@ export default function Hero() {
             )}
 
             <div className="box-pagination-button box-pagination-button-2  md:px-16 lg:px-24 ">
-              <div className="swiper-button-prev swiper-button-prev-banner swiper-button-prev-banner-2 snbp11 flex items-center justify-center">
+              <div className="swiper-button-prev swiper-button-prev-banner swiper-button-prev-banner-2 snbp11 flex items-center justify-center min-[2000px]:ml-[-160px]">
                 <svg
                   className="w-6 h-6 md:w-8 md:h-8"
                   fill="none"
@@ -161,7 +161,7 @@ export default function Hero() {
                   />
                 </svg>
               </div>
-              <div className="swiper-button-prev swiper-button-prev-banner swiper-button-prev-banner-2 snbp11 flex items-center justify-center">
+              <div className="swiper-button-prev swiper-button-prev-banner swiper-button-prev-banner-2 snbp11 flex items-center justify-center min-[2000px]:ml-[-160px]">
                 <svg
                   className="w-6 h-6 md:w-8 md:h-8"
                   fill="none"

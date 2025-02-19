@@ -115,9 +115,6 @@ const AboutFormus = () => {
                     className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
                   />
                 </div>
-                <div className="absolute -top-4 -right-4 bg-white p-3 rounded-full shadow-lg">
-                  <div className="w-8 h-8 bg-yellow-400 rounded-full"></div>
-                </div>
               </div>
             </div>
 

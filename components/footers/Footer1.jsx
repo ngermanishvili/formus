@@ -17,13 +17,11 @@ const translations = {
     workingHours: "Working Hours",
     monToFri: "Mon- Sat: 10:00 - 18:00",
     saturday: "Sat: 11:00 - 17:00",
-    termsAndConditions: "Terms and Conditions",
   },
   ka: {
     workingHours: "სამუშაო საათები",
     monToFri: "ორშ-პარ: 10:00 - 18:00",
     saturday: "შაბ: 11:00 - 17:00",
-    termsAndConditions: "წესები და პირობები",
   },
 };
 
@@ -59,106 +57,93 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-[#003366] w-full max-md:pt-64 ">
-      <div className=" mx-auto max-w-7xl max-2xl:max-w-none max-2xl:px-0">
-        <div className="pt-40 ">
-          {/* Main Footer Content */}
-          <div className="flex justify-between items-center relative max-2xl:mt-[100px] max-2xl:w-[72%] max-2xl:mx-auto max-md:flex-col max-md:mt-0">
-            {/* Logo Section - Left */}
-            <div className="-ml-[120px] mt-[60px] min-[2000px]:mt-[100px]  max-2xl:m-0 ">
-              <Link href={`/${locale}`}>
-                <Image
-                  src={FooterLogo}
-                  alt="Formus Logo"
-                  width={100}
-                  height={100}
-                  className="w-auto h-auto min-[2000px]:w-[200px] min-[2000px]:h-[200px]"
-                />
-              </Link>
-            </div>
-
-            {/* Social Icons - Right */}
-            <div className="flex gap-4 -mr-[-140px] min-[2000px]:mt-[100px] min-[2000px]:-mr-[-140px] mt-[60px] max-2xl:mr-0 max-2xl:mt-0 ">
-              <a href="#" className="hover:opacity-80 transition-opacity">
-                <PiFacebookLogo className="text-white" size={24} />
-              </a>
-              <a href="#" className="hover:opacity-80 transition-opacity">
-                <PiInstagramLogo className="text-white" size={24} />
-              </a>
-              <a href="#" className="hover:opacity-80 transition-opacity">
-                <PiLinkedinLogo className="text-white" size={24} />
-              </a>
-            </div>
+    <footer className="bg-[#003366] w-full py-16">
+      <div className="mx-auto max-w-7xl px-4 max-md:pt-72">
+        {/* Logo */}
+        <div className="flex justify-between  items-center w-[90%] mx-auto max-md:flex-col min-md:w-[100%] relative ">
+          <div
+            className="flex justify-start min-[2000px]:-ml-48
+"
+          >
+            <Link href={`/${locale}`}>
+              <Image
+                src={FooterLogo}
+                alt="Formus Logo"
+                width={100}
+                height={100}
+                className="w-auto h-auto mt-8  "
+              />
+            </Link>
           </div>
-
-          <div className="grid grid-cols-12 gap-4 mt-16 mb-4 w-full max-2xl:flex max-2xl:flex-row max-2xl:grid-cols-none max-2xl:w-full max-2xl:justify-center max-2xl:gap-32 md:flex-row sm:flex-col sm:gap-8 sm:items-center max-md:flex max-md:flex-col">
-            {/* Left Section - Address */}
-            <div className="col-span-2 flex flex-col -ml-20 w-[250px] text-center max-2xl:m-0 sm:w-full sm:items-center max-md:ml-0 max-md:w-auto">
-              <div className=" max-md:w-[250px] max-md:self-center max-md:flex max-md:flex-col">
-                <h6 className="text-white/60 text-sm font-medium mb-4">
-                  {locale === "ka" ? "მისამართი" : "Address"}
-                </h6>
-                <div className="flex items-start sm:justify-center sm:min-w-80">
-                  <MapPin
-                    className="text-white mr-2 flex-shrink-0 mt-1"
-                    size={20}
-                  />
-                  <p className="text-white text-sm md:mt-1">
-                    {getLocalizedAddress()}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-span-4 flex flex-col items-center text-center sm:w-full">
-              <h6 className="text-white/60 text-sm font-medium mb-4">
-                {locale === "ka" ? "ტელეფონი/ელ-ფოსტა" : "Phone/E-mail"}
-              </h6>
-              <div className="flex flex-col space-y-2">
-                <div className="flex items-center">
-                  <div className="w-8 flex justify-center">
-                    <Phone className="text-white" size={20} />
-                  </div>
-                  <a
-                    href={`tel:${contactInfo.phone_number}`}
-                    className="text-white text-sm hover:opacity-80 transition-opacity"
-                  >
-                    {contactInfo.phone_number}
-                  </a>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-8 flex justify-center">
-                    <Mail className="text-white" size={20} />
-                  </div>
-                  <a
-                    href={`mailto:${contactInfo.email}`}
-                    className="text-white text-sm hover:opacity-80 transition-opacity"
-                  >
-                    {contactInfo.email}
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className="col-span-4 flex flex-col items-center -mr-[170px] text-center max-2xl:m-0 sm:w-full">
-              <h6 className="text-white/60 text-sm font-medium mb-4">
-                {t.workingHours}
-              </h6>
-              <div className="flex items-start">
-                <div className="w-8 flex justify-center">
-                  <Clock className="text-white" size={20} />
-                </div>
-                <div className="text-white text-sm">
-                  <p>{t.monToFri}</p>
-                  <p className="mr-[40px]">{t.saturday}</p>
-                </div>
-              </div>
-            </div>
+          <div className="flex justify-end  gap-4 mr-[70px] max-md:ml-[0px] max-md:justify-center ">
+            <a href="#" className="hover:opacity-80 transition-opacity">
+              <PiFacebookLogo className="text-white" size={24} />
+            </a>
+            <a href="#" className="hover:opacity-80 transition-opacity">
+              <PiInstagramLogo className="text-white" size={24} />
+            </a>
+            <a href="#" className="hover:opacity-80 transition-opacity">
+              <PiLinkedinLogo className="text-white" size={24} />
+            </a>
           </div>
-
-          {/* Footer Bottom Border */}
-          <div className="border-t border-white/10 pt-4"></div>
         </div>
+
+        {/* Contact Information Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 ">
+          {/* Address Section */}
+          <div className="flex flex-col items-start text-center max-md:items-center max-md:mt-4 ">
+            <h6 className="text-white/60 text-sm font-medium mb-4">
+              {locale === "ka" ? "მისამართი" : "Address"}
+            </h6>
+            <div className="flex items-start justify-center max-md-items-end">
+              <MapPin className="text-white mr-2 flex-shrink-0 " size={20} />
+              <p className="text-white text-sm">{getLocalizedAddress()}</p>
+            </div>
+          </div>
+
+          {/* Phone/Email Section */}
+          <div className="flex flex-col items-center text-center">
+            <h6 className="text-white/60 text-sm font-medium mb-4">
+              {locale === "ka" ? "ტელეფონი/ელ-ფოსტა" : "Phone/E-mail"}
+            </h6>
+            <div className="flex flex-col space-y-2">
+              <div className="flex items-center">
+                <Phone className="text-white mr-2" size={20} />
+                <a
+                  href={`tel:${contactInfo.phone_number}`}
+                  className="text-white text-sm hover:opacity-80 transition-opacity"
+                >
+                  {contactInfo.phone_number}
+                </a>
+              </div>
+              <div className="flex items-center">
+                <Mail className="text-white mr-2" size={20} />
+                <a
+                  href={`mailto:${contactInfo.email}`}
+                  className="text-white text-sm hover:opacity-80 transition-opacity"
+                >
+                  {contactInfo.email}
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Working Hours Section */}
+          <div className="flex flex-col items-center text-center">
+            <h6 className="text-white/60 text-sm font-medium mb-4">
+              {t.workingHours}
+            </h6>
+            <div className="flex items-start">
+              <Clock className="text-white mr-2" size={20} />
+              <div className="text-white text-sm">
+                <p>{t.monToFri}</p>
+                <p className="mr-10">{t.saturday}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Social Icons */}
       </div>
     </footer>
   );

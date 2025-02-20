@@ -35,7 +35,7 @@ const routes = [
     id: 4,
     path: "/choose-apartment",
     translations: {
-      ka: "შეარჩიე ბინა",
+      ka: "შეარჩიეთ ბინა",
       en: "Choose Home",
     },
     showOnlyOnHome: true, // Added this flag

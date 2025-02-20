@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 export default function DownloadApp() {
   const pathname = usePathname();
   const chooseHomeText =
-    pathname === "/ka" ? "შეარჩიე ბინა" : "Choose an Apartment";
+    pathname === "/ka" ? "შეარჩიეთ ბინა" : "Choose an Apartment";
 
   return (
     <div className="flex justify-center items-center my-[30px] sm:my-[40px] lg:my-[100px] px-4 sm:px-6 lg:px-8">

@@ -4,11 +4,11 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Loader2 } from "lucide-react";
-import SecondShape1 from "@/public/assets/shapes/project/3.png";
 import SecondShape2 from "@/public/assets/shapes/project/1.png";
 import InteractiveSection from "./interactive-section";
 import BreadCumpShape from "@/public/assets/shapes/home/2.png";
 import Link from "next/link";
+import ProjectContPhotos from "@/public/assets/imgs/ortachala/ortachala.png";
 
 const ProjectContent = ({ id }) => {
   const [loading, setLoading] = useState(true);

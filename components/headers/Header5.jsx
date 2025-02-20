@@ -40,6 +40,7 @@ const routes = [
     },
     showOnlyOnHome: true, // Added this flag
   },
+  //
   {
     id: 5,
     path: "/media",

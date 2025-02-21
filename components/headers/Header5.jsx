@@ -38,9 +38,8 @@ const routes = [
       ka: "შეარჩიეთ ბინა",
       en: "Choose Home",
     },
-    showOnlyOnHome: true, // Added this flag
+    showOnlyOnHome: true,
   },
-  //
   {
     id: 5,
     path: "/media",
@@ -115,29 +114,25 @@ export default function Header5() {
     window.location.href = getLocalizedPath(newLocale);
   };
 
-  // Filter routes based on current page
   const visibleRoutes = routes.filter(
     (route) => !route.showOnlyOnHome || (route.showOnlyOnHome && isHomePage)
   );
 
   return (
     <>
-      {/* Mobile Header */}
       <div className="block md:hidden">
         <MobileHeader1 routes={visibleRoutes} languageNames={languageNames} />
       </div>
 
-      {/* Desktop Header */}
       <div className="hidden md:block">
         <header
-          className={`fixed w-full top-0 z-50 bg-[#00326B] transition-all duration-300 ${
+          className={`fixed w-full flex justify-center top-0 z-50 bg-[#00326B] transition-all duration-300 ${
             scrolled ? "shadow-lg" : ""
           }`}
         >
-          <div className="container mx-auto max-w-7xl px-4">
-            <div className="flex items-center justify-between py-4">
-              {/* Left Navigation */}
-              <nav className="flex items-center space-x-1 -ml-20 uppercase font-firago">
+          <div className="mx-auto max-w-7xl w-[1280px] px-32">
+            <div className="flex items-center justify-between py-3">
+              <nav className="flex items-center gap-6 uppercase font-firago w-1/3 ml-8">
                 {visibleRoutes.map((route) => (
                   <Link
                     key={route.id}
@@ -145,26 +140,24 @@ export default function Header5() {
                     onClick={(e) => handleChooseHomeClick(e, route.path)}
                     className={`${
                       isActivePath(route.path) ? "text-white" : "text-gray-200"
-                    } px-2 py-1 text-sm hover:text-[#FBB102] rounded transition-colors`}
+                    } whitespace-nowrap text-xs hover:text-[#FBB102] transition-colors`}
                   >
                     {route.translations[locale]}
                   </Link>
                 ))}
               </nav>
 
-              {/* Center Logo */}
               <Link
                 href="/"
-                className="text-white text-2xl font-bold absolute left-1/2 -translate-x-1/2 font-firago"
+                className="text-white text-lg font-bold absolute left-[52%] -translate-x-1/2 font-firago"
               >
                 FORMUS
               </Link>
 
-              {/* Right Actions */}
-              <div className="flex items-center space-x-4 -mr-[-150px] font-firago">
+              <div className="flex items-center space-x-2 font-firago w-1/3 justify-end mr-8">
                 <button
                   onClick={toggleLanguage}
-                  className="flex items-center space-x-1 text-white hover:text-[#f94011] transition-colors"
+                  className="flex items-center text-xs text-white hover:text-[#f94011] transition-colors"
                 >
                   <span>{languageNames[locale]}</span>
                 </button>
@@ -172,9 +165,9 @@ export default function Header5() {
                 <a
                   onClick={scrollToFooter}
                   href="tel:+995123456789"
-                  className="flex items-center space-x-1 text-white hover:text-[#f94011] transition-colors"
+                  className="flex items-center text-white hover:text-[#f94011] transition-colors ml-2"
                 >
-                  <Phone className="w-4 h-4" />
+                  <Phone className="w-3 h-3" />
                 </a>
               </div>
             </div>

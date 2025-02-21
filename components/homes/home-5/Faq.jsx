@@ -33,7 +33,7 @@ export default function Faq() {
       <div className="flex flex-col lg:flex-row items-stretch relative">
         <div className="w-full lg:w-1/2 relative h-[600px] lg:h-[800px]">
           <div className="absolute w-full h-full flex items-center justify-center lg:justify-end lg:pr-20 max-md:mt-28">
-            <div className="max-w-[400px] mb-[220px]  min-[2000px]:mb-52 min-[2000px]:mr-52 max-sm:p-10 max-sm:mt-32">
+            <div className="max-w-[400px] mb-[220px]  min-[2000px]:mb-52  max-sm:p-10 max-sm:mt-32">
               <div className="relative mb-4">
                 <div className="absolute left-[-30px] top-[0px]">
                   <Image
@@ -48,7 +48,7 @@ export default function Faq() {
                 </h2>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-2">
                 <h2 className="text-3xl sm:text-4xl font-bold text-black leading-tight relative z-10">
                   {isGeorgian ? "ფორმუსი" : "FORMUS"}
                 </h2>
@@ -64,9 +64,9 @@ export default function Faq() {
                 </p>
 
                 <Link href="/about-formus" className="block w-40 ">
-                  <Button className="w-full h-10 bg-[#Fcb203] text-black font-normal text-lg rounded-md right-0 shadow-lg hover:shadow-xl transition duration-300 ease-in-out p-4 max-md:mb-[150px]">
+                  <button className="w-full h-10 bg-[#Fcb203] text-black font-normal text-lg rounded-md right-0 shadow-lg flex items-center  transition duration-300 ease-in-out p-4 max-md:mb-[150px]">
                     {isGeorgian ? "გაიგეთ მეტი" : "Learn More"}
-                  </Button>
+                  </button>
                 </Link>
               </div>
             </div>

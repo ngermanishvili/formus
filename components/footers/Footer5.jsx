@@ -1,137 +1,169 @@
-import { legalLinks, socialMediaPlatforms } from "@/data/footerLinks";
-import Image from "next/image";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { MapPin, Phone, Clock, Mail } from "lucide-react";
+import FooterLogo from "@/public/assets/shapes/home/footer-logo.png";
+import Image from "next/image";
+import { useLocale } from "next-intl";
+import {
+  PiFacebookLogo,
+  PiInstagramLogo,
+  PiLinkedinLogo,
+} from "react-icons/pi";
+
+const translations = {
+  en: {
+    workingHours: "Working Hours",
+    monToFri: "Mon- Sat: 10:00 - 18:00",
+    saturday: "Sat: 11:00 - 17:00",
+    terms: "Terms & Conditions",
+  },
+  ka: {
+    workingHours: "სამუშაო საათები",
+    monToFri: "ორშ-პარ: 10:00 - 18:00",
+    saturday: "შაბ: 11:00 - 17:00",
+    terms: "პირობები და პირობები",
+  },
+};
 
 export default function Footer5() {
+  const locale = useLocale();
+  const t = translations[locale];
+  const [contactInfo, setContactInfo] = useState(null);
+
+  useEffect(() => {
+    const fetchContactInfo = async () => {
+      try {
+        const response = await fetch("/api/contactinfo");
+        const data = await response.json();
+        if (data.status === "success") {
+          setContactInfo(data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching contact info:", error);
+      }
+    };
+
+    fetchContactInfo();
+  }, []);
+
+  if (!contactInfo) {
+    return null;
+  }
+
+  const getLocalizedAddress = () => {
+    if (locale === "ka") {
+      return contactInfo.address_line_ge.replace("თბილისი", "\nთბილისი");
+    } else {
+      return contactInfo.address_line_en.replace("Tbilisi", "\nTbilisi");
+    }
+  };
+
   return (
-    <footer className="footer footer-5">
-      <div className="footer-1">
-        <div className="container-sub">
-          <div className="box-footer-top">
-            <div className="row align-items-center">
-              <div className="col-lg-6 col-md-6 text-md-start text-center mb-15 wow fadeInUp">
-                <div className="d-flex align-items-center justify-content-md-start justify-content-center">
-                  <a className="mr-30" href="#">
-                    <Image
-                      width={150}
-                      height={19}
-                      src="/assets/imgs/template/logo.svg"
-                      style={{ height: "fit-content" }}
-                      alt="Luxride"
-                    />
+    <footer className="w-full bg-[#00326B]">
+      {/* Mobile Footer */}
+      <div className="block md:hidden">
+        {/* Mobile footer content can be added here */}
+      </div>
+
+      {/* Desktop Footer */}
+      <div className="hidden md:block">
+        <div className="mx-auto max-w-7xl w-[1280px] px-40 pt-24">
+          {/* Top Section */}
+          <div className="py-8 border-b border-gray-700">
+            <div className="flex items-center justify-between w-[90%] mx-auto">
+              <div className="w-[150px]">
+                <Link href={`/${locale}`}>
+                  <Image
+                    src={FooterLogo}
+                    alt="Formus"
+                    width={100}
+                    height={100}
+                    className="w-auto h-auto"
+                  />
+                </Link>
+              </div>
+              <div className="flex justify-end gap-4">
+                <a href="#" className="hover:opacity-80 transition-opacity">
+                  <PiFacebookLogo className="text-white" size={24} />
+                </a>
+                <a href="#" className="hover:opacity-80 transition-opacity">
+                  <PiInstagramLogo className="text-white" size={24} />
+                </a>
+                <a href="#" className="hover:opacity-80 transition-opacity">
+                  <PiLinkedinLogo className="text-white" size={24} />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Middle Section */}
+          <div className="py-12 grid grid-cols-3 gap-8">
+            {/* Address Section */}
+            <div className="flex flex-col items-start">
+              <h6 className="text-white/60 text-sm font-medium mb-4">
+                {locale === "ka" ? "მისამართი" : "Address"}
+              </h6>
+              <div className="flex items-start">
+                <MapPin className="text-white mr-2 flex-shrink-0" size={20} />
+                <p className="text-white text-sm whitespace-pre-line">
+                  {getLocalizedAddress()}
+                </p>
+              </div>
+            </div>
+
+            {/* Phone/Email Section */}
+            <div className="flex flex-col items-center">
+              <h6 className="text-white/60 text-sm font-medium mb-4">
+                {locale === "ka" ? "ტელეფონი/ელ-ფოსტა" : "Phone/E-mail"}
+              </h6>
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center">
+                  <Phone className="text-white mr-2" size={20} />
+                  <a
+                    href={`tel:${contactInfo.phone_number}`}
+                    className="text-white text-sm hover:opacity-80 transition-opacity"
+                  >
+                    {contactInfo.phone_number}
+                  </a>
+                </div>
+                <div className="flex items-center">
+                  <Mail className="text-white mr-2" size={20} />
+                  <a
+                    href={`mailto:${contactInfo.email}`}
+                    className="text-white text-sm hover:opacity-80 transition-opacity"
+                  >
+                    {contactInfo.email}
                   </a>
                 </div>
               </div>
-              <div className="col-lg-6 col-md-6 text-md-end text-center mb-15 wow fadeInUp">
-                <div className="d-flex align-items-center justify-content-md-end justify-content-center">
-                  {socialMediaPlatforms.map((elm, i) => (
-                    <a key={i} className={elm.className} href={elm.href}></a>
-                  ))}
+            </div>
+
+            {/* Working Hours Section */}
+            <div className="flex flex-col items-center">
+              <h6 className="text-white/60 text-sm font-medium mb-4">
+                {t.workingHours}
+              </h6>
+              <div className="flex items-start">
+                <Clock className="text-white mr-2" size={20} />
+                <div className="text-white text-sm">
+                  <p>{t.monToFri}</p>
+                  <p>{t.saturday}</p>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="row mb-40 justify-content-between">
-            <div className="col-lg-3 width-25 wow fadeInUp">
-              <h6 className="text-14 color-white-2 mb-20">Address</h6>
-              <p className="color-white address-footer">
-                184 Main Collins Street West Victoria 8007
-              </p>
-            </div>
-            <div className="col-lg-3 width-25 mb-30 wow fadeInUp">
-              <h6 className="text-14 color-white-2 mb-20">Call Our Office</h6>
-              <a
-                className="text-14-medium call-phone color-white hover-up d-inline-block mb-20"
-                href="tel:+41227157000"
-              >
-                +(995) 593 93 90 93
-              </a>
-            </div>
-            <div className="col-lg-3 width-25 mb-30 wow fadeInUp">
-              <h6 className="text-14 color-white-2 mb-20">Working Hours</h6>
-              <span className="text-14-medium time-footer color-white hover-up d-inline-block mb-20">
-                Mon-Sat: 09:00 - 17:00 - Sun: Closed
-              </span>
-            </div>
-            <div className="col-lg-3 width-20 text-start text-md-end wow fadeInUp">
-              <div className="d-inline-block text-start">
-                <h6 className="text-14 color-white-2 mb-20">
-                  Download The App
-                </h6>
-                <div className="text-start">
-                  <div className="box-button-download">
-                    <a
-                      className="btn btn-download hover-up wow fadeInUp"
-                      href="#"
-                    >
-                      <div className="inner-download">
-                        <div className="icon-download">
-                          <Image
-                            width={19}
-                            height={23}
-                            src="/assets/imgs/template/icons/apple-icon.svg"
-                            alt="luxride"
-                          />
-                        </div>
-                        <div className="info-download">
-                          <span className="text-download-top">
-                            Download on the
-                          </span>
-                          <span className="text-14-medium">Apple Store</span>
-                        </div>
-                      </div>
-                    </a>
-                    <a
-                      className="btn btn-download hover-up wow fadeInUp"
-                      href="#"
-                    >
-                      <div className="inner-download">
-                        <div className="icon-download">
-                          <Image
-                            width={23}
-                            height={26}
-                            src="/assets/imgs/template/icons/google-icon.svg"
-                            alt="luxride"
-                          />
-                        </div>
-                        <div className="info-download">
-                          <span className="text-download-top">
-                            Download on the
-                          </span>
-                          <span className="text-14-medium">Apple Store</span>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="footer-2">
-        <div className="container-sub">
-          <div className="footer-bottom">
-            <div className="row align-items-center">
-              <div className="col-lg-8 col-md-12 text-center text-lg-start">
-                <span className="text-14 color-white mr-50">
-                  © {new Date().getFullYear()} Luxride
+            <div className="py-6 border-t border-gray-700">
+              <div className="flex items-center justify-between">
+                <span className="text-gray-200 text-sm">
+                  © {new Date().getFullYear()} Formus
                 </span>
-                <ul className="menu-bottom">
-                  {legalLinks.map((elm, i) => (
-                    <li key={i}>
-                      <Link href={elm.href}>{elm.name}</Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="col-lg-4 col-md-12 text-center text-lg-end">
-                <a className="btn btn-link-location" href="#">
-                  New York
-                </a>
-                <a className="btn btn-link-globe active" href="#">
-                  English
-                </a>
+                <Link
+                  className="text-gray-200 text-sm hover:text-white transition-colors"
+                  href={`/${locale}/terms`}
+                >
+                  {t.terms}
+                </Link>
               </div>
             </div>
           </div>

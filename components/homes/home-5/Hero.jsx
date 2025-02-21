@@ -108,7 +108,7 @@ export default function Hero() {
                     </SwiperSlide>
                   ))}
                 </Swiper>
-                <div className="  absolute ">
+                <div className=" absolute ">
                   <h2 className="text-base md:text-lg lg:text-xl color-white wow fadeInUp mt-4">
                     {currentLang === "ge"
                       ? data.sliders[0]?.description_ge

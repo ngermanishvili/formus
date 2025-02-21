@@ -24,15 +24,9 @@
   margin: auto;
   padding-right: var(--bs-gutter-x, 0.75rem);
   padding-left: var(--bs-gutter-x, 0.75rem);
-  max-width: 1060px; /* დეფოლტი პატარა ეკრანებისთვის */
+  max-width: 1000px; /* დეფოლტი პატარა ეკრანებისთვის */
 }
 
-/* 13-ინჩიან მაკზე დიდი ეკრანებისთვის (დაახლოებით 1280px) */
-@media screen and (min-width: 1920px) {
-  .box-banner-info {
-    max-width: 1380px;
-  }
-}
 .box-cover-image {
   position: relative;
   background-position: top center;

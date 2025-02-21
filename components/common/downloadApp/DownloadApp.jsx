@@ -12,7 +12,7 @@ export default function DownloadApp() {
     <div className="flex justify-center items-center my-[30px] sm:my-[40px] lg:my-[100px] px-4 sm:px-6 lg:px-8">
       <section
         className="min-h-[180px] w-full sm:min-h-[220px] lg:min-h-[250px] sm:w-[980px] sm:ml-[-100px] 
-        rounded-2xl min-[2000px]:w-[1170px] max-w-full min-[2000px]:ml-[-320px] bg-[#abc188] 
+        rounded-2xl  max-w-full  bg-[#abc188] 
         relative overflow-hidden"
       >
         <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 hidden sm:block"></div>

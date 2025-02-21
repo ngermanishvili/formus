@@ -133,26 +133,22 @@ const AboutFormus = () => {
 
   return (
     <div className="relative w-full bg-gray-50 py-40 font-firago">
-      <div className="absolute bottom-[-200px] hidden sm:block sm:bottom-[-80px] md:bottom-[-80px] lg:top-[100px] right-0 z-0">
-        <Image
-          src={NewsShape2}
+      <div className="hidden lg:block  absolute top-[100px] right-0 z-0">
+        <img
+          src="/assets/shapes/news/1.png"
           alt="Decorative shape"
-          width={200}
-          height={200}
-          className="mt-12"
+          className="mt-12  lg:w-[90px] xl:w-[140px]  2xl:w-[200px] min-[1900px]:w-[300px] "
         />
       </div>
-      <div className="absolute bottom-[-200px] hidden sm:block sm:bottom-[-80px] md:bottom-[-80px] lg:bottom-[600px] left-[-20px] right-0 z-0">
-        <Image
-          src={NewsShape1}
+      <div className="hidden lg:block absolute bottom-[400px] left-[-20px] z-0">
+        <img
+          src="/assets/shapes/news/3.png"
           alt="Decorative shape"
-          width={200}
-          height={200}
-          className="mt-12"
+          className="mt-12 lg:w-[110px] xl:w-[170px] 2xl:w-[200px] min-[1900px]:w-[300px] "
         />
       </div>
       <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-[970px] mx-auto">
           <div className="w-full mb-16">
             <img
               src={aboutData[0]?.image_url}

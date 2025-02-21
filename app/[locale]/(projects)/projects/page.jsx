@@ -15,26 +15,18 @@ export default function Page() {
     <>
       <main className="main">
         <Breadcumb />
-        <div className="hidden lg:block absolute top-[100px] right-0 z-0">
-          {" "}
-          {/* დავამატეთ hidden და lg:block */}
-          <Image
-            src={NewsShape2}
+        <div className="hidden lg:block  absolute top-[100px] right-0 z-0">
+          <img
+            src="/assets/shapes/news/1.png"
             alt="Decorative shape"
-            width={200}
-            height={200}
-            className="mt-12"
+            className="mt-12  lg:w-[150px] xl:w-[120px]  2xl:w-[200px] min-[1900px]:w-[300px] "
           />
         </div>
         <div className="hidden lg:block absolute bottom-[600px] left-[-20px] z-0">
-          {" "}
-          {/* დავამატეთ hidden და lg:block */}
-          <Image
-            src={NewsShape1}
+          <img
+            src="/assets/shapes/news/3.png"
             alt="Decorative shape"
-            width={200}
-            height={200}
-            className="mt-12"
+            className="mt-12 lg:w-[150px] xl:w-[100px] 2xl:w-[200px] min-[1900px]:w-[300px]"
           />
         </div>
         <Services1 />

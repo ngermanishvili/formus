@@ -103,7 +103,7 @@ export default function Services1() {
         </button>
 
         <div
-          className={`relative w-full max-w-7xl mx-4 aspect-[16/9] transition-transform duration-300 ${
+          className={`relative w-full max-w-74xl mx-4 aspect-[16/9] transition-transform duration-300 ${
             isModalClosing ? "scale-95" : "scale-100"
           }`}
           onClick={(e) => e.stopPropagation()}
@@ -196,7 +196,7 @@ export default function Services1() {
                     </div>
                     <div className="cardImage overflow-hidden">
                       <Image
-                        width={570}
+                        width={400}
                         height={500}
                         style={{ height: "fit-content" }}
                         src={project.main_image_url || "/placeholder-image.jpg"}

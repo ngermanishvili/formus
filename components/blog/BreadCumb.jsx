@@ -28,7 +28,6 @@ export default function BreadCumb() {
             alt={t.decorativeShape}
             width={90}
             height={90}
-            className="w-[90px] h-[90px]"
           />
         </div>
         <h1 className="heading-44-medium color-black mb-5 relative z-10">

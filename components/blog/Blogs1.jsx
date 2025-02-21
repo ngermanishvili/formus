@@ -131,7 +131,7 @@ export default function Blogs1() {
                     ...
                   </p>
                   <Link
-                    className="cardLink btn btn-arrow-up"
+                    className="cardLink btn btn-arrow-up flex justify-center items-center"
                     href={`/media-single/${blog.id}`}
                   >
                     <svg

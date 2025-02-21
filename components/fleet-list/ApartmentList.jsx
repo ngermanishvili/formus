@@ -38,16 +38,19 @@ export default function ApartmentList() {
   const [visibleItems, setVisibleItems] = useState(ITEMS_PER_PAGE);
   const searchParams = useSearchParams();
 
-  // Updated filters to match URL structure
+  // Updated filters section in ApartmentList component
   const filters = useMemo(
     () => ({
       blocks: searchParams.get("blocks")?.split(",") || [],
       floors: searchParams.get("floors")?.split(",").map(Number) || [],
       statuses: searchParams.get("statuses")?.split(",") || [],
+      totalArea: {
+        min: parseInt(searchParams.get("totalAreaMin")) || 0,
+        max: parseInt(searchParams.get("totalAreaMax")) || Infinity,
+      },
     }),
     [searchParams]
   );
-
   // Updated filter function
   const filterApartments = useCallback(
     (apts) => {
@@ -62,7 +65,12 @@ export default function ApartmentList() {
           filters.statuses.length === 0 ||
           filters.statuses.includes(apt.status);
 
-        return blockMatch && floorMatch && statusMatch;
+        // Add area filter
+        const areaMatch =
+          apt.total_area >= filters.totalArea.min &&
+          apt.total_area <= filters.totalArea.max;
+
+        return blockMatch && floorMatch && statusMatch && areaMatch;
       });
     },
     [filters]

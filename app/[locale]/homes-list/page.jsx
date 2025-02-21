@@ -39,6 +39,7 @@ export default function HomesListPage() {
       parseInt(searchParams.get("priceMin") || "50000"),
       parseInt(searchParams.get("priceMax") || "500000"),
     ],
+
     status: searchParams.get("status") || "all",
     blockId: searchParams.get("blockId") || "",
   };

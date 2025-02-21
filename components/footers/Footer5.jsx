@@ -153,7 +153,7 @@ export default function Footer5() {
                 </div>
               </div>
             </div>
-            <div className="py-6 border-t border-gray-700">
+            <div className=" border-t border-gray-700">
               <div className="flex items-center justify-between">
                 <span className="text-gray-200 text-sm">
                   © {new Date().getFullYear()} Formus

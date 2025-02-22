@@ -146,7 +146,7 @@ const ProjectContent = ({ id }) => {
 
               <Link className="btn btn-border mt-2" href="/choose-apartment">
                 {currentLang === "ge"
-                  ? "აირჩიე აპარტამენტი "
+                  ? "შეარჩიეთ ბინა "
                   : "Choose an apartament"}
                 <svg
                   className="icon-16"
@@ -211,21 +211,34 @@ const ProjectContent = ({ id }) => {
               </div>
             </div>
 
-            <div className="lg:w-1/2">
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                {[1, 2, 3, 4].map((index) => (
+            <div className="w-full lg:w-[700px] mb-20">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+                {[
+                  {
+                    img: "/assets/ortachala-project/four.png",
+                    alt: "Ortachala Project View 4",
+                  },
+                  {
+                    img: "/assets/ortachala-project/three.png",
+                    alt: "Ortachala Project View 3",
+                  },
+                  {
+                    img: "/assets/ortachala-project/two.png",
+                    alt: "Ortachala Project View 2",
+                  },
+                  {
+                    img: "/assets/ortachala-project/one.png",
+                    alt: "Ortachala Project View 1",
+                  },
+                ].map((image, index) => (
                   <div
                     key={index}
-                    className="relative h-52 lg:h-80 xl:h-96 2xl:h-[12rem] group overflow-hidden rounded-lg"
+                    className="relative h-52 group overflow-hidden rounded-lg"
                   >
-                    <Image
-                      src={
-                        projectData.second_section_img ||
-                        "/assets/imgs/page/homepage5/banner.png"
-                      }
-                      alt={`Gallery image ${index}`}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    <img
+                      src={image.img}
+                      alt={image.alt}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-opacity duration-300" />
                   </div>

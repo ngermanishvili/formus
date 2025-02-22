@@ -65,8 +65,7 @@ export default function SearchForm() {
       params.set("totalAreaMax", maxArea);
 
       // Create the URL
-      const url = `http://localhost:3000/${locale}/homes-list?${params.toString()}`;
-
+      const url = `/${locale}/homes-list?${params.toString()}`;
       // Redirect to the filtered results page
       window.location.href = url;
     }

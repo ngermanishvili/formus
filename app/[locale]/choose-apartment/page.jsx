@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import OrtachalaPolygon from "../(test)/testroute/(components)/ortachala-polygon";
 import ApartmentFilters from "@/components/apartment/filters";
@@ -44,8 +45,8 @@ const ChooseApartment = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-black">
-      <main className="flex-1 relative">
+    <div className="min-h-[350px] md:h-screen w-full bg-black overflow-hidden">
+      <main className="relative w-full h-full">
         <div className="absolute inset-0">
           <OrtachalaPolygon />
         </div>
@@ -63,7 +64,6 @@ const ChooseApartment = () => {
         >
           <ApartmentFilters onFilterChange={handleFilterChange} />
         </div>
-
         {/* Mobile Formus Logo */}
         <div
           className="absolute left-1/2 transform -translate-x-1/2 

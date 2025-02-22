@@ -41,7 +41,7 @@ export default function LocaleLayout({ children, params: { locale } }) {
     <NextIntlClientProvider locale={locale} messages={messages}>
       <Header5 />
       <div className={firaGO.variable}>
-        <Providers>{children}</Providers>
+        {children}
         <StickySocial />
         <Toaster />
         <Footer5 />

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { MapPin, Phone, Clock, Mail } from "lucide-react";
 import FooterLogo from "@/public/assets/shapes/home/footer-logo.png";
 import Image from "next/image";
@@ -29,8 +30,11 @@ const translations = {
 
 export default function Footer5() {
   const locale = useLocale();
+  const pathname = usePathname();
   const t = translations[locale];
   const [contactInfo, setContactInfo] = useState(null);
+
+  const isHomePage = pathname === `/${locale}` || pathname === "/";
 
   useEffect(() => {
     const fetchContactInfo = async () => {
@@ -65,10 +69,11 @@ export default function Footer5() {
 
   const FooterContent = ({ isMobile }) => (
     <div
-      className={
-        isMobile ? "px-6 pt-12" : "mx-auto max-w-7xl w-[1280px] px-40 pt-24"
-      }
+      className={`${isMobile ? "px-6" : "mx-auto max-w-7xl w-[1280px] px-40"} ${
+        isHomePage ? (isMobile ? "pt-12" : "pt-14") : ""
+      }`}
     >
+      {/* რჩება იგივე კოდი... */}
       {/* Logo and Social Media Section */}
       <div
         className={`py-8 border-b border-gray-700 ${isMobile ? "px-4" : ""}`}
@@ -163,7 +168,7 @@ export default function Footer5() {
               </a>
             </div>
             <div className="flex items-center justify-center">
-              <Mail className="text-white mr-6" size={20} />
+              <Mail className="text-white mr-3" size={20} />
               <a
                 href={`mailto:${contactInfo.email}`}
                 className="text-white text-sm hover:opacity-80 transition-opacity"
@@ -187,7 +192,9 @@ export default function Footer5() {
           </h6>
           <div className="flex items-center">
             <Clock className="text-white mr-3" size={20} />
-            <div className={`text-white text-sm  ${georgianTextClass}`}>
+            <div
+              className={`text-white text-sm text-center ${georgianTextClass}`}
+            >
               <p>{t.monToFri}</p>
               <p>{t.saturday}</p>
             </div>

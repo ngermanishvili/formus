@@ -40,7 +40,7 @@ const GalleryGrid = () => {
   const images = {
     exterior: [
       {
-        src: "https://res.cloudinary.com/ds9dsumwl/image/upload/v1739541169/5.4._%E1%83%9D%E1%83%A0%E1%83%97%E1%83%90%E1%83%AD%E1%83%90%E1%83%9A%E1%83%90_%E1%83%B0%E1%83%98%E1%83%9A%E1%83%A1%E1%83%98-%E1%83%9B%E1%83%9D%E1%83%99%E1%83%9A%E1%83%94_%E1%83%90%E1%83%A6%E1%83%AC%E1%83%94%E1%83%A0%E1%83%98%E1%83%97_e2v9rk.jpg",
+        src: "https://res.cloudinary.com/ds9dsumwl/image/upload/c_limit,w_1200/f_auto/q_80/v1738153443/1.%E1%83%A4%E1%83%9D%E1%83%A0%E1%83%9B%E1%83%A3%E1%83%A1%E1%83%98%E1%83%A1_%E1%83%9B%E1%83%9D%E1%83%99%E1%83%9A%E1%83%94_About_us_rmogdh?_a=BAVAZGDW0",
         alt: currentLang === "ka" ? "ექსტერიერი 1" : "Exterior View 1",
       },
       {
@@ -48,19 +48,19 @@ const GalleryGrid = () => {
         alt: currentLang === "ka" ? "ექსტერიერი 2" : "Exterior View 2",
       },
       {
-        src: Photo,
+        src: "/assets/ortachala-project/2-teritory-security.png",
         alt: currentLang === "ka" ? "ექსტერიერი 3" : "Exterior View 3",
       },
       {
-        src: Photo,
+        src: "/assets/ortachala-project/4-recreation.png",
         alt: currentLang === "ka" ? "ექსტერიერი 4" : "Exterior View 4",
       },
       {
-        src: Photo,
+        src: "/assets/ortachala-project/three.png",
         alt: currentLang === "ka" ? "ექსტერიერი 5" : "Exterior View 5",
       },
       {
-        src: Photo,
+        src: "/assets/ortachala-project/two.png",
         alt: currentLang === "ka" ? "ექსტერიერი 6" : "Exterior View 6",
       },
     ],

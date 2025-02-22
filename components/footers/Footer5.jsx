@@ -168,7 +168,7 @@ export default function Footer5() {
               </a>
             </div>
             <div className="flex items-center justify-center">
-              <Mail className="text-white mr-3" size={20} />
+              <Mail className="text-white mr-6" size={20} />
               <a
                 href={`mailto:${contactInfo.email}`}
                 className="text-white text-sm hover:opacity-80 transition-opacity"
@@ -190,11 +190,9 @@ export default function Footer5() {
           >
             {t.workingHours}
           </h6>
-          <div className="flex items-center">
+          <div className="flex ">
             <Clock className="text-white mr-3" size={20} />
-            <div
-              className={`text-white text-sm text-center ${georgianTextClass}`}
-            >
+            <div className={`text-white text-sm  ${georgianTextClass}`}>
               <p>{t.monToFri}</p>
               <p>{t.saturday}</p>
             </div>

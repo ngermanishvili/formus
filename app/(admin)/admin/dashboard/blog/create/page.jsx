@@ -1,3 +1,4 @@
+// app/(admin)/admin/dashboard/blog/create/page.jsx
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";

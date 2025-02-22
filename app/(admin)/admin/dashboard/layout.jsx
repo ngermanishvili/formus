@@ -100,6 +100,11 @@ const AdminLayout = ({ children }) => {
       href: "/admin/dashboard/contact",
       icon: <Contact2Icon className="w-5 h-5" />,
     },
+    {
+      title: "სოციალური ქსელები",
+      href: "/admin/dashboard/social-content",
+      icon: <Contact2Icon className="w-5 h-5" />,
+    },
 
     // {
     //   title: "როუტების მართვა",

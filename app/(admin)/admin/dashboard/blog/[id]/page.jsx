@@ -1,3 +1,4 @@
+// app/(admin)/admin/dashboard/blog/[id]/page.jsx
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";

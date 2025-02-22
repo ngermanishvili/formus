@@ -19,6 +19,7 @@ const PUBLIC_APIS = [
     '/api/projects/3',
     'api/hero-content',
     '/api/contact',
+    '/api/social-links',
 ];
 
 const intlMiddleware = createIntlMiddleware({

@@ -10,6 +10,8 @@ import {
   PiFacebookLogo,
   PiInstagramLogo,
   PiLinkedinLogo,
+  PiTiktokLogo,
+  PiYoutubeLogo,
 } from "react-icons/pi";
 
 const translations = {
@@ -32,23 +34,35 @@ export default function Footer5() {
   const pathname = usePathname();
   const t = translations[locale];
   const [contactInfo, setContactInfo] = useState(null);
+  const [socialLinks, setSocialLinks] = useState([]);
 
   const isHomePage = pathname === `/${locale}` || pathname === "/";
 
   useEffect(() => {
-    const fetchContactInfo = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch("/api/contactinfo");
-        const data = await response.json();
-        if (data.status === "success") {
-          setContactInfo(data.data);
+        // Fetch contact info
+        const contactResponse = await fetch("/api/contactinfo");
+        const contactData = await contactResponse.json();
+        if (contactData.status === "success") {
+          setContactInfo(contactData.data);
+        }
+
+        // Fetch social links
+        const socialResponse = await fetch("/api/social-links");
+        const socialData = await socialResponse.json();
+        if (socialData.status === "success") {
+          const sortedLinks = socialData.data
+            .filter((link) => link.is_visible)
+            .sort((a, b) => a.display_order - b.display_order);
+          setSocialLinks(sortedLinks);
         }
       } catch (error) {
-        console.error("Error fetching contact info:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchContactInfo();
+    fetchData();
   }, []);
 
   if (!contactInfo) {
@@ -66,13 +80,20 @@ export default function Footer5() {
   const georgianTextClass =
     locale === "ka" ? "[font-feature-settings:'case'_on]" : "";
 
+  const socialIcons = {
+    facebook: PiFacebookLogo,
+    instagram: PiInstagramLogo,
+    linkedin: PiLinkedinLogo,
+    tiktok: PiTiktokLogo,
+    youtube: PiYoutubeLogo,
+  };
+
   const FooterContent = ({ isMobile }) => (
     <div
       className={`${isMobile ? "px-6" : "mx-auto max-w-7xl w-[1280px] px-40"} ${
         isHomePage ? (isMobile ? "pt-12" : "pt-14") : ""
       }`}
     >
-      {/* რჩება იგივე კოდი... */}
       {/* Logo and Social Media Section */}
       <div
         className={`py-8 border-b border-gray-700 ${isMobile ? "px-4" : ""}`}
@@ -95,25 +116,26 @@ export default function Footer5() {
               />
             </Link>
           </div>
-          <div className="flex justify-center gap-8">
-            <a href="#" className="hover:opacity-80 transition-opacity">
-              <PiFacebookLogo
-                className="text-white"
-                size={isMobile ? 28 : 24}
-              />
-            </a>
-            <a href="#" className="hover:opacity-80 transition-opacity">
-              <PiInstagramLogo
-                className="text-white"
-                size={isMobile ? 28 : 24}
-              />
-            </a>
-            <a href="#" className="hover:opacity-80 transition-opacity">
-              <PiLinkedinLogo
-                className="text-white"
-                size={isMobile ? 28 : 24}
-              />
-            </a>
+          <div className="flex justify-center gap-2 relative z-50">
+            {socialLinks.map((social) => {
+              const IconComponent = socialIcons[social.platform_key];
+              if (!IconComponent || !social.url) return null;
+
+              return (
+                <a
+                  key={social.platform_key}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:opacity-80 transition-opacity relative z-50"
+                >
+                  <IconComponent
+                    className="text-white"
+                    size={isMobile ? 28 : 24}
+                  />
+                </a>
+              );
+            })}
           </div>
         </div>
       </div>

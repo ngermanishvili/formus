@@ -25,7 +25,7 @@ const translations = {
     workingHours: "სამუშაო საათები",
     monToFri: "ორშ-პარ: 10:00 - 18:00",
     saturday: "შაბ: 11:00 - 17:00",
-    terms: "პირობები და პირობები",
+    terms: "წესები და პირობები",
   },
 };
 
@@ -90,9 +90,11 @@ export default function Footer5() {
 
   const FooterContent = ({ isMobile }) => (
     <div
-      className={`${isMobile ? "px-6" : "mx-auto max-w-7xl w-[1280px] px-40"} ${
-        isHomePage ? (isMobile ? "pt-12" : "pt-14") : ""
-      }`}
+      className={`${
+        isMobile
+          ? "px-6"
+          : "mx-auto max-w-7xl w-[1280px] px-40 md:px-28 md:w-full xl:w-[1280px] xl:px-40"
+      } ${isHomePage ? (isMobile ? " pt-56" : "pt-14") : ""}`}
     >
       {/* Logo and Social Media Section */}
       <div
@@ -102,10 +104,14 @@ export default function Footer5() {
           className={`flex flex-col ${
             isMobile
               ? "items-center space-y-6"
-              : "flex-row items-center justify-between w-[90%] mx-auto"
+              : "flex-row items-center justify-between mx-auto"
           }`}
         >
-          <div className={`${isMobile ? "w-[120px]" : "w-[150px]"}`}>
+          <div
+            className={`${
+              isMobile ? "w-[120px]" : "w-[150px] translate-x-[-30%]"
+            }`}
+          >
             <Link href={`/${locale}`}>
               <Image
                 src={FooterLogo}
@@ -116,7 +122,7 @@ export default function Footer5() {
               />
             </Link>
           </div>
-          <div className="flex justify-center gap-2 relative z-50">
+          <div className="flex justify-center gap-2 relative z-50 mr-[5%]">
             {socialLinks.map((social) => {
               const IconComponent = socialIcons[social.platform_key];
               if (!IconComponent || !social.url) return null;

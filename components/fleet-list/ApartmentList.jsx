@@ -9,8 +9,8 @@ const ITEMS_PER_PAGE = 12;
 const CACHE_TTL = 1000 * 60 * 30; // 30 minutes
 
 const statusConfig = {
-  available: { text: "ხელმისაწვდომი", color: "bg-green-500" },
-  sold: { text: "გაყიდული", color: "bg-red-500" },
+  available: { text: "ხელმისაწვდომი", color: "bg-[#a2c080]" },
+  sold: { text: "გაყიდული", color: "bg-[#f94011]" },
   reserved: { text: "დაჯავშნილი", color: "bg-yellow-500" },
   default: { text: "უცნობი", color: "bg-gray-500" },
 };
@@ -184,7 +184,7 @@ const HeaderSection = ({ count, activeView, setView }) => (
           onClick={() => setView(view)}
           className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
             activeView === view
-              ? "bg-black text-white"
+              ? "bg-[#00326b] text-white"
               : "bg-gray-100 text-gray-700 hover:bg-gray-200"
           }`}
         >
@@ -286,7 +286,7 @@ const LoadMoreButton = ({ onClick }) => (
   <div className="mt-8 flex justify-center">
     <button
       onClick={onClick}
-      className="px-6 py-2 bg-black text-white rounded-full hover:bg-gray-800 transition-colors"
+      className="px-6 py-2  text-white rounded-full bg-[#00326b] transition-colors"
     >
       მეტის ნახვა
     </button>

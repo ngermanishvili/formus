@@ -122,11 +122,11 @@ export default function Header5() {
 
   return (
     <>
-      <div className="block md:hidden">
+      <div className="block min-[940px]:hidden">
         <MobileHeader1 routes={visibleRoutes} languageNames={languageNames} />
       </div>
 
-      <div className="hidden md:block">
+      <div className="hidden min-[940px]:block">
         <header
           className={`fixed w-full flex justify-center top-0 z-50 bg-[#00326B] transition-all duration-300 ${
             scrolled ? "shadow-lg" : ""
@@ -151,7 +151,7 @@ export default function Header5() {
 
               <Link
                 href="/"
-                className="text-white text-lg font-bold absolute left-[52%] -translate-x-1/2 font-firago"
+                className="text-white text-lg font-bold absolute left-[52%] max-xl:left-[65%] max-lg:left-[70%] -translate-x-1/2 font-firago"
               >
                 FORMUS
               </Link>

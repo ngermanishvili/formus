@@ -122,9 +122,9 @@ export default function Hero() {
 
                   <Link className="btn btn-border mt-2" href="/projects">
                     {currentLang === "ge"
-                      ? "მიმდინარე პროექტები"
-                      : "Ongoing Projects"}
-                    <svg
+                      ? "მიმდინარე პროექტი"
+                      : "Ongoing Project"}
+                    {/* <svg
                       className="icon-16"
                       fill="none"
                       stroke="currentColor"
@@ -138,12 +138,12 @@ export default function Hero() {
                         strokeLinejoin="round"
                         d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
                       ></path>
-                    </svg>
+                    </svg> */}
                   </Link>
                 </div>
               </>
             )}
-
+            {/* 
             <div className="box-pagination-button box-pagination-button-2  md:px-16 lg:px-24 ">
               <div className="swiper-button-prev swiper-button-prev-banner swiper-button-prev-banner-2 snbp11 flex items-center justify-center min-[2000px]:ml-[-160px]">
                 <svg
@@ -177,7 +177,7 @@ export default function Hero() {
                   />
                 </svg>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="box-services-banner">

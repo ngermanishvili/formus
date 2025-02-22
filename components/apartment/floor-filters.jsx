@@ -20,6 +20,8 @@ const translations = {
     available: "Available",
     reserved: "Reserved",
     sold: "Sold",
+    area: "Area",
+    areas: "Areas",
   },
   ka: {
     back: "← უკან",
@@ -35,8 +37,18 @@ const translations = {
     available: "თავისუფალი",
     reserved: "დაჯავშნული",
     sold: "გაყიდული",
+    area: "ფართი",
+    areas: "ფართი",
   },
 };
+const areaRanges = [
+  { value: "20-40", label: "20-40 მ²" },
+  { value: "40-60", label: "40-60 მ²" },
+  { value: "60-80", label: "60-80 მ²" },
+  { value: "80-100", label: "80-100 მ²" },
+  { value: "100-120", label: "100-120 მ²" },
+  { value: "120-150", label: "120-150 მ²" },
+];
 
 const FilterButton = ({ label, children, isActive, isOpen, onToggle }) => {
   return (
@@ -81,6 +93,7 @@ const FloorFilters = () => {
     floors: [],
     statuses: [],
     blocks: [],
+    areas: [], // Add areas to filters state
   });
 
   const blockFloors = {
@@ -101,7 +114,15 @@ const FloorFilters = () => {
   }, [isDrawerOpen]);
 
   const handleFilterToggle = useCallback((type, value, entireRow = false) => {
-    if (type === "blocks") {
+    if (type === "areas") {
+      setFilters((prev) => {
+        const currentValues = prev[type];
+        const newValues = currentValues.includes(value)
+          ? currentValues.filter((v) => v !== value)
+          : [...currentValues, value];
+        return { ...prev, [type]: newValues };
+      });
+    } else if (type === "blocks") {
       setFilters((prev) => {
         let newValues = [...prev.blocks];
 
@@ -158,6 +179,7 @@ const FloorFilters = () => {
       floors: [],
       statuses: [],
       blocks: [],
+      areas: [], // დავამატოთ areas მასივ
     });
   }, []);
 
@@ -172,6 +194,11 @@ const FloorFilters = () => {
     }
     if (filters.blocks.length) {
       queryParams.set("blocks", filters.blocks.join(","));
+    }
+    if (filters.areas.length) {
+      const [minArea, maxArea] = filters.areas[0].split("-");
+      queryParams.set("totalAreaMin", minArea);
+      queryParams.set("totalAreaMax", maxArea);
     }
 
     router.push(`/${locale}/homes-list?${queryParams.toString()}`);
@@ -198,7 +225,7 @@ const FloorFilters = () => {
   return (
     <>
       <div className="relative bg-white border-b border-black/30">
-        <div className="max-w-7xl mx-auto px-4 py-3">
+        <div className="max-w-[1400px] mx-auto px-4 py-3">
           <div className="flex items-center gap-3">
             <Link
               href={`/choose-apartment`}
@@ -231,9 +258,7 @@ const FloorFilters = () => {
                   {["A", "B", "D"].map((block) => (
                     <label
                       key={block}
-                      className="flex items-center gap-2 px-2 py-1.5 
-                                hover:bg-black/5 rounded cursor-pointer
-                                disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex items-center gap-2 px-2 py-1.5 hover:bg-black/5 rounded cursor-pointer"
                       onClick={(e) => {
                         e.preventDefault();
                         handleFilterToggle("blocks", block, true);
@@ -259,6 +284,41 @@ const FloorFilters = () => {
                       <span className="text-black">
                         {t.block} {block}
                       </span>
+                    </label>
+                  ))}
+                </div>
+              </FilterButton>
+              <FilterButton
+                label={
+                  filters.areas.length > 0 ? `${filters.areas[0]} მ²` : t.area
+                }
+                isActive={filters.areas.length > 0}
+                isOpen={openFilter === "area"}
+                onToggle={() =>
+                  setOpenFilter(openFilter === "area" ? null : "area")
+                }
+              >
+                <div className="space-y-1">
+                  {areaRanges.map((range) => (
+                    <label
+                      key={range.value}
+                      className="flex items-center gap-2 px-2 py-1.5 
+                                hover:bg-black/5 rounded cursor-pointer"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleFilterToggle("areas", range.value, true);
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={filters.areas.includes(range.value)}
+                        className="text-[#FBB200]"
+                        onChange={(e) => {
+                          e.stopPropagation();
+                          handleFilterToggle("areas", range.value, false);
+                        }}
+                      />
+                      <span className="text-black">{range.label}</span>
                     </label>
                   ))}
                 </div>
@@ -498,6 +558,26 @@ const FloorFilters = () => {
               </div>
             </div>
 
+            {/* Add Area filter section for mobile */}
+            <div>
+              <h3 className="text-white/90 mb-3">{t.area}</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {areaRanges.map((range) => (
+                  <button
+                    key={range.value}
+                    onClick={() => handleFilterToggle("areas", range.value)}
+                    className={`p-3 rounded-lg text-center font-medium
+                                ${
+                                  filters.areas.includes(range.value)
+                                    ? "bg-[#FBB200] text-black"
+                                    : "bg-white/10 text-white/90"
+                                }`}
+                  >
+                    {range.label}
+                  </button>
+                ))}
+              </div>
+            </div>
             {/* Mobile Action Buttons */}
             <div
               className="absolute bottom-0 left-0 right-0 p-4 

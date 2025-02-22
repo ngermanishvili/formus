@@ -7,6 +7,7 @@ import DownloadApp from "@/components/common/downloadApp/DownloadApp";
 import GreenSection from "@/components/ortachala/3d-photo";
 import ProjectContent from "../../(components)/hero-content";
 import GalleryComponent from "@/components/apartment/gallery";
+import AboutOrtachala from "@/app/[locale]/about-ortachala/page";
 
 export default function Page({ params }) {
   const [isMobile, setIsMobile] = useState(false);
@@ -26,6 +27,7 @@ export default function Page({ params }) {
       <main className="main" style={{ maxWidth: "100vw", overflow: "hidden" }}>
         <div className="border-bottom"></div>
         <ProjectContent id={params.id} />
+        <AboutOrtachala />
         <GreenSection />
 
         <GalleryComponent />

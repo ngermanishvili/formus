@@ -191,10 +191,7 @@ const AboutFormus = () => {
             <div className="w-full md:w-[350px] flex justify-center">
               <div className="w-full h-[350px] rounded-lg overflow-hidden shadow-xl">
                 <img
-                  src={
-                    aboutData[1]?.image_url ||
-                    "/assets/imgs/page/homepage5/banner.png"
-                  }
+                  src={aboutData[1]?.image_url || "ფოტო ვერ მოიძებნა"}
                   alt="Building Quality"
                   className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
                 />
@@ -230,11 +227,10 @@ const AboutFormus = () => {
             </div>
             <div className="w-full md:w-[350px] flex justify-center">
               <div className="w-full h-[350px] rounded-lg overflow-hidden shadow-xl">
-                <img
-                  src={
-                    aboutData[2]?.image_url ||
-                    "/assets/imgs/page/homepage5/banner.png"
-                  }
+                <Image
+                  width={100}
+                  height={350}
+                  src="https://res.cloudinary.com/ds9dsumwl/image/upload/v1740007760/formus/avzerdz2slr0g1rftaot.png"
                   alt="Our Services"
                   className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
                 />

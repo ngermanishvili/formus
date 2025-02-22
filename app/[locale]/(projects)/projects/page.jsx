@@ -15,7 +15,7 @@ export default function Page() {
     <>
       <main className="main">
         <Breadcumb />
-        <div className="hidden lg:block  absolute top-[100px] right-0 z-0">
+        <div className="hidden lg:block  absolute top-[100px] right-0 z-0 ">
           <img
             src="/assets/shapes/news/1.png"
             alt="Decorative shape"

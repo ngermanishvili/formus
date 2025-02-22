@@ -1,8 +1,56 @@
-// ContactModal.jsx
+"use client";
+
 import React, { useState, useCallback } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
 const ContactModal = ({ isOpen, setIsOpen }) => {
+  const params = useParams();
+  const locale = params.locale || "ka";
+
+  const translations = {
+    title: {
+      en: "Leave Your Number",
+      ka: "დაგვიტოვეთ ნომერი",
+    },
+    subtitle: {
+      en: "Fill out the form and our representative will contact you",
+      ka: "შეავსეთ ფორმა და ჩვენი წარმომადგენელი დაგიკავშირდებათ",
+    },
+    name: {
+      en: "Name",
+      ka: "სახელი",
+    },
+    phone: {
+      en: "Phone Number",
+      ka: "ტელ. ნომერი",
+    },
+    terms: {
+      en: "I have read and agree to the terms and conditions.",
+      ka: "გავეცანი და ვეთანხმები წესებს და პირობებს.",
+    },
+    marketing: {
+      en: "I have read and agree to the data processing terms for marketing purposes",
+      ka: "გავეცანი მარკეტინგის მიზნით მონაცემთა დამუშავების პირობებს და ვეთანხმები",
+    },
+    sending: {
+      en: "Sending...",
+      ka: "იგზავნება...",
+    },
+    send: {
+      en: "Send",
+      ka: "გაგზავნა",
+    },
+    success: {
+      en: "Data sent successfully",
+      ka: "მონაცემები წარმატებით გაიგზავნა",
+    },
+    error: {
+      en: "An error occurred",
+      ka: "დაფიქსირდა შეცდომა",
+    },
+  };
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState({ type: "", text: "" });
   const [formData, setFormData] = useState({
@@ -48,7 +96,7 @@ const ContactModal = ({ isOpen, setIsOpen }) => {
         if (response.ok) {
           setSubmitMessage({
             type: "success",
-            text: "მონაცემები წარმატებით გაიგზავნა",
+            text: translations.success[locale],
           });
           setFormData({ name: "", phone: "" });
           setAcceptTerms({ terms1: false, terms2: false });
@@ -56,12 +104,12 @@ const ContactModal = ({ isOpen, setIsOpen }) => {
         } else {
           setSubmitMessage({
             type: "error",
-            text: data.error || "დაფიქსირდა შეცდომა",
+            text: data.error || translations.error[locale],
           });
         }
       } catch (error) {
         console.error("Error:", error);
-        setSubmitMessage({ type: "error", text: "დაფიქსირდა შეცდომა" });
+        setSubmitMessage({ type: "error", text: translations.error[locale] });
       } finally {
         setIsSubmitting(false);
       }
@@ -84,17 +132,17 @@ const ContactModal = ({ isOpen, setIsOpen }) => {
         </button>
 
         <h2 className="text-lg sm:text-2xl font-bold mb-2 sm:mb-6 mt-1">
-          დაგვიტოვეთ ნომერი
+          {translations.title[locale]}
         </h2>
         <p className="mb-3 sm:mb-6 text-sm sm:text-base text-gray-600">
-          შეავსეთ ფორმა და ჩვენი წარმომადგენელი დაგიკავშირდებათ
+          {translations.subtitle[locale]}
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <input
               type="text"
-              placeholder="სახელი"
+              placeholder={translations.name[locale]}
               className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
               value={formData.name}
               onChange={(e) =>
@@ -104,7 +152,7 @@ const ContactModal = ({ isOpen, setIsOpen }) => {
             />
             <input
               type="tel"
-              placeholder="ტელ. ნომერი"
+              placeholder={translations.phone[locale]}
               className="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
               value={formData.phone}
               onChange={(e) =>
@@ -129,11 +177,11 @@ const ContactModal = ({ isOpen, setIsOpen }) => {
               />
               <span className="text-xs sm:text-sm text-gray-600 leading-tight underline">
                 <Link
-                  href="/terms"
+                  href={`/${locale}/terms`}
                   target="_blank"
-                  className="hover:text-gray-800 text-gray-600 underline "
+                  className="hover:text-gray-800 text-gray-600 underline"
                 >
-                  გავეცანი და ვეთანხმები წესებს და პირობებს.
+                  {translations.terms[locale]}
                 </Link>
               </span>
             </label>
@@ -152,13 +200,12 @@ const ContactModal = ({ isOpen, setIsOpen }) => {
               />
               <span className="text-xs sm:text-sm text-gray-600 leading-tight">
                 <Link
-                  href="/terms?section=marketing"
+                  href={`/${locale}/terms?section=marketing`}
                   target="_blank"
-                  className="hover:text-gray-800 text-gray-600 underline "
+                  className="hover:text-gray-800 text-gray-600 underline"
                 >
-                  გავეცანი მარკეტინგის მიზნით მონაცემთა დამუშავების პირობებს და
-                  ვეთანხმები
-                </Link>{" "}
+                  {translations.marketing[locale]}
+                </Link>
               </span>
             </label>
           </div>
@@ -182,7 +229,9 @@ const ContactModal = ({ isOpen, setIsOpen }) => {
               !acceptTerms.terms1 || !acceptTerms.terms2 || isSubmitting
             }
           >
-            {isSubmitting ? "იგზავნება..." : "გაგზავნა"}
+            {isSubmitting
+              ? translations.sending[locale]
+              : translations.send[locale]}
           </button>
         </form>
       </div>

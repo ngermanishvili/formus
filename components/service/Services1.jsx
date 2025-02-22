@@ -153,7 +153,7 @@ export default function Services1() {
   }
 
   return (
-    <section className="section pt-60">
+    <section className="section pt-60 ">
       <div className="container-sub">
         <div className="row">
           {projects.map(

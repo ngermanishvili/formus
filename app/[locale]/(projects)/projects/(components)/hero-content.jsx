@@ -116,7 +116,7 @@ const ProjectContent = ({ id }) => {
     return (
       <>
         {/* Hero Section */}
-        <div className="relative h-[70vh] w-full">
+        <div className="relative h-[80vh] w-full">
           <Image
             src={projectData.main_image_url}
             alt={projectData.title}
@@ -130,19 +130,20 @@ const ProjectContent = ({ id }) => {
               alt="Bottom shape"
               width={300}
               height={300}
-              className="w-[150px] h-[150px] sm:w-[200px] sm:h-[200px] md:w-[250px] md:h-[250px] lg:w-[300px] lg:h-[300px] object-contain"
+              className="w-[180px]  object-contain"
               priority
             />
           </div>
           <div className="absolute inset-0 bg-black/50" />
           <div className="absolute inset-0 flex items-center">
             <div className="container mx-auto px-4">
+              <p className="font-firago text-sm text-white">
+                {projectData.location}
+              </p>
               <h1 className="font-firago font-bold text-4xl md:text-6xl text-white mb-4">
                 {projectData.title}
               </h1>
-              <p className="font-firago text-xl text-white">
-                {projectData.location}
-              </p>
+
               <Link className="btn btn-border mt-2" href="/choose-apartment">
                 {currentLang === "ge"
                   ? "აირჩიე აპარტამენტი "
@@ -199,7 +200,7 @@ const ProjectContent = ({ id }) => {
               </div>
 
               {/* Decorative shape - positioned below content */}
-              <div className="absolute left-[-14px] bottom-[230px] z-10">
+              <div className="absolute left-[-14px] top-0 z-10">
                 <Image
                   src={BreadCumpShape}
                   alt="Decorative shape"
@@ -215,7 +216,7 @@ const ProjectContent = ({ id }) => {
                 {[1, 2, 3, 4].map((index) => (
                   <div
                     key={index}
-                    className="relative h-52 lg:h-80 xl:h-96 2xl:h-[17rem] group overflow-hidden rounded-lg"
+                    className="relative h-52 lg:h-80 xl:h-96 2xl:h-[12rem] group overflow-hidden rounded-lg"
                   >
                     <Image
                       src={

@@ -1,45 +1,71 @@
+"use client";
+
 import React, { useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { useParams } from "next/navigation";
 import SecondShape1 from "@/public/assets/shapes/project/3.png";
+import EnergyEfficiency from "@/public/assets/ortachala-project/1-energo.png";
+import EssentialFacilities from "@/public/assets/ortachala-project/3-everyday-life.png";
+import RecreationArea from "@/public/assets/ortachala-project/4-recreation.png";
+import Security from "@/public/assets/ortachala-project/2-teritory-security.png";
 
-const InteractiveSection = ({ projectData, currentLang }) => {
+const InteractiveSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
+  const params = useParams();
+  const locale = params.locale || "ka";
 
-  // Demo content array with multiple sections
+  const translations = {
+    services: {
+      en: "Services",
+      ka: "სერვისები",
+    },
+  };
+
   const sections = [
     {
-      title: projectData.second_section_title,
-      description: projectData.second_section_description,
-      image:
-        projectData.second_section_img ||
-        "/assets/imgs/page/homepage5/banner.png",
+      title: {
+        en: "Energy Efficiency",
+        ka: "ენერგოეფექტურობა",
+      },
+      description: {
+        en: 'The construction of "Ortachala Hills" is being carried out using environmentally friendly and energy-efficient materials that feature high thermal and sound insulation properties. Energy efficiency significantly reduces heating, cooling and electricity costs.',
+        ka: "ორთაჭალა ჰილსის მშენებლობა მიმდინარეობს ეკოლოგიური და ენერგოეფექტური სამშენებლო მასალებით, რომლებიც მაღალი თბოიზოლაციური და ხმის იზოლაციური თვისებებით გამოირჩევიან. ენერგოეფექტურობა მნიშვნელოვნად ამცირებს გათბობის, გაგრილებისა და ელექტროენერგიის ხარჯებს.",
+      },
+      image: "/assets/ortachala-project/1-energo.png",
     },
     {
-      title:
-        currentLang === "ge" ? "მშენებლობის პროცესი" : "Construction Process",
-      description:
-        currentLang === "ge"
-          ? "ჩვენი გუნდი იყენებს თანამედროვე ტექნოლოგიებს და მაღალი ხარისხის მასალებს მშენებლობის პროცესში, რაც უზრუნველყოფს პროექტის მაღალ ხარისხს და გამძლეობას."
-          : "Our team employs modern technologies and high-quality materials in the construction process, ensuring project durability and excellence.",
-      image: "/assets/imgs/page/homepage5/banner.png",
+      title: {
+        en: "Essential facilities in one place",
+        ka: "ყოველდღიური ცხოვრებისთვის აუცილებელი ობიექტები ერთ სივრცეში",
+      },
+      description: {
+        en: "The residential complex will include a supermarket, pharmacy, gastro space, beauty salon and other commercial facilities to meet daily living needs.",
+        ka: "საცხოვრებელი კომპლექსის ტერიტორიაზე გათვალისწინებულია სუპერმარკეტი, აფთიაქი, გასტრო სივრცე, სილამაზის ცენტრი და სხვა კომერციული ობიექტები.",
+      },
+      image: "/assets/ortachala-project/3-everyday-life.png",
     },
     {
-      title: currentLang === "ge" ? "ინტერიერის დიზაინი" : "Interior Design",
-      description:
-        currentLang === "ge"
-          ? "ჩვენი დიზაინერები ქმნიან უნიკალურ და თანამედროვე ინტერიერებს, რომლებიც მორგებულია თქვენს გემოვნებასა და საჭიროებებზე."
-          : "Our designers create unique and modern interiors tailored to your taste and needs.",
-      image: "/assets/imgs/page/homepage5/banner.png",
+      title: {
+        en: "3,000 m² internal recreational area",
+        ka: "3 000 მ2 შიდა რეკრეაციული ზონა",
+      },
+      description: {
+        en: "The internal recreational area features walking paths, relaxation spaces, a children's playground and cycling lanes.",
+        ka: "შიდა რეკრეაციული ზონა მოიცავს სასეირნო ბილიკებს, მოსასვენებელ სივრცეებს, საბავშვო სათამაშო მოედანს და ველო ბილიკებს.",
+      },
+      image: "/assets/ortachala-project/4-recreation.png",
     },
     {
-      title:
-        currentLang === "ge" ? "გარე სივრცის მოწყობა" : "Exterior Development",
-      description:
-        currentLang === "ge"
-          ? "პროექტი მოიცავს მწვანე სივრცეების, სარეკრეაციო ზონებისა და პარკინგის მოწყობას, რაც ქმნის კომფორტულ საცხოვრებელ გარემოს."
-          : "The project includes green spaces, recreational areas, and parking facilities, creating a comfortable living environment.",
-      image: "/assets/imgs/page/homepage5/banner.png",
+      title: {
+        en: "24/7 full security",
+        ka: "სრული ტერიტორიის დაცვა 24/7",
+      },
+      description: {
+        en: "The residential complex is a gated community, fully equipped with security cameras and offering round-the-clock security.",
+        ka: "საცხოვრებელი კომპლექსი დახურული ტიპისაა და სრულად აღჭურვილია დაცვის კამერებით.",
+      },
+      image: "/assets/ortachala-project/2-teritory-security.png",
     },
   ];
 
@@ -49,7 +75,7 @@ const InteractiveSection = ({ projectData, currentLang }) => {
         <div className="w-full lg:w-1/2 relative h-screen lg:h-[500px] group overflow-hidden">
           <Image
             src={sections[activeIndex].image}
-            alt={sections[activeIndex].title}
+            alt={sections[activeIndex].title[locale]}
             fill
             className="object-cover transition-transform duration-700 group-hover:scale-110"
             priority
@@ -60,13 +86,15 @@ const InteractiveSection = ({ projectData, currentLang }) => {
         <div className="w-full lg:w-1/2 relative">
           <div className="px-6 lg:px-12 xl:px-16 py-12 lg:py-16 h-full flex">
             <div className="flex-1">
-              <h2 className="text-sm text-black mb-2">Services</h2>
+              <h2 className="text-sm text-black mb-2">
+                {translations.services[locale]}
+              </h2>
               <div className="max-w-xl">
                 <h2 className="font-firago font-bold text-3xl lg:text-4xl text-foreground mb-6 lg:mb-8 leading-tight">
-                  {sections[activeIndex].title}
+                  {sections[activeIndex].title[locale]}
                 </h2>
                 <p className="font-firago font-light text-muted-foreground text-base lg:text-lg leading-relaxed">
-                  {sections[activeIndex].description}
+                  {sections[activeIndex].description[locale]}
                 </p>
               </div>
             </div>
@@ -89,7 +117,7 @@ const InteractiveSection = ({ projectData, currentLang }) => {
           </div>
 
           <div
-            className="hidden lg:block absolute  bottom-[-12px] right-0 w-[500px] xl:w-[500px]"
+            className="hidden lg:block absolute bottom-[-12px] right-0 w-[400px] xl:w-[400px]"
             style={{ zIndex: 10, pointerEvents: "none" }}
           >
             <Image src={SecondShape1} alt="Shape" className="object-contain" />

@@ -60,6 +60,9 @@ export default function Footer5() {
     }
   };
 
+  const georgianTextClass =
+    locale === "ka" ? "[font-feature-settings:'case'_on]" : "";
+
   const FooterContent = ({ isMobile }) => (
     <div
       className={
@@ -123,12 +126,16 @@ export default function Footer5() {
             isMobile ? "items-center text-center" : "items-start"
           }`}
         >
-          <h6 className="text-white/60 text-sm font-medium mb-6">
+          <h6
+            className={`text-white/60 text-sm font-medium mb-6 ${georgianTextClass}`}
+          >
             {locale === "ka" ? "მისამართი" : "Address"}
           </h6>
           <div className="flex items-center">
             <MapPin className="text-white mr-2 flex-shrink-0" size={20} />
-            <p className="text-white text-sm whitespace-pre-line">
+            <p
+              className={`text-white text-sm whitespace-pre-line ${georgianTextClass}`}
+            >
               {getLocalizedAddress()}
             </p>
           </div>
@@ -140,7 +147,9 @@ export default function Footer5() {
             isMobile ? "items-center" : "items-center"
           }`}
         >
-          <h6 className="text-white/60 text-sm font-medium mb-6">
+          <h6
+            className={`text-white/60 text-sm font-medium mb-6 ${georgianTextClass}`}
+          >
             {locale === "ka" ? "ტელეფონი/ელ-ფოსტა" : "Phone/E-mail"}
           </h6>
           <div className="flex flex-col space-y-4">
@@ -154,7 +163,7 @@ export default function Footer5() {
               </a>
             </div>
             <div className="flex items-center justify-center">
-              <Mail className="text-white mr-3" size={20} />
+              <Mail className="text-white mr-6" size={20} />
               <a
                 href={`mailto:${contactInfo.email}`}
                 className="text-white text-sm hover:opacity-80 transition-opacity"
@@ -171,12 +180,14 @@ export default function Footer5() {
             isMobile ? "items-center" : "items-center"
           }`}
         >
-          <h6 className="text-white/60 text-sm font-medium mb-6">
+          <h6
+            className={`text-white/60 text-sm font-medium mb-6 ${georgianTextClass}`}
+          >
             {t.workingHours}
           </h6>
           <div className="flex items-center">
             <Clock className="text-white mr-3" size={20} />
-            <div className="text-white text-sm text-center">
+            <div className={`text-white text-sm  ${georgianTextClass}`}>
               <p>{t.monToFri}</p>
               <p>{t.saturday}</p>
             </div>
@@ -197,7 +208,7 @@ export default function Footer5() {
             © {new Date().getFullYear()} Formus
           </span>
           <Link
-            className="text-gray-200 text-sm hover:text-white transition-colors"
+            className={`text-gray-200 text-sm hover:text-white transition-colors ${georgianTextClass}`}
             href={`/${locale}/terms`}
           >
             {t.terms}

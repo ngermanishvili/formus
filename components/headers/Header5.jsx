@@ -61,6 +61,8 @@ export default function Header5() {
   const locale = useLocale();
 
   const isHomePage = pathname === `/${locale}` || pathname === "/";
+  const georgianTextClass =
+    locale === "ka" ? "[font-feature-settings:'case'_on]" : "";
 
   const scrollToFooter = (e) => {
     e.preventDefault();
@@ -130,9 +132,9 @@ export default function Header5() {
             scrolled ? "shadow-lg" : ""
           }`}
         >
-          <div className="mx-auto max-w-7xl w-[1280px] px-32">
+          <div className="mx-auto max-w-7xl w-[1280px] px-36">
             <div className="flex items-center justify-between py-3">
-              <nav className="flex items-center gap-6 uppercase font-firago w-1/3 ml-8">
+              <nav className="flex items-center gap-4 uppercase font-firago w-1/3 ">
                 {visibleRoutes.map((route) => (
                   <Link
                     key={route.id}
@@ -140,7 +142,7 @@ export default function Header5() {
                     onClick={(e) => handleChooseHomeClick(e, route.path)}
                     className={`${
                       isActivePath(route.path) ? "text-white" : "text-gray-200"
-                    } whitespace-nowrap text-xs hover:text-[#FBB102] transition-colors`}
+                    } whitespace-nowrap text-xs hover:text-[#FBB102] transition-colors ${georgianTextClass}`}
                   >
                     {route.translations[locale]}
                   </Link>

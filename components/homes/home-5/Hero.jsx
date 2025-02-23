@@ -120,7 +120,10 @@ export default function Hero() {
                       : data.sliders[0]?.title_en}
                   </p>
 
-                  <Link className="btn btn-border mt-2" href="/projects">
+                  <Link
+                    className="btn btn-border mt-2"
+                    href="/projects/1/ortachala-hilsi"
+                  >
                     {currentLang === "ge"
                       ? "მიმდინარე პროექტი"
                       : "Ongoing Project"}

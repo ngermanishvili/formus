@@ -20,7 +20,7 @@ const StickySocial = () => {
 
   return (
     <>
-      <div className="fixed bottom-16 sm:bottom-20 md:bottom-24 right-2 sm:right-4 z-50 flex flex-col sm:flex-row gap-2 sm:gap-3">
+      <div className="fixed bottom-24 sm:bottom-20 md:bottom-24 right-2 sm:right-4 z-50 flex flex-col sm:flex-row gap-2 sm:gap-3">
         <button
           onClick={() => setIsModalOpen(true)}
           className="bg-[#FBB200] hover:bg-[#ffcc3f] text-white p-3 sm:p-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"

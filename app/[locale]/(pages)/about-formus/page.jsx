@@ -41,6 +41,11 @@ const AboutFormus = () => {
     ka: 'მომავალი მობინადრეებისთვის "ფორმუსი" არის ახალი ცხოვრების გზამკვლევი და თანამგზავრი სახლის შერჩევის დაწყებიდან საკუთარი ბინის კარის შეღებამდე.',
   };
 
+  const companionTitle = {
+    en: "The company offers every resident: ",
+    ka: "კომპანია ყველა მომხმარებელს სთავაზობს: ",
+  };
+
   const getLocalizedField = (item, field) => {
     if (!item) return "";
     const fieldSuffix = locale === "en" ? "en" : "ge";
@@ -63,7 +68,7 @@ const AboutFormus = () => {
   const renderBenefits = () => {
     const introText = {
       en: "The investment in our projects is fully dedicated to creating environmentally friendly, safe and comfortable developments.",
-      ka: "ჩვენს პროექტებში ინვესტიცია სრულად ეძღვნება ეკოლოგიურად სუფთა, უსაფრთხო და კომფორტული განაშენიანების შექმნას.",
+      ka: "პროექტებში განხორციელებული ინვესტიცია სრულად მიმართულია ეკოლოგიურად სუფთა, უსაფრთხო  და მყუდრო განაშენიანების შექმნაზე.",
     };
 
     const benefits = {
@@ -75,23 +80,26 @@ const AboutFormus = () => {
         "Fully funded projects",
       ],
       ka: [
-        "გადახდის ხელსაყრელი პირობები",
-        "დანაზოგის ეფექტური განთავსება",
-        "ენერგოეფექტური უძრავი ქონება მზარდი ღირებულებით",
-        "მშენებლობის მკაცრად დაცული ვადები",
-        "სრულად დაფინანსებული პროექტები",
+        "გადახდის ხელსაყრელ პირობებს",
+        "დანაზოგის ეფექტურ განთავსებას",
+        "ენერგოეფექტურ უძრავ ქონებას მზარდი ღირებულებით",
+        "მშენებლობის მკაცრად დაცულ ვადებს",
+        "სრულად დაფინანსებულ პროექტებს",
       ],
     };
 
     const companionText = {
       en: 'For future residents, "Formus" serves as a guide and companion, from the very beginning of choosing a home to opening the door to their own apartment.',
-      ka: 'მომავალი მაცხოვრებლებისთვის "ფორმუსი" წარმოადგენს გზამკვლევს და თანამგზავრს, საცხოვრებლის არჩევიდან საკუთარი ბინის კარის გაღებამდე.',
+      ka: 'მომავალი მობინადრეებისთვის "ფორმუსი" არის ახალი ცხოვრების გზამკვლევი და თანამგზავრი სახლის შერჩევის დაწყებიდან საკუთარი ბინის კარის შეღებამდე.',
     };
 
     return (
       <div className="mb-12">
         <p className="text-lg text-gray-700 leading-relaxed font-normal mb-6">
           {introText[locale]}
+        </p>
+        <p className="text-lg text-gray-700 leading-relaxed font-normal mb-4">
+          {companionTitle[locale]}
         </p>
         <ul className="space-y-4 mb-6">
           {benefits[locale].map((benefit, index) => (
@@ -207,6 +215,9 @@ const AboutFormus = () => {
               <div className="prose max-w-none">
                 <p className="text-lg text-gray-700 leading-relaxed font-normal mb-6">
                   {introText[locale]}
+                </p>
+                <p className="text-lg text-gray-700 leading-relaxed font-normal mb-4">
+                  {companionTitle[locale]}
                 </p>
                 <ul className="space-y-4 mb-6">
                   {benefits[locale].map((benefit, index) => (

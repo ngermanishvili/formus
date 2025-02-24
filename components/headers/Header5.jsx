@@ -134,7 +134,16 @@ export default function Header5() {
         >
           <div className="mx-auto max-w-7xl w-[1280px] px-36">
             <div className="flex items-center justify-between py-3">
-              <nav className="flex items-center gap-4 uppercase font-firago w-1/3 ">
+              {/* ლოგო მარცხენა მხარეს */}
+              <Link
+                href="/"
+                className="text-white text-lg font-bold font-firago"
+              >
+                FORMUS
+              </Link>
+
+              {/* ნავიგაცია ცენტრში */}
+              <nav className="flex items-center gap-4 uppercase font-firago justify-center">
                 {visibleRoutes.map((route) => (
                   <Link
                     key={route.id}
@@ -142,21 +151,15 @@ export default function Header5() {
                     onClick={(e) => handleChooseHomeClick(e, route.path)}
                     className={`${
                       isActivePath(route.path) ? "text-white" : "text-gray-200"
-                    } whitespace-nowrap text-xs hover:text-[#FBB102] transition-colors ${georgianTextClass}`}
+                    } whitespace-nowrap text-md hover:text-[#FBB102] transition-colors ${georgianTextClass}`}
                   >
                     {route.translations[locale]}
                   </Link>
                 ))}
               </nav>
 
-              <Link
-                href="/"
-                className="text-white text-lg font-bold absolute left-[52%] max-xl:left-[65%] max-lg:left-[70%] -translate-x-1/2 font-firago"
-              >
-                FORMUS
-              </Link>
-
-              <div className="flex items-center space-x-2 font-firago w-1/3 justify-end mr-8">
+              {/* ენის არჩევა და ტელეფონი მარჯვენა მხარეს */}
+              <div className="flex items-center space-x-2 font-firago justify-end">
                 <button
                   onClick={toggleLanguage}
                   className="flex items-center text-xs text-white hover:text-[#f94011] transition-colors"

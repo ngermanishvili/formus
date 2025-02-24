@@ -25,7 +25,7 @@ export default function Pagination({ activePage, setActivePage, totalPages }) {
     <ul className="pagination">
       <li className="page-item">
         <a
-          className="page-link page-prev cursor-pointer"
+          className="page-link page-prev cursor-pointer flex justify-center align-center"
           onClick={() => setActivePage((pre) => (pre > 1 ? pre - 1 : pre))}
         >
           <svg

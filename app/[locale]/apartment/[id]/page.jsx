@@ -136,6 +136,18 @@ const ApartmentDetails = () => {
               <span className="text-gray-400 mx-2">|</span>
               <span className="text-gray-400">{t.view360}</span>
             </h2>
+            <div className="mt-4">
+              {data.status === "sold" ? (
+                <span className="bg-[#f94011] text-white px-2 py-1 rounded">
+                  გაყიდულია
+                </span>
+              ) : (
+                <span className="bg-[#a2c080] text-white px-2 py-1 rounded">
+                  თავისუფალი
+                </span>
+              )}
+            </div>
+
             <div className="flex items-start border-b border-gray-200">
               <div>
                 <h3 className="text-base font-light gap-2">

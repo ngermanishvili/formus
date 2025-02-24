@@ -136,7 +136,7 @@ const ProjectContent = ({ id }) => {
           </div>
           <div className="absolute inset-0 bg-black/50" />
           <div className="absolute inset-0 flex items-center">
-            <div className="container mx-auto px-4">
+            <div className="w-full mx-auto  max-w-[1000px]">
               <p className="font-firago text-sm text-white">
                 {projectData.location}
               </p>

@@ -153,7 +153,7 @@ const ProjectContent = ({ id }) => {
               {/* Content container */}
               <div className="relative z-20 ">
                 <p className="font-firago text-sm text-foreground mb-2">
-                  {currentLang === "ge" ? "ჩვენს შესახებ" : "About Us"}
+                  {currentLang === "ge" ? "ჩვენ შესახებ" : "About Us"}
                 </p>
                 <h2 className="font-firago font-bold text-3xl text-foreground mb-4">
                   {currentLang === "ge" ? (

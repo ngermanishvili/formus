@@ -91,7 +91,7 @@ const AdminLayout = ({ children }) => {
       icon: <Folders className="w-5 h-5" />,
     },
     {
-      title: "ჩვენს შესახებ",
+      title: "ჩვენ შესახებ",
       href: "/admin/dashboard/about",
       icon: <Building className="w-5 h-5" />,
     },

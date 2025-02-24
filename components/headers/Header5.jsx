@@ -19,7 +19,7 @@ const routes = [
     id: 2,
     path: "/about-formus",
     translations: {
-      ka: "ჩვენს შესახებ",
+      ka: "ჩვენ შესახებ",
       en: "About Us",
     },
   },

@@ -109,17 +109,17 @@ export default function Hero() {
                   ))}
                 </Swiper>
                 <div className=" absolute ">
-                  <h2 className="text-base md:text-lg lg:text-xl color-white wow fadeInUp mt-4">
+                  {/* <h2 className="text-base md:text-lg lg:text-xl color-white wow fadeInUp mt-4">
                     {currentLang === "ge"
                       ? data.sliders[0]?.description_ge
                       : data.sliders[0]?.description_en}
-                  </h2>
+                  </h2> */}
                   <p className="heading-52-medium color-white wow fadeInUp text-2xl md:text-3xl lg:text-6xl xl:text-6xl">
                     {currentLang === "ge"
                       ? data.sliders[0]?.title_ge
                       : data.sliders[0]?.title_en}
                   </p>
-
+                  {/* 
                   <Link
                     className="btn btn-border mt-2"
                     href="/projects/1/ortachala-hilsi"
@@ -142,7 +142,7 @@ export default function Hero() {
                         d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
                       ></path>
                     </svg>
-                  </Link>
+                  </Link> */}
                 </div>
               </>
             )}

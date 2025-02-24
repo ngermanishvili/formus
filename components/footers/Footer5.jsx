@@ -23,8 +23,8 @@ const translations = {
   },
   ka: {
     workingHours: "სამუშაო საათები",
-    monToFri: "ორშ-პარ: 10:00 - 18:00",
-    saturday: "შაბ: 11:00 - 17:00",
+    monToFri: "ორშაბათი-პარასკევი: 10:00 - 18:00",
+    saturday: "შაბათი: 11:00 - 17:00",
     terms: "წესები და პირობები",
   },
 };
@@ -213,7 +213,7 @@ export default function Footer5() {
           }`}
         >
           <h6
-            className={`text-white/60 text-sm font-medium mb-6 ${georgianTextClass}`}
+            className={`text-white/60 text-sm font-medium mb-6 lg:mr-[84px] ${georgianTextClass}`}
           >
             {t.workingHours}
           </h6>

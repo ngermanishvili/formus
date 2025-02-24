@@ -90,10 +90,10 @@ const InteractiveSection = () => {
                 {translations.services[locale]}
               </h2> */}
               <div className="max-w-xl">
-                <h2 className="font-firago font-bold text-3xl lg:text-4xl text-foreground mb-6 lg:mb-8 leading-tight">
+                <h2 className="font-firago font-bold text-3xl lg:text-3xl text-foreground mb-6 lg:mb-8 leading-tight">
                   {sections[activeIndex].title[locale]}
                 </h2>
-                <p className="font-firago font-light text-muted-foreground text-base lg:text-lg leading-relaxed">
+                <p className="font-firago   lg:text-lg font-light">
                   {sections[activeIndex].description[locale]}
                 </p>
               </div>

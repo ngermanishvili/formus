@@ -216,7 +216,7 @@ const ProjectContent = ({ id }) => {
                   {currentLang === "ge" ? "ჩვენს შესახებ" : "About Us"}
                 </p> */}
 
-                <h2 className="font-firago font-bold text-3xl text-foreground mb-4">
+                <h2 className="font-firago font-bold text-3xl lg:text-3xl text-foreground mb-6 lg:mb-8 leading-tight">
                   {currentLang === "ge" ? (
                     <>
                       პროექტი დაფინანსებულია

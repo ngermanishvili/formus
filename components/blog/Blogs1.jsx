@@ -155,13 +155,13 @@ export default function Blogs1() {
             </div>
           ))}
         </div>
-        {blogs.length > 0 && (
+        {/* {blogs.length > 0 && (
           <div className="text-center mt-40 mb-120 wow fadeInUp">
             <nav className="box-pagination">
               <Pagination />
             </nav>
           </div>
-        )}
+        )} */}
       </div>
     </section>
   );

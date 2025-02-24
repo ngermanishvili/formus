@@ -158,7 +158,7 @@ const ProjectContent = ({ id }) => {
                 <h2 className="font-firago font-bold text-3xl text-foreground mb-4">
                   {currentLang === "ge" ? (
                     <>
-                      ორთაჭალა ჰილს
+                      ორთაჭალა ჰილსი
                       <br />
                       დაფინანსებულია თი-ბი-სი ბანკის მიერ.
                     </>

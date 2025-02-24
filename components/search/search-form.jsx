@@ -15,7 +15,7 @@ const translations = {
     location: "მდებარეობა",
     area: "ფართი",
     search: "ძებნა",
-    ortachalaHills: "ორთაჭალა ჰილს",
+    ortachalaHills: "ორთაჭალა ჰილსი",
     tbilisi: "თბილისი",
     choose: "არჩევა",
   },

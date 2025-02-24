@@ -30,6 +30,9 @@ const AboutOrtachala = () => {
       subtitle: 'დაფინანსებულია "თიბისი" ბანკის მიერ',
       sections: [
         {
+          text: '"ორთაჭალა ჰილსი" ყველაზე მშვიდ და გამწვანებულ ლოკაციაზე, ძველი ქალაქის კულტურულ ცენტრთან ახლოს მდებარეობს. კომპლექსი მაღალი სამშენებლო სტანდარტებითა და კონცეფციით გამოირჩევა, სადაც მომხმარებლის ყველა სურვილი და საჭიროებაა გათვალისწინებული.',
+        },
+        {
           text: "მშენებლობა მიმდინარეობს 10 000 კვადრატულ მეტრზე, რომელიც მოიცავს 4 საცხოვრებელ ბლოკს (15 და 8 სართულიან შენობებს) და კომერციულ შენობა-ნაგებობას. მასშტაბიდან გამომდინარე მშენებლობა ხორციელდება რამოდენიმე ეტაპად. 15 სართულიანი საცხოვრებელი ბლოკის მშენებლობა თითქმის დასრულებულია და კომერციული ობიექტები იხსნება. 8 სართულიანი საცხოვრებელი ბლოკის მშენებლობა დასრულდება 2025 წლის შემოდგომაზე.",
         },
         {
@@ -70,13 +73,6 @@ const AboutOrtachala = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-[970px] mx-auto">
           {/* Main top image */}
-          <div className="w-full mb-16">
-            <img
-              src="/assets/ortachala-project/ortachala-1.png"
-              alt="Ortachala Hills Complex"
-              className="w-full h-[800px] max-w-[1200px] object-cover object-bottom rounded-2xl shadow-lg"
-            />
-          </div>
 
           {/* Title and first section */}
           <div className="mb-20">
@@ -90,9 +86,6 @@ const AboutOrtachala = () => {
               <h3 className="text-2xl text-gray-700 mt-4 font-firago">
                 {content[locale].subtitle}
               </h3>
-            </div>
-            <div className="space-y-4">
-              {renderParagraphs(content[locale].sections[0].text)}
             </div>
           </div>
 

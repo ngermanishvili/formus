@@ -13,9 +13,30 @@ import ProjectContPhotos from "@/public/assets/imgs/ortachala/ortachala.png";
 const ProjectContent = ({ id }) => {
   const [loading, setLoading] = useState(true);
   const [projectData, setProjectData] = useState(null);
+  const [openImageIndex, setOpenImageIndex] = useState(null);
 
   const pathname = usePathname();
   const currentLang = pathname.includes("/ka") ? "ge" : "en";
+
+  // პროექტის ფოტოები
+  const projectImages = [
+    {
+      img: "/assets/ortachala-project/four.png",
+      alt: "Ortachala Project View 4",
+    },
+    {
+      img: "/assets/ortachala-project/three.png",
+      alt: "Ortachala Project View 3",
+    },
+    {
+      img: "/assets/ortachala-project/two.png",
+      alt: "Ortachala Project View 2",
+    },
+    {
+      img: "/assets/ortachala-project/one.png",
+      alt: "Ortachala Project View 1",
+    },
+  ];
 
   // გუგლის რუკების iframe-ების ობიექტი ID-ების მიხედვით
   const mapsUrls = {
@@ -90,6 +111,23 @@ const ProjectContent = ({ id }) => {
       fetchData();
     }
   }, [id, currentLang]);
+
+  // მოდალის დახურვის ფუნქცია Escape ღილაკის დაჭერით
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") {
+        setOpenImageIndex(null);
+      }
+    };
+
+    if (openImageIndex !== null) {
+      document.addEventListener("keydown", handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [openImageIndex]);
 
   if (loading) {
     return (
@@ -209,27 +247,11 @@ const ProjectContent = ({ id }) => {
 
             <div className="w-full lg:w-[700px] mb-20">
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
-                {[
-                  {
-                    img: "/assets/ortachala-project/four.png",
-                    alt: "Ortachala Project View 4",
-                  },
-                  {
-                    img: "/assets/ortachala-project/three.png",
-                    alt: "Ortachala Project View 3",
-                  },
-                  {
-                    img: "/assets/ortachala-project/two.png",
-                    alt: "Ortachala Project View 2",
-                  },
-                  {
-                    img: "/assets/ortachala-project/one.png",
-                    alt: "Ortachala Project View 1",
-                  },
-                ].map((image, index) => (
+                {projectImages.map((image, index) => (
                   <div
                     key={index}
-                    className="relative h-52 group overflow-hidden rounded-lg"
+                    className="relative h-52 group overflow-hidden rounded-lg cursor-pointer"
+                    onClick={() => setOpenImageIndex(index)}
                   >
                     <img
                       src={image.img}
@@ -243,6 +265,46 @@ const ProjectContent = ({ id }) => {
             </div>
           </div>
         </div>
+
+        {/* Image Modal */}
+        {openImageIndex !== null && (
+          <div
+            className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+            onClick={() => setOpenImageIndex(null)}
+          >
+            <div
+              className="relative max-w-[500px] max-h-[500px] w-full h-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                className="absolute top-0 right-0 bg-white rounded-full p-2 text-gray-800 hover:bg-gray-200 z-10"
+                onClick={() => setOpenImageIndex(null)}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+              <div className="relative w-full h-full max-w-[500px] max-h-[500px]">
+                <img
+                  src={projectImages[openImageIndex].img}
+                  alt={projectImages[openImageIndex].alt}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Second Section */}
         <section className="relative bg-background">

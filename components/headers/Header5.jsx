@@ -51,7 +51,7 @@ const routes = [
 ];
 
 const languageNames = {
-  ka: "GE",
+  ka: "KA",
   en: "ENG",
 };
 

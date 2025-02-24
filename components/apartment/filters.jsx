@@ -201,12 +201,12 @@ const FloorFilters = () => {
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center gap-3">
             <Link
-              href={`/choose-apartment`}
-              className=" items-center gap-2 px-4 py-2 rounded-lg
-              bg-[#FBB200] font-medium
-              transition-colors duration-200
-              border border-[#FBB200] text-white 
-              hidden md:flex"
+              href={pathname.includes("/floor") ? "/choose-apartment" : "/"}
+              className="items-center gap-2 px-4 py-2 rounded-lg 
+            bg-[#FBB200] font-medium
+            transition-colors duration-200
+            border border-[#FBB200] text-white 
+            hidden md:flex"
             >
               <span>{t.back}</span>
             </Link>
@@ -397,7 +397,7 @@ const FloorFilters = () => {
               flex items-center gap-2 mr-1
               ${
                 pathname.includes("/choose-apartment")
-                  ? "absolute mt-[62%] left-0"
+                  ? "absolute mt-[55%] left-0"
                   : "bottom-6 right-6"
               }`}
       >

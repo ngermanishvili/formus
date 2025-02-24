@@ -150,7 +150,6 @@ export default function AboutPage() {
   return (
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">ჩვენ შესახებ</h1>
-
       <div className="bg-white rounded-lg shadow">
         <Table>
           <TableHeader>

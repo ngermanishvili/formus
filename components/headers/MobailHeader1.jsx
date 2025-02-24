@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { Link, usePathname } from "@/src/i18n/routing";
 import { useLocale } from "next-intl";
 import { Menu, X, Phone } from "lucide-react";
+import Logo from "@/public/assets/imgs/logo/formus-header1.png";
+import Image from "next/image";
 
 const MobileHeader1 = ({ routes, languageNames }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -73,7 +75,15 @@ const MobileHeader1 = ({ routes, languageNames }) => {
             </button>
 
             <Link href="/" className="text-white text-xl font-bold">
-              FORMUS
+              <div className="w-28 h-10 relative">
+                <Image
+                  src={Logo}
+                  alt="Formus Logo"
+                  fill
+                  style={{ objectFit: "cover" }}
+                  priority
+                />
+              </div>
             </Link>
 
             <div className="flex items-center space-x-2">

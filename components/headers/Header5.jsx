@@ -5,7 +5,8 @@ import { Link, usePathname } from "@/src/i18n/routing";
 import { useLocale } from "next-intl";
 import { Phone } from "lucide-react";
 import MobileHeader1 from "@/components/headers/MobailHeader1";
-
+import Image from "next/image";
+import Logo from "@/public/assets/imgs/logo/formus-header1.png";
 const routes = [
   {
     id: 1,
@@ -38,7 +39,7 @@ const routes = [
       ka: "შეარჩიეთ ბინა",
       en: "Choose Home",
     },
-    showOnlyOnHome: true,
+    // წავშალეთ showOnlyOnHome პარამეტრი, რომ ყველა გვერდზე გამოჩნდეს
   },
   {
     id: 5,
@@ -75,6 +76,15 @@ export default function Header5() {
   const handleChooseHomeClick = (e, routePath) => {
     if (routePath === "/choose-apartment") {
       e.preventDefault();
+
+      // თუ მთავარ გვერდზე არ ვიმყოფებით, ჯერ მთავარზე გადავიდეთ
+      if (!isHomePage) {
+        // მთავარ გვერდზე გადასვლა და პარამეტრის გადაცემა, რომ გადასვლის შემდეგ დასქროლოს
+        window.location.href = `/${locale}?scrollToApartments=true`;
+        return;
+      }
+
+      // თუ უკვე მთავარ გვერდზე ვართ, მაშინ პირდაპირ დავასქროლოთ
       window.scrollTo({
         top: document.documentElement.scrollHeight * 0.8,
         behavior: "smooth",
@@ -87,8 +97,27 @@ export default function Header5() {
       setScrolled(window.scrollY > 200);
     };
     window.addEventListener("scroll", handleScroll);
+
+    // URL პარამეტრების შემოწმება გვერდის ჩატვირთვისას
+    if (isHomePage) {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("scrollToApartments") === "true") {
+        // თუ პარამეტრი არსებობს, დავასქროლოთ ბინების სექციამდე
+        setTimeout(() => {
+          window.scrollTo({
+            top: document.documentElement.scrollHeight * 0.8,
+            behavior: "smooth",
+          });
+
+          // პარამეტრის წაშლა ისტორიიდან, რომ არ დარჩეს URL-ში
+          const newUrl = window.location.pathname;
+          window.history.replaceState({}, document.title, newUrl);
+        }, 500); // პატარა დაყოვნება, რომ გვერდი ჯერ სრულად ჩაიტვირთოს
+      }
+    }
+
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isHomePage]);
 
   const getFullPath = (routePath) => {
     return routePath.startsWith("/") ? routePath : `/${routePath}`;
@@ -116,9 +145,9 @@ export default function Header5() {
     window.location.href = getLocalizedPath(newLocale);
   };
 
-  const visibleRoutes = routes.filter(
-    (route) => !route.showOnlyOnHome || (route.showOnlyOnHome && isHomePage)
-  );
+  // ყველა route-ის ჩვენება, უკვე აღარ ვფილტრავთ
+  // showOnlyOnHome პარამეტრის მიხედვით
+  const visibleRoutes = routes;
 
   return (
     <>
@@ -139,7 +168,15 @@ export default function Header5() {
                 href="/"
                 className="text-white text-lg font-bold font-firago"
               >
-                FORMUS
+                <div className="w-28 h-10 relative">
+                  <Image
+                    src={Logo}
+                    alt="Formus Logo"
+                    fill
+                    style={{ objectFit: "cover" }}
+                    priority
+                  />
+                </div>
               </Link>
 
               {/* ნავიგაცია ცენტრში */}
@@ -168,7 +205,6 @@ export default function Header5() {
                 </button>
 
                 <a
-                  onClick={scrollToFooter}
                   href="tel:+995123456789"
                   className="flex items-center text-white hover:text-[#f94011] transition-colors ml-2"
                 >

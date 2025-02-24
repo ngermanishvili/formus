@@ -180,9 +180,9 @@ const Controls = ({ zoomIn, zoomOut, resetTransform }) => {
   const handleZoomOut = () => zoomOut(0.3);
 
   return (
-    <div className="fixed bottom-[250px] right-6 z-40 flex flex-col gap-2">
-      <div className="backdrop-blur-xl rounded-md border border-white/10 shadow-md p-1.5">
-        <div className="flex flex-col gap-1">
+    <div className="relative  right-6 z-40 flex  gap-2">
+      <div className="backdrop-blur-xl rounded-md border border-white/10 shadow-md p-1.5 absolute right-0 mt-[275px]">
+        <div className="flex gap-1">
           <button
             onClick={handleZoomIn}
             className="p-3 rounded-xl bg-gradient-to-tr from-white/5 to-white/10
@@ -368,6 +368,11 @@ const OrtachalaPolygon = () => {
       </div>
     </>
   );
+  useEffect(() => {
+    if (selectedPolygon) {
+      console.log("Selected polygon state updated:", selectedPolygon);
+    }
+  }, [selectedPolygon]);
 
   return (
     <div className="relative w-full">
@@ -384,22 +389,18 @@ const OrtachalaPolygon = () => {
           position={hoverPosition}
         />
       )}
-
       {selectedPolygon && (
         <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100]"
           onClick={() => setSelectedPolygon(null)}
         >
           <div
-            className={`
-              fixed bottom-0 left-0 right-0
-              lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 
-              bg-black/95 backdrop-blur-lg z-50 
-              border-t border-blue-500/50 lg:border
-              lg:rounded-xl w-full lg:max-w-2xl
-              translate-y-0 transition-transform duration-300
-              ${selectedPolygon ? "translate-y-0" : "translate-y-full"}
-            `}
+            className="fixed bottom-0 left-0 right-0
+                lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 
+                bg-black/95 backdrop-blur-lg z-[101] 
+                border-t border-blue-500/50 lg:border
+                lg:rounded-xl w-full lg:max-w-2xl
+                transform transition-transform duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative max-h-[90vh] overflow-y-auto">

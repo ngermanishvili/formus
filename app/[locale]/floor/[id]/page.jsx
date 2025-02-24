@@ -17,7 +17,7 @@ const translations = {
     dataError: "Error receiving data",
   },
   ka: {
-    chooseApartment: "აირჩიე აპარტამენტი",
+    chooseApartment: "შეარჩიეთ ბინა",
     sold: "გაყიდულია",
     floorError: "სართულის ID არ არის მითითებული",
     dataError: "შეცდომა მონაცემების მიღებისას",

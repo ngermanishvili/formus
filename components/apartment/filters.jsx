@@ -388,19 +388,25 @@ const FloorFilters = () => {
       </div>
 
       {/* Mobile Filter Button */}
+      {/* Mobile Filter Button */}
       <button
         onClick={() => setIsDrawerOpen(true)}
-        className="fixed bottom-6 right-6 p-4 rounded-full bg-[#FBB200] 
-                  hover:bg-[#FBB200]/90 text-black shadow-xl 
-                  transition-all duration-200 z-50 md:hidden
-                  flex items-center gap-2"
+        className={`relative  p-4 rounded-md bg-[#FBB200] 
+              hover:bg-[#FBB200]/90 text-black shadow-xl 
+              transition-all duration-200 z-0 md:hidden
+              flex items-center gap-2 mr-1
+              ${
+                pathname.includes("/choose-apartment")
+                  ? "absolute mt-[62%] left-0"
+                  : "bottom-6 right-6"
+              }`}
       >
         <Search size={20} />
         <span className="font-medium">{t.filter}</span>
         {activeFiltersCount > 0 && (
           <span
             className="flex items-center justify-center w-5 h-5 text-xs 
-                        bg-black text-[#FBB200] rounded-full"
+                bg-black text-[#FBB200] rounded-full"
           >
             {activeFiltersCount}
           </span>

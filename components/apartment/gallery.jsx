@@ -157,12 +157,9 @@ const GalleryGrid = () => {
             {texts[currentLang].exterior}
           </button>
           <button
-            onClick={() => setActiveCategory("interior")}
-            className={`font-firago text-lg transition-colors hover:text-foreground ${
-              activeCategory === "interior"
-                ? "text-foreground font-medium"
-                : "text-muted-foreground font-light"
-            }`}
+            disabled
+            className="font-firago text-lg opacity-50 cursor-not-allowed"
+            title={currentLang === "ka" ? "მალე დაემატება" : "Coming soon"}
           >
             {texts[currentLang].interior}
           </button>

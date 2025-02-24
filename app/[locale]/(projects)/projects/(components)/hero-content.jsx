@@ -181,16 +181,12 @@ const ProjectContent = ({ id }) => {
                 <h2 className="font-firago font-bold text-3xl text-foreground mb-4">
                   {currentLang === "ge" ? (
                     <>
-                      ორთაჭალა ჰილსი
+                      პროექტი დაფინანსებულია
                       <br />
-                      დაფინანსებულია "თიბისი" ბანკის მიერ.
+                      "თიბისი" ბანკის მიერ.
                     </>
                   ) : (
-                    <>
-                      Ortachala Hills
-                      <br />
-                      Financed by TBC Bank.
-                    </>
+                    <>Project is financed by TBC Bank.</>
                   )}
                 </h2>
 

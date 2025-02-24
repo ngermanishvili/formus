@@ -27,9 +27,18 @@ export default function Services1() {
 
         if (data.status === "success" && Array.isArray(data.data)) {
           const sortedProjects = [...data.data].sort((a, b) => {
-            if (a.id === 1) return -1;
-            if (b.id === 1) return 1;
-            return 0;
+            // Define specific order: Ortachala(1), City View(7), Vake(6), Didi Dighomi(4), Gldani(3), Didube(5), Avlabari(2)
+            const order = {
+              1: 0, // Ortachala Hills
+              7: 1, // City View
+              6: 2, // Vake
+              4: 3, // Didi Dighomi
+              3: 4, // Gldani
+              5: 5, // Didube
+              2: 6, // Avlabari
+            };
+
+            return (order[a.id] ?? 999) - (order[b.id] ?? 999);
           });
           setProjects(sortedProjects);
         } else {
@@ -45,6 +54,17 @@ export default function Services1() {
 
     fetchProjects();
   }, []);
+
+  const getProjectAddress = (project) => {
+    if (project.id === 1) {
+      return currentLang === "ge"
+        ? "სულიკო თორთლაძის ქუჩა"
+        : "Suliko Tortladze Street";
+    }
+    return currentLang === "ge"
+      ? project.description_ge || project.description || ""
+      : project.description_en || project.description || "";
+  };
 
   const handleProjectClick = (project, e) => {
     e.preventDefault();
@@ -103,7 +123,7 @@ export default function Services1() {
         </button>
 
         <div
-          className={`relative w-full max-w-74xl mx-4 aspect-[16/9] transition-transform duration-300 ${
+          className={`relative w-full max-w-3xl mx-4 aspect-[4/3] transition-transform duration-300 ${
             isModalClosing ? "scale-95" : "scale-100"
           }`}
           onClick={(e) => e.stopPropagation()}
@@ -153,7 +173,7 @@ export default function Services1() {
   }
 
   return (
-    <section className="section pt-60 ">
+    <section className="section pt-60">
       <div className="container-sub">
         <div className="row">
           {projects.map(
@@ -174,31 +194,22 @@ export default function Services1() {
                           : project.title_en || project.title || "Untitled"}
                       </h3>
                       <div className="">
-                        <p className="cardDesc text-14 color-white ">
-                          {project.id === 1
-                            ? currentLang === "ge"
-                              ? "სულიკო თორთლაძის ქუჩა"
-                              : "Suliko Tortladze Street"
-                            : currentLang === "ge"
-                            ? project.description_ge ||
-                              project.description ||
-                              ""
-                            : project.description_en ||
-                              project.description ||
-                              ""}
-                        </p>
-                        <p className="text-14 color-white ">
-                          {currentLang === "ge"
-                            ? project.address_ge || project.address || ""
-                            : project.address_en || project.address || ""}
+                        <p className="cardDesc text-14 color-white">
+                          {getProjectAddress(project)}
                         </p>
                       </div>
                     </div>
-                    <div className="cardImage overflow-hidden">
+                    <div
+                      className="cardImage overflow-hidden"
+                      style={{ maxHeight: "280px" }}
+                    >
                       <Image
-                        width={400}
-                        height={500}
-                        style={{ height: "fit-content" }}
+                        width={300}
+                        height={280}
+                        style={{
+                          height: "280px",
+                          objectFit: "cover",
+                        }}
                         src={project.main_image_url || "/placeholder-image.jpg"}
                         alt={
                           currentLang === "ge"

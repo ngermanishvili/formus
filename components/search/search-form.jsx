@@ -55,7 +55,6 @@ export default function SearchForm() {
   };
 
   const handleSearch = () => {
-    // Only proceed with search if area range is selected
     if (searchParams.areaRange) {
       const [minArea, maxArea] = searchParams.areaRange.split("-");
 
@@ -63,10 +62,10 @@ export default function SearchForm() {
       const params = new URLSearchParams();
       params.set("totalAreaMin", minArea);
       params.set("totalAreaMax", maxArea);
+      params.set("statuses", "available");
 
       // Create the URL
       const url = `/${locale}/homes-list?${params.toString()}`;
-      // Redirect to the filtered results page
       window.location.href = url;
     }
   };

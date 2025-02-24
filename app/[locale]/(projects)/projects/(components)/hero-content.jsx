@@ -146,7 +146,7 @@ const ProjectContent = ({ id }) => {
 
               <Link className="btn btn-border mt-2" href="/choose-apartment">
                 {currentLang === "ge"
-                  ? "შეარჩიეთ ბინა "
+                  ? "შეარჩიეთ ბინა"
                   : "Choose an apartament"}
                 <svg
                   className="icon-16"

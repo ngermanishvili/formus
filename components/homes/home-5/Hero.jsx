@@ -127,7 +127,7 @@ export default function Hero() {
                     {currentLang === "ge"
                       ? "მიმდინარე პროექტი"
                       : "Ongoing Project"}
-                    {/* <svg
+                    <svg
                       className="icon-16"
                       fill="none"
                       stroke="currentColor"
@@ -141,7 +141,7 @@ export default function Hero() {
                         strokeLinejoin="round"
                         d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
                       ></path>
-                    </svg> */}
+                    </svg>
                   </Link>
                 </div>
               </>

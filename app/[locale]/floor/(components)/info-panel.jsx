@@ -23,7 +23,7 @@ const InfoPanel = memo(({ data, onViewDetails }) => {
       case "sold":
         return "გაყიდული";
       case "reserved":
-        return "დაჯავშნული";
+        return "დაჯავშნილი";
       default:
         return "უცნობი";
     }

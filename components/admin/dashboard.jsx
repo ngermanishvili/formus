@@ -51,7 +51,7 @@ export default function AdminPanel() {
   const apartmentStatuses = [
     { value: "available", label: "თავისუფალი" },
     { value: "sold", label: "გაყიდული" },
-    { value: "reserved", label: "დაჯავშნული" },
+    { value: "reserved", label: "დაჯავშნილი" },
     { value: "in_progress", label: "მშენებარე" },
   ];
 

@@ -173,7 +173,7 @@ const ErrorDisplay = ({ message }) => (
 const HeaderSection = ({ count, activeView, setView }) => (
   <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
     <div className="flex items-center gap-4">
-      <h2 className="text-2xl font-semibold">ჩვენი ბინები</h2>
+      {/* <h2 className="text-2xl font-semibold">ჩვენი ბინები</h2> */}
       <span className="text-sm text-gray-500">ნაპოვნია {count} ბინა</span>
     </div>
 

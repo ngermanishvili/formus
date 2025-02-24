@@ -71,7 +71,7 @@ const SearchFilters = ({ apartments, onFilterChange }) => {
                     : status === "sold"
                     ? "გაყიდული"
                     : status === "reserved"
-                    ? "დაჯავშნული"
+                    ? "დაჯავშნილი"
                     : status}
                 </SelectItem>
               ))}

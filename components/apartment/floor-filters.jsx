@@ -35,7 +35,7 @@ const translations = {
     filters: "ფილტრები",
     clear: "გასუფთავება",
     available: "თავისუფალი",
-    reserved: "დაჯავშნული",
+    reserved: "დაჯავშნილი",
     sold: "გაყიდული",
     area: "ფართი",
     areas: "ფართი",

@@ -48,7 +48,7 @@ export const ApartmentList = ({
       case "sold":
         return "გაყიდული";
       case "reserved":
-        return "დაჯავშნული";
+        return "დაჯავშნილი";
       default:
         return status;
     }
@@ -126,7 +126,7 @@ export const ApartmentList = ({
                     >
                       <option value="available">ხელმისაწვდომი</option>
                       <option value="sold">გაყიდული</option>
-                      <option value="reserved">დაჯავშნული</option>
+                      <option value="reserved">დაჯავშნილი</option>
                     </select>
                   </TableCell>
                   <TableCell>
@@ -199,7 +199,7 @@ export const ApartmentList = ({
                           }
                           disabled={apartment.status === "reserved"}
                         >
-                          დაჯავშნული
+                          დაჯავშნილი
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem

@@ -104,7 +104,7 @@ export const AddApartmentDialog = ({
             >
               <option value="available">ხელმისაწვდომი</option>
               <option value="sold">გაყიდული</option>
-              <option value="reserved">დაჯავშნული</option>
+              <option value="reserved">დაჯავშნილი</option>
             </select>
           </div>
           {/* ოთახების ფართობები */}

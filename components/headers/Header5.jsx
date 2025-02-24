@@ -20,7 +20,7 @@ const routes = [
     path: "/about-formus",
     translations: {
       ka: "ჩვენ შესახებ",
-      en: "About",
+      en: "About Us",
     },
   },
   {

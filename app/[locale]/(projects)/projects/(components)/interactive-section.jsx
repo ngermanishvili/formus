@@ -86,9 +86,9 @@ const InteractiveSection = () => {
         <div className="w-full lg:w-1/2 relative">
           <div className="px-6 lg:px-12 xl:px-16 py-12 lg:py-16 h-full flex">
             <div className="flex-1">
-              <h2 className="text-sm text-black mb-2">
+              {/* <h2 className="text-sm text-black mb-2">
                 {translations.services[locale]}
-              </h2>
+              </h2> */}
               <div className="max-w-xl">
                 <h2 className="font-firago font-bold text-3xl lg:text-4xl text-foreground mb-6 lg:mb-8 leading-tight">
                   {sections[activeIndex].title[locale]}

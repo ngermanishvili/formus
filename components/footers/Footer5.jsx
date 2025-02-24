@@ -122,7 +122,7 @@ export default function Footer5() {
               />
             </Link>
           </div>
-          <div className="flex justify-center gap-2 relative z-50 mr-[5%]">
+          <div className="flex justify-center gap-2 relative z-0 mr-[5%]">
             {socialLinks.map((social) => {
               const IconComponent = socialIcons[social.platform_key];
               if (!IconComponent || !social.url) return null;

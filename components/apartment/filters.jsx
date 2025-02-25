@@ -397,7 +397,7 @@ const FloorFilters = () => {
               flex items-center gap-2 mr-1
               ${
                 pathname.includes("/choose-apartment")
-                  ? "absolute mt-[55%] left-0"
+                  ? "absolute mt-[64%] left-0"
                   : "bottom-6 right-6"
               }`}
       >

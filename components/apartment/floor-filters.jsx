@@ -229,15 +229,13 @@ const FloorFilters = () => {
           <div className="flex items-center gap-3">
             <Link
               href={pathname.includes("/floor") ? "/choose-apartment" : "/"}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg
-                        bg-[#FBB200] font-medium
-                        transition-colors duration-200
-                        border border-[#FBB200] text-black"
+              className=" items-center gap-2 px-4 py-2 rounded-lg
+             bg-[#FBB200] font-medium
+             transition-colors duration-200
+             border border-[#FBB200] text-black hidden sm:block md:hidden lg:block"
             >
               <span className="text-black hover:text-black">{t.back}</span>
             </Link>
-
-            <div className="h-6 w-px bg-black/30" />
 
             <div className="hidden md:flex items-center gap-2">
               <FilterButton
@@ -449,10 +447,10 @@ const FloorFilters = () => {
       {/* Mobile Filter Button */}
       <button
         onClick={() => setIsDrawerOpen(true)}
-        className="fixed bottom-6 right-6 p-4 rounded-full bg-[#FBB200] 
+        className="absolute top-0  w-[90%] flex justify-center items-center h-[50px] bottom-6 right-6 p-4 rounded-md bg-[#FBB200] 
                   hover:bg-[#FBB200]/90 text-black shadow-xl 
-                  transition-all duration-200 z-50 md:hidden
-                  flex items-center gap-2"
+                  transition-all duration-200  md:hidden
+                  text-center gap-2"
       >
         <Search size={20} />
         <span className="font-medium">{t.filter}</span>

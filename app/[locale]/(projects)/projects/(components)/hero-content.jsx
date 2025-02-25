@@ -207,14 +207,14 @@ const ProjectContent = ({ id }) => {
         </div>
 
         {/* Content Section */}
-        <div className=" mx-auto px-4 py-12">
+        <div className="mx-auto max-w-[1080px] px-4 py-12">
           <div className="flex flex-col lg:flex-row gap-[100px] justify-end">
-            <div className="lg:w-[600px] relative">
+            <div className="w-full relative">
               {/* Content container */}
-              <div className="relative z-20 ">
+              <div className="relative z-20 text-left">
                 {/* <p className="font-firago text-sm text-foreground mb-2">
-                  {currentLang === "ge" ? "ჩვენს შესახებ" : "About Us"}
-                </p> */}
+          {currentLang === "ge" ? "ჩვენს შესახებ" : "About Us"}
+        </p> */}
 
                 <h2 className="font-firago font-bold text-3xl lg:text-3xl text-foreground mb-6 lg:mb-8 leading-tight">
                   {currentLang === "ge" ? (
@@ -245,7 +245,7 @@ const ProjectContent = ({ id }) => {
               </div>
             </div>
 
-            <div className="w-full lg:w-[700px] mb-20">
+            <div className="w-full lg:w-[1200px] mb-20">
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
                 {projectImages.map((image, index) => (
                   <div

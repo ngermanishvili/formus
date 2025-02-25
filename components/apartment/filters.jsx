@@ -208,7 +208,7 @@ const FloorFilters = () => {
             border border-[#FBB200] text-white 
             hidden md:flex"
             >
-              <span>{t.back}</span>
+              <span className="text-black hover:text-black">{t.back}</span>
             </Link>
 
             <div className="h-6 w-px bg-black/30" />

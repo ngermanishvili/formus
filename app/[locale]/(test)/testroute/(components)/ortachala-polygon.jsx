@@ -181,7 +181,7 @@ const Controls = ({ zoomIn, zoomOut, resetTransform }) => {
 
   return (
     <div className="relative  right-6 z-40 flex  gap-2">
-      <div className="backdrop-blur-xl rounded-md border border-white/10 shadow-md p-1.5 absolute right-0 mt-[275px]">
+      <div className="backdrop-blur-xl absolute rounded-md   shadow-md p-1.5 bottom-[-350px] right-0 ">
         <div className="flex gap-1">
           <button
             onClick={handleZoomIn}

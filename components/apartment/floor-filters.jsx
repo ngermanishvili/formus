@@ -232,9 +232,11 @@ const FloorFilters = () => {
               className=" items-center gap-2 px-4 py-2 rounded-lg
              bg-[#FBB200] font-medium
              transition-colors duration-200
-             border border-[#FBB200] text-black hidden sm:block md:hidden lg:block"
+             border border-[#FBB200] text-black hidden sm:block md:hidden lg:block "
             >
-              <span className="text-black hover:text-black">{t.back}</span>
+              <span className="text-black hover:text-black min-w-[100px]">
+                {t.back}
+              </span>
             </Link>
 
             <div className="hidden md:flex items-center gap-2">

@@ -94,7 +94,7 @@ export default function Footer5() {
         isMobile
           ? "px-6"
           : "mx-auto max-w-7xl w-[1280px] px-40 md:px-28 md:w-full xl:w-[1280px] xl:px-40"
-      } ${isHomePage ? (isMobile ? " pt-56" : "pt-14") : ""}`}
+      } ${isHomePage ? (isMobile ? "" : "") : ""}`}
     >
       {/* Logo and Social Media Section */}
       <div

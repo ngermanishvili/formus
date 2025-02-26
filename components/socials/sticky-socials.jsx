@@ -41,7 +41,7 @@ const StickySocial = () => {
   return (
     <>
       <style>{tooltipAnimation}</style>
-      <div className="fixed bottom-24 sm:bottom-20 md:bottom-24 right-2 sm:right-4 z-50 flex flex-col sm:flex-row gap-2 sm:gap-3 mt-2">
+      <div className="fixed bottom-24 sm:bottom-20 md:bottom-24 right-2 sm:right-4 z-50 flex flex-col sm:flex-row gap-2 sm:gap-3 mt-2 items-end sm:items-start">
         <div className="relative">
           <button
             onClick={() => setIsModalOpen(true)}

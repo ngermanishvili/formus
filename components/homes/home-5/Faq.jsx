@@ -43,9 +43,9 @@ export default function Faq() {
                     height={80}
                   />
                 </div>
-                <h2 className="text-black text-xs relative top-[24px] font-normal">
+                {/* <h2 className="text-black text-xs relative top-[24px] font-normal">
                   About us
-                </h2>
+                </h2> */}
               </div>
 
               <div className="space-y-2">

@@ -86,7 +86,7 @@ export default function Header5() {
 
       // თუ უკვე მთავარ გვერდზე ვართ, მაშინ პირდაპირ დავასქროლოთ
       window.scrollTo({
-        top: document.documentElement.scrollHeight * 0.8,
+        top: document.documentElement.scrollHeight * 0.4,
         behavior: "smooth",
       });
     }

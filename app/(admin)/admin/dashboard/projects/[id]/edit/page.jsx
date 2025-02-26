@@ -1,3 +1,4 @@
+//app/(admin)/admin/dashboard/projects/%5Bid%5D/edit/page.jsx
 "use client";
 
 import { useState, useEffect } from "react";

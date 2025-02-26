@@ -132,7 +132,7 @@ export default function ApartmentList() {
   return (
     <>
       <section className="section pt-16 bg-gray-50 mb-16">
-        <div className="container mx-auto px-4 flex justify-center items-center mt-[100px] ">
+        <div className="container mx-auto px-4 flex justify-center items-center mt-8 md:mt-12 lg:mt-[100px] mb-8">
           <FloorFilters />
         </div>
         <div className="container mx-auto px-4">

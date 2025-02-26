@@ -5,10 +5,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { useParams } from "next/navigation";
 import SecondShape1 from "@/public/assets/shapes/project/3.png";
-import EnergyEfficiency from "@/public/assets/ortachala-project/1-energo.png";
-import EssentialFacilities from "@/public/assets/ortachala-project/3-everyday-life.png";
-import RecreationArea from "@/public/assets/ortachala-project/4-recreation.png";
-import Security from "@/public/assets/ortachala-project/2-teritory-security.png";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const InteractiveSection = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -19,6 +16,14 @@ const InteractiveSection = () => {
     services: {
       en: "Services",
       ka: "სერვისები",
+    },
+    prev: {
+      en: "Previous",
+      ka: "წინა",
+    },
+    next: {
+      en: "Next",
+      ka: "შემდეგი",
     },
   };
 
@@ -69,6 +74,16 @@ const InteractiveSection = () => {
     },
   ];
 
+  const handlePrev = () => {
+    setActiveIndex((prevIndex) =>
+      prevIndex === 0 ? sections.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleNext = () => {
+    setActiveIndex((prevIndex) => (prevIndex + 1) % sections.length);
+  };
+
   return (
     <section className="relative bg-background">
       <div className="flex flex-col lg:flex-row">
@@ -84,35 +99,47 @@ const InteractiveSection = () => {
         </div>
 
         <div className="w-full lg:w-1/2 relative">
-          <div className="px-6 lg:px-12 xl:px-16 py-12 lg:py-16 h-full flex">
+          <div className="px-6 lg:px-12 xl:px-16 py-12 lg:py-16 h-full flex flex-col">
             <div className="flex-1">
-              {/* <h2 className="text-sm text-black mb-2">
-                {translations.services[locale]}
-              </h2> */}
               <div className="max-w-xl">
                 <h2 className="font-firago font-bold text-3xl lg:text-3xl text-foreground mb-6 lg:mb-8 leading-tight">
                   {sections[activeIndex].title[locale]}
                 </h2>
-                <p className="font-firago   lg:text-lg font-light">
+                <p className="font-firago lg:text-lg font-light">
                   {sections[activeIndex].description[locale]}
                 </p>
               </div>
             </div>
-            <div className="flex flex-col items-center gap-2 mr-8">
-              {sections.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveIndex(index)}
-                  className={cn(
-                    "w-10 h-10 rounded-full border-2 flex items-center justify-center transition-all z-10",
-                    activeIndex === index
-                      ? "border-transparent bg-primary text-white"
-                      : "border-gray-300 hover:border-primary"
-                  )}
-                >
-                  {index + 1}
-                </button>
-              ))}
+            <div className="flex justify-between items-center mt-8">
+              <button
+                onClick={handlePrev}
+                className="flex items-center gap-2 text-foreground hover:text-primary transition-colors"
+              >
+                <ChevronLeft className="w-6 h-6" />
+                <span className="hidden sm:inline">
+                  {translations.prev[locale]}
+                </span>
+              </button>
+              <div className="flex gap-2">
+                {sections.map((_, index) => (
+                  <div
+                    key={index}
+                    className={cn(
+                      "w-2 h-2 rounded-full transition-all",
+                      activeIndex === index ? "bg-primary w-4" : "bg-gray-300"
+                    )}
+                  />
+                ))}
+              </div>
+              <button
+                onClick={handleNext}
+                className="flex items-center gap-2 text-foreground hover:text-primary transition-colors"
+              >
+                <span className="hidden sm:inline">
+                  {translations.next[locale]}
+                </span>
+                <ChevronRight className="w-6 h-6" />
+              </button>
             </div>
           </div>
 
@@ -120,7 +147,7 @@ const InteractiveSection = () => {
             className="hidden lg:block absolute bottom-[-12px] right-0 w-[400px] xl:w-[400px]"
             style={{ zIndex: 10, pointerEvents: "none" }}
           >
-            <Image src={SecondShape1} alt="Shape" className="object-contain" />
+            {/* <Image src={SecondShape1} alt="Shape" className="object-contain" /> */}
           </div>
         </div>
       </div>

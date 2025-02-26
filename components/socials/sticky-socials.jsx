@@ -41,28 +41,22 @@ const StickySocial = () => {
   return (
     <>
       <style>{tooltipAnimation}</style>
-      <div className="fixed bottom-24 sm:bottom-20 md:bottom-24 right-2 sm:right-4 z-50 flex flex-col sm:flex-row gap-2 sm:gap-3">
+      <div className="fixed bottom-24 sm:bottom-20 md:bottom-24 right-2 sm:right-4 z-50 flex flex-col sm:flex-row gap-2 sm:gap-3 mt-2">
         <div className="relative">
-          {showTooltip && (
-            <div className="absolute bottom-full mb-2 right-0 bg-[#ABC188] text-black p-2 rounded shadow-md whitespace-nowrap opacity-0 animate-fadeIn transition-all duration-300">
-              <div className="text-sm font-medium">დაგვიკავშირდით</div>
-              <div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-[#000]"></div>
-            </div>
-          )}
           <button
             onClick={() => setIsModalOpen(true)}
-            className="bg-[#FBB200] hover:bg-[#ffcc3f] text-white p-3 sm:p-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="bg-[#FBB200] mt-2 hover:bg-[#ffcc3f] text-white p-3 sm:p-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
           >
-            <IoLogoWechat className="w-6 h-6 sm:w-8 sm:h-8" />
+            დაგვიკავშირდით
           </button>
         </div>
         <a
           href={messengerUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-[#ABC188] hover:bg-[#557424] text-white p-3 sm:p-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
+          className="bg-[#ABC188] hover:bg-[#557424] text-white flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
         >
-          <PiMessengerLogoDuotone className="w-6 h-6 sm:w-8 sm:h-8" />
+          <PiMessengerLogoDuotone className="w-5 h-5 sm:w-6 sm:h-6" />
         </a>
       </div>
       <ContactModal isOpen={isModalOpen} setIsOpen={setIsModalOpen} />

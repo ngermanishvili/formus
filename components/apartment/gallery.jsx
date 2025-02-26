@@ -2,9 +2,11 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
-import Photo from "@/public/assets/imgs/ortachala/ortachala-hills.jpg";
+import { X, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { CldImage } from "next-cloudinary";
 
 const GalleryGrid = () => {
   const [activeCategory, setActiveCategory] = useState("exterior");
@@ -13,7 +15,13 @@ const GalleryGrid = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [galleryPhotos, setGalleryPhotos] = useState({
+    exterior: [],
+    interior: [],
+  });
 
+  const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -24,75 +32,73 @@ const GalleryGrid = () => {
     }
   }, [pathname]);
 
+  // ფოტოების ჩატვირთვა API-დან
+  useEffect(() => {
+    const fetchGalleryPhotos = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/gallery-photos");
+        const result = await response.json();
+
+        if (result.status === "success") {
+          // დააჯგუფე ფოტოები კატეგორიების მიხედვით
+          const photos = {
+            exterior: result.data
+              .filter(
+                (photo) => photo.category === "exterior" && photo.is_active
+              )
+              .sort((a, b) => a.display_order - b.display_order),
+            interior: result.data
+              .filter(
+                (photo) => photo.category === "interior" && photo.is_active
+              )
+              .sort((a, b) => a.display_order - b.display_order),
+          };
+
+          setGalleryPhotos(photos);
+        }
+      } catch (error) {
+        console.error("Error fetching gallery photos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchGalleryPhotos();
+  }, []);
+
   const texts = {
     en: {
       title: "Gallery",
       exterior: "Exterior",
       interior: "Interior",
+      loading: "Loading...",
+      noPhotos: "No photos available in this category",
+      comingSoon: "Coming soon",
     },
     ka: {
       title: "გალერეა",
       exterior: "ექსტერიერი",
       interior: "ინტერიერი",
+      loading: "იტვირთება...",
+      noPhotos: "ამ კატეგორიაში ფოტოები არ არის",
+      comingSoon: "მალე დაემატება",
     },
   };
 
-  const images = {
-    exterior: [
-      {
-        src: "https://res.cloudinary.com/ds9dsumwl/image/upload/c_limit,w_1200/f_auto/q_80/v1738153443/1.%E1%83%A4%E1%83%9D%E1%83%A0%E1%83%9B%E1%83%A3%E1%83%A1%E1%83%98%E1%83%A1_%E1%83%9B%E1%83%9D%E1%83%99%E1%83%9A%E1%83%94_About_us_rmogdh?_a=BAVAZGDW0",
-        alt: currentLang === "ka" ? "ექსტერიერი 1" : "Exterior View 1",
-      },
-      {
-        src: "https://res.cloudinary.com/ds9dsumwl/image/upload/v1739541169/7.2._%E1%83%A7%E1%83%9D%E1%83%95%E1%83%94%E1%83%9A%E1%83%93%E1%83%A6%E1%83%98%E1%83%A3%E1%83%A0%E1%83%98_%E1%83%AA%E1%83%AE%E1%83%9D%E1%83%95%E1%83%A0%E1%83%94%E1%83%91%E1%83%98%E1%83%A1%E1%83%97%E1%83%95%E1%83%98%E1%83%A1_%E1%83%90%E1%83%A3%E1%83%AA%E1%83%98%E1%83%9A%E1%83%94%E1%83%91%E1%83%94%E1%83%9A%E1%83%98_%E1%83%9D%E1%83%91%E1%83%98%E1%83%94%E1%83%A5%E1%83%A2%E1%83%94%E1%83%91%E1%83%98_%E1%83%94%E1%83%A0%E1%83%97_%E1%83%A1%E1%83%98%E1%83%95%E1%83%A0%E1%83%AA%E1%83%94%E1%83%A8%E1%83%98_rytck6.jpg",
-        alt: currentLang === "ka" ? "ექსტერიერი 2" : "Exterior View 2",
-      },
-      {
-        src: "/assets/ortachala-project/2-teritory-security.png",
-        alt: currentLang === "ka" ? "ექსტერიერი 3" : "Exterior View 3",
-      },
-      {
-        src: "/assets/ortachala-project/4-recreation.png",
-        alt: currentLang === "ka" ? "ექსტერიერი 4" : "Exterior View 4",
-      },
-      {
-        src: "/assets/ortachala-project/three.png",
-        alt: currentLang === "ka" ? "ექსტერიერი 5" : "Exterior View 5",
-      },
-      {
-        src: "/assets/ortachala-project/two.png",
-        alt: currentLang === "ka" ? "ექსტერიერი 6" : "Exterior View 6",
-      },
-    ],
-    interior: [
-      {
-        src: Photo,
-        alt: currentLang === "ka" ? "ინტერიერი 1" : "Interior View 1",
-      },
-      {
-        src: Photo,
-        alt: currentLang === "ka" ? "ინტერიერი 2" : "Interior View 2",
-      },
-      {
-        src: Photo,
-        alt: currentLang === "ka" ? "ინტერიერი 3" : "Interior View 3",
-      },
-      {
-        src: Photo,
-        alt: currentLang === "ka" ? "ინტერიერი 4" : "Interior View 4",
-      },
-      {
-        src: Photo,
-        alt: currentLang === "ka" ? "ინტერიერი 5" : "Interior View 5",
-      },
-      {
-        src: Photo,
-        alt: currentLang === "ka" ? "ინტერიერი 6" : "Interior View 6",
-      },
-    ],
-  };
+  const currentImages = galleryPhotos[activeCategory];
+  const hasInteriorPhotos = galleryPhotos.interior.length > 0;
 
-  const currentImages = images[activeCategory];
+  // ფოტოზე დაჭერისას ორი შესაძლებლობა გვაქვს:
+  // 1. გახსნას მოდალი (როგორც ახლა არის)
+  // 2. გადავიდეს პროექტის ბმულზე
+  const handleImageClick = (image, index) => {
+    // თუ გვინდა გადასვლა პროექტის გვერდზე
+    router.push(image.project_link);
+
+    // თუ გვინდა მოდალის გახსნა, ეს კოდი იქნება
+    // openModal(index);
+  };
 
   const openModal = (index) => {
     setCurrentImageIndex(index);
@@ -136,7 +142,7 @@ const GalleryGrid = () => {
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
-  }, [isModalOpen, currentImageIndex]);
+  }, [isModalOpen, currentImageIndex, currentImages]);
 
   return (
     <>
@@ -144,7 +150,8 @@ const GalleryGrid = () => {
         <h2 className="font-firago font-bold text-4xl text-center mb-4">
           {texts[currentLang].title}
         </h2>
-        {/* Category Filter */}
+
+        {/* კატეგორიის ფილტრი */}
         <div className="flex justify-center gap-12 mb-16">
           <button
             onClick={() => setActiveCategory("exterior")}
@@ -157,113 +164,141 @@ const GalleryGrid = () => {
             {texts[currentLang].exterior}
           </button>
           <button
-            disabled
-            className="font-firago text-lg opacity-50 cursor-not-allowed"
-            title={currentLang === "ka" ? "მალე დაემატება" : "Coming soon"}
+            onClick={() => hasInteriorPhotos && setActiveCategory("interior")}
+            className={`font-firago text-lg transition-colors ${
+              !hasInteriorPhotos
+                ? "opacity-50 cursor-not-allowed"
+                : activeCategory === "interior"
+                ? "text-foreground font-medium hover:text-foreground"
+                : "text-muted-foreground font-light hover:text-foreground"
+            }`}
+            title={!hasInteriorPhotos ? texts[currentLang].comingSoon : ""}
           >
             {texts[currentLang].interior}
           </button>
         </div>
-        {/* Gallery Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* First Gallery Section */}
-          <div className="space-y-8">
-            <div className="w-full">
-              <div
-                className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
-                onClick={() => openModal(0)}
-              >
-                <Image
-                  src={currentImages[0].src}
-                  alt={currentImages[0].alt}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  priority
-                />
-                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-8">
-              <div
-                className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
-                onClick={() => openModal(1)}
-              >
-                <Image
-                  src={currentImages[1].src}
-                  alt={currentImages[1].alt}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-              </div>
-              <div
-                className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
-                onClick={() => openModal(2)}
-              >
-                <Image
-                  src={currentImages[2].src}
-                  alt={currentImages[2].alt}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-              </div>
-            </div>
-          </div>
 
-          {/* Second Gallery Section */}
-          <div className="space-y-8">
-            <div className="grid grid-cols-2 gap-8">
-              <div
-                className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
-                onClick={() => openModal(3)}
-              >
-                <Image
-                  src={currentImages[3].src}
-                  alt={currentImages[3].alt}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-              </div>
-              <div
-                className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
-                onClick={() => openModal(4)}
-              >
-                <Image
-                  src={currentImages[4].src}
-                  alt={currentImages[4].alt}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-              </div>
+        {/* ჩატვირთვის ინდიკატორი */}
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <Loader2 className="h-8 w-8 animate-spin" />
+            <span className="ml-2">{texts[currentLang].loading}</span>
+          </div>
+        ) : currentImages.length === 0 ? (
+          <div className="flex justify-center items-center h-64">
+            <p>{texts[currentLang].noPhotos}</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* პირველი სვეტი */}
+            <div className="space-y-8">
+              {currentImages.length > 0 && (
+                <div className="w-full">
+                  <div
+                    className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
+                    onClick={() => handleImageClick(currentImages[0], 0)}
+                  >
+                    <CldImage
+                      src={currentImages[0].image_path}
+                      alt={currentImages[0].title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      priority
+                    />
+                    <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                  </div>
+                </div>
+              )}
+
+              {currentImages.length > 2 && (
+                <div className="grid grid-cols-2 gap-8">
+                  <div
+                    className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
+                    onClick={() => handleImageClick(currentImages[1], 1)}
+                  >
+                    <CldImage
+                      src={currentImages[1].image_path}
+                      alt={currentImages[1].title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                  </div>
+                  <div
+                    className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
+                    onClick={() => handleImageClick(currentImages[2], 2)}
+                  >
+                    <Image
+                      src={currentImages[2].image_path}
+                      alt={currentImages[2].title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                  </div>
+                </div>
+              )}
             </div>
-            <div
-              className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
-              onClick={() => openModal(5)}
-            >
-              <Image
-                src={currentImages[5].src}
-                alt={currentImages[5].alt}
-                fill
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+
+            {/* მეორე სვეტი */}
+            <div className="space-y-8">
+              {currentImages.length > 4 && (
+                <div className="grid grid-cols-2 gap-8">
+                  <div
+                    className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
+                    onClick={() => handleImageClick(currentImages[3], 3)}
+                  >
+                    <CldImage
+                      src={currentImages[3].image_path}
+                      alt={currentImages[3].title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                  </div>
+                  <div
+                    className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
+                    onClick={() => handleImageClick(currentImages[4], 4)}
+                  >
+                    <Image
+                      src={currentImages[4].image_path}
+                      alt={currentImages[4].title}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                  </div>
+                </div>
+              )}
+
+              {currentImages.length > 5 && (
+                <div
+                  className="relative aspect-video rounded-lg overflow-hidden cursor-pointer group"
+                  onClick={() => handleImageClick(currentImages[5], 5)}
+                >
+                  <CldImage
+                    src={currentImages[5].image_path}
+                    alt={currentImages[5].title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+                </div>
+              )}
             </div>
           </div>
-        </div>
+        )}
       </div>
 
-      {/* Modal */}
-      {isModalOpen && (
+      {/* მოდალი (თუ საჭიროა) */}
+      {isModalOpen && selectedImage && (
         <div
           className={`fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity duration-300 ${
             isClosing ? "opacity-0" : "opacity-100"
           }`}
           onClick={closeModal}
         >
-          {/* Close Button */}
+          {/* დახურვის ღილაკი */}
           <button
             className="absolute top-4 right-4 z-50 p-2 text-white hover:text-gray-300 transition-colors"
             onClick={closeModal}
@@ -271,7 +306,7 @@ const GalleryGrid = () => {
             <X className="w-8 h-8" />
           </button>
 
-          {/* Navigation Buttons */}
+          {/* ნავიგაციის ღილაკები */}
           <button
             className="absolute left-4 md:left-8 z-50 p-2 text-white hover:text-gray-300 transition-colors"
             onClick={prevImage}
@@ -285,22 +320,28 @@ const GalleryGrid = () => {
             <ChevronRight className="w-8 h-8" />
           </button>
 
-          {/* Image Container */}
+          {/* სურათის კონტეინერი */}
           <div
             className={`relative w-full max-w-7xl mx-4 aspect-[16/9] transition-transform duration-300 ${
               isClosing ? "scale-95" : "scale-100"
             }`}
             onClick={(e) => e.stopPropagation()}
           >
-            {selectedImage && (
-              <Image
-                src={selectedImage.src}
-                alt={selectedImage.alt}
-                fill
-                className="object-contain"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
-              />
-            )}
+            <CldImage
+              src={selectedImage.image_path}
+              alt={selectedImage.title}
+              fill
+              className="object-contain"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
+            />
+
+            {/* პროექტის ბმულზე გადასვლის ღილაკი (თუ გსურთ მოდალშიც გქონდეთ ბმული) */}
+            <Link
+              href={selectedImage.project_link}
+              className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-white/90 text-black px-4 py-2 rounded-lg shadow hover:bg-white transition-colors"
+            >
+              {currentLang === "ka" ? "პროექტის ნახვა" : "View Project"}
+            </Link>
           </div>
         </div>
       )}

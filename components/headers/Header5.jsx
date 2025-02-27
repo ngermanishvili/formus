@@ -1,12 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Link, usePathname } from "@/src/i18n/routing";
 import { useLocale } from "next-intl";
 import { Phone } from "lucide-react";
 import MobileHeader1 from "@/components/headers/MobailHeader1";
 import Image from "next/image";
 import Logo from "@/public/assets/imgs/logo/formus-header1.png";
+
 const routes = [
   {
     id: 1,
@@ -39,7 +41,6 @@ const routes = [
       ka: "შეარჩიეთ ბინა",
       en: "Choose Home",
     },
-    // წავშალეთ showOnlyOnHome პარამეტრი, რომ ყველა გვერდზე გამოჩნდეს
   },
   {
     id: 5,
@@ -60,8 +61,10 @@ export default function Header5() {
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
   const locale = useLocale();
+  const router = useRouter();
 
   const isHomePage = pathname === `/${locale}` || pathname === "/";
+
   const georgianTextClass =
     locale === "ka" ? "[font-feature-settings:'case'_on]" : "";
 
@@ -77,14 +80,11 @@ export default function Header5() {
     if (routePath === "/choose-apartment") {
       e.preventDefault();
 
-      // თუ მთავარ გვერდზე არ ვიმყოფებით, ჯერ მთავარზე გადავიდეთ
       if (!isHomePage) {
-        // მთავარ გვერდზე გადასვლა და პარამეტრის გადაცემა, რომ გადასვლის შემდეგ დასქროლოს
-        window.location.href = `/${locale}?scrollToApartments=true`;
+        router.push(`/${locale}?scrollToApartments=true`);
         return;
       }
 
-      // თუ უკვე მთავარ გვერდზე ვართ, მაშინ პირდაპირ დავასქროლოთ
       window.scrollTo({
         top: document.documentElement.scrollHeight * 0.4,
         behavior: "smooth",
@@ -98,61 +98,40 @@ export default function Header5() {
     };
     window.addEventListener("scroll", handleScroll);
 
-    // URL პარამეტრების შემოწმება გვერდის ჩატვირთვისას
     if (isHomePage) {
       const urlParams = new URLSearchParams(window.location.search);
       if (urlParams.get("scrollToApartments") === "true") {
-        // თუ პარამეტრი არსებობს, დავასქროლოთ ბინების სექციამდე
         setTimeout(() => {
           window.scrollTo({
             top: document.documentElement.scrollHeight * 0.8,
             behavior: "smooth",
           });
 
-          // პარამეტრის წაშლა ისტორიიდან, რომ არ დარჩეს URL-ში
-          const newUrl = window.location.pathname;
-          window.history.replaceState({}, document.title, newUrl);
-        }, 500); // პატარა დაყოვნება, რომ გვერდი ჯერ სრულად ჩაიტვირთოს
+          router.replace(`/${locale}`);
+        }, 500);
       }
     }
 
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isHomePage]);
+  }, [isHomePage, router, locale]);
 
   const getFullPath = (routePath) => {
-    return routePath.startsWith("/") ? routePath : `/${routePath}`;
+    return `/${locale}${routePath}`;
   };
 
   const isActivePath = (routePath) => {
-    const currentPath = pathname.split("/").slice(2).join("/");
-    return currentPath === routePath.replace(/^\//, "");
-  };
-
-  const getLocalizedPath = (targetLocale) => {
-    if (pathname === `/${locale}`) {
-      return `/${targetLocale}`;
-    }
-    const segments = pathname.split("/");
-    const filteredSegments = segments.filter((segment) => segment !== "");
-    if (filteredSegments[0] === locale) {
-      filteredSegments.shift();
-    }
-    return `/${targetLocale}/${filteredSegments.join("/")}`;
+    return pathname === getFullPath(routePath);
   };
 
   const toggleLanguage = () => {
     const newLocale = locale === "ka" ? "en" : "ka";
-    window.location.href = getLocalizedPath(newLocale);
+    router.push(`/${newLocale}${pathname.replace(`/${locale}`, "")}`);
   };
-
-  // ყველა route-ის ჩვენება, უკვე აღარ ვფილტრავთ
-  // showOnlyOnHome პარამეტრის მიხედვით
-  const visibleRoutes = routes;
 
   return (
     <>
       <div className="block min-[940px]:hidden">
-        <MobileHeader1 routes={visibleRoutes} languageNames={languageNames} />
+        <MobileHeader1 routes={routes} languageNames={languageNames} />
       </div>
 
       <div className="hidden min-[940px]:block">
@@ -163,9 +142,9 @@ export default function Header5() {
         >
           <div className="mx-auto max-w-7xl w-[1280px] px-36">
             <div className="flex items-center justify-between py-3">
-              {/* ლოგო მარცხენა მხარეს */}
+              {/* Logo */}
               <Link
-                href="/"
+                href={`/${locale}`}
                 className="text-white text-lg font-bold font-firago"
               >
                 <div className="w-28 h-10 relative">
@@ -179,9 +158,9 @@ export default function Header5() {
                 </div>
               </Link>
 
-              {/* ნავიგაცია ცენტრში */}
+              {/* Navigation */}
               <nav className="flex items-center gap-4 uppercase font-firago justify-center">
-                {visibleRoutes.map((route) => (
+                {routes.map((route) => (
                   <Link
                     key={route.id}
                     href={getFullPath(route.path)}
@@ -195,7 +174,7 @@ export default function Header5() {
                 ))}
               </nav>
 
-              {/* ენის არჩევა და ტელეფონი მარჯვენა მხარეს */}
+              {/* Language switch & Phone */}
               <div className="flex items-center space-x-2 font-firago justify-end">
                 <button
                   onClick={toggleLanguage}

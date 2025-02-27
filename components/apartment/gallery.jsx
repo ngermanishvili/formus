@@ -152,32 +152,36 @@ const GalleryGrid = () => {
         </h2>
 
         {/* კატეგორიის ფილტრი */}
-        <div className="flex justify-center gap-12 mb-16">
-          <button
-            onClick={() => setActiveCategory("exterior")}
-            className={`font-firago text-lg transition-colors hover:text-foreground ${
-              activeCategory === "exterior"
-                ? "text-foreground font-medium"
-                : "text-muted-foreground font-light"
-            }`}
-          >
-            {texts[currentLang].exterior}
-          </button>
-          <button
-            onClick={() => hasInteriorPhotos && setActiveCategory("interior")}
-            className={`font-firago text-lg transition-colors ${
-              !hasInteriorPhotos
-                ? "opacity-50 cursor-not-allowed"
-                : activeCategory === "interior"
-                ? "text-foreground font-medium hover:text-foreground"
-                : "text-muted-foreground font-light hover:text-foreground"
-            }`}
-            title={!hasInteriorPhotos ? texts[currentLang].comingSoon : ""}
-          >
-            {texts[currentLang].interior}
-          </button>
-        </div>
 
+        {pathname === "/en/projects/1/ortachala-hilsi" ||
+        pathname === "/ka/projects/1/ortachala-hilsi" ? (
+          // Only show the buttons when the pathname is "/"
+          <div className="flex justify-center gap-12 mb-16">
+            <button
+              onClick={() => setActiveCategory("exterior")}
+              className={`font-firago text-lg transition-colors hover:text-foreground ${
+                activeCategory === "exterior"
+                  ? "text-foreground font-medium"
+                  : "text-muted-foreground font-light"
+              }`}
+            >
+              {texts[currentLang].exterior}
+            </button>
+            <button
+              onClick={() => hasInteriorPhotos && setActiveCategory("interior")}
+              className={`font-firago text-lg transition-colors ${
+                !hasInteriorPhotos
+                  ? "opacity-50 cursor-not-allowed"
+                  : activeCategory === "interior"
+                  ? "text-foreground font-medium hover:text-foreground"
+                  : "text-muted-foreground font-light hover:text-foreground"
+              }`}
+              title={!hasInteriorPhotos ? texts[currentLang].comingSoon : ""}
+            >
+              {texts[currentLang].interior}
+            </button>
+          </div>
+        ) : null}
         {/* ჩატვირთვის ინდიკატორი */}
         {loading ? (
           <div className="flex justify-center items-center h-64">

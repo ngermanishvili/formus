@@ -18,7 +18,7 @@ const translations = {
     filters: "Filters",
     clear: "Clear",
     available: "Available",
-    reserved: "Reserved",
+    booked: "Booked",
     sold: "Sold",
   },
   ka: {
@@ -33,7 +33,7 @@ const translations = {
     filters: "ფილტრები",
     clear: "გასუფთავება",
     available: "თავისუფალი",
-    reserved: "დაჯავშნილი",
+    booked: "დაჯავშნილი",
     sold: "გაყიდული",
   },
 };
@@ -322,7 +322,7 @@ const FloorFilters = () => {
                 <div className="space-y-1">
                   {[
                     { value: "available", label: t.available },
-                    { value: "reserved", label: t.reserved },
+                    { value: "booked", label: t.booked },
                     { value: "sold", label: t.sold },
                   ].map(({ value, label }) => (
                     <label
@@ -485,7 +485,7 @@ const FloorFilters = () => {
                 <div className="grid grid-cols-2 gap-2">
                   {[
                     { value: "available", label: t.available },
-                    { value: "reserved", label: t.reserved },
+                    { value: "booked", label: t.booked },
                     { value: "sold", label: t.sold },
                   ].map(({ value, label }) => (
                     <button

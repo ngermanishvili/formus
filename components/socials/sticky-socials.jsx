@@ -38,6 +38,18 @@ const StickySocial = () => {
     return () => clearTimeout(tooltipTimer);
   }, []);
 
+  // Function to get the current locale
+  const getCurrentLocale = () => {
+    // Assuming you are using a library or method to get the locale.
+    // For simplicity, let's assume it's based on the URL or navigator language.
+    const locale =
+      window.location.pathname.startsWith("/ka") ||
+      navigator.language.startsWith("ka");
+    return locale;
+  };
+
+  const locale = getCurrentLocale();
+
   return (
     <>
       <style>{tooltipAnimation}</style>
@@ -47,7 +59,7 @@ const StickySocial = () => {
             onClick={() => setIsModalOpen(true)}
             className="bg-[#FBB200] mt-2 hover:bg-[#ffcc3f] text-white p-3 sm:p-4 rounded-full transition-all duration-300 shadow-lg hover:shadow-xl"
           >
-            დაგვიკავშირდით
+            {locale ? "დაგვიკავშირდით" : "Contact Us"}
           </button>
         </div>
         <a

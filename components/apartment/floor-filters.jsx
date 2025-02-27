@@ -18,10 +18,11 @@ const translations = {
     filters: "Filters",
     clear: "Clear",
     available: "Available",
-    reserved: "Reserved",
+    booked: "Booked",
     sold: "Sold",
     area: "Area",
     areas: "Areas",
+    squareMeters: "m²",
   },
   ka: {
     back: "← უკან",
@@ -35,20 +36,13 @@ const translations = {
     filters: "ფილტრები",
     clear: "გასუფთავება",
     available: "თავისუფალი",
-    reserved: "დაჯავშნილი",
+    booked: "დაჯავშნილი",
     sold: "გაყიდული",
     area: "ფართი",
     areas: "ფართი",
+    squareMeters: "მ²",
   },
 };
-const areaRanges = [
-  { value: "20-40", label: "20-40 მ²" },
-  { value: "40-60", label: "40-60 მ²" },
-  { value: "60-80", label: "60-80 მ²" },
-  { value: "80-100", label: "80-100 მ²" },
-  { value: "100-120", label: "100-120 მ²" },
-  { value: "120-150", label: "120-150 მ²" },
-];
 
 const FilterButton = ({ label, children, isActive, isOpen, onToggle }) => {
   return (
@@ -86,7 +80,28 @@ const FloorFilters = () => {
   const pathname = usePathname();
   const locale = useLocale();
   const t = translations[locale];
-
+  const areaRanges = [
+    {
+      value: "20-40",
+      label: pathname === "/ka/homes-list" ? "20-40 მ²" : "20-40 m²",
+    },
+    {
+      value: "40-60",
+      label: pathname === "/ka/homes-list" ? "40-60 მ²" : "40-60 m²",
+    },
+    {
+      value: "60-80",
+      label: pathname === "/ka/homes-list" ? "60-80 მ²" : "60-80 m²",
+    },
+    {
+      value: "80-100",
+      label: pathname === "/ka/homes-list" ? "80-100 მ²" : "80-100 m²",
+    },
+    {
+      value: "100-120",
+      label: pathname === "/ka/homes-list" ? "100-120 მ²" : "100-120 m²",
+    },
+  ];
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [openFilter, setOpenFilter] = useState(null);
   const [filters, setFilters] = useState({
@@ -290,7 +305,9 @@ const FloorFilters = () => {
               </FilterButton>
               <FilterButton
                 label={
-                  filters.areas.length > 0 ? `${filters.areas[0]} მ²` : t.area
+                  filters.areas.length > 0
+                    ? `${filters.areas[0]} ${t.squareMeters}`
+                    : t.area
                 }
                 isActive={filters.areas.length > 0}
                 isOpen={openFilter === "area"}
@@ -381,7 +398,7 @@ const FloorFilters = () => {
                 <div className="space-y-1">
                   {[
                     { value: "available", label: t.available },
-                    { value: "reserved", label: t.reserved },
+                    { value: "booked", label: t.booked },
                     { value: "sold", label: t.sold },
                   ].map(({ value, label }) => (
                     <label
@@ -450,7 +467,9 @@ const FloorFilters = () => {
       <button
         onClick={() => setIsDrawerOpen(true)}
         className={`absolute ${
-          pathname === "/ka/homes-list" ? "max-md:top-20" : "top-0"
+          pathname === "/ka/homes-list" || "/ka/homes-list"
+            ? "max-md:top-20"
+            : "top-0"
         } 
                   w-[90%] flex justify-center items-center h-[50px] bottom-6 right-6 p-4 
                   rounded-md bg-[#FBB200] hover:bg-[#FBB200]/90 text-black shadow-xl 
@@ -540,7 +559,7 @@ const FloorFilters = () => {
                 <div className="grid grid-cols-2 gap-2">
                   {[
                     { value: "available", label: t.available },
-                    { value: "reserved", label: t.reserved },
+                    { value: "booked", label: t.booked },
                     { value: "sold", label: t.sold },
                   ].map(({ value, label }) => (
                     <button

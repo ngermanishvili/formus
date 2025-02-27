@@ -59,6 +59,29 @@ const MobileHeader1 = ({ routes, languageNames }) => {
     }
   };
 
+  const handleChooseHomeClick = (e, routePath) => {
+    if (routePath === "/choose-apartment") {
+      e.preventDefault();
+
+      // Close the menu if it's open
+      if (isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+
+      // If not on the home page, redirect to the home page with a parameter to scroll
+      if (pathname !== `/${locale}` && pathname !== "/") {
+        window.location.href = `/${locale}?scrollToApartments=true`;
+        return;
+      }
+
+      // If already on the home page, scroll directly
+      window.scrollTo({
+        top: document.documentElement.scrollHeight * 0.3,
+        behavior: "smooth",
+      });
+    }
+  };
+
   return (
     <>
       <header
@@ -128,7 +151,13 @@ const MobileHeader1 = ({ routes, languageNames }) => {
                     key={route.id}
                     href={route.path}
                     className="block text-lg text-white hover:text-[#f94011] transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={(e) => {
+                      if (route.path === "/choose-apartment") {
+                        handleChooseHomeClick(e, route.path);
+                      } else {
+                        setIsMenuOpen(false);
+                      }
+                    }}
                   >
                     {route.translations[locale]}
                   </Link>

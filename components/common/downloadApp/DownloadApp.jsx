@@ -9,7 +9,7 @@ export default function DownloadApp() {
     pathname === "/ka" ? "შეარჩიეთ ბინა" : "Choose an Apartment";
 
   return (
-    <div className="flex justify-center items-center my-[30px] sm:my-[40px] lg:my-[100px] px-4 sm:px-6 lg:px-8">
+    <div className="flex justify-center items-center my-[30px] sm:my-[40px] lg:my-[85px] px-4 sm:px-6 lg:px-8">
       <section
         className="min-h-[180px] w-full sm:min-h-[220px] lg:min-h-[250px] sm:w-[980px] sm:ml-[-100px] 
         rounded-2xl  max-w-full  bg-[#abc188] 

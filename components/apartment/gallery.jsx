@@ -146,15 +146,15 @@ const GalleryGrid = () => {
 
   return (
     <>
-      <div className="mx-auto py-16">
+      <div className="mx-auto py-24">
         <h2 className="font-firago font-bold text-4xl text-center mb-4">
           {texts[currentLang].title}
         </h2>
 
         {/* კატეგორიის ფილტრი */}
 
-        {pathname === "/en/projects/1/ortachala-hilsi" ||
-        pathname === "/ka/projects/1/ortachala-hilsi" ? (
+        {pathname === "/en/projects/1/ortachala-hils" ||
+        pathname === "/ka/projects/1/ortachala-hils" ? (
           // Only show the buttons when the pathname is "/"
           <div className="flex justify-center gap-12 mb-16">
             <button

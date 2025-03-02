@@ -159,17 +159,20 @@ export default function Footer5() {
           }`}
         >
           <h6
-            className={`text-white/60 text-sm font-medium mb-6 ${georgianTextClass}`}
+            className={`text-white/60 text-sm font-medium mb-6 lg:mr-[84px] ${georgianTextClass}`}
           >
             {locale === "ka" ? "მისამართი" : "Address"}
           </h6>
-          <div className="flex items-center">
-            <MapPin className="text-white mr-2 flex-shrink-0" size={20} />
-            <p
+          <div className="flex items-center ">
+            {/* <MapPin className="text-white mr-2 flex-shrink-0" size={20} /> */}
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://maps.app.goo.gl/8rUczLePMh8SSBFL6"
               className={`text-white text-sm whitespace-pre-line ${georgianTextClass}`}
             >
               {getLocalizedAddress()}
-            </p>
+            </a>
           </div>
         </div>
 

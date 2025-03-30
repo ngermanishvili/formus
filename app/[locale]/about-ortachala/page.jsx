@@ -8,8 +8,34 @@ import Image from "next/image";
 const AboutOrtachala = () => {
   const params = useParams();
   const locale = params.locale || "ka";
+  const [aboutData, setAboutData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const content = {
+  useEffect(() => {
+    const fetchAboutData = async () => {
+      try {
+        // ვიყენებთ სპეციალურ about API-ს, რომელიც აბრუნებს მხოლოდ about_page ტიპის ჩანაწერებს
+        const response = await fetch(`/api/projects/1/about`);
+        const result = await response.json();
+
+        if (result.status === "success") {
+          console.log("About Ortachala data:", result.data);
+          setAboutData(result.data);
+        } else {
+          console.error("Failed to fetch about data:", result);
+        }
+      } catch (error) {
+        console.error("Error fetching about data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAboutData();
+  }, []);
+
+  // Fallback content in case API fails
+  const fallbackContent = {
     en: {
       title: "Ortachala Hills",
       subtitle: "Financed by TBC Bank",
@@ -54,6 +80,45 @@ const AboutOrtachala = () => {
     ));
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
+
+  // Use data from API or fallback to hardcoded content
+  const sections = aboutData || [];
+
+  // Log data for debugging
+  console.log("About data from API:", sections);
+
+  if (sections.length === 0 && !loading) {
+    return (
+      <div className="container mx-auto px-4 py-20">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold">
+            {locale === "ka" ? "მონაცემები ვერ მოიძებნა" : "No data found"}
+          </h2>
+          <p className="mt-2">
+            {locale === "ka"
+              ? "გთხოვთ დაამატოთ სექციები ადმინ პანელიდან (section_type: about_page)"
+              : "Please add sections from admin panel (section_type: about_page)"}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const title =
+    sections.length > 0
+      ? locale === "ka"
+        ? sections[0].title_ge
+        : sections[0].title_en
+      : "";
+  const subtitle = "";
+
   return (
     <div className="relative w-full bg-gray-50 py-40 font-firago">
       <div className="hidden lg:block absolute top-[100px] right-0 z-0">
@@ -81,49 +146,84 @@ const AboutOrtachala = () => {
                 <div className="w-[90px] h-[90px]" />
               </div>
               <h2 className="text-4xl font-bold text-gray-900 font-firago whitespace-pre-line relative z-10">
-                {content[locale].title}
+                {title}
               </h2>
               <h3 className="text-2xl text-gray-700 mt-4 font-firago">
-                {content[locale].subtitle}
+                {subtitle}
               </h3>
             </div>
+            {sections.length > 0 && (
+              <div className="mt-6">
+                {renderParagraphs(
+                  locale === "ka"
+                    ? sections[0].description_ge
+                    : sections[0].description_en
+                )}
+              </div>
+            )}
           </div>
 
           {/* Second section with right-aligned image */}
-          <div className="flex flex-col md:flex-row items-center gap-16 mb-20">
-            <div className="flex-1">
-              <div className="space-y-2">
-                {renderParagraphs(content[locale].sections[1].text)}
+          {sections.length > 1 && (
+            <div className="flex flex-col md:flex-row items-center gap-16 mb-20">
+              <div className="flex-1">
+                <div className="space-y-2">
+                  {renderParagraphs(
+                    locale === "ka"
+                      ? sections[1].description_ge
+                      : sections[1].description_en
+                  )}
+                </div>
+              </div>
+              <div className="w-full md:w-[350px] flex justify-center">
+                <div className="w-full h-[300px] rounded-lg overflow-hidden shadow-xl">
+                  <img
+                    src={
+                      sections[1].image_url ||
+                      "/assets/ortachala-project/ortachala-2.png"
+                    }
+                    alt={
+                      locale === "ka"
+                        ? sections[1].title_ge
+                        : sections[1].title_en
+                    }
+                    className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
               </div>
             </div>
-            <div className="w-full md:w-[350px] flex justify-center">
-              <div className="w-full h-[300px] rounded-lg overflow-hidden shadow-xl">
-                <img
-                  src="/assets/ortachala-project/ortachala-2.png"
-                  alt="Ortachala Hills Features"
-                  className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-            </div>
-          </div>
+          )}
 
           {/* Third section with left-aligned image */}
-          <div className="flex flex-col md:flex-row-reverse items-center gap-16 mb-20">
-            <div className="flex-1">
-              <div className="space-y-4">
-                {renderParagraphs(content[locale].sections[2].text)}
+          {sections.length > 2 && (
+            <div className="flex flex-col md:flex-row-reverse items-center gap-16 mb-20">
+              <div className="flex-1">
+                <div className="space-y-4">
+                  {renderParagraphs(
+                    locale === "ka"
+                      ? sections[2].description_ge
+                      : sections[2].description_en
+                  )}
+                </div>
+              </div>
+              <div className="w-full md:w-[350px] flex justify-center">
+                <div className="w-full h-[300px] rounded-lg overflow-hidden shadow-xl">
+                  <img
+                    src={
+                      sections[2].image_url ||
+                      "/assets/ortachala-project/ortachala-3.png"
+                    }
+                    alt={
+                      locale === "ka"
+                        ? sections[2].title_ge
+                        : sections[2].title_en
+                    }
+                    className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
               </div>
             </div>
-            <div className="w-full md:w-[350px] flex justify-center">
-              <div className="w-full h-[300px] rounded-lg overflow-hidden shadow-xl">
-                <img
-                  src="/assets/ortachala-project/ortachala-3.png"
-                  alt="Ortachala Hills Views"
-                  className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

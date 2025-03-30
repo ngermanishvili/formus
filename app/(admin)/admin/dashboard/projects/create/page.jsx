@@ -37,6 +37,8 @@ export default function CreateProject() {
     second_section_title_ge: "",
     second_section_description_en: "",
     second_section_description_ge: "",
+    display_order: "",
+    is_active: false,
   });
 
   const handleUploadSuccess = (result, section) => {
@@ -144,7 +146,7 @@ export default function CreateProject() {
                     {formData.main_image_url ? (
                       <img
                         src={formData.main_image_url}
-                        alt="Preview"
+                        alt="Main Image Preview"
                         className="h-full w-full object-cover"
                       />
                     ) : (
@@ -160,6 +162,58 @@ export default function CreateProject() {
               </CldUploadWidget>
             </CardContent>
           </Card>
+
+          {/* Position Order */}
+          <div>
+            <Label className="text-base font-semibold mb-4 block">
+              პოზიცია (რიგითობა)
+            </Label>
+            <Input
+              type="number"
+              placeholder="შეიყვანეთ რიგითობა (1, 2, 3...)"
+              value={formData.display_order}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  display_order: e.target.value,
+                }))
+              }
+              className="w-full"
+            />
+            <p className="text-sm text-gray-500 mt-2">
+              დაბალი რიცხვები გამოჩნდება თავში. თუ ცარიელია, გამოჩნდება ბოლოს.
+            </p>
+          </div>
+
+          {/* Active Status Toggle */}
+          <div>
+            <Label className="text-base font-semibold mb-4 block">
+              პროექტის აქტიურობა
+            </Label>
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="active-toggle"
+                checked={formData.is_active}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    is_active: e.target.checked,
+                  }))
+                }
+                className="w-6 h-6"
+              />
+              <label htmlFor="active-toggle" className="text-sm font-medium">
+                {formData.is_active
+                  ? "ჩართულია - პროექტს ექნება მისი გვერდი"
+                  : "გამორთულია - გამოჩნდება მხოლოდ გალერეაში"}
+              </label>
+            </div>
+            <p className="text-sm text-gray-500 mt-2">
+              აქტიური პროექტისთვის შეიქმნება დეტალური გვერდი. არააქტიური
+              პროექტისთვის გამოჩნდება მხოლოდ სურათი.
+            </p>
+          </div>
 
           {/* First Section Content */}
           <Card>

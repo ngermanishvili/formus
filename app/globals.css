@@ -104,3 +104,27 @@
 .animate-slide-up {
   animation: slide-up 0.3s ease-out forwards;
 }
+
+/* Disable all hover transforms for images */
+img,
+.object-cover,
+[class*="hover:scale"] {
+  transform: none !important;
+  transition: none !important;
+}
+
+img:hover,
+.object-cover:hover,
+[class*="hover:scale"]:hover {
+  transform: none !important;
+  scale: none !important;
+}
+
+/* Disable specific transform effects */
+.group:hover .group-hover\:scale-105,
+.group:hover .group-hover\:scale-110,
+.hover\:scale-110:hover,
+.hover\:scale-105:hover {
+  transform: none !important;
+  scale: none !important;
+}

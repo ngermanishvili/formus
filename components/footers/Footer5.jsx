@@ -163,8 +163,8 @@ export default function Footer5() {
           >
             {locale === "ka" ? "მისამართი" : "Address"}
           </h6>
-          <div className="flex items-center ">
-            {/* <MapPin className="text-white mr-2 flex-shrink-0" size={20} /> */}
+          <div className="flex items-center">
+            <MapPin className="text-white mr-3 flex-shrink-0" size={20} />
             <a
               target="_blank"
               rel="noopener noreferrer"
@@ -183,25 +183,29 @@ export default function Footer5() {
           }`}
         >
           <h6
-            className={`text-white/60 text-sm font-medium mb-6 ${georgianTextClass}`}
+            className={`text-white/60 text-sm font-medium mb-6 ml-4 ${georgianTextClass}`}
           >
             {locale === "ka" ? "ტელეფონი/ელ-ფოსტა" : "Phone/E-mail"}
           </h6>
           <div className="flex flex-col space-y-4">
-            <div className="flex items-center justify-center">
-              <Phone className="text-white mr-3" size={20} />
+            <div className="flex items-center">
+              <span className="w-6 flex justify-center">
+                <Phone className="text-white" size={20} />
+              </span>
               <a
                 href={`tel:${contactInfo.phone_number}`}
-                className="text-white text-sm hover:opacity-80 transition-opacity"
+                className="text-white text-sm hover:opacity-80 transition-opacity ml-3"
               >
                 {contactInfo.phone_number}
               </a>
             </div>
-            <div className="flex items-center justify-center">
-              <Mail className="text-white mr-6" size={20} />
+            <div className="flex items-center">
+              <span className="w-6 flex justify-center">
+                <Mail className="text-white" size={20} />
+              </span>
               <a
                 href={`mailto:${contactInfo.email}`}
-                className="text-white text-sm hover:opacity-80 transition-opacity"
+                className="text-white text-sm hover:opacity-80 transition-opacity ml-3"
               >
                 {contactInfo.email}
               </a>
@@ -220,11 +224,13 @@ export default function Footer5() {
           >
             {t.workingHours}
           </h6>
-          <div className="flex ">
-            <Clock className="text-white mr-3" size={20} />
-            <div className={`text-white text-sm  ${georgianTextClass}`}>
-              <p>{t.monToFri}</p>
-              <p>{t.saturday}</p>
+          <div className="flex flex-col space-y-4">
+            <div className="flex items-center justify-center">
+              <Clock className="text-white mr-3" size={20} />
+              <div className={`text-white text-sm ${georgianTextClass}`}>
+                <p>{t.monToFri}</p>
+                <p>{t.saturday}</p>
+              </div>
             </div>
           </div>
         </div>

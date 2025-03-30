@@ -24,8 +24,15 @@ const cloudinaryLoader = ({ src, width, quality }) => {
     "c_limit",
     "g_auto",
   ];
+
+  // Add caching parameters
+  params.push("fl_immutable");
+  params.push("fl_lossy");
+
   if (quality) params.push(`q_${quality}`);
-  return `https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/${params.join(
+
+  // Replace YOUR_CLOUD_NAME with the actual cloud name from env variable
+  return `https://res.cloudinary.com/ds9dsumwl/image/upload/${params.join(
     ","
   )}/${src}`;
 };
@@ -230,6 +237,10 @@ const ApartmentCard = ({ apt, index, view }) => {
             quality={60}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover"
+            fetchPriority={index < 4 ? "high" : "auto"}
+            unoptimized={false}
+            placeholder="blur"
+            blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iNjAwIiB2aWV3Qm94PSIwIDAgODAwIDYwMCI+PHJlY3Qgd2lkdGg9IjgwMCIgaGVpZ2h0PSI2MDAiIGZpbGw9IiNlMmU4ZjAiLz48L3N2Zz4="
           />
         ) : (
           <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">

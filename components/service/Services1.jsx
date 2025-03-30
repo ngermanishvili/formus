@@ -26,20 +26,19 @@ export default function Services1() {
         const data = await response.json();
 
         if (data.status === "success" && Array.isArray(data.data)) {
+          // Use display_order for sorting projects
           const sortedProjects = [...data.data].sort((a, b) => {
-            // Define specific order: Ortachala(1), City View(7), Vake(6), Didi Dighomi(4), Gldani(3), Didube(5), Avlabari(2)
-            const order = {
-              1: 0, // Ortachala Hills
-              7: 1, // City View
-              6: 2, // Vake
-              4: 3, // Didi Dighomi
-              3: 4, // Gldani
-              5: 5, // Didube
-              2: 6, // Avlabari
-            };
-
-            return (order[a.id] ?? 999) - (order[b.id] ?? 999);
+            // If both have display_order, sort by it
+            if (a.display_order !== null && b.display_order !== null) {
+              return a.display_order - b.display_order;
+            }
+            // If only one has display_order, prioritize the one with display_order
+            if (a.display_order !== null) return -1;
+            if (b.display_order !== null) return 1;
+            // If neither has display_order, sort by created_at (newest first)
+            return new Date(b.created_at) - new Date(a.created_at);
           });
+
           setProjects(sortedProjects);
         } else {
           setError("Invalid data format received");
@@ -68,9 +67,17 @@ export default function Services1() {
 
   const handleProjectClick = (project, e) => {
     e.preventDefault();
-    if (project.id === 1) {
-      window.location.href = `/${locale}/projects/1/ortachala-hilsi`;
+    if (project.is_active) {
+      // თუ პროექტი აქტიურია, გადავამისამართოთ დეტალურ გვერდზე
+      const slug = (project.title_ge || project.title || "project")
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^\w\-]+/g, "")
+        .replace(/\-\-+/g, "-");
+
+      window.location.href = `/${locale}/projects/${project.id}/${slug}`;
     } else {
+      // თუ პროექტი არააქტიურია, მხოლოდ გავხსნათ ფოტო
       openModal(project.main_image_url);
     }
   };

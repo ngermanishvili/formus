@@ -175,9 +175,6 @@ const ProjectContent = ({ id }) => {
           <div className="absolute inset-0 bg-black/50" />
           <div className="absolute inset-0 flex items-center">
             <div className="w-full mx-auto px-0   max-w-[1000px]">
-              {/* <p className="font-firago text-sm text-white">
-                {projectData.location}
-              </p> */}
               <h1 className="font-firago font-bold text-4xl md:text-6xl text-white mb-4">
                 {projectData.title}
               </h1>
@@ -212,10 +209,6 @@ const ProjectContent = ({ id }) => {
             <div className="w-full relative">
               {/* Content container */}
               <div className="relative z-20 text-left">
-                {/* <p className="font-firago text-sm text-foreground mb-2">
-          {currentLang === "ge" ? "ჩვენს შესახებ" : "About Us"}
-        </p> */}
-
                 <h2 className="font-firago font-bold text-3xl lg:text-3xl text-foreground mb-6 lg:mb-8 leading-tight">
                   {currentLang === "ge" ? (
                     <>
@@ -269,46 +262,47 @@ const ProjectContent = ({ id }) => {
         {/* Image Modal */}
         {openImageIndex !== null && (
           <div
-            className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
             onClick={() => setOpenImageIndex(null)}
           >
             <div
-              className="relative max-w-[500px] max-h-[500px] w-full h-full"
+              className="relative max-w-4xl w-full"
               onClick={(e) => e.stopPropagation()}
             >
+              <Image
+                src={projectImages[openImageIndex].img}
+                alt={projectImages[openImageIndex].alt}
+                width={1200}
+                height={800}
+                className="w-full h-auto"
+                priority
+              />
               <button
-                className="absolute top-0 right-0 bg-white rounded-full p-2 text-gray-800 hover:bg-gray-200 z-10"
+                className="absolute top-4 right-4 text-white bg-black/60 hover:bg-black/80 rounded-full p-2"
                 onClick={() => setOpenImageIndex(null)}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill="none"
+                  width="24"
+                  height="24"
                   viewBox="0 0 24 24"
+                  fill="none"
                   stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
               </button>
-              <div className="relative w-full h-full max-w-[500px] max-h-[500px]">
-                <img
-                  src={projectImages[openImageIndex].img}
-                  alt={projectImages[openImageIndex].alt}
-                  className="w-full h-full object-contain"
-                />
-              </div>
             </div>
           </div>
         )}
 
         {/* Second Section */}
         <section className="relative bg-background">
-          <InteractiveSection projectData={projectData} />
+          <InteractiveSection projectData={projectData} projectId={id} />
         </section>
       </>
     );

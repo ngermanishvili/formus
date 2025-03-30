@@ -16,6 +16,7 @@ import {
   Languages,
   Plus,
   Trash,
+  Info,
 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 
@@ -63,6 +64,58 @@ const SecondSection = ({ formData, setFormData, activeTab, setActiveTab }) => {
                 </Button>
               )}
             </CldUploadWidget>
+          </div>
+
+          {/* Position Order */}
+          <div>
+            <Label className="text-base font-semibold mb-4 block">
+              პოზიცია (რიგითობა)
+            </Label>
+            <Input
+              type="number"
+              placeholder="შეიყვანეთ რიგითობა (1, 2, 3...)"
+              value={formData.display_order}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  display_order: e.target.value,
+                }))
+              }
+              className="w-full"
+            />
+            <p className="text-sm text-gray-500 mt-2">
+              დაბალი რიცხვები გამოჩნდება თავში. თუ ცარიელია, გამოჩნდება ბოლოს.
+            </p>
+          </div>
+
+          {/* Active Status Toggle */}
+          <div>
+            <Label className="text-base font-semibold mb-4 block">
+              პროექტის აქტიურობა
+            </Label>
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="active-toggle"
+                checked={formData.is_active}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    is_active: e.target.checked,
+                  }))
+                }
+                className="w-6 h-6"
+              />
+              <label htmlFor="active-toggle" className="text-sm font-medium">
+                {formData.is_active
+                  ? "ჩართულია - პროექტს აქვს მისი გვერდი"
+                  : "გამორთულია - გამოჩნდება მხოლოდ გალერეაში"}
+              </label>
+            </div>
+            <p className="text-sm text-gray-500 mt-2">
+              აქტიური პროექტისთვის შეიქმნება დეტალური გვერდი. არააქტიური
+              პროექტისთვის გამოჩნდება მხოლოდ სურათი.
+            </p>
           </div>
 
           {/* Content Tabs */}
@@ -164,6 +217,8 @@ export default function EditProject({ params }) {
     second_section_title_ge: "",
     second_section_description_en: "",
     second_section_description_ge: "",
+    display_order: "",
+    is_active: false,
   });
 
   useEffect(() => {
@@ -283,6 +338,18 @@ export default function EditProject({ params }) {
             პროექტის რედაქტირება
           </h1>
           <p className="text-gray-500 mt-1">შეცვალეთ ინფორმაცია ორივე ენაზე</p>
+        </div>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={() =>
+              router.push(`/admin/dashboard/projects/${params.id}/project-info`)
+            }
+            className="flex items-center gap-2"
+          >
+            <Info className="h-4 w-4" />
+            პროექტის დეტალების მართვა
+          </Button>
         </div>
       </div>
 
@@ -546,7 +613,7 @@ export default function EditProject({ params }) {
             formData={formData}
             setFormData={setFormData}
             activeTab={activeTab}
-            setActiveTab={setActiveTab} // დავამატოთ ეს
+            setActiveTab={setActiveTab}
           />
 
           {/* Submit Button */}

@@ -34,6 +34,10 @@ const ImageUpload = ({ value, onChange }) => {
         <CldUploadWidget
           uploadPreset="formus_test"
           onSuccess={(result) => onChange(result.info.secure_url)}
+          options={{
+            maxFiles: 1,
+            resourceType: "image",
+          }}
         >
           {({ open }) => (
             <div className="space-y-4">
@@ -111,12 +115,15 @@ export default function AboutPage() {
     setLoading(true);
 
     try {
+      // Create a new formData object with the updated image_url
+      const updatedFormData = { ...formData };
+
       const res = await fetch(`/api/about/${selectedItem.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(updatedFormData),
       });
 
       const data = await res.json();

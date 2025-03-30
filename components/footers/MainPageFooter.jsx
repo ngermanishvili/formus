@@ -140,7 +140,7 @@ export default function Footer() {
                 {t.workingHours}
               </h6>
               <div className="flex items-start gap-14">
-                <div className="flex items-start">
+                <div className="flex items-center">
                   <Clock className="text-white mr-2" size={20} />
                   <div className="text-white text-sm">
                     <p>{t.monToFri}</p>

@@ -5,7 +5,7 @@ export async function GET() {
     try {
         const result = await db.query(`
            SELECT * FROM projects 
-           ORDER BY created_at DESC
+           ORDER BY COALESCE(display_order, 999), created_at DESC
        `);
 
         return NextResponse.json({
@@ -40,7 +40,9 @@ export async function POST(request) {
             second_section_title_en,
             second_section_title_ge,
             second_section_description_en,
-            second_section_description_ge
+            second_section_description_ge,
+            display_order,
+            is_active
         } = await request.json();
 
         if (!title_ge || !description_ge || !title_en || !description_en || !main_image_url) {
@@ -68,9 +70,11 @@ export async function POST(request) {
                second_section_title_en,
                second_section_title_ge,
                second_section_description_en,
-               second_section_description_ge
+               second_section_description_ge,
+               display_order,
+               is_active
            )
-           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
            RETURNING *
        `, [
             title_en,
@@ -86,7 +90,9 @@ export async function POST(request) {
             second_section_title_en,
             second_section_title_ge,
             second_section_description_en,
-            second_section_description_ge
+            second_section_description_ge,
+            display_order || null,
+            is_active || false
         ]);
 
         return NextResponse.json({

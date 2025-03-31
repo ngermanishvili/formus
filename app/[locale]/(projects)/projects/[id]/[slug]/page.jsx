@@ -2,7 +2,6 @@
 "use client";
 import { useState, useEffect } from "react";
 import ProjectContent from "../../(components)/hero-content";
-import GalleryComponent from "@/components/apartment/gallery";
 import AboutProject from "../../(components)/about-project";
 
 export default function Page({ params }) {
@@ -25,8 +24,6 @@ export default function Page({ params }) {
         <ProjectContent id={params.id} />
 
         <AboutProject projectId={params.id} />
-
-        <GalleryComponent />
       </main>
     </>
   );

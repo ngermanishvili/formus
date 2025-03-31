@@ -57,7 +57,12 @@ export default function ProjectInfoPage({ params }) {
 
   const fetchProjectData = async () => {
     try {
-      const response = await fetch(`/api/projects/${params.id}`);
+      const response = await fetch(`/api/projects/${params.id}`, {
+        cache: "no-store",
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      });
       const result = await response.json();
       if (result.status === "success") {
         setProjectData(result.data);
@@ -69,10 +74,21 @@ export default function ProjectInfoPage({ params }) {
 
   const fetchProjectInfo = async () => {
     try {
-      const response = await fetch(`/api/projects/${params.id}/info`);
+      console.log(`Fetching project info for ID: ${params.id}`);
+      const response = await fetch(`/api/projects/${params.id}/info`, {
+        cache: "no-store",
+        headers: {
+          "Cache-Control": "no-cache",
+        },
+      });
       const result = await response.json();
+      console.log("API Response:", result);
+
       if (result.status === "success") {
+        console.log("Setting project info:", result.data);
         setProjectInfo(result.data);
+      } else {
+        console.error("API returned error:", result);
       }
     } catch (error) {
       console.error("Error fetching project info:", error);
@@ -130,7 +146,9 @@ export default function ProjectInfoPage({ params }) {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
         },
+        cache: "no-store",
         body: JSON.stringify({ infoId }),
       });
 
@@ -162,7 +180,9 @@ export default function ProjectInfoPage({ params }) {
         method,
         headers: {
           "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
         },
+        cache: "no-store",
         body,
       });
 
@@ -201,7 +221,9 @@ export default function ProjectInfoPage({ params }) {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
         },
+        cache: "no-store",
         body: JSON.stringify({
           infoId: info.id,
           ...info,
@@ -214,7 +236,9 @@ export default function ProjectInfoPage({ params }) {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
         },
+        cache: "no-store",
         body: JSON.stringify({
           infoId: targetInfo.id,
           ...targetInfo,
@@ -243,6 +267,16 @@ export default function ProjectInfoPage({ params }) {
     );
   }
 
+  console.log("Rendering component with projectInfo:", projectInfo);
+  console.log("Filter type:", filterType);
+
+  // Filter visible items based on filter type
+  const visibleItems = projectInfo.filter(
+    (info) => filterType === "all" || info.section_type === filterType
+  );
+
+  console.log("Visible items after filtering:", visibleItems);
+
   return (
     <div className="max-w-6xl mx-auto p-6">
       <div className="flex items-center justify-between mb-8">
@@ -255,6 +289,14 @@ export default function ProjectInfoPage({ params }) {
           </p>
         </div>
         <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={fetchProjectInfo}
+            className="flex gap-2 items-center"
+          >
+            <Loader2 className="h-4 w-4" />
+            განახლება
+          </Button>
           <Button variant="outline" onClick={() => router.back()}>
             უკან დაბრუნება
           </Button>
@@ -518,88 +560,88 @@ export default function ProjectInfoPage({ params }) {
               </div>
 
               <div className="space-y-4">
-                {projectInfo.length === 0 ? (
+                {!Array.isArray(projectInfo) || projectInfo.length === 0 ? (
                   <div className="text-center py-6 text-gray-500">
                     ინფორმაცია არ არის. დაამატეთ ახალი ინფორმაცია.
                   </div>
+                ) : visibleItems.length === 0 ? (
+                  <div className="text-center py-6 text-gray-500">
+                    ამ ფილტრით ინფორმაცია არ არის. შეცვალეთ ფილტრი ან დაამატეთ
+                    ახალი ინფორმაცია.
+                  </div>
                 ) : (
-                  projectInfo
-                    .filter(
-                      (info) =>
-                        filterType === "all" || info.section_type === filterType
-                    )
-                    .map((info) => (
-                      <div
-                        key={info.id}
-                        className="border rounded-lg p-4 shadow-sm flex gap-4"
-                      >
-                        {info.image_url && (
-                          <div className="w-24 h-24 flex-shrink-0 overflow-hidden rounded">
-                            <img
-                              src={info.image_url}
-                              alt={info.title_ge}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-start justify-between">
-                            <div>
-                              <h3 className="font-semibold text-gray-900 truncate">
-                                {info.title_ge}
-                              </h3>
-                              <p className="text-sm text-gray-500">
-                                #{info.display_order} •{" "}
-                                {info.section_type === "feature"
-                                  ? "მახასიათებელი"
-                                  : "აღწერითი გვერდი"}
-                              </p>
-                            </div>
-                            <div className="flex gap-1">
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => moveItem(info, "up")}
-                                className="h-8 w-8"
-                                title="აწევა"
-                              >
-                                <ArrowUp className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => moveItem(info, "down")}
-                                className="h-8 w-8"
-                                title="ჩამოწევა"
-                              >
-                                <ArrowDown className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => handleEdit(info)}
-                                className="h-8 w-8 text-blue-500"
-                                title="რედაქტირება"
-                              >
-                                <PencilLine className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => handleDelete(info.id)}
-                                className="h-8 w-8 text-red-500"
-                                title="წაშლა"
-                              >
-                                <Trash className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </div>
-                          <p className="text-sm text-gray-600 mt-1 line-clamp-2">
-                            {info.description_ge}
-                          </p>
+                  visibleItems.map((info) => (
+                    <div
+                      key={info.id}
+                      className="border rounded-lg p-4 shadow-sm flex gap-4"
+                    >
+                      {info.image_url && (
+                        <div className="w-24 h-24 flex-shrink-0 overflow-hidden rounded">
+                          <img
+                            src={info.image_url}
+                            alt={info.title_ge}
+                            className="w-full h-full object-cover"
+                          />
                         </div>
+                      )}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <h3 className="font-semibold text-gray-900 truncate">
+                              {info.title_ge}
+                            </h3>
+                            <p className="text-sm text-gray-500">
+                              #{info.display_order} •{" "}
+                              {info.section_type === "feature"
+                                ? "მახასიათებელი"
+                                : "აღწერითი გვერდი"}
+                            </p>
+                          </div>
+                          <div className="flex gap-1">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => moveItem(info, "up")}
+                              className="h-8 w-8"
+                              title="აწევა"
+                            >
+                              <ArrowUp className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => moveItem(info, "down")}
+                              className="h-8 w-8"
+                              title="ჩამოწევა"
+                            >
+                              <ArrowDown className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => handleEdit(info)}
+                              className="h-8 w-8 text-blue-500"
+                              title="რედაქტირება"
+                            >
+                              <PencilLine className="h-4 w-4" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => handleDelete(info.id)}
+                              className="h-8 w-8 text-red-500"
+                              title="წაშლა"
+                            >
+                              <Trash className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                        <p className="text-sm text-gray-600 mt-1 line-clamp-2">
+                          {info.description_ge}
+                        </p>
                       </div>
-                    ))
+                    </div>
+                  ))
                 )}
               </div>
             </CardContent>

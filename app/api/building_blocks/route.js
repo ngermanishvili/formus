@@ -28,7 +28,7 @@ export async function GET(request) {
 
                 // Try to use project_blocks table 
                 query = `
-                    SELECT bb.block_id, bb.block_name as name, bb.total_floors 
+                    SELECT bb.block_id, bb.block_name as name, bb.name_en, bb.total_floors 
                     FROM building_blocks bb
                     JOIN project_blocks pb ON bb.block_id = pb.block_id
                     WHERE pb.project_id = $1
@@ -56,7 +56,7 @@ export async function GET(request) {
                 console.log("Falling back to returning all blocks");
 
                 query = `
-                    SELECT block_id, block_name as name, total_floors 
+                    SELECT block_id, block_name as name, name_en, total_floors 
                     FROM building_blocks 
                     ORDER BY block_name
                 `;
@@ -66,7 +66,7 @@ export async function GET(request) {
             // Get all blocks
             console.log("No project_id provided, fetching all blocks");
             query = `
-                SELECT block_id, block_name as name, total_floors 
+                SELECT block_id, block_name as name, name_en, total_floors 
                 FROM building_blocks 
                 ORDER BY block_name
             `;
@@ -102,7 +102,7 @@ export async function GET(request) {
 // დაამატებს ახალ ბლოკს building_blocks ცხრილში
 export async function POST(request) {
     try {
-        const { block_name } = await request.json();
+        const { block_name, name_en } = await request.json();
 
         if (!block_name) {
             return NextResponse.json(
@@ -111,11 +111,14 @@ export async function POST(request) {
             );
         }
 
+        // Use the provided English name or default to "{block_id} Block"
+        const englishName = name_en || `${block_name.charAt(0)} Block`;
+
         const result = await db.query(
-            `INSERT INTO building_blocks (block_name) 
-             VALUES ($1)
-             RETURNING block_id, block_name as name`,
-            [block_name]
+            `INSERT INTO building_blocks (block_name, name_en) 
+             VALUES ($1, $2)
+             RETURNING block_id, block_name as name, name_en`,
+            [block_name, englishName]
         );
 
         return NextResponse.json({

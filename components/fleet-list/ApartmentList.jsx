@@ -76,18 +76,18 @@ export default function ApartmentList() {
             apt.project_id !== null &&
             filters.projects.includes(String(apt.project_id)));
 
-        // Make block comparison case insensitive
+        // Make block comparison case insensitive - prioritize block_name over block_id
         const blockMatch =
           !filters.blocks ||
           filters.blocks.length === 0 ||
-          (apt.block_id &&
-            filters.blocks
-              .map((b) => b.toUpperCase())
-              .includes(apt.block_id.toUpperCase())) ||
           (apt.block_name &&
             filters.blocks
               .map((b) => b.toUpperCase())
-              .includes(apt.block_name.toUpperCase()));
+              .includes(apt.block_name.toUpperCase())) ||
+          (apt.block_id &&
+            filters.blocks
+              .map((b) => b.toUpperCase())
+              .includes(apt.block_id.toUpperCase()));
 
         const floorMatch =
           !filters.floors ||
@@ -136,6 +136,17 @@ export default function ApartmentList() {
         const cacheKey = "apartments";
         localStorage.removeItem(cacheKey);
 
+        // Clear any other cached data that might interfere
+        sessionStorage.removeItem(cacheKey);
+
+        // Force clear other localStorage items that might contain apartment data
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          if (key && (key.includes("apartment") || key.includes("cache"))) {
+            localStorage.removeItem(key);
+          }
+        }
+
         // Build API URL with all filters
         let apiURL = "/api/apartments";
 
@@ -180,13 +191,49 @@ export default function ApartmentList() {
           apiURL += `?${params.toString()}`;
         }
 
+        // Add a unique timestamp to prevent browser caching
+        const timestamp = new Date().getTime();
+        apiURL += apiURL.includes("?") ? `&_=${timestamp}` : `?_=${timestamp}`;
+
         console.log(`Fetching from: ${apiURL}`);
-        const res = await fetch(apiURL);
+
+        // Use fetch with cache: 'no-store' and appropriate headers
+        const res = await fetch(apiURL, {
+          cache: "no-store",
+          headers: {
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            Pragma: "no-cache",
+            Expires: "0",
+          },
+        });
 
         if (!res.ok) throw new Error("Failed to fetch");
 
         const { data } = await res.json();
         console.log("Fetched apartments:", data.length);
+
+        // Check for any unexpected project IDs
+        const uniqueProjectIds = [
+          ...new Set(data.map((apt) => apt.project_id)),
+        ];
+        console.log("Apartments belong to these projects:", uniqueProjectIds);
+
+        if (filters.projects && filters.projects.length > 0) {
+          const requestedProjectId = filters.projects[0];
+          const hasUnexpectedProjects = uniqueProjectIds.some(
+            (id) => String(id) !== String(requestedProjectId)
+          );
+
+          if (hasUnexpectedProjects) {
+            console.warn(
+              "Warning: Received apartments from projects we didn't request!",
+              {
+                requested: requestedProjectId,
+                received: uniqueProjectIds,
+              }
+            );
+          }
+        }
 
         if (data.length > 0) {
           // Check first apartment block data
@@ -195,6 +242,8 @@ export default function ApartmentList() {
             block_name: data[0].block_name,
             block_id_type: typeof data[0].block_id,
             block_id_length: data[0].block_id?.length || 0,
+            project_id: data[0].project_id,
+            project_name: data[0].project_name,
           });
 
           // Log unique blocks with more details
@@ -279,10 +328,6 @@ export default function ApartmentList() {
         console.log(
           "Sample apartment data structure:",
           data.length > 0 ? data[0] : "No data"
-        );
-        localStorage.setItem(
-          cacheKey,
-          JSON.stringify({ data, timestamp: Date.now() })
         );
         setApartments(data || []);
       } catch (err) {

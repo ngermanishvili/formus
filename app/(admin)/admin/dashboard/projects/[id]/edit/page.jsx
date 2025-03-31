@@ -17,30 +17,32 @@ import {
   Plus,
   Trash,
   Info,
+  Building2,
 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 
 const SecondSection = ({ formData, setFormData, activeTab, setActiveTab }) => {
+  const handleSecondImageUpload = (result) => {
+    setFormData((prev) => ({
+      ...prev,
+      second_section_img: result.info.secure_url,
+    }));
+  };
+
   return (
     <Card>
       <CardContent className="p-6">
-        <Label className="text-2xl font-semibold mb-6 block">
+        <Label className="text-base font-semibold mb-4 block">
           მეორე სექცია
         </Label>
-        <div className="space-y-8">
-          {/* Image Upload */}
-          <div>
-            <Label className="text-base font-semibold mb-4 block">სურათი</Label>
-            <CldUploadWidget
-              uploadPreset="formus_test"
-              onSuccess={(result) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  second_section_img: result.info.secure_url,
-                }))
-              }
-            >
-              {({ open }) => (
+
+        <div className="mb-6">
+          <CldUploadWidget
+            uploadPreset="formus_test"
+            onSuccess={handleSecondImageUpload}
+          >
+            {({ open }) => (
+              <div className="space-y-4">
                 <Button
                   type="button"
                   variant="outline"
@@ -50,7 +52,7 @@ const SecondSection = ({ formData, setFormData, activeTab, setActiveTab }) => {
                   {formData.second_section_img ? (
                     <img
                       src={formData.second_section_img}
-                      alt="Second Section Preview"
+                      alt="Preview"
                       className="h-full w-full object-cover"
                     />
                   ) : (
@@ -62,136 +64,173 @@ const SecondSection = ({ formData, setFormData, activeTab, setActiveTab }) => {
                     </div>
                   )}
                 </Button>
-              )}
-            </CldUploadWidget>
-          </div>
+              </div>
+            )}
+          </CldUploadWidget>
+        </div>
 
-          {/* Position Order */}
-          <div>
-            <Label className="text-base font-semibold mb-4 block">
-              პოზიცია (რიგითობა)
-            </Label>
-            <Input
-              type="number"
-              placeholder="შეიყვანეთ რიგითობა (1, 2, 3...)"
-              value={formData.display_order}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  display_order: e.target.value,
-                }))
-              }
-              className="w-full"
-            />
-            <p className="text-sm text-gray-500 mt-2">
-              დაბალი რიცხვები გამოჩნდება თავში. თუ ცარიელია, გამოჩნდება ბოლოს.
-            </p>
-          </div>
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="grid w-full grid-cols-2 mb-6">
+            <TabsTrigger value="georgian" className="flex items-center gap-2">
+              <Globe className="h-4 w-4" />
+              ქართული
+            </TabsTrigger>
+            <TabsTrigger value="english" className="flex items-center gap-2">
+              <Languages className="h-4 w-4" />
+              English
+            </TabsTrigger>
+          </TabsList>
 
-          {/* Active Status Toggle */}
-          <div>
-            <Label className="text-base font-semibold mb-4 block">
-              პროექტის აქტიურობა
-            </Label>
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="active-toggle"
-                checked={formData.is_active}
+          <TabsContent value="georgian" className="space-y-4">
+            <div className="space-y-2">
+              <Label>სექციის სათაური</Label>
+              <Input
+                placeholder="შეიყვანეთ სექციის სათაური"
+                value={formData.second_section_title_ge || ""}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,
-                    is_active: e.target.checked,
+                    second_section_title_ge: e.target.value,
                   }))
                 }
-                className="w-6 h-6"
               />
-              <label htmlFor="active-toggle" className="text-sm font-medium">
-                {formData.is_active
-                  ? "ჩართულია - პროექტს აქვს მისი გვერდი"
-                  : "გამორთულია - გამოჩნდება მხოლოდ გალერეაში"}
-              </label>
             </div>
-            <p className="text-sm text-gray-500 mt-2">
-              აქტიური პროექტისთვის შეიქმნება დეტალური გვერდი. არააქტიური
-              პროექტისთვის გამოჩნდება მხოლოდ სურათი.
-            </p>
-          </div>
+            <div className="space-y-2">
+              <Label>სექციის აღწერა</Label>
+              <Textarea
+                placeholder="შეიყვანეთ სექციის აღწერა"
+                value={formData.second_section_description_ge || ""}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    second_section_description_ge: e.target.value,
+                  }))
+                }
+                className="min-h-[120px]"
+              />
+            </div>
+          </TabsContent>
 
-          {/* Content Tabs */}
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="georgian" className="flex items-center gap-2">
-                <Globe className="h-4 w-4" />
-                ქართული
-              </TabsTrigger>
-              <TabsTrigger value="english" className="flex items-center gap-2">
-                <Languages className="h-4 w-4" />
-                English
-              </TabsTrigger>
-            </TabsList>
+          <TabsContent value="english" className="space-y-4">
+            <div className="space-y-2">
+              <Label>Section Title</Label>
+              <Input
+                placeholder="Enter section title"
+                value={formData.second_section_title_en || ""}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    second_section_title_en: e.target.value,
+                  }))
+                }
+              />
+            </div>
+            <div className="space-y-2">
+              <Label>Section Description</Label>
+              <Textarea
+                placeholder="Enter section description"
+                value={formData.second_section_description_en || ""}
+                onChange={(e) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    second_section_description_en: e.target.value,
+                  }))
+                }
+                className="min-h-[120px]"
+              />
+            </div>
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+    </Card>
+  );
+};
 
-            <TabsContent value="georgian" className="space-y-4">
-              <div className="space-y-2">
-                <Label>სათაური</Label>
-                <Input
-                  placeholder="შეიყვანეთ სათაური"
-                  value={formData.second_section_title_ge}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      second_section_title_ge: e.target.value,
-                    }))
-                  }
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>აღწერა</Label>
-                <Textarea
-                  placeholder="შეიყვანეთ აღწერა"
-                  value={formData.second_section_description_ge}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      second_section_description_ge: e.target.value,
-                    }))
-                  }
-                  className="min-h-[200px]"
-                />
-              </div>
-            </TabsContent>
+const ProjectBlocks = ({ projectId }) => {
+  const router = useRouter();
+  const [blocks, setBlocks] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-            <TabsContent value="english" className="space-y-4">
-              <div className="space-y-2">
-                <Label>Title</Label>
-                <Input
-                  placeholder="Enter title"
-                  value={formData.second_section_title_en}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      second_section_title_en: e.target.value,
-                    }))
-                  }
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Description</Label>
-                <Textarea
-                  placeholder="Enter description"
-                  value={formData.second_section_description_en}
-                  onChange={(e) =>
-                    setFormData((prev) => ({
-                      ...prev,
-                      second_section_description_en: e.target.value,
-                    }))
-                  }
-                  className="min-h-[200px]"
-                />
-              </div>
-            </TabsContent>
-          </Tabs>
+  useEffect(() => {
+    const fetchBlocks = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(
+          `/api/building_blocks?project_id=${projectId}`
+        );
+        if (!response.ok) throw new Error("Failed to fetch blocks");
+        const data = await response.json();
+        setBlocks(data.data || []);
+      } catch (error) {
+        console.error("Error fetching blocks:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlocks();
+  }, [projectId]);
+
+  if (loading) {
+    return (
+      <Card>
+        <CardContent className="p-6 flex justify-center items-center min-h-[150px]">
+          <Loader2 className="h-6 w-6 animate-spin text-primary" />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <CardContent className="p-6">
+        <div className="flex justify-between items-center mb-4">
+          <Label className="text-base font-semibold">პროექტის ბლოკები</Label>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              router.push(`/admin/dashboard/projects/${projectId}/blocks`)
+            }
+            className="flex items-center gap-2"
+          >
+            <Plus className="h-4 w-4" />
+            ბლოკების მართვა
+          </Button>
         </div>
+
+        {blocks.length === 0 ? (
+          <div className="bg-gray-50 p-4 rounded-lg text-center">
+            <p className="text-gray-500 text-sm">
+              ამ პროექტს ჯერ არ აქვს ბლოკები
+            </p>
+            <Button
+              variant="link"
+              onClick={() =>
+                router.push(`/admin/dashboard/projects/${projectId}/blocks`)
+              }
+              className="mt-2"
+            >
+              დაამატეთ პირველი ბლოკი
+            </Button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            {blocks.map((block) => (
+              <div
+                key={block.block_id}
+                className="border rounded-lg p-3 text-center"
+              >
+                <h3 className="font-medium">{block.name}</h3>
+                <p className="text-xs text-gray-500 mt-1">
+                  {block.total_floors
+                    ? `${block.total_floors} სართული`
+                    : "სართულები არ არის მითითებული"}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
       </CardContent>
     </Card>
   );
@@ -340,6 +379,16 @@ export default function EditProject({ params }) {
           <p className="text-gray-500 mt-1">შეცვალეთ ინფორმაცია ორივე ენაზე</p>
         </div>
         <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={() =>
+              router.push(`/admin/dashboard/projects/${params.id}/blocks`)
+            }
+            className="flex items-center gap-2"
+          >
+            <Building2 className="h-4 w-4" />
+            ბლოკების მართვა
+          </Button>
           <Button
             variant="outline"
             onClick={() =>
@@ -615,6 +664,74 @@ export default function EditProject({ params }) {
             activeTab={activeTab}
             setActiveTab={setActiveTab}
           />
+
+          {/* Project Blocks */}
+          <ProjectBlocks projectId={params.id} />
+
+          {/* Settings Section */}
+          <Card>
+            <CardContent className="p-6">
+              <Label className="text-base font-semibold mb-4 block">
+                პროექტის პარამეტრები
+              </Label>
+
+              {/* Position Order */}
+              <div className="mb-6">
+                <Label className="text-sm font-medium mb-2 block">
+                  პოზიცია (რიგითობა)
+                </Label>
+                <Input
+                  type="number"
+                  placeholder="შეიყვანეთ რიგითობა (1, 2, 3...)"
+                  value={formData.display_order}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      display_order: e.target.value,
+                    }))
+                  }
+                  className="w-full"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  დაბალი რიცხვები გამოჩნდება თავში. თუ ცარიელია, გამოჩნდება
+                  ბოლოს.
+                </p>
+              </div>
+
+              {/* Active Status Toggle */}
+              <div>
+                <Label className="text-sm font-medium mb-2 block">
+                  პროექტის აქტიურობა
+                </Label>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="active-toggle"
+                    checked={formData.is_active}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        is_active: e.target.checked,
+                      }))
+                    }
+                    className="w-6 h-6"
+                  />
+                  <label
+                    htmlFor="active-toggle"
+                    className="text-sm font-medium"
+                  >
+                    {formData.is_active
+                      ? "ჩართულია - პროექტს აქვს მისი გვერდი"
+                      : "გამორთულია - გამოჩნდება მხოლოდ გალერეაში"}
+                  </label>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  აქტიური პროექტისთვის შეიქმნება დეტალური გვერდი. არააქტიური
+                  პროექტისთვის გამოჩნდება მხოლოდ სურათი.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
 
           {/* Submit Button */}
           <div className="flex justify-end gap-4">

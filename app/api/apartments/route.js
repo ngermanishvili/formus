@@ -100,12 +100,14 @@ export async function POST(request) {
                 t.living_room_area,
                 t.balcony_area,
                 t.balcony2_area,
-                '1' as project_id,
-                'ორთაჭალა ჰილსი' as project_name,
+                p.id as project_id,
+                p.title_ge as project_name,
                 bb.block_name
             FROM apartments a
             JOIN apartment_types t ON a.type_id = t.type_id
             JOIN building_blocks bb ON a.block_id = bb.block_id
+            JOIN project_blocks pb ON a.block_id = pb.block_id
+            JOIN projects p ON pb.project_id = p.id
             WHERE a.apartment_id = $1
         `, [apartmentId]);
 
@@ -153,7 +155,38 @@ export async function GET(request) {
             totalAreaMax
         });
 
-        // Build the query
+        // Special case: if project_id is specified but that project has no apartments yet,
+        // return empty array immediately, don't try to fallback to other projects
+        if (project_id) {
+            console.log(`Checking if project ID ${project_id} has any apartments...`);
+            const projectCheck = await db.query(
+                `SELECT EXISTS (
+                    SELECT 1 FROM apartments a
+                    JOIN building_blocks bb ON a.block_id = bb.block_id
+                    JOIN project_blocks pb ON bb.block_id = pb.block_id
+                    WHERE pb.project_id = $1
+                ) as has_apartments`,
+                [project_id]
+            );
+
+            console.log(`Project check result:`, projectCheck[0]);
+
+            if (!projectCheck[0].has_apartments) {
+                console.log(`Project ID ${project_id} has no apartments yet. Returning empty result.`);
+                return NextResponse.json(
+                    { status: "success", data: [] },
+                    {
+                        headers: {
+                            "Cache-Control": "no-cache, no-store, must-revalidate",
+                            "Pragma": "no-cache",
+                            "Expires": "0"
+                        }
+                    }
+                );
+            }
+        }
+
+        // Build the query - using explicit JOINs with project_blocks table when project_id is specified
         let query = `
             SELECT 
                 a.apartment_id,
@@ -166,51 +199,88 @@ export async function GET(request) {
                 a.home_3d,
                 t.total_area,
                 bb.block_name,
-                p.id as project_id,
+                pb.project_id,
                 p.title_ge as project_name
             FROM apartments a
             JOIN apartment_types t ON a.type_id = t.type_id
             JOIN building_blocks bb ON a.block_id = bb.block_id
-            LEFT JOIN project_blocks pb ON a.block_id = pb.block_id
-            LEFT JOIN projects p ON pb.project_id = p.id
         `;
 
-        // Add where conditions
-        const whereConditions = [];
+        // Initialize parameters
         let paramIndex = 1;
         const queryParams = [];
 
-        // Add project filter if provided
+        // Add where conditions
+        const whereConditions = [];
+
+        // Modify query structure based on project_id
         if (project_id) {
-            whereConditions.push(`p.id = $${paramIndex++}`);
-            queryParams.push(project_id);
-            console.log(`Filtering apartments by project_id: ${project_id}`);
+            // First, check if apartments table has project_id column
+            try {
+                // When filtering by project_id, use the most direct relationship if available
+                query += `
+                JOIN project_blocks pb ON bb.block_id = pb.block_id AND pb.project_id = $${paramIndex}
+                JOIN projects p ON pb.project_id = p.id
+                `;
+
+                // Add an additional WHERE clause to ensure only apartments from this project are returned
+                whereConditions.push(`pb.project_id = $${paramIndex}`);
+
+                // Add project_id as first parameter
+                queryParams.push(project_id);
+                paramIndex++;
+                console.log(`Using strict filtering for project_id: ${project_id}`);
+            } catch (error) {
+                console.error("Error with project filtering:", error);
+                // Fallback to original implementation
+                query += `
+                JOIN project_blocks pb ON bb.block_id = pb.block_id
+                JOIN projects p ON pb.project_id = p.id
+                `;
+                whereConditions.push(`pb.project_id = $${paramIndex++}`);
+                queryParams.push(project_id);
+            }
+        } else {
+            // Without project_id filter, use regular JOINs
+            query += `
+            JOIN project_blocks pb ON bb.block_id = pb.block_id
+            JOIN projects p ON pb.project_id = p.id
+            `;
         }
 
-        // Add block filter if provided - block_id is a character like 'A', 'B', 'D'
+        // Add block filter if provided - block_id only (not block_name)
         if (blocks.length > 0) {
-            // Debug specifically for D block
-            if (blocks.includes('D')) {
-                console.log("D block is in the requested blocks, checking database data type for block_id");
+            if (project_id) {
+                // If project_id is specified, filter blocks only for that project
+                const placeholders = [];
+                const blockParams = [];
 
-                // Add a separate debug query to see what D block data looks like in the database
-                try {
-                    const debugResult = await db.query("SELECT apartment_id, block_id, apartment_number FROM apartments WHERE UPPER(block_id) = 'D' LIMIT 5");
-                    console.log(`Found ${debugResult.length} apartments with block_id 'D':`, debugResult);
-
-                    // If no results, try a broader search to see format issues
-                    if (debugResult.length === 0) {
-                        const allBlocksDebug = await db.query("SELECT DISTINCT block_id FROM apartments");
-                        console.log("All distinct block_ids in database:", allBlocksDebug);
-                    }
-                } catch (dbError) {
-                    console.error("Error in debug query for D block:", dbError);
+                // For each block in the blocks array - we're only filtering by block_id
+                for (const block of blocks) {
+                    placeholders.push(`UPPER(bb.block_id) = $${paramIndex++}`);
+                    blockParams.push(block.toUpperCase());
                 }
-            }
 
-            whereConditions.push(`UPPER(a.block_id) IN (${blocks.map(() => `$${paramIndex++}`).join(',')})`);
-            queryParams.push(...blocks);
-            console.log(`Filtering apartments by blocks:`, blocks);
+                whereConditions.push(`(${placeholders.join(' OR ')}) AND pb.project_id = $1`);
+                queryParams.push(...blockParams);
+
+                console.log(`Filtering apartments by block_ids (strict project-specific):`, blocks);
+            } else {
+                // Standard block filtering without project context
+                const placeholders = [];
+                const blockParams = [];
+
+                // For each block in the blocks array - we're only filtering by block_id
+                for (const block of blocks) {
+                    placeholders.push(`UPPER(bb.block_id) = $${paramIndex++}`);
+                    blockParams.push(block.toUpperCase());
+                }
+
+                whereConditions.push(`(${placeholders.join(' OR ')})`);
+                queryParams.push(...blockParams);
+
+                console.log(`Filtering apartments by block_ids:`, blocks);
+            }
         }
 
         // Add floor filter if provided
@@ -244,89 +314,57 @@ export async function GET(request) {
 
         console.log(`Found ${result.length} apartments`);
 
-        if (result.length > 0) {
-            // Log the first apartment to see its structure
-            console.log("Sample apartment:", {
-                id: result[0].apartment_id,
-                block_id: result[0].block_id,
-                block_name: result[0].block_name,
-                floor: result[0].floor,
-                status: result[0].status
+        // Log the distinct project IDs in the result to debug cross-project issues
+        const projectIds = [...new Set(result.map(apt => apt.project_id))];
+        console.log(`Apartments belong to these projects:`, projectIds);
+
+        // Process the result to handle duplicate apartment IDs
+        if (project_id) {
+            console.log("Deduplicating apartments for specific project...");
+            // Create a map to track unique apartments by apartment_id
+            const apartmentMap = {};
+
+            // First, group apartments by ID
+            result.forEach(apt => {
+                if (!apartmentMap[apt.apartment_id]) {
+                    apartmentMap[apt.apartment_id] = [];
+                }
+                apartmentMap[apt.apartment_id].push(apt);
             });
 
-            // Log unique blocks found
-            const uniqueBlocks = [...new Set(result.map(apt => apt.block_id))];
-            console.log("Unique block_ids in results:", uniqueBlocks);
+            // Then, for each apartment ID, ensure we only keep the one matching our project
+            const dedupedResult = [];
 
-            // Check if D block is missing
-            if (blocks.includes('D') && !uniqueBlocks.includes('D')) {
-                console.log("D block was requested but not found in results. Trying a direct query...");
+            Object.keys(apartmentMap).forEach(aptId => {
+                const apartments = apartmentMap[aptId];
 
-                // Log the SQL and parameters to see exactly what we're sending to the database
-                console.log("Original SQL that didn't return D block:", query);
-                console.log("Parameters used:", queryParams);
+                // If there's only one apartment with this ID, keep it
+                if (apartments.length === 1) {
+                    dedupedResult.push(apartments[0]);
+                } else {
+                    // Multiple apartments with same ID - find the one matching our project
+                    const matchingApt = apartments.find(apt =>
+                        String(apt.project_id) === String(project_id)
+                    );
 
-                // Try a direct query for D block apartments
-                const dBlockQuery = `
-                SELECT 
-                  a.apartment_id,
-                  a.block_id,
-                  a.apartment_number,
-                  a.floor,
-                  a.status,
-                  a.price,
-                  a.home_2d,
-                  a.home_3d,
-                  t.total_area,
-                  bb.block_name,
-                  '1' as project_id,
-                  'ორთაჭალა ჰილსი' as project_name
-                FROM apartments a
-                JOIN apartment_types t ON a.type_id = t.type_id
-                JOIN building_blocks bb ON a.block_id = bb.block_id
-                WHERE UPPER(a.block_id) = 'D'
-                `;
-
-                // If a status filter was applied, also apply it to the D block query
-                let filteredDBlockQuery = dBlockQuery;
-                let dBlockParams = [];
-
-                if (statuses.length > 0) {
-                    filteredDBlockQuery += ` AND LOWER(a.status) IN (${statuses.map((_, i) => `LOWER($${i + 1})`).join(',')})`;
-                    dBlockParams = [...statuses];
-                    console.log("Adding status filter to D block query:", statuses);
-                }
-
-                try {
-                    console.log("Direct D block query:", filteredDBlockQuery);
-                    console.log("Direct D block parameters:", dBlockParams);
-
-                    const dBlockResult = dBlockParams.length > 0
-                        ? await db.query(filteredDBlockQuery, dBlockParams)
-                        : await db.query(dBlockQuery);
-
-                    console.log(`Direct query found ${dBlockResult.length} D block apartments`);
-
-                    if (dBlockResult.length > 0) {
-                        // Add these to the results
-                        result = [...result, ...dBlockResult];
-                        console.log(`Updated results to include D block apartments. New total: ${result.length}`);
-                    } else {
-                        console.log("No D block apartments matched the criteria (likely no apartments with requested status)");
+                    if (matchingApt) {
+                        dedupedResult.push(matchingApt);
                     }
-                } catch (dBlockError) {
-                    console.error("Error querying for D block directly:", dBlockError);
                 }
-            }
+            });
+
+            console.log(`After deduplication: ${dedupedResult.length} apartments (was ${result.length})`);
+            result = dedupedResult;
         }
 
+        // Return the result with no-cache headers
         return NextResponse.json(
             { status: "success", data: result },
             {
                 headers: {
-                    "Cache-Control": "public, max-age=300, s-maxage=600",
-                    "CDN-Cache-Control": "public, s-maxage=600",
-                    "Vercel-CDN-Cache-Control": "public, s-maxage=3600",
+                    "Cache-Control": "no-cache, no-store, must-revalidate",
+                    "Pragma": "no-cache",
+                    "Expires": "0"
                 }
             }
         );

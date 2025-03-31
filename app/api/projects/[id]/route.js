@@ -127,10 +127,6 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
     try {
         const { id } = params;
-        console.log('DELETE request for project ID:', id);
-        console.log('Request URL:', request.url);
-        console.log('Request method:', request.method);
-        console.log('Params:', params);
 
         // Delete the project
         const result = await db.query(`
@@ -139,10 +135,7 @@ export async function DELETE(request, { params }) {
             RETURNING id
         `, [id]);
 
-        console.log('Delete query result:', result);
-
         if (!result.length) {
-            console.log('No project found with ID:', id);
             return NextResponse.json({
                 status: "error",
                 message: "პროექტი ვერ მოიძებნა"
@@ -155,7 +148,6 @@ export async function DELETE(request, { params }) {
             WHERE project_id = $1
         `, [id]);
 
-        console.log('Successfully deleted project with ID:', id);
         return NextResponse.json({
             status: "success",
             message: "პროექტი წარმატებით წაიშალა"

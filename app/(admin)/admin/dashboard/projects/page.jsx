@@ -43,36 +43,14 @@ export default function ProjectsDashboard() {
   const handleDelete = async (id) => {
     if (window.confirm("გსურთ პროექტის წაშლა?")) {
       try {
-        console.log(`Attempting to delete project with ID: ${id}`);
-        // Using our new dedicated delete endpoint
-        const response = await fetch(`/api/projects/delete`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ id }),
+        const response = await fetch(`/api/projects/${id}`, {
+          method: "DELETE",
         });
-
-        console.log(`Delete response status: ${response.status}`);
-
         if (response.ok) {
-          const data = await response.json();
-          console.log("Delete successful:", data);
           fetchProjects(); // განაახლე სია
-          alert("პროექტი წაიშალა წარმატებით");
-        } else {
-          let errorData;
-          try {
-            errorData = await response.json();
-          } catch (e) {
-            errorData = { message: "Unable to parse error response" };
-          }
-          console.error("Error deleting project:", errorData);
-          alert(errorData.message || "პროექტის წაშლისას დაფიქსირდა შეცდომა");
         }
       } catch (error) {
         console.error("Error deleting project:", error);
-        alert("პროექტის წაშლისას დაფიქსირდა შეცდომა");
       }
     }
   };

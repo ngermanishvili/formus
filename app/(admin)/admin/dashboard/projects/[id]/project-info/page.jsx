@@ -18,6 +18,8 @@ import {
   PencilLine,
   ArrowUp,
   ArrowDown,
+  Trash2,
+  Pencil,
 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import {
@@ -317,47 +319,30 @@ export default function ProjectInfoPage({ params }) {
       display_order: info.display_order || 0,
     });
 
-    // თუ ეს გალერეის სექციაა, ვცდილობთ გავაანალიზოთ image_url როგორც JSON მასივი
+    // სექციის ტიპის ანალიზი და შესაბამისი ლოგიკის გამოყენება
     if (info.section_type === "gallery_section" && info.image_url) {
       console.log(
-        "Gallery section detected, parsing image_url:",
+        "Gallery section detected for editing, parsing image_url:",
         info.image_url
       );
       try {
-        let imageUrls;
-        if (typeof info.image_url === "string") {
-          if (
-            info.image_url.trim().startsWith("[") &&
-            info.image_url.trim().endsWith("]")
-          ) {
-            // JSON მასივის პარსინგი
-            imageUrls = JSON.parse(info.image_url);
-            console.log(
-              "Successfully parsed image_url as JSON array:",
-              imageUrls
-            );
-          } else if (info.image_url.includes("http")) {
-            // ერთი URL-ის შემთხვევაში მასივში გახვევა
-            imageUrls = [info.image_url];
-            console.log("Single URL detected, wrapping in array:", imageUrls);
-          }
-        }
+        // გალერეის სურათების პარსინგი
+        const imageUrls = parseGalleryImages(info.image_url);
+        console.log("Parsed gallery images for editing:", imageUrls);
 
-        if (Array.isArray(imageUrls)) {
-          // განვასუფთაოთ URL-ები
-          const cleanUrls = imageUrls
-            .map((url) =>
-              typeof url === "string" ? url.replace(/['"]/g, "") : ""
-            )
-            .filter((url) => url.trim() !== "");
-
-          setGalleryImages(cleanUrls);
-          console.log("Set galleryImages for editing:", cleanUrls);
-        }
+        // galleryImages მასივის განახლება
+        setGalleryImages(imageUrls);
       } catch (error) {
         console.error("Error parsing gallery images for edit:", error);
         alert("გალერეის სურათების ჩატვირთვისას დაფიქსირდა შეცდომა");
+        setGalleryImages([]); // ცარიელი მასივის დაყენება უსაფრთხოებისთვის
       }
+    } else {
+      // არაგალერეის სექციისთვის - გავასუფთაოთ გალერეის მასივი
+      console.log(
+        "Non-gallery section detected for editing, using standard image handling"
+      );
+      setGalleryImages([]);
     }
 
     // გადავსქროლოთ ფორმასთან
@@ -403,10 +388,12 @@ export default function ProjectInfoPage({ params }) {
     try {
       let finalFormData = { ...formData };
 
+      // სექციის ტიპის მიხედვით სხვადასხვა ლოგიკა
       if (formData.section_type === "gallery_section") {
+        // გალერეის სექციისთვის - image_url არის JSON მასივი
         const galleryJson = prepareGalleryImages();
         finalFormData.image_url = galleryJson;
-        console.log("Final form data for gallery:", finalFormData);
+        console.log("Final form data for gallery section:", finalFormData);
         console.log("Gallery JSON length:", galleryJson.length);
 
         // შევამოწმოთ ცარიელია თუ არა
@@ -415,6 +402,17 @@ export default function ProjectInfoPage({ params }) {
           setSubmitLoading(false);
           return;
         }
+      } else {
+        // სხვა სექციისთვის (მახასიათებელი, აღწერითი გვერდი) - image_url არის ჩვეულებრივი სტრიქონი
+        console.log("Final form data for non-gallery section:", finalFormData);
+        console.log("Image URL:", finalFormData.image_url);
+
+        // სურათის არჩევა სავალდებულო არ არის, მაგრამ შეგვიძლია შევამოწმოთ თუ საჭიროა
+        // if (!finalFormData.image_url) {
+        //   alert("გთხოვთ აირჩიოთ სურათი");
+        //   setSubmitLoading(false);
+        //   return;
+        // }
       }
 
       const url = `/api/projects/${params.id}/info`;
@@ -730,39 +728,78 @@ export default function ProjectInfoPage({ params }) {
     console.log("Section type changed to:", value);
 
     // ფორმის სექციის ტიპის განახლება
-    setFormData((prev) => ({ ...prev, section_type: value }));
+    setFormData((prev) => {
+      // თუ სექციის ტიპი იცვლება, გასუფთავდეს სურათის ველები
+      if (prev.section_type !== value) {
+        // ახალი ობიექტი მიმდინარე ფორმის მონაცემებიდან
+        const newFormData = { ...prev, section_type: value };
+
+        // თუ ვცვლით გალერეიდან არაგალერეის ტიპზე, გავასუფთაოთ image_url
+        if (
+          prev.section_type === "gallery_section" &&
+          value !== "gallery_section"
+        ) {
+          newFormData.image_url = "";
+        }
+
+        return newFormData;
+      }
+      return { ...prev, section_type: value };
+    });
 
     // თუ ირჩევენ გალერეის სექციას, ვცდილობთ ვიპოვოთ არსებული გალერეა
-    if (
-      value === "gallery_section" &&
-      Array.isArray(projectInfo) &&
-      projectInfo.length > 0
-    ) {
-      const gallerySection = projectInfo.find(
-        (info) => info.section_type === "gallery_section"
-      );
+    if (value === "gallery_section") {
+      console.log("Gallery section selected");
 
-      if (gallerySection) {
+      // თუ რედაქტირების რეჟიმში ვართ და უკვე გვაქვს galleryImages, არ ვცვლით
+      if (editMode && galleryImages.length > 0) {
         console.log(
-          "Found existing gallery section when changing type:",
-          gallerySection
+          "Already in edit mode with gallery images, keeping current images:",
+          galleryImages
         );
-
-        // პარსინგის ფუნქციის გამოძახება და gallery images მასივის განახლება
-        const images = parseGalleryImages(gallerySection.image_url);
-        console.log("Parsed gallery images on type change:", images);
-
-        if (images.length > 0) {
-          setGalleryImages(images);
-          console.log("Set galleryImages state with existing images:", images);
-        }
-      } else {
-        // თუ გალერეის სექცია არ არსებობს, გავასუფთაოთ მასივი
-        setGalleryImages([]);
-        console.log(
-          "No existing gallery section found, cleared gallery images"
-        );
+        return;
       }
+
+      // თუ პროექტის ინფორმაცია არსებობს, ვცდილობთ ვიპოვოთ არსებული გალერეა
+      if (Array.isArray(projectInfo) && projectInfo.length > 0) {
+        const gallerySection = projectInfo.find(
+          (info) => info.section_type === "gallery_section"
+        );
+
+        if (gallerySection) {
+          console.log(
+            "Found existing gallery section when changing type:",
+            gallerySection
+          );
+
+          // პარსინგის ფუნქციის გამოძახება და gallery images მასივის განახლება
+          const images = parseGalleryImages(gallerySection.image_url);
+          console.log("Parsed gallery images on type change:", images);
+
+          if (images.length > 0) {
+            setGalleryImages(images);
+            console.log(
+              "Set galleryImages state with existing images:",
+              images
+            );
+          } else {
+            setGalleryImages([]);
+            console.log(
+              "No valid images found in existing gallery, cleared array"
+            );
+          }
+        } else {
+          // თუ გალერეის სექცია არ არსებობს, გავასუფთაოთ მასივი
+          setGalleryImages([]);
+          console.log(
+            "No existing gallery section found, cleared gallery images"
+          );
+        }
+      }
+    } else {
+      // თუ არ არის გალერეის სექცია, გავასუფთაოთ გალერეის სურათების მასივი
+      setGalleryImages([]);
+      console.log("Non-gallery section selected, cleared gallery images");
     }
   };
 
@@ -848,136 +885,217 @@ export default function ProjectInfoPage({ params }) {
                 {/* Image Upload */}
                 <div className="space-y-2">
                   <Label>სურათი</Label>
-                  <CldUploadWidget
-                    uploadPreset="formus_test"
-                    options={{
-                      multiple: false,
-                      sources: ["local", "url"],
-                      showAdvancedOptions: false,
-                      cropping: false,
-                      styles: {
-                        palette: {
-                          window: "#FFFFFF",
-                          windowBorder: "#90A0B3",
-                          tabIcon: "#0078FF",
-                          menuIcons: "#5A616A",
-                          textDark: "#000000",
-                          textLight: "#FFFFFF",
-                          link: "#0078FF",
-                          action: "#FF620C",
-                          inactiveTabIcon: "#0E2F5A",
-                          error: "#F44235",
-                          inProgress: "#0078FF",
-                          complete: "#20B832",
-                          sourceBg: "#f4f4f5",
-                        },
-                        fonts: {
-                          default: null,
-                          "'Fira Sans', sans-serif": {
-                            url: "https://fonts.googleapis.com/css?family=Fira+Sans",
-                            active: true,
-                          },
-                        },
-                      },
-                    }}
-                    onSuccess={(result) => {
-                      if (result && result.info && result.info.secure_url) {
-                        const imageUrl = result.info.secure_url;
-                        console.log("Upload success, raw URL:", imageUrl);
-                        console.log(
-                          "Current gallery images before adding:",
-                          galleryImages
-                        );
-
-                        const cleanUrl = imageUrl.replace(/['"]/g, "");
-
-                        // ვამოწმებთ გვაქვს თუ არა ფოტოს ჩანაცვლების რეჟიმი
-                        if (window.replacePhotoIndex !== undefined) {
-                          const replaceIndex = window.replacePhotoIndex;
-
-                          setGalleryImages((prevImages) => {
-                            const newImages = [...prevImages];
-                            newImages[replaceIndex] = cleanUrl;
-
-                            // ვაჩვენოთ შეტყობინება წარმატების შესახებ
-                            setTimeout(() => {
-                              alert(
-                                `ფოტო #${
-                                  replaceIndex + 1
-                                } წარმატებით შეიცვალა ახლით.`
-                              );
-                            }, 100);
-
-                            // გავასუფთაოთ ჩანაცვლების რეჟიმი
-                            window.replacePhotoIndex = undefined;
-
-                            return newImages;
-                          });
-                        } else {
-                          // ჩვეულებრივი დამატება
-                          setGalleryImages((prevImages) => {
-                            if (prevImages.includes(cleanUrl)) {
-                              alert("ეს სურათი უკვე დამატებულია გალერეაში.");
-                              return prevImages;
-                            }
-
-                            if (prevImages.length >= 4) {
-                              alert(
-                                "მაქსიმუმ 4 ფოტოს დამატებაა შესაძლებელი. წაშალეთ რომელიმე არსებული ფოტო ახლის დასამატებლად."
-                              );
-                              return prevImages;
-                            }
-
-                            const newImages = [...prevImages, cleanUrl];
-                            console.log(
-                              "New gallery images after adding:",
-                              newImages
-                            );
-
-                            setTimeout(() => {
-                              alert(
-                                `ფოტო წარმატებით დაემატა. ამჟამად ${newImages.length} სურათია გალერეაში. შეგიძლიათ დაამატოთ კიდევ (მაქსიმუმ 4).`
-                              );
-                            }, 100);
-
-                            return newImages;
-                          });
-                        }
-                      } else {
-                        console.error(
-                          "Upload result format unexpected:",
-                          result
-                        );
-                        alert(
-                          "სურათის ატვირთვა ვერ მოხერხდა. გთხოვთ, სცადოთ თავიდან."
-                        );
-                      }
-                    }}
-                  >
-                    {({ open }) => (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => open()}
-                        className="w-full h-32 border-dashed"
-                      >
-                        {formData.image_url ? (
-                          <img
-                            src={formData.image_url}
-                            alt="Preview"
-                            className="h-full w-full object-cover"
-                          />
-                        ) : (
-                          <div className="flex flex-col items-center justify-center">
-                            <ImagePlus className="h-8 w-8 mb-2 text-gray-400" />
-                            <span className="text-sm text-gray-500">
-                              აირჩიეთ ან ჩააგდეთ სურათი
-                            </span>
+                  {formData.section_type === "gallery_section" ? (
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        {galleryImages.map((imageUrl, index) => (
+                          <div
+                            key={index}
+                            className="relative border rounded overflow-hidden h-40"
+                          >
+                            <img
+                              src={imageUrl}
+                              alt={`Gallery image ${index + 1}`}
+                              className="w-full h-full object-cover"
+                            />
+                            <div className="absolute bottom-0 right-0 flex space-x-1 p-1 bg-black/60">
+                              <Button
+                                type="button"
+                                variant="destructive"
+                                size="icon"
+                                className="h-6 w-6"
+                                onClick={() => removeGalleryImage(index)}
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                              <Button
+                                type="button"
+                                variant="secondary"
+                                size="icon"
+                                className="h-6 w-6"
+                                onClick={() => replaceGalleryImage(index)}
+                              >
+                                <Pencil className="h-3 w-3" />
+                              </Button>
+                            </div>
                           </div>
+                        ))}
+                        {galleryImages.length < 4 && (
+                          <CldUploadWidget
+                            uploadPreset="formus_test"
+                            options={{
+                              multiple: false,
+                              sources: ["local", "url"],
+                              showAdvancedOptions: false,
+                              cropping: false,
+                              styles: {
+                                palette: {
+                                  window: "#FFFFFF",
+                                  windowBorder: "#90A0B3",
+                                  tabIcon: "#0078FF",
+                                  menuIcons: "#5A616A",
+                                  textDark: "#000000",
+                                  textLight: "#FFFFFF",
+                                  link: "#0078FF",
+                                  action: "#FF620C",
+                                  inactiveTabIcon: "#0E2F5A",
+                                  error: "#F44235",
+                                  inProgress: "#0078FF",
+                                  complete: "#20B832",
+                                  sourceBg: "#f4f4f5",
+                                },
+                                fonts: {
+                                  default: null,
+                                  "'Fira Sans', sans-serif": {
+                                    url: "https://fonts.googleapis.com/css?family=Fira+Sans",
+                                    active: true,
+                                  },
+                                },
+                              },
+                            }}
+                            onSuccess={(result) => {
+                              if (
+                                result &&
+                                result.info &&
+                                result.info.secure_url
+                              ) {
+                                const imageUrl = result.info.secure_url;
+                                console.log(
+                                  "Upload success, raw URL:",
+                                  imageUrl
+                                );
+                                console.log(
+                                  "Current gallery images before adding:",
+                                  galleryImages
+                                );
+
+                                const cleanUrl = imageUrl.replace(/['"]/g, "");
+
+                                // ვამოწმებთ გვაქვს თუ არა ფოტოს ჩანაცვლების რეჟიმი
+                                if (window.replacePhotoIndex !== undefined) {
+                                  const replaceIndex = window.replacePhotoIndex;
+
+                                  setGalleryImages((prevImages) => {
+                                    const newImages = [...prevImages];
+                                    newImages[replaceIndex] = cleanUrl;
+
+                                    // ვაჩვენოთ შეტყობინება წარმატების შესახებ
+                                    setTimeout(() => {
+                                      alert(
+                                        `ფოტო #${
+                                          replaceIndex + 1
+                                        } წარმატებით შეიცვალა ახლით.`
+                                      );
+                                    }, 100);
+
+                                    // გავასუფთაოთ ჩანაცვლების რეჟიმი
+                                    window.replacePhotoIndex = undefined;
+
+                                    return newImages;
+                                  });
+                                } else {
+                                  // ჩვეულებრივი დამატება
+                                  setGalleryImages((prevImages) => {
+                                    if (prevImages.includes(cleanUrl)) {
+                                      alert(
+                                        "ეს სურათი უკვე დამატებულია გალერეაში."
+                                      );
+                                      return prevImages;
+                                    }
+
+                                    if (prevImages.length >= 4) {
+                                      alert(
+                                        "მაქსიმუმ 4 ფოტოს დამატებაა შესაძლებელი. წაშალეთ რომელიმე არსებული ფოტო ახლის დასამატებლად."
+                                      );
+                                      return prevImages;
+                                    }
+
+                                    const newImages = [...prevImages, cleanUrl];
+                                    console.log(
+                                      "New gallery images after adding:",
+                                      newImages
+                                    );
+
+                                    setTimeout(() => {
+                                      alert(
+                                        `ფოტო წარმატებით დაემატა. ამჟამად ${newImages.length} სურათია გალერეაში. შეგიძლიათ დაამატოთ კიდევ (მაქსიმუმ 4).`
+                                      );
+                                    }, 100);
+
+                                    return newImages;
+                                  });
+                                }
+                              } else {
+                                console.error(
+                                  "Upload result format unexpected:",
+                                  result
+                                );
+                                alert(
+                                  "სურათის ატვირთვა ვერ მოხერხდა. გთხოვთ, სცადოთ თავიდან."
+                                );
+                              }
+                            }}
+                          >
+                            {({ open }) => (
+                              <div
+                                onClick={open}
+                                className="border border-dashed rounded flex items-center justify-center h-40 cursor-pointer hover:bg-gray-50"
+                              >
+                                <div className="flex flex-col items-center justify-center">
+                                  <ImagePlus className="h-8 w-8 mb-2 text-gray-400" />
+                                  <span className="text-sm text-gray-500">
+                                    დაამატეთ გალერეის ფოტო (
+                                    {galleryImages.length}/4)
+                                  </span>
+                                </div>
+                              </div>
+                            )}
+                          </CldUploadWidget>
                         )}
-                      </Button>
-                    )}
-                  </CldUploadWidget>
+                      </div>
+                      <p className="text-xs text-gray-500">
+                        გალერეის სექციისთვის შეგიძლიათ დაამატოთ 1-დან 4-მდე
+                        ფოტო. ფოტოების ატვირთვის შემდეგ დააჭირეთ შენახვის
+                        ღილაკს.
+                      </p>
+                    </div>
+                  ) : (
+                    // სტანდარტული ერთი ფოტოს ატვირთვა მახასიათებლებისთვის და აღწერითი გვერდისთვის
+                    <CldUploadWidget
+                      uploadPreset="formus_test"
+                      options={{
+                        multiple: false,
+                        sources: ["local", "url"],
+                        showAdvancedOptions: false,
+                        cropping: false,
+                      }}
+                      onSuccess={handleUploadSuccess}
+                    >
+                      {({ open }) => (
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => open()}
+                          className="w-full h-32 border-dashed"
+                        >
+                          {formData.image_url ? (
+                            <img
+                              src={formData.image_url}
+                              alt="Preview"
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <div className="flex flex-col items-center justify-center">
+                              <ImagePlus className="h-8 w-8 mb-2 text-gray-400" />
+                              <span className="text-sm text-gray-500">
+                                აირჩიეთ ან ჩააგდეთ სურათი
+                              </span>
+                            </div>
+                          )}
+                        </Button>
+                      )}
+                    </CldUploadWidget>
+                  )}
                 </div>
 
                 {/* Display Order */}

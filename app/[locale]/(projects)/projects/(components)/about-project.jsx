@@ -165,11 +165,7 @@ const AboutProject = ({ projectId }) => {
     );
   }
 
-  if (
-    !projectData ||
-    !projectData.sections ||
-    projectData.sections.length === 0
-  ) {
+  if (!projectData || !projectData.data || projectData.data.length === 0) {
     return (
       <div className="py-12 px-4 text-center">
         <p>No project sections available.</p>
@@ -177,13 +173,9 @@ const AboutProject = ({ projectId }) => {
     );
   }
 
-  // მოდით გავფილტროთ და დავალაგოთ სექციები
-  const aboutSections = projectData.sections.filter(
-    (section) => section.section_type !== "hero"
-  );
+  const aboutSections = projectData.data;
 
-  // Gallery სექციის პოვნა
-  const gallerySection = projectData.sections.find(
+  const gallerySection = projectData.data.find(
     (section) =>
       section.section_type === "gallery" ||
       (section.title && section.title.toLowerCase().includes("gallery")) ||
@@ -192,7 +184,6 @@ const AboutProject = ({ projectId }) => {
 
   console.log("Gallery section found:", gallerySection);
 
-  // Gallery სურათების მასივის გაპარსვა
   const galleryImages = gallerySection
     ? parseImages(gallerySection.image_url)
     : [];
@@ -208,53 +199,87 @@ const AboutProject = ({ projectId }) => {
             {locale === "ka" ? "პროექტის შესახებ" : "About the Project"}
           </h2>
 
-          {/* First section */}
-          {aboutSections.length > 0 && (
+          {/* Display the about_page section if it exists */}
+          {aboutSections.filter(
+            (section) => section.section_type === "about_page"
+          ).length > 0 ? (
             <div className="flex flex-col md:flex-row items-center gap-16 mb-20">
               <div className="flex-1">
-                <h3 className="text-2xl font-bold mb-2">
-                  {currentLang === "ge"
-                    ? aboutSections[0].title_ge
-                    : aboutSections[0].title_en}
-                </h3>
-                {/* Show subtitle if exists */}
-                {((currentLang === "ge" && aboutSections[0].subtitle_ge) ||
-                  (currentLang === "en" && aboutSections[0].subtitle_en)) && (
-                  <h4 className="text-lg text-gray-600 mb-6">
-                    {currentLang === "ge"
-                      ? aboutSections[0].subtitle_ge
-                      : aboutSections[0].subtitle_en}
-                  </h4>
+                {aboutSections.map(
+                  (section, index) =>
+                    section.section_type === "about_page" && (
+                      <div key={index}>
+                        <h3 className="text-2xl font-bold mb-2">
+                          {currentLang === "ge"
+                            ? section.title_ge
+                            : section.title_en}
+                        </h3>
+                        {/* Show subtitle if exists */}
+                        {((currentLang === "ge" && section.subtitle_ge) ||
+                          (currentLang === "en" && section.subtitle_en)) && (
+                          <h4 className="text-lg text-gray-600 mb-6">
+                            {currentLang === "ge"
+                              ? section.subtitle_ge
+                              : section.subtitle_en}
+                          </h4>
+                        )}
+                        {/* If no subtitle, add margin */}
+                        {!(
+                          (currentLang === "ge" && section.subtitle_ge) ||
+                          (currentLang === "en" && section.subtitle_en)
+                        ) && <div className="mb-6"></div>}
+                        <div className="space-y-2">
+                          {renderParagraphs(
+                            currentLang === "ge"
+                              ? section.description_ge
+                              : section.description_en
+                          )}
+                        </div>
+                      </div>
+                    )
                 )}
-                {/* If no subtitle, add margin */}
-                {!(
-                  (currentLang === "ge" && aboutSections[0].subtitle_ge) ||
-                  (currentLang === "en" && aboutSections[0].subtitle_en)
-                ) && <div className="mb-6"></div>}
-                <div className="space-y-2">
-                  {renderParagraphs(
-                    currentLang === "ge"
-                      ? aboutSections[0].description_ge
-                      : aboutSections[0].description_en
-                  )}
-                </div>
               </div>
               <div className="w-full md:w-[350px] flex justify-center">
                 <div className="w-full h-[300px] rounded-lg overflow-hidden shadow-xl">
-                  <img
-                    src={
-                      aboutSections[0].image_url ||
-                      "/assets/ortachala-project/ortachala-project.png"
-                    }
-                    alt={
-                      currentLang === "ge"
-                        ? aboutSections[0].title_ge
-                        : aboutSections[0].title_en
-                    }
-                    className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
-                  />
+                  {aboutSections.find(
+                    (section) => section.section_type === "about_page"
+                  )?.image_url ? (
+                    <img
+                      src={
+                        aboutSections.find(
+                          (section) => section.section_type === "about_page"
+                        ).image_url
+                      }
+                      alt={
+                        currentLang === "ge"
+                          ? aboutSections.find(
+                              (section) => section.section_type === "about_page"
+                            ).title_ge
+                          : aboutSections.find(
+                              (section) => section.section_type === "about_page"
+                            ).title_en
+                      }
+                      className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
+                    />
+                  ) : (
+                    <img
+                      src="/assets/ortachala-project/ortachala-project.png"
+                      alt={
+                        locale === "ka" ? "პროექტის სურათი" : "Project image"
+                      }
+                      className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
+                    />
+                  )}
                 </div>
               </div>
+            </div>
+          ) : (
+            <div className="py-12 px-4 text-center">
+              <p>
+                {locale === "ka"
+                  ? "ამ პროექტისთვის არ არის ხელმისაწვდომი აღწერილობითი სექციები."
+                  : "No description sections available for this project."}
+              </p>
             </div>
           )}
 

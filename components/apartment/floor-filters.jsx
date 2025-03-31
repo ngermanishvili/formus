@@ -164,7 +164,11 @@ const FloorFilters = ({ initialFilters, onSearch }) => {
   });
 
   const [projects, setProjects] = useState([]);
-  const [availableBlocks, setAvailableBlocks] = useState(["A", "B", "D"]);
+  const [availableBlocks, setAvailableBlocks] = useState([
+    { id: "A", name: "A ბლოკი" },
+    { id: "B", name: "B ბლოკი" },
+    { id: "D", name: "D ბლოკი" },
+  ]);
 
   // Fetch projects
   useEffect(() => {
@@ -192,7 +196,16 @@ const FloorFilters = ({ initialFilters, onSearch }) => {
         if (filters.projects.length === 0) {
           // If no project selected, use default blocks
           console.log("No project selected, using default blocks A, B, D");
-          setAvailableBlocks(["A", "B", "D"]);
+          setAvailableBlocks([
+            { id: "A", name: "A ბლოკი" },
+            { id: "B", name: "B ბლოკი" },
+            { id: "D", name: "D ბლოკი" },
+          ]);
+          console.log("Default blocks set:", [
+            { id: "A", name: "A ბლოკი" },
+            { id: "B", name: "B ბლოკი" },
+            { id: "D", name: "D ბლოკი" },
+          ]);
           return;
         }
 
@@ -205,19 +218,28 @@ const FloorFilters = ({ initialFilters, onSearch }) => {
         );
         if (response.ok) {
           const { data } = await response.json();
-          console.log(`Got ${data.length} blocks for project ${projectId}`);
+          console.log(
+            `Got ${data.length} blocks for project ${projectId}:`,
+            data
+          );
 
           if (data.length > 0) {
-            // Extract block IDs
-            const blockIds = data.map((block) => block.block_id);
-            console.log("Available blocks for this project:", blockIds);
-            setAvailableBlocks(blockIds);
+            // Create array of objects with ID and name for blocks - use actual name from API
+            const blocksWithNames = data.map((block) => ({
+              id: block.block_id,
+              name: block.name, // Use the name directly from API without transformation
+            }));
+            console.log(
+              "Available blocks with names for this project:",
+              blocksWithNames
+            );
+            setAvailableBlocks(blocksWithNames);
 
             // If current selected blocks contain blocks that don't belong to this project,
             // filter them out
             setFilters((prev) => {
-              const validBlocks = prev.blocks.filter((block) =>
-                blockIds.includes(block)
+              const validBlocks = prev.blocks.filter((blockId) =>
+                blocksWithNames.some((block) => block.id === blockId)
               );
               if (validBlocks.length !== prev.blocks.length) {
                 console.log(
@@ -234,12 +256,20 @@ const FloorFilters = ({ initialFilters, onSearch }) => {
             console.log(
               "No blocks found for this project, using default blocks A, B, D"
             );
-            setAvailableBlocks(["A", "B", "D"]);
+            setAvailableBlocks([
+              { id: "A", name: "A ბლოკი" },
+              { id: "B", name: "B ბლოკი" },
+              { id: "D", name: "D ბლოკი" },
+            ]);
           }
         }
       } catch (error) {
         console.error("Error fetching blocks:", error);
-        setAvailableBlocks(["A", "B", "D"]); // Fallback to defaults
+        setAvailableBlocks([
+          { id: "A", name: "A ბლოკი" },
+          { id: "B", name: "B ბლოკი" },
+          { id: "D", name: "D ბლოკი" },
+        ]); // Fallback to defaults
       }
     };
 
@@ -254,14 +284,18 @@ const FloorFilters = ({ initialFilters, onSearch }) => {
     if (filters.projects.length === 0) {
       const requiredBlocks = ["A", "B", "D"];
       const missingBlocks = requiredBlocks.filter(
-        (block) => !availableBlocks.includes(block)
+        (blockId) => !availableBlocks.some((block) => block.id === blockId)
       );
 
       if (missingBlocks.length > 0) {
         console.log(
           "No project selected, adding default blocks A, B, D to the UI"
         );
-        setAvailableBlocks((prev) => [...prev, ...missingBlocks]);
+        const blocksToAdd = missingBlocks.map((id) => ({
+          id,
+          name: `${id} ბლოკი`,
+        }));
+        setAvailableBlocks((prev) => [...prev, ...blocksToAdd]);
       }
     }
   }, [availableBlocks, filters.projects]);
@@ -432,6 +466,17 @@ const FloorFilters = ({ initialFilters, onSearch }) => {
     }
 
     console.log("Navigating with params:", queryParams.toString());
+    console.log("Selected blocks:", filters.blocks);
+    console.log("Available blocks:", availableBlocks);
+    // Added debugging to track block names vs ids
+    console.log(
+      "Block names for selected blocks:",
+      filters.blocks.map((blockId) => {
+        const block = availableBlocks.find((b) => b.id === blockId);
+        return block ? block.name : blockId;
+      })
+    );
+
     router.push(`/${locale}/homes-list?${queryParams.toString()}`);
     setIsDrawerOpen(false);
   };
@@ -462,6 +507,23 @@ const FloorFilters = ({ initialFilters, onSearch }) => {
     (count, arr) => count + arr.length,
     0
   );
+
+  // Helper to get block name based on current language
+  const getBlockName = (block) => {
+    if (locale === "en") {
+      // For English, use name_en if available, otherwise fallback to "{ID} Block"
+      return block.name_en || `${block.id} Block`;
+    }
+    // For Georgian, use the name field
+    return block.name;
+  };
+
+  // Helper to get block name from id
+  const getBlockNameById = (blockId) => {
+    const block = availableBlocks.find((b) => b.id === blockId);
+    if (!block) return blockId;
+    return getBlockName(block);
+  };
 
   const getStatusLabel = (status) => {
     return t[status] || status;
@@ -535,9 +597,21 @@ const FloorFilters = ({ initialFilters, onSearch }) => {
                   <div className="flex items-center gap-2">
                     <span>{t.block}</span>
                     {filters.blocks.length > 0 && (
-                      <span className="w-5 h-5 rounded-full flex items-center justify-center bg-[#00326b] text-white text-xs">
-                        {filters.blocks.length}
-                      </span>
+                      <>
+                        <span className="w-5 h-5 rounded-full flex items-center justify-center bg-[#00326b] text-white text-xs">
+                          {filters.blocks.length}
+                        </span>
+                        <span className="ml-1 text-xs max-w-[80px] truncate">
+                          {filters.blocks
+                            .map((blockId) => {
+                              const block = availableBlocks.find(
+                                (b) => b.id === blockId
+                              );
+                              return block ? getBlockName(block) : blockId;
+                            })
+                            .join(", ")}
+                        </span>
+                      </>
                     )}
                   </div>
                 }
@@ -550,22 +624,22 @@ const FloorFilters = ({ initialFilters, onSearch }) => {
                 <div className="p-3 max-h-60 overflow-y-auto">
                   {availableBlocks.map((block) => (
                     <div
-                      key={block}
+                      key={block.id}
                       className="flex items-center gap-2 py-1.5 cursor-pointer hover:bg-gray-100 px-2 rounded"
-                      onClick={() => handleFilterToggle("blocks", block)}
+                      onClick={() => handleFilterToggle("blocks", block.id)}
                     >
                       <div
                         className={`w-4 h-4 rounded border flex items-center justify-center ${
-                          filters.blocks.includes(block)
+                          filters.blocks.includes(block.id)
                             ? "bg-[#00326b] border-[#00326b]"
                             : "border-gray-400"
                         }`}
                       >
-                        {filters.blocks.includes(block) && (
+                        {filters.blocks.includes(block.id) && (
                           <Check size={12} className="text-white" />
                         )}
                       </div>
-                      <span>{block}</span>
+                      <span>{getBlockName(block)}</span>
                     </div>
                   ))}
                 </div>
@@ -810,22 +884,22 @@ const FloorFilters = ({ initialFilters, onSearch }) => {
                 <div className="grid grid-cols-3 gap-2">
                   {availableBlocks.map((block) => (
                     <button
-                      key={block}
-                      onClick={() => handleFilterToggle("blocks", block)}
+                      key={block.id}
+                      onClick={() => handleFilterToggle("blocks", block.id)}
                       className={`p-3 rounded-lg text-center font-medium
                                 ${
-                                  filters.blocks.includes(block)
+                                  filters.blocks.includes(block.id)
                                     ? "bg-[#FBB200] text-black"
                                     : "bg-white/10 text-white/90"
                                 }`}
                       disabled={
-                        (block === "D" &&
+                        (block.id === "D" &&
                           filters.blocks.some((b) => b === "A" || b === "B")) ||
-                        ((block === "A" || block === "B") &&
+                        ((block.id === "A" || block.id === "B") &&
                           filters.blocks.includes("D"))
                       }
                     >
-                      {t.block} {block}
+                      {getBlockName(block)}
                     </button>
                   ))}
                 </div>

@@ -14,10 +14,11 @@ export async function GET(request, { params }) {
         }
 
         const result = await db.query(`
-            SELECT block_id, name, description
-            FROM project_blocks
-            WHERE project_id = $1
-            ORDER BY name
+            SELECT pb.block_id, bb.block_name as name, bb.description
+            FROM project_blocks pb
+            JOIN building_blocks bb ON pb.block_id = bb.block_id
+            WHERE pb.project_id = $1
+            ORDER BY bb.block_name
         `, [id]);
 
         return NextResponse.json({
@@ -59,12 +60,12 @@ export async function POST(request, { params }) {
 
         // First create or find the block in building_blocks
         const blockResult = await db.query(`
-            INSERT INTO building_blocks (block_name) 
-            VALUES ($1)
-            ON CONFLICT (block_name) DO UPDATE 
+            INSERT INTO building_blocks (block_id, block_name) 
+            VALUES ($1, $2)
+            ON CONFLICT (block_id) DO UPDATE 
             SET block_name = EXCLUDED.block_name
             RETURNING block_id, block_name as name
-        `, [name]);
+        `, [name, name + " ბლოკი"]);
 
         if (!blockResult || blockResult.length === 0) {
             throw new Error("Failed to create building block");

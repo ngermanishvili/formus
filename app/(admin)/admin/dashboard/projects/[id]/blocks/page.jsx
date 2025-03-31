@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Loader2, PlusCircle, Trash2 } from "lucide-react";
+import { Loader2, PlusCircle, Trash2, Edit } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -20,9 +20,18 @@ export default function ProjectBlocksPage({ params }) {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [selectedBlockId, setSelectedBlockId] = useState(null);
-  const [newBlock, setNewBlock] = useState({ block_name: "" });
+  const [newBlock, setNewBlock] = useState({
+    block_name: "",
+    total_floors: "",
+  });
+  const [editingBlock, setEditingBlock] = useState({
+    block_id: "",
+    block_name: "",
+    total_floors: "",
+  });
   const [buttonLoading, setButtonLoading] = useState(false);
   const { toast } = useToast();
 
@@ -38,8 +47,10 @@ export default function ProjectBlocksPage({ params }) {
         const projectData = await projectResponse.json();
         setProject(projectData.data);
 
-        // Fetch building blocks
-        const blocksResponse = await fetch(`/api/building_blocks`);
+        // Fetch building blocks for this project
+        const blocksResponse = await fetch(
+          `/api/building_blocks?project_id=${id}`
+        );
         if (!blocksResponse.ok) throw new Error("Failed to fetch blocks");
         const blocksData = await blocksResponse.json();
         setBlocks(blocksData.data || []);
@@ -70,19 +81,57 @@ export default function ProjectBlocksPage({ params }) {
 
     try {
       setButtonLoading(true);
-      const response = await fetch(`/api/building_blocks`, {
+
+      // First, create the block
+      const response = await fetch(`/api/projects/${id}/blocks`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ block_name: newBlock.block_name }),
+        body: JSON.stringify({ name: newBlock.block_name }),
       });
 
-      if (!response.ok) throw new Error("Failed to add block");
+      let data;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to add block");
+      } else {
+        const responseData = await response.json();
+        data = responseData.data;
+      }
 
-      const { data } = await response.json();
-      setBlocks((prev) => [...prev, data]);
-      setNewBlock({ block_name: "" });
+      // If total_floors is provided, update the block with floors count
+      if (newBlock.total_floors) {
+        const updateResponse = await fetch(
+          `/api/building_blocks/${data.block_id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              total_floors: parseInt(newBlock.total_floors) || null,
+            }),
+          }
+        );
+
+        let updatedData;
+        if (!updateResponse.ok) {
+          const errorData = await updateResponse.json();
+          throw new Error(errorData.message || "Failed to update block floors");
+        } else {
+          const responseData = await updateResponse.json();
+          updatedData = responseData.data;
+        }
+
+        // Replace the block with updated data
+        setBlocks((prev) => [...prev, updatedData]);
+      } else {
+        // Just add the new block without floors data
+        setBlocks((prev) => [...prev, data]);
+      }
+
+      setNewBlock({ block_name: "", total_floors: "" });
       setIsAddDialogOpen(false);
 
       toast({
@@ -94,7 +143,71 @@ export default function ProjectBlocksPage({ params }) {
       toast({
         variant: "destructive",
         title: "შეცდომა",
-        description: "ბლოკის დამატებისას დაფიქსირდა შეცდომა",
+        description: "ბლოკის დამატებისას დაფიქსირდა შეცდომა: " + error.message,
+      });
+    } finally {
+      setButtonLoading(false);
+    }
+  };
+
+  const handleEditBlock = async () => {
+    if (!editingBlock.block_id) return;
+
+    try {
+      setButtonLoading(true);
+
+      console.log("Updating block with data:", {
+        block_name: editingBlock.block_name,
+        total_floors:
+          editingBlock.total_floors === ""
+            ? null
+            : parseInt(editingBlock.total_floors),
+      });
+
+      const response = await fetch(
+        `/api/building_blocks/${editingBlock.block_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            block_name: editingBlock.block_name,
+            total_floors:
+              editingBlock.total_floors === ""
+                ? null
+                : parseInt(editingBlock.total_floors),
+          }),
+        }
+      );
+
+      let data;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update block");
+      } else {
+        const responseData = await response.json();
+        data = responseData.data;
+      }
+
+      setBlocks((prev) =>
+        prev.map((block) =>
+          block.block_id === editingBlock.block_id ? data : block
+        )
+      );
+
+      setIsEditDialogOpen(false);
+
+      toast({
+        title: "წარმატება",
+        description: "ბლოკი წარმატებით განახლდა",
+      });
+    } catch (error) {
+      console.error("Error updating block:", error);
+      toast({
+        variant: "destructive",
+        title: "შეცდომა",
+        description: "ბლოკის განახლებისას დაფიქსირდა შეცდომა: " + error.message,
       });
     } finally {
       setButtonLoading(false);
@@ -152,7 +265,7 @@ export default function ProjectBlocksPage({ params }) {
                 {project?.title_ge} - ბლოკები
               </h2>
               <p className="text-gray-500 mt-1">
-                ბლოკების მართვა ყველა პროექტისთვის
+                ბლოკების მართვა ამ პროექტისათვის
               </p>
             </div>
             <Button
@@ -182,21 +295,41 @@ export default function ProjectBlocksPage({ params }) {
                   <CardContent className="p-4">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="text-xl font-semibold">
-                          ბლოკი {block.name}
-                        </h3>
+                        <h3 className="text-xl font-semibold">{block.name}</h3>
+                        <p className="text-gray-500 text-sm mt-1">
+                          {block.total_floors
+                            ? `${block.total_floors} სართული`
+                            : "სართულების რაოდენობა არ არის მითითებული"}
+                        </p>
                       </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
-                        onClick={() => {
-                          setSelectedBlockId(block.block_id);
-                          setIsDeleteDialogOpen(true);
-                        }}
-                      >
-                        <Trash2 size={16} />
-                      </Button>
+                      <div className="flex space-x-1">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-blue-500 hover:text-blue-700 hover:bg-blue-50"
+                          onClick={() => {
+                            setEditingBlock({
+                              block_id: block.block_id,
+                              block_name: block.name,
+                              total_floors: block.total_floors || "",
+                            });
+                            setIsEditDialogOpen(true);
+                          }}
+                        >
+                          <Edit size={16} />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                          onClick={() => {
+                            setSelectedBlockId(block.block_id);
+                            setIsDeleteDialogOpen(true);
+                          }}
+                        >
+                          <Trash2 size={16} />
+                        </Button>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -227,6 +360,21 @@ export default function ProjectBlocksPage({ params }) {
                 }
               />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="total-floors">სართულების რაოდენობა</Label>
+              <Input
+                id="total-floors"
+                type="number"
+                placeholder="მაგ: 8, 10, 15..."
+                value={newBlock.total_floors}
+                onChange={(e) =>
+                  setNewBlock((prev) => ({
+                    ...prev,
+                    total_floors: e.target.value,
+                  }))
+                }
+              />
+            </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setIsAddDialogOpen(false)}>
@@ -243,6 +391,70 @@ export default function ProjectBlocksPage({ params }) {
                 </>
               ) : (
                 "დაამატე"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Block Dialog */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>ბლოკის რედაქტირება</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="edit-block-name">ბლოკის სახელი</Label>
+              <Input
+                id="edit-block-name"
+                placeholder="მაგ: A ბლოკი, B ბლოკი..."
+                value={editingBlock.block_name}
+                onChange={(e) =>
+                  setEditingBlock((prev) => ({
+                    ...prev,
+                    block_name: e.target.value,
+                  }))
+                }
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="edit-total-floors">სართულების რაოდენობა</Label>
+              <Input
+                id="edit-total-floors"
+                type="number"
+                placeholder="მაგ: 8, 10, 15..."
+                value={editingBlock.total_floors}
+                onChange={(e) =>
+                  setEditingBlock((prev) => ({
+                    ...prev,
+                    total_floors: e.target.value,
+                  }))
+                }
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                დატოვეთ ცარიელი, თუ არ გსურთ სართულების რაოდენობის მითითება
+              </p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsEditDialogOpen(false)}
+            >
+              გაუქმება
+            </Button>
+            <Button
+              onClick={handleEditBlock}
+              disabled={buttonLoading || !editingBlock.block_name.trim()}
+            >
+              {buttonLoading ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  განახლება...
+                </>
+              ) : (
+                "განახლება"
               )}
             </Button>
           </DialogFooter>

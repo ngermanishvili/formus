@@ -16,9 +16,94 @@ const renderParagraphs = (text) => {
   ));
 };
 
+// პარსინგის ფუნქცია გალერეის სურათებისთვის
+function parseImages(imageUrl) {
+  console.log("Gallery imageUrl in about-project:", imageUrl);
+
+  if (!imageUrl) {
+    console.log("No gallery images found");
+    return [];
+  }
+
+  try {
+    // თუ მასივია, დავაბრუნოთ
+    if (Array.isArray(imageUrl)) {
+      console.log("Image URL is already an array:", imageUrl);
+      return imageUrl
+        .map((url) => (typeof url === "string" ? url.replace(/['"]/g, "") : ""))
+        .filter((url) => url.trim() !== "");
+    }
+
+    // გავასუფთაოთ სტრინგი
+    let cleanJsonString =
+      typeof imageUrl === "string"
+        ? imageUrl.replace(/^["'](.*)["']$/, "$1").trim()
+        : "";
+
+    console.log("Cleaned gallery JSON string:", cleanJsonString);
+
+    if (!cleanJsonString) {
+      console.log("Empty gallery string after cleaning");
+      return [];
+    }
+
+    // JSON მასივის პარსინგი
+    if (cleanJsonString.startsWith("[") && cleanJsonString.endsWith("]")) {
+      console.log("String appears to be a JSON array, attempting to parse");
+      try {
+        const parsed = JSON.parse(cleanJsonString);
+        console.log("Successfully parsed gallery JSON:", parsed);
+
+        if (Array.isArray(parsed)) {
+          const validUrls = parsed
+            .map((url) =>
+              typeof url === "string" ? url.replace(/['"]/g, "") : ""
+            )
+            .filter((url) => url.trim() !== "");
+
+          console.log("Validated gallery URLs:", validUrls);
+          return validUrls;
+        } else {
+          console.log("Parsed gallery result is not an array:", parsed);
+        }
+      } catch (parseError) {
+        console.error("Gallery JSON parsing error:", parseError);
+      }
+    }
+
+    // URL-ების ამოღება რეგულარული გამოსახულებით
+    if (cleanJsonString.includes("http")) {
+      console.log("String contains URLs, extracting with regex");
+      const urlRegex = /(https?:\/\/[^"'\s,\[\]]+)/g;
+      const matches = cleanJsonString.match(urlRegex);
+
+      if (matches && matches.length > 0) {
+        console.log("Found gallery URLs with regex:", matches);
+        return matches
+          .map((url) => url.replace(/['"]/g, ""))
+          .filter((url) => url.trim() !== "");
+      }
+    }
+
+    // ერთი URL-ის შემთხვევა
+    if (cleanJsonString.startsWith("http")) {
+      console.log("Gallery string appears to be a single URL");
+      return [cleanJsonString.replace(/['"]/g, "")];
+    }
+
+    console.log("Could not parse gallery images");
+    return [];
+  } catch (error) {
+    console.error("Error parsing gallery images:", error);
+    return [];
+  }
+}
+
 const AboutProject = ({ projectId }) => {
   const [loading, setLoading] = useState(true);
   const [sections, setSections] = useState([]);
+  const [projectData, setProjectData] = useState(null);
+  const [error, setError] = useState(null);
 
   const pathname = usePathname();
   const locale = pathname.includes("/ka") ? "ka" : "en";
@@ -27,51 +112,92 @@ const AboutProject = ({ projectId }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // პროექტის შესახებ სექციების ჩატვირთვა
-        const response = await fetch(`/api/projects/${projectId}/about`);
-        const result = await response.json();
+        console.log(`Fetching project data for ID: ${projectId}`);
+        setLoading(true);
 
-        if (result.status === "success") {
-          console.log(`About data for project ${projectId}:`, result.data);
-          setSections(result.data);
-        } else {
-          console.error("Failed to fetch about data:", result);
+        // კეშის გამორთვისთვის პარამეტრების დამატება
+        const timestamp = new Date().getTime();
+        const response = await fetch(
+          `/api/projects/${projectId}/about?_=${timestamp}`,
+          {
+            cache: "no-store",
+            headers: {
+              "Cache-Control": "no-cache, no-store, must-revalidate",
+              Pragma: "no-cache",
+              Expires: "0",
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`Failed to fetch project data: ${response.status}`);
         }
-      } catch (error) {
-        console.error("Error fetching about data:", error);
+
+        const data = await response.json();
+        console.log("Fetched project data:", data);
+        setProjectData(data);
+      } catch (err) {
+        console.error("Error fetching project data:", err);
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
+    if (projectId) {
+      fetchData();
+    }
   }, [projectId]);
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="h-8 w-8 animate-spin" />
+      <div className="flex justify-center items-center min-h-[300px]">
+        <Loader2 className="h-10 w-10 animate-spin text-primary" />
       </div>
     );
   }
 
-  if (!sections || sections.length === 0) {
-    // ფოლბეკ კონტენტი, თუ API-დან მონაცემები ვერ მივიღეთ
+  if (error) {
     return (
-      <div className="py-16">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center">
-            {locale === "ka" ? "პროექტის შესახებ" : "About the Project"}
-          </h2>
-          <p className="text-center text-lg text-gray-500">
-            {locale === "ka"
-              ? "ინფორმაცია ამ პროექტის შესახებ არ არის ხელმისაწვდომი"
-              : "Information about this project is not available"}
-          </p>
-        </div>
+      <div className="py-12 px-4 text-center">
+        <p className="text-red-500">Error: {error}</p>
       </div>
     );
   }
+
+  if (
+    !projectData ||
+    !projectData.sections ||
+    projectData.sections.length === 0
+  ) {
+    return (
+      <div className="py-12 px-4 text-center">
+        <p>No project sections available.</p>
+      </div>
+    );
+  }
+
+  // მოდით გავფილტროთ და დავალაგოთ სექციები
+  const aboutSections = projectData.sections.filter(
+    (section) => section.section_type !== "hero"
+  );
+
+  // Gallery სექციის პოვნა
+  const gallerySection = projectData.sections.find(
+    (section) =>
+      section.section_type === "gallery" ||
+      (section.title && section.title.toLowerCase().includes("gallery")) ||
+      (section.title_geo && section.title_geo.toLowerCase().includes("გალერე"))
+  );
+
+  console.log("Gallery section found:", gallerySection);
+
+  // Gallery სურათების მასივის გაპარსვა
+  const galleryImages = gallerySection
+    ? parseImages(gallerySection.image_url)
+    : [];
+
+  console.log("Parsed gallery images:", galleryImages);
 
   return (
     <>
@@ -83,33 +209,33 @@ const AboutProject = ({ projectId }) => {
           </h2>
 
           {/* First section */}
-          {sections.length > 0 && (
+          {aboutSections.length > 0 && (
             <div className="flex flex-col md:flex-row items-center gap-16 mb-20">
               <div className="flex-1">
                 <h3 className="text-2xl font-bold mb-2">
                   {currentLang === "ge"
-                    ? sections[0].title_ge
-                    : sections[0].title_en}
+                    ? aboutSections[0].title_ge
+                    : aboutSections[0].title_en}
                 </h3>
                 {/* Show subtitle if exists */}
-                {((currentLang === "ge" && sections[0].subtitle_ge) ||
-                  (currentLang === "en" && sections[0].subtitle_en)) && (
+                {((currentLang === "ge" && aboutSections[0].subtitle_ge) ||
+                  (currentLang === "en" && aboutSections[0].subtitle_en)) && (
                   <h4 className="text-lg text-gray-600 mb-6">
                     {currentLang === "ge"
-                      ? sections[0].subtitle_ge
-                      : sections[0].subtitle_en}
+                      ? aboutSections[0].subtitle_ge
+                      : aboutSections[0].subtitle_en}
                   </h4>
                 )}
                 {/* If no subtitle, add margin */}
                 {!(
-                  (currentLang === "ge" && sections[0].subtitle_ge) ||
-                  (currentLang === "en" && sections[0].subtitle_en)
+                  (currentLang === "ge" && aboutSections[0].subtitle_ge) ||
+                  (currentLang === "en" && aboutSections[0].subtitle_en)
                 ) && <div className="mb-6"></div>}
                 <div className="space-y-2">
                   {renderParagraphs(
                     currentLang === "ge"
-                      ? sections[0].description_ge
-                      : sections[0].description_en
+                      ? aboutSections[0].description_ge
+                      : aboutSections[0].description_en
                   )}
                 </div>
               </div>
@@ -117,13 +243,13 @@ const AboutProject = ({ projectId }) => {
                 <div className="w-full h-[300px] rounded-lg overflow-hidden shadow-xl">
                   <img
                     src={
-                      sections[0].image_url ||
+                      aboutSections[0].image_url ||
                       "/assets/ortachala-project/ortachala-project.png"
                     }
                     alt={
                       currentLang === "ge"
-                        ? sections[0].title_ge
-                        : sections[0].title_en
+                        ? aboutSections[0].title_ge
+                        : aboutSections[0].title_en
                     }
                     className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
                   />
@@ -133,19 +259,19 @@ const AboutProject = ({ projectId }) => {
           )}
 
           {/* Second section with right-aligned image */}
-          {sections.length > 1 && (
+          {aboutSections.length > 1 && (
             <div className="flex flex-col md:flex-row items-center gap-16 mb-20">
               <div className="flex-1">
                 <h3 className="text-2xl font-bold mb-6">
                   {currentLang === "ge"
-                    ? sections[1].title_ge
-                    : sections[1].title_en}
+                    ? aboutSections[1].title_ge
+                    : aboutSections[1].title_en}
                 </h3>
                 <div className="space-y-2">
                   {renderParagraphs(
                     currentLang === "ge"
-                      ? sections[1].description_ge
-                      : sections[1].description_en
+                      ? aboutSections[1].description_ge
+                      : aboutSections[1].description_en
                   )}
                 </div>
               </div>
@@ -153,13 +279,13 @@ const AboutProject = ({ projectId }) => {
                 <div className="w-full h-[300px] rounded-lg overflow-hidden shadow-xl">
                   <img
                     src={
-                      sections[1].image_url ||
+                      aboutSections[1].image_url ||
                       "/assets/ortachala-project/ortachala-2.png"
                     }
                     alt={
                       currentLang === "ge"
-                        ? sections[1].title_ge
-                        : sections[1].title_en
+                        ? aboutSections[1].title_ge
+                        : aboutSections[1].title_en
                     }
                     className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
                   />
@@ -169,19 +295,19 @@ const AboutProject = ({ projectId }) => {
           )}
 
           {/* Third section with left-aligned image */}
-          {sections.length > 2 && (
+          {aboutSections.length > 2 && (
             <div className="flex flex-col md:flex-row-reverse items-center gap-16 mb-20">
               <div className="flex-1">
                 <h3 className="text-2xl font-bold mb-6">
                   {currentLang === "ge"
-                    ? sections[2].title_ge
-                    : sections[2].title_en}
+                    ? aboutSections[2].title_ge
+                    : aboutSections[2].title_en}
                 </h3>
                 <div className="space-y-4">
                   {renderParagraphs(
                     currentLang === "ge"
-                      ? sections[2].description_ge
-                      : sections[2].description_en
+                      ? aboutSections[2].description_ge
+                      : aboutSections[2].description_en
                   )}
                 </div>
               </div>
@@ -189,13 +315,13 @@ const AboutProject = ({ projectId }) => {
                 <div className="w-full h-[300px] rounded-lg overflow-hidden shadow-xl">
                   <img
                     src={
-                      sections[2].image_url ||
+                      aboutSections[2].image_url ||
                       "/assets/ortachala-project/ortachala-3.png"
                     }
                     alt={
                       currentLang === "ge"
-                        ? sections[2].title_ge
-                        : sections[2].title_en
+                        ? aboutSections[2].title_ge
+                        : aboutSections[2].title_en
                     }
                     className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
                   />
@@ -205,6 +331,41 @@ const AboutProject = ({ projectId }) => {
           )}
         </div>
       </div>
+
+      {/* Gallery Section */}
+      {galleryImages.length > 0 && (
+        <div className="py-16 md:py-24 bg-gray-100">
+          <div className="container mx-auto px-4">
+            <h2 className="text-3xl md:text-4xl font-bold mb-10 text-center">
+              {gallerySection?.title_geo || gallerySection?.title || "გალერეა"}
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {galleryImages.map((imageUrl, index) => (
+                <div
+                  key={index}
+                  className="relative h-64 md:h-80 overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:scale-105"
+                >
+                  <Image
+                    src={imageUrl}
+                    alt={`Gallery image ${index + 1}`}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+
+            {gallerySection?.description_geo || gallerySection?.description ? (
+              <div className="mt-10 text-center">
+                <p className="max-w-3xl mx-auto">
+                  {gallerySection.description_geo || gallerySection.description}
+                </p>
+              </div>
+            ) : null}
+          </div>
+        </div>
+      )}
 
       {/* 3D Section - Only show for Ortachala Hills (projectId === "1") */}
       {projectId === "1" && (

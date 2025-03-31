@@ -36,7 +36,12 @@ const InteractiveSection = ({ projectData, projectId }) => {
     const fetchProjectInfo = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/projects/${id}/info`);
+        const response = await fetch(`/api/projects/${id}/info`, {
+          cache: "no-store",
+          headers: {
+            "Cache-Control": "no-cache",
+          },
+        });
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

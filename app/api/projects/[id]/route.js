@@ -123,3 +123,48 @@ export async function PUT(request, { params }) {
         }, { status: 500 });
     }
 }
+
+export async function DELETE(request, { params }) {
+    try {
+        const { id } = params;
+        console.log('DELETE request for project ID:', id);
+        console.log('Request URL:', request.url);
+        console.log('Request method:', request.method);
+        console.log('Params:', params);
+
+        // Delete the project
+        const result = await db.query(`
+            DELETE FROM projects
+            WHERE id = $1
+            RETURNING id
+        `, [id]);
+
+        console.log('Delete query result:', result);
+
+        if (!result.length) {
+            console.log('No project found with ID:', id);
+            return NextResponse.json({
+                status: "error",
+                message: "პროექტი ვერ მოიძებნა"
+            }, { status: 404 });
+        }
+
+        // Also clean up related project information
+        await db.query(`
+            DELETE FROM project_info
+            WHERE project_id = $1
+        `, [id]);
+
+        console.log('Successfully deleted project with ID:', id);
+        return NextResponse.json({
+            status: "success",
+            message: "პროექტი წარმატებით წაიშალა"
+        });
+    } catch (error) {
+        console.error('Delete Project Error:', error);
+        return NextResponse.json({
+            status: "error",
+            message: error.message
+        }, { status: 500 });
+    }
+}

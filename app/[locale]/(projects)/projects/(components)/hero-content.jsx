@@ -13,28 +13,30 @@ import ProjectContPhotos from "@/public/assets/imgs/ortachala/ortachala.png";
 const ProjectContent = ({ id }) => {
   const [loading, setLoading] = useState(true);
   const [projectData, setProjectData] = useState(null);
+  const [galleryData, setGalleryData] = useState(null);
   const [openImageIndex, setOpenImageIndex] = useState(null);
+  const [loadingGallery, setLoadingGallery] = useState(true);
 
   const pathname = usePathname();
   const currentLang = pathname.includes("/ka") ? "ge" : "en";
 
-  // პროექტის ფოტოები
-  const projectImages = [
+  // ფოლბეკ პროექტის ფოტოები (გამოყენებული იქნება თუ API-დან ვერ ჩაიტვირთება)
+  const defaultProjectImages = [
     {
       img: "/assets/ortachala-project/four.png",
-      alt: "Ortachala Project View 4",
+      alt: "Project View 4",
     },
     {
       img: "/assets/ortachala-project/three.png",
-      alt: "Ortachala Project View 3",
+      alt: "Project View 3",
     },
     {
       img: "/assets/ortachala-project/two.png",
-      alt: "Ortachala Project View 2",
+      alt: "Project View 2",
     },
     {
       img: "/assets/ortachala-project/one.png",
-      alt: "Ortachala Project View 1",
+      alt: "Project View 1",
     },
   ];
 
@@ -51,7 +53,12 @@ const ProjectContent = ({ id }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`/api/projects/${id}`);
+        const response = await fetch(`/api/projects/${id}`, {
+          cache: "no-store",
+          headers: {
+            "Cache-Control": "no-cache",
+          },
+        });
         const data = await response.json();
 
         if (data.status === "success" && data.data) {
@@ -94,8 +101,39 @@ const ProjectContent = ({ id }) => {
       }
     };
 
+    // ფეტჩი გალერეის სექციის მონაცემებისთვის
+    const fetchGalleryData = async () => {
+      try {
+        setLoadingGallery(true);
+        const response = await fetch(`/api/projects/${id}/info`, {
+          cache: "no-store",
+          headers: {
+            "Cache-Control": "no-cache",
+          },
+        });
+        const result = await response.json();
+
+        if (result.status === "success") {
+          // ფილტრაცია gallery_section ტიპის მონაცემებისთვის
+          const galleryItems = result.data.filter(
+            (item) => item.section_type === "gallery_section"
+          );
+
+          if (galleryItems.length > 0) {
+            console.log("Found gallery section data:", galleryItems);
+            setGalleryData(galleryItems[0]); // ვიღებთ პირველ გალერეის სექციას
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching gallery data:", error);
+      } finally {
+        setLoadingGallery(false);
+      }
+    };
+
     if (id) {
       fetchData();
+      fetchGalleryData();
     }
   }, [id, currentLang]);
 
@@ -115,6 +153,80 @@ const ProjectContent = ({ id }) => {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [openImageIndex]);
+
+  // გალერეის ფოტოების მასივის მიღება - დინამიური ან ფოლბეკ
+  const getGalleryImages = () => {
+    if (galleryData?.image_url) {
+      try {
+        // სცადეთ პარსინგი, ჯერ გავასუფთაოთ ყველა გარე კავიჭისგან
+        const cleanJsonString = galleryData.image_url.replace(/^["'](.*)["']$/, '$1');
+        console.log("Attempting to parse gallery JSON:", cleanJsonString);
+        
+        let galleryImages;
+        try {
+          // მცდელობა JSON პარსინგის
+          galleryImages = JSON.parse(cleanJsonString);
+        } catch (e) {
+          console.error("JSON parsing error, trying alternative method:", e);
+          // თუ ვერ დაპარსა, შევეცადოთ სტრინგიდან მასივის მიღებას რეგულარული გამოსახულებით
+          const urlMatches = galleryData.image_url.match(/(https?:\/\/[^"'\s]+)/g);
+          if (urlMatches && urlMatches.length > 0) {
+            galleryImages = urlMatches;
+          }
+        }
+        
+        if (Array.isArray(galleryImages) && galleryImages.length > 0) {
+          console.log("Successfully parsed gallery images:", galleryImages);
+          return galleryImages.map((url, index) => {
+            // გავასუფთაოთ ნებისმიერი კავიჭებისგან და სხვა არასასურველი სიმბოლოებისგან
+            const cleanUrl = typeof url === 'string' ? url.replace(/['"]/g, '') : '';
+            return {
+              img: cleanUrl,
+              alt: `${projectData?.title || 'Project'} View ${index + 1}`,
+            };
+          });
+        } else if (typeof galleryData.image_url === 'string' && galleryData.image_url.includes('http')) {
+          // თუ ერთი URL-ია სტრინგში
+          const cleanUrl = galleryData.image_url.replace(/['"]/g, '');
+          console.log("Single URL detected in gallery:", cleanUrl);
+          return [
+            {
+              img: cleanUrl,
+              alt: `${projectData?.title || 'Project'} View`,
+            }
+          ];
+        }
+      } catch (error) {
+        console.error("Error processing gallery images:", error, galleryData.image_url);
+      }
+    }
+
+    console.log("Using default gallery images");
+    // ფოლბეკ მასივი
+    return defaultProjectImages;
+  };
+
+  // სექციის სათაურის მიღება
+  const getGallerySectionTitle = () => {
+    if (galleryData) {
+      return currentLang === "ge"
+        ? galleryData.title_ge
+        : galleryData.title_en || "Project is financed by TBC Bank";
+    }
+    return currentLang === "ge"
+      ? "პროექტი დაფინანსებულია თიბისი ბანკის მიერ"
+      : "Project is financed by TBC Bank";
+  };
+
+  // სექციის აღწერის მიღება
+  const getGallerySectionDescription = () => {
+    if (galleryData) {
+      return currentLang === "ge"
+        ? galleryData.description_ge
+        : galleryData.description_en || projectData?.description;
+    }
+    return projectData?.description;
+  };
 
   if (loading) {
     return (
@@ -136,6 +248,8 @@ const ProjectContent = ({ id }) => {
       </div>
     );
   }
+
+  const projectImages = getGalleryImages();
 
   return (
     <>
@@ -194,19 +308,11 @@ const ProjectContent = ({ id }) => {
             {/* Content container */}
             <div className="relative z-20 text-left">
               <h2 className="font-firago font-bold text-3xl lg:text-3xl text-foreground mb-6 lg:mb-8 leading-tight">
-                {currentLang === "ge" ? (
-                  <>
-                    პროექტი დაფინანსებულია
-                    <br />
-                    "თიბისი" ბანკის მიერ.
-                  </>
-                ) : (
-                  <>Project is financed by TBC Bank.</>
-                )}
+                {getGallerySectionTitle()}
               </h2>
 
               <p className="font-firago text-lg font-light">
-                {projectData.description}
+                {getGallerySectionDescription()}
               </p>
             </div>
 

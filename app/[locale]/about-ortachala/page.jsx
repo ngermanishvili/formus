@@ -15,7 +15,12 @@ const AboutOrtachala = () => {
     const fetchAboutData = async () => {
       try {
         // ვიყენებთ სპეციალურ about API-ს, რომელიც აბრუნებს მხოლოდ about_page ტიპის ჩანაწერებს
-        const response = await fetch(`/api/projects/1/about`);
+        const response = await fetch(`/api/projects/1/about`, {
+          cache: "no-store",
+          headers: {
+            "Cache-Control": "no-cache",
+          },
+        });
         const result = await response.json();
 
         if (result.status === "success") {

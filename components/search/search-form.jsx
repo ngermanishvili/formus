@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   Select,
@@ -34,6 +34,8 @@ export default function SearchForm() {
   const { locale = "ka" } = useParams() || {};
   const router = useRouter();
   const t = translations[locale] || translations.ka;
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const areaRanges = [
     { value: "20-40", label: "20-40 მ²" },
@@ -42,32 +44,69 @@ export default function SearchForm() {
     { value: "80-100", label: "80-100 მ²" },
     { value: "100-120", label: "100-120 მ²" },
     { value: "120-150", label: "120-150 მ²" },
+    { value: "150-1000", label: "150+ მ²" },
   ];
 
   const [searchParams, setSearchParams] = useState({
-    project: "ortachala_hills",
+    project: "",
     location: "tbilisi",
     areaRange: "",
   });
+
+  // Fetch active projects
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch("/api/projects?isActive=true");
+        if (response.ok) {
+          const { data } = await response.json();
+          setProjects(data);
+
+          // Set default project if available
+          if (data.length > 0) {
+            setSearchParams((prev) => ({
+              ...prev,
+              project: data[0].id.toString(),
+            }));
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   const handleSelect = (value, type) => {
     setSearchParams((prev) => ({ ...prev, [type]: value }));
   };
 
   const handleSearch = () => {
+    // Create query parameters
+    const params = new URLSearchParams();
+
+    // Always include available status
+    params.set("statuses", "available");
+
+    // Add project ID if selected
+    if (searchParams.project) {
+      params.set("projects", searchParams.project);
+    }
+
+    // Add area range if selected
     if (searchParams.areaRange) {
       const [minArea, maxArea] = searchParams.areaRange.split("-");
-
-      // Create query parameters
-      const params = new URLSearchParams();
       params.set("totalAreaMin", minArea);
       params.set("totalAreaMax", maxArea);
-      params.set("statuses", "available");
-
-      // Create the URL
-      const url = `/${locale}/homes-list?${params.toString()}`;
-      window.location.href = url;
     }
+
+    // Create the URL and navigate
+    const url = `/${locale}/homes-list?${params.toString()}`;
+    window.location.href = url;
   };
 
   return (
@@ -81,20 +120,25 @@ export default function SearchForm() {
           <div className="flex-1 min-w-0">
             <p className="text-gray-500 text-sm mb-1 text-left">{t.project}</p>
             <Select
-              value="ortachala_hills"
-              disabled
+              value={searchParams.project}
               onValueChange={(value) => handleSelect(value, "project")}
             >
               <SelectTrigger
                 className="h-12 bg-gray-50 border-none rounded-xl 
                                    focus:ring-2 focus:ring-green-400 transition-all text-left"
               >
-                <SelectValue placeholder={t.ortachalaHills} />
+                <SelectValue
+                  placeholder={loading ? "იტვირთება..." : t.choose}
+                />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ortachala_hills">
-                  {t.ortachalaHills}
-                </SelectItem>
+                {projects.map((project) => (
+                  <SelectItem key={project.id} value={project.id.toString()}>
+                    {locale === "ka"
+                      ? project.title_ge
+                      : project.title_en || project.title}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

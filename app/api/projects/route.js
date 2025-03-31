@@ -1,12 +1,22 @@
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request) {
     try {
-        const result = await db.query(`
+        const url = new URL(request.url);
+        const isActive = url.searchParams.get('isActive');
+
+        let query = `
            SELECT * FROM projects 
-           ORDER BY COALESCE(display_order, 999), created_at DESC
-       `);
+        `;
+
+        if (isActive === 'true') {
+            query += ` WHERE is_active = true `;
+        }
+
+        query += ` ORDER BY COALESCE(display_order, 999), created_at DESC`;
+
+        const result = await db.query(query);
 
         return NextResponse.json({
             status: "success",

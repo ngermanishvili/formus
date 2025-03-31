@@ -139,9 +139,13 @@ export async function GET(request, { params }) {
         t.bathroom2_area,
         t.living_room_area,
         t.balcony_area,
-        t.balcony2_area
+        t.balcony2_area,
+        pb.project_id,
+        p.title_ge as project_name
       FROM apartments a
       JOIN apartment_types t ON a.type_id = t.type_id
+      LEFT JOIN project_blocks pb ON a.block_id = pb.block_id
+      LEFT JOIN projects p ON pb.project_id = p.id
       WHERE a.apartment_id = $1
     `, [id]);
 

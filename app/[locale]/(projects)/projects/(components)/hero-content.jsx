@@ -57,48 +57,35 @@ const ProjectContent = ({ id }) => {
         if (data.status === "success" && data.data) {
           const project = data.data;
 
-          if (id === "1") {
-            const features =
-              currentLang === "ge"
-                ? typeof project.features_ge === "string"
-                  ? JSON.parse(project.features_ge)
-                  : project.features_ge
-                : typeof project.features_en === "string"
-                ? JSON.parse(project.features_en)
-                : project.features_en;
+          const features =
+            currentLang === "ge"
+              ? typeof project.features_ge === "string"
+                ? JSON.parse(project.features_ge)
+                : project.features_ge
+              : typeof project.features_en === "string"
+              ? JSON.parse(project.features_en)
+              : project.features_en;
 
-            setProjectData({
-              title: currentLang === "ge" ? project.title_ge : project.title_en,
-              description:
-                currentLang === "ge"
-                  ? project.description_ge
-                  : project.description_en,
-              features: features || [],
-              main_image_url: project.main_image_url,
-              location:
-                currentLang === "ge"
-                  ? project.location_ge
-                  : project.location_en,
-              second_section_img: project.second_section_img,
-              second_section_title:
-                currentLang === "ge"
-                  ? project.second_section_title_ge
-                  : project.second_section_title_en,
-              second_section_description:
-                currentLang === "ge"
-                  ? project.second_section_description_ge
-                  : project.second_section_description_en,
-            });
-          } else {
-            setProjectData({
-              title: currentLang === "ge" ? project.title_ge : project.title_en,
-              main_image_url: project.main_image_url,
-              location:
-                currentLang === "ge"
-                  ? project.location_ge
-                  : project.location_en,
-            });
-          }
+          setProjectData({
+            title: currentLang === "ge" ? project.title_ge : project.title_en,
+            description:
+              currentLang === "ge"
+                ? project.description_ge
+                : project.description_en,
+            features: features || [],
+            main_image_url: project.main_image_url,
+            location:
+              currentLang === "ge" ? project.location_ge : project.location_en,
+            second_section_img: project.second_section_img,
+            second_section_title:
+              currentLang === "ge"
+                ? project.second_section_title_ge
+                : project.second_section_title_en,
+            second_section_description:
+              currentLang === "ge"
+                ? project.second_section_description_ge
+                : project.second_section_description_en,
+          });
         }
       } catch (error) {
         console.error("Error fetching project data:", error);
@@ -150,168 +137,10 @@ const ProjectContent = ({ id }) => {
     );
   }
 
-  if (id === "1") {
-    return (
-      <>
-        {/* Hero Section */}
-        <div className="relative h-[80vh] w-full">
-          <Image
-            src={projectData.main_image_url}
-            alt={projectData.title}
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute bottom-0 left-0 z-10">
-            <Image
-              src={SecondShape2}
-              alt="Bottom shape"
-              width={300}
-              height={300}
-              className="w-[180px]  object-contain"
-              priority
-            />
-          </div>
-          <div className="absolute inset-0 bg-black/50" />
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full mx-auto px-0   max-w-[1000px]">
-              <h1 className="font-firago font-bold text-4xl md:text-6xl text-white mb-4">
-                {projectData.title}
-              </h1>
-
-              <Link className="btn btn-border mt-2" href="/choose-apartment">
-                {currentLang === "ge"
-                  ? "შეარჩიეთ ბინა"
-                  : "Choose an apartament"}
-                <svg
-                  className="icon-16"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-hidden="true"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
-                  ></path>
-                </svg>
-              </Link>
-            </div>
-          </div>
-        </div>
-
-        {/* Content Section */}
-        <div className="mx-auto max-w-[1080px] px-4 py-12">
-          <div className="flex flex-col lg:flex-row gap-[100px] justify-end">
-            <div className="w-full relative">
-              {/* Content container */}
-              <div className="relative z-20 text-left">
-                <h2 className="font-firago font-bold text-3xl lg:text-3xl text-foreground mb-6 lg:mb-8 leading-tight">
-                  {currentLang === "ge" ? (
-                    <>
-                      პროექტი დაფინანსებულია
-                      <br />
-                      "თიბისი" ბანკის მიერ.
-                    </>
-                  ) : (
-                    <>Project is financed by TBC Bank.</>
-                  )}
-                </h2>
-
-                <p className="font-firago text-lg font-light">
-                  {projectData.description}
-                </p>
-              </div>
-
-              {/* Decorative shape - positioned below content */}
-              <div className="absolute left-[-14px] top-0 z-10">
-                <Image
-                  src={BreadCumpShape}
-                  alt="Decorative shape"
-                  width={90}
-                  height={90}
-                  className="w-[90px] h-[90px]"
-                />
-              </div>
-            </div>
-
-            <div className="w-full lg:w-[1200px] mb-20">
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
-                {projectImages.map((image, index) => (
-                  <div
-                    key={index}
-                    className="relative h-52 group overflow-hidden rounded-lg cursor-pointer"
-                    onClick={() => setOpenImageIndex(index)}
-                  >
-                    <img
-                      src={image.img}
-                      alt={image.alt}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-opacity duration-300" />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Image Modal */}
-        {openImageIndex !== null && (
-          <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
-            onClick={() => setOpenImageIndex(null)}
-          >
-            <div
-              className="relative max-w-4xl w-full"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Image
-                src={projectImages[openImageIndex].img}
-                alt={projectImages[openImageIndex].alt}
-                width={1200}
-                height={800}
-                className="w-full h-auto"
-                priority
-              />
-              <button
-                className="absolute top-4 right-4 text-white bg-black/60 hover:bg-black/80 rounded-full p-2"
-                onClick={() => setOpenImageIndex(null)}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="18" y1="6" x2="6" y2="18"></line>
-                  <line x1="6" y1="6" x2="18" y2="18"></line>
-                </svg>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Second Section */}
-        <section className="relative bg-background">
-          <InteractiveSection projectData={projectData} projectId={id} />
-        </section>
-      </>
-    );
-  }
-
-  // დანარჩენი ID-ებისთვის hero სექცია და რუკა
   return (
     <>
-      <div className="relative h-[100vh] w-full">
+      {/* Hero Section */}
+      <div className="relative h-[80vh] w-full">
         <Image
           src={projectData.main_image_url}
           alt={projectData.title}
@@ -319,18 +148,148 @@ const ProjectContent = ({ id }) => {
           className="object-cover"
           priority
         />
+        <div className="absolute bottom-0 left-0 z-10">
+          <Image
+            src={SecondShape2}
+            alt="Bottom shape"
+            width={300}
+            height={300}
+            className="w-[180px]  object-contain"
+            priority
+          />
+        </div>
         <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 flex items-center">
-          <div className="container mx-auto px-4">
+          <div className="w-full mx-auto px-0   max-w-[1000px]">
             <h1 className="font-firago font-bold text-4xl md:text-6xl text-white mb-4">
               {projectData.title}
             </h1>
-            <p className="font-firago text-xl text-white">
-              {projectData.location}
-            </p>
+
+            <Link className="btn btn-border mt-2" href="/choose-apartment">
+              {currentLang === "ge" ? "შეარჩიეთ ბინა" : "Choose an apartament"}
+              <svg
+                className="icon-16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
+                ></path>
+              </svg>
+            </Link>
           </div>
         </div>
       </div>
+
+      {/* Content Section */}
+      <div className="mx-auto max-w-[1080px] px-4 py-12">
+        <div className="flex flex-col lg:flex-row gap-[100px] justify-end">
+          <div className="w-full relative">
+            {/* Content container */}
+            <div className="relative z-20 text-left">
+              <h2 className="font-firago font-bold text-3xl lg:text-3xl text-foreground mb-6 lg:mb-8 leading-tight">
+                {currentLang === "ge" ? (
+                  <>
+                    პროექტი დაფინანსებულია
+                    <br />
+                    "თიბისი" ბანკის მიერ.
+                  </>
+                ) : (
+                  <>Project is financed by TBC Bank.</>
+                )}
+              </h2>
+
+              <p className="font-firago text-lg font-light">
+                {projectData.description}
+              </p>
+            </div>
+
+            {/* Decorative shape - positioned below content */}
+            <div className="absolute left-[-14px] top-0 z-10">
+              <Image
+                src={BreadCumpShape}
+                alt="Decorative shape"
+                width={90}
+                height={90}
+                className="w-[90px] h-[90px]"
+              />
+            </div>
+          </div>
+
+          <div className="w-full lg:w-[1200px] mb-20">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+              {projectImages.map((image, index) => (
+                <div
+                  key={index}
+                  className="relative h-52 group overflow-hidden rounded-lg cursor-pointer"
+                  onClick={() => setOpenImageIndex(index)}
+                >
+                  <img
+                    src={image.img}
+                    alt={image.alt}
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-opacity duration-300" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Image Modal */}
+      {openImageIndex !== null && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
+          onClick={() => setOpenImageIndex(null)}
+        >
+          <div
+            className="relative max-w-4xl w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Image
+              src={projectImages[openImageIndex].img}
+              alt={projectImages[openImageIndex].alt}
+              width={1200}
+              height={800}
+              className="w-full h-auto"
+              priority
+            />
+            <button
+              className="absolute top-4 right-4 text-white bg-black/60 hover:bg-black/80 rounded-full p-2"
+              onClick={() => setOpenImageIndex(null)}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Second Section */}
+      <section className="relative bg-background">
+        <InteractiveSection projectData={projectData} projectId={id} />
+      </section>
+
+      {/* Add map if available */}
       {mapsUrls[id] && (
         <div className="w-full h-[600px] mt-8">
           <iframe

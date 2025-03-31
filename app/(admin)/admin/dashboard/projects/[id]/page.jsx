@@ -165,6 +165,24 @@ export default function EditProject({ params }) {
           </h1>
           <p className="text-gray-500 mt-1">შეცვალეთ ინფორმაცია ორივე ენაზე</p>
         </div>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={() =>
+              router.push(`/admin/dashboard/projects/${params.id}/blocks`)
+            }
+          >
+            ბლოკების მართვა
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() =>
+              router.push(`/admin/dashboard/projects/${params.id}/project-info`)
+            }
+          >
+            დეტალების მართვა
+          </Button>
+        </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">

@@ -69,7 +69,7 @@ const FilterButton = ({ label, children, isActive, isOpen, onToggle }) => {
   );
 };
 
-const FloorFilters = () => {
+const FloorFilters = (props) => {
   const router = useRouter();
   const pathname = usePathname();
   const locale = useLocale();
@@ -174,7 +174,12 @@ const FloorFilters = () => {
       queryParams.set("blocks", filters.blocks.join(","));
     }
 
-    router.push(`/${locale}/homes-list?${queryParams.toString()}`);
+    if (typeof props.onFilterChange === "function") {
+      props.onFilterChange(filters);
+    } else {
+      router.push(`/${locale}/homes-list?${queryParams.toString()}`);
+    }
+
     setIsDrawerOpen(false);
   };
 
@@ -545,4 +550,8 @@ const FloorFilters = () => {
   );
 };
 
-export default FloorFilters;
+const ApartmentFilters = ({ onFilterChange }) => {
+  return <FloorFilters onFilterChange={onFilterChange} />;
+};
+
+export default ApartmentFilters;

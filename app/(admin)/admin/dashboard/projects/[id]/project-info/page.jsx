@@ -41,6 +41,8 @@ export default function ProjectInfoPage({ params }) {
     title_en: "",
     description_ge: "",
     description_en: "",
+    subtitle_ge: "",
+    subtitle_en: "",
     image_url: "",
     display_order: 0,
     section_type: "feature",
@@ -92,6 +94,8 @@ export default function ProjectInfoPage({ params }) {
       title_en: "",
       description_ge: "",
       description_en: "",
+      subtitle_ge: "",
+      subtitle_en: "",
       image_url: "",
       display_order: projectInfo.length + 1,
       section_type: "feature",
@@ -107,6 +111,8 @@ export default function ProjectInfoPage({ params }) {
       title_en: info.title_en || "",
       description_ge: info.description_ge || "",
       description_en: info.description_en || "",
+      subtitle_ge: info.subtitle_ge || "",
+      subtitle_en: info.subtitle_en || "",
       image_url: info.image_url || "",
       display_order: info.display_order || 0,
       section_type: info.section_type || "feature",
@@ -369,6 +375,23 @@ export default function ProjectInfoPage({ params }) {
                         }
                       />
                     </div>
+                    {formData.section_type === "about_page" && (
+                      <div className="space-y-2">
+                        <Label>
+                          ქვესათაური (მაგ: დაფინანსებულია "თიბისი" ბანკის მიერ)
+                        </Label>
+                        <Input
+                          placeholder="შეიყვანეთ ქვესათაური"
+                          value={formData.subtitle_ge}
+                          onChange={(e) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              subtitle_ge: e.target.value,
+                            }))
+                          }
+                        />
+                      </div>
+                    )}
                     <div className="space-y-2">
                       <Label>აღწერა</Label>
                       <Textarea
@@ -399,6 +422,21 @@ export default function ProjectInfoPage({ params }) {
                         }
                       />
                     </div>
+                    {formData.section_type === "about_page" && (
+                      <div className="space-y-2">
+                        <Label>Subtitle (e.g.: Financed by TBC Bank)</Label>
+                        <Input
+                          placeholder="Enter subtitle"
+                          value={formData.subtitle_en}
+                          onChange={(e) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              subtitle_en: e.target.value,
+                            }))
+                          }
+                        />
+                      </div>
+                    )}
                     <div className="space-y-2">
                       <Label>Description</Label>
                       <Textarea

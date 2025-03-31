@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react";
 import ProjectContent from "../../(components)/hero-content";
 import GalleryComponent from "@/components/apartment/gallery";
-import AboutOrtachala from "@/app/[locale]/about-ortachala/page";
-import GreenSection from "@/components/ortachala/3d-photo";
+import AboutProject from "../../(components)/about-project";
 
 export default function Page({ params }) {
   const [isMobile, setIsMobile] = useState(false);
@@ -19,22 +18,15 @@ export default function Page({ params }) {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  const isOrtachalaHills = params.id === "1";
-
   return (
     <>
       <main className="main" style={{ maxWidth: "100vw", overflow: "hidden" }}>
         <div className="border-bottom"></div>
         <ProjectContent id={params.id} />
 
-        {isOrtachalaHills && (
-          <>
-            <AboutOrtachala />
-            <GreenSection />
-          </>
-        )}
+        <AboutProject projectId={params.id} />
 
-        {isOrtachalaHills && <GalleryComponent />}
+        <GalleryComponent />
       </main>
     </>
   );

@@ -23,6 +23,9 @@ const translations = {
     area: "Area",
     areas: "Areas",
     squareMeters: "m²",
+    project: "Project",
+    projects: "Projects",
+    ortachalaHills: "Ortachala Hills",
   },
   ka: {
     back: "← უკან",
@@ -41,6 +44,9 @@ const translations = {
     area: "ფართი",
     areas: "ფართი",
     squareMeters: "მ²",
+    project: "პროექტი",
+    projects: "პროექტები",
+    ortachalaHills: "ორთაჭალა ჰილსი",
   },
 };
 
@@ -75,7 +81,7 @@ const FilterButton = ({ label, children, isActive, isOpen, onToggle }) => {
   );
 };
 
-const FloorFilters = () => {
+const FloorFilters = ({ initialFilters, onSearch }) => {
   const router = useRouter();
   const pathname = usePathname();
   const locale = useLocale();
@@ -101,21 +107,209 @@ const FloorFilters = () => {
       value: "100-120",
       label: pathname === "/ka/homes-list" ? "100-120 მ²" : "100-120 m²",
     },
+    {
+      value: "120-150",
+      label: pathname === "/ka/homes-list" ? "120-150 მ²" : "120-150 m²",
+    },
+    {
+      value: "150-1000",
+      label: pathname === "/ka/homes-list" ? "150+ მ²" : "150+ m²",
+    },
   ];
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [openFilter, setOpenFilter] = useState(null);
-  const [filters, setFilters] = useState({
-    floors: [],
-    statuses: [],
-    blocks: [],
-    areas: [], // Add areas to filters state
+
+  // Initialize with URL params if provided via initialFilters
+  const [filters, setFilters] = useState(() => {
+    // Use initialFilters if provided, otherwise use the default empty state
+    if (initialFilters) {
+      console.log(
+        "Initial filters from URL or parent component:",
+        initialFilters
+      );
+
+      // Parse blocks to ensure they are uppercase and normalized
+      let blocks = initialFilters.blocks || [];
+      if (typeof blocks === "string") {
+        blocks = [blocks.toUpperCase()];
+      } else if (Array.isArray(blocks)) {
+        blocks = blocks.map((b) => String(b).toUpperCase());
+      }
+
+      // Parse projects
+      let projects = initialFilters.projects || [];
+      if (projects.length > 0) {
+        console.log(`Starting with project ID: ${projects[0]}`);
+      }
+
+      const result = {
+        projects: initialFilters.projects || [],
+        floors: initialFilters.floors || [],
+        statuses: initialFilters.statuses || [],
+        blocks: blocks,
+        areas: initialFilters.areas || [],
+      };
+
+      console.log("Initialized filters:", result);
+      return result;
+    }
+
+    return {
+      projects: [],
+      floors: [],
+      statuses: [],
+      blocks: [],
+      areas: [],
+    };
   });
 
-  const blockFloors = {
+  const [projects, setProjects] = useState([]);
+  const [availableBlocks, setAvailableBlocks] = useState(["A", "B", "D"]);
+
+  // Fetch projects
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        console.log("Fetching active projects...");
+        const response = await fetch("/api/projects?isActive=true");
+        if (response.ok) {
+          const { data } = await response.json();
+          console.log("Active projects fetched:", data);
+          setProjects(data);
+        }
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  // Fetch blocks for selected project
+  useEffect(() => {
+    const fetchBlocks = async () => {
+      try {
+        if (filters.projects.length === 0) {
+          // If no project selected, use default blocks
+          console.log("No project selected, using default blocks A, B, D");
+          setAvailableBlocks(["A", "B", "D"]);
+          return;
+        }
+
+        const projectId = filters.projects[0];
+        console.log(`Fetching blocks for project ${projectId}...`);
+
+        // Use building_blocks API with project_id filter to get blocks for this project
+        const response = await fetch(
+          `/api/building_blocks?project_id=${projectId}`
+        );
+        if (response.ok) {
+          const { data } = await response.json();
+          console.log(`Got ${data.length} blocks for project ${projectId}`);
+
+          if (data.length > 0) {
+            // Extract block IDs
+            const blockIds = data.map((block) => block.block_id);
+            console.log("Available blocks for this project:", blockIds);
+            setAvailableBlocks(blockIds);
+
+            // If current selected blocks contain blocks that don't belong to this project,
+            // filter them out
+            setFilters((prev) => {
+              const validBlocks = prev.blocks.filter((block) =>
+                blockIds.includes(block)
+              );
+              if (validBlocks.length !== prev.blocks.length) {
+                console.log(
+                  `Removing blocks that don't belong to project ${projectId}`
+                );
+                return {
+                  ...prev,
+                  blocks: validBlocks,
+                };
+              }
+              return prev;
+            });
+          } else {
+            console.log(
+              "No blocks found for this project, using default blocks A, B, D"
+            );
+            setAvailableBlocks(["A", "B", "D"]);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching blocks:", error);
+        setAvailableBlocks(["A", "B", "D"]); // Fallback to defaults
+      }
+    };
+
+    fetchBlocks();
+  }, [filters.projects]);
+
+  // Remove hard-coded blocks requirement since each project will have its own blocks
+  useEffect(() => {
+    console.log("Current available blocks:", availableBlocks);
+
+    // Only add A, B, D blocks by default if no project is selected
+    if (filters.projects.length === 0) {
+      const requiredBlocks = ["A", "B", "D"];
+      const missingBlocks = requiredBlocks.filter(
+        (block) => !availableBlocks.includes(block)
+      );
+
+      if (missingBlocks.length > 0) {
+        console.log(
+          "No project selected, adding default blocks A, B, D to the UI"
+        );
+        setAvailableBlocks((prev) => [...prev, ...missingBlocks]);
+      }
+    }
+  }, [availableBlocks, filters.projects]);
+
+  // Remove hardcoded blockFloors object and create a state for it
+  const [blockFloors, setBlockFloors] = useState({
     A: Array.from({ length: 8 }, (_, i) => i + 1),
     B: Array.from({ length: 8 }, (_, i) => i + 1),
     D: Array.from({ length: 15 }, (_, i) => i + 1),
-  };
+    T: Array.from({ length: 12 }, (_, i) => i + 1),
+    Y: Array.from({ length: 12 }, (_, i) => i + 1),
+  });
+
+  // Fetch buildings and their floors when component loads
+  useEffect(() => {
+    const fetchBuildingDetails = async () => {
+      try {
+        // Fetch all available building blocks with their total floors
+        const response = await fetch("/api/building_blocks");
+        if (response.ok) {
+          const { data } = await response.json();
+
+          // Update block floors state with fetched data
+          const newBlockFloors = { ...blockFloors };
+
+          data.forEach((block) => {
+            const blockId = block.block_id;
+            // Get total_floors from API if available, otherwise use default
+            const totalFloors = block.total_floors || 12;
+
+            console.log(`Block ${blockId}: Setting ${totalFloors} floors`);
+
+            // Create array of floors from 1 to totalFloors
+            newBlockFloors[blockId] = Array.from(
+              { length: totalFloors },
+              (_, i) => i + 1
+            );
+          });
+
+          setBlockFloors(newBlockFloors);
+        }
+      } catch (error) {
+        console.error("Error fetching building details:", error);
+      }
+    };
+
+    fetchBuildingDetails();
+  }, []);
 
   useEffect(() => {
     if (isDrawerOpen) {
@@ -136,6 +330,18 @@ const FloorFilters = () => {
           ? currentValues.filter((v) => v !== value)
           : [...currentValues, value];
         return { ...prev, [type]: newValues };
+      });
+    } else if (type === "projects") {
+      setFilters((prev) => {
+        const currentValues = prev[type];
+        const newValues = currentValues.includes(value)
+          ? currentValues.filter((v) => v !== value)
+          : [...currentValues, value];
+
+        return {
+          ...prev,
+          [type]: newValues,
+        };
       });
     } else if (type === "blocks") {
       setFilters((prev) => {
@@ -191,16 +397,20 @@ const FloorFilters = () => {
 
   const handleClearFilters = useCallback(() => {
     setFilters({
+      projects: [],
       floors: [],
       statuses: [],
       blocks: [],
-      areas: [], // დავამატოთ areas მასივ
+      areas: [],
     });
   }, []);
 
   const handleSearch = () => {
     const queryParams = new URLSearchParams();
 
+    if (filters.projects.length) {
+      queryParams.set("projects", filters.projects.join(","));
+    }
     if (filters.floors.length) {
       queryParams.set("floors", filters.floors.join(","));
     }
@@ -216,14 +426,34 @@ const FloorFilters = () => {
       queryParams.set("totalAreaMax", maxArea);
     }
 
+    // Call onSearch prop if provided
+    if (typeof onSearch === "function") {
+      onSearch(filters);
+    }
+
+    console.log("Navigating with params:", queryParams.toString());
     router.push(`/${locale}/homes-list?${queryParams.toString()}`);
     setIsDrawerOpen(false);
   };
 
   const getAvailableFloors = () => {
-    if (filters.blocks.length === 0) return [];
+    // Helper function to safely get floors for a block
+    const getBlockFloors = (block) => {
+      return blockFloors[block] || Array.from({ length: 12 }, (_, i) => i + 1);
+    };
+
+    // If no blocks selected, show floors for all blocks to allow selection
+    if (filters.blocks.length === 0) {
+      // Get maximum floor across all blocks
+      const maxFloor = Math.max(
+        ...Object.values(blockFloors).map((floors) => floors.length)
+      );
+      return Array.from({ length: maxFloor }, (_, i) => i + 1);
+    }
+
+    // If blocks are selected, get floors for those blocks
     const maxFloor = Math.max(
-      ...filters.blocks.map((block) => blockFloors[block].length)
+      ...filters.blocks.map((block) => getBlockFloors(block).length)
     );
     return Array.from({ length: maxFloor }, (_, i) => i + 1);
   };
@@ -255,54 +485,92 @@ const FloorFilters = () => {
             </Link>
 
             <div className="hidden md:flex items-center gap-2">
+              {/* Project Filter Button */}
               <FilterButton
                 label={
-                  filters.blocks.length > 0
-                    ? filters.blocks.length === 1
-                      ? `${filters.blocks[0]} ${t.block}`
-                      : `${filters.blocks.join(" & ")} ${t.block}`
-                    : t.block
+                  <div className="flex items-center gap-2">
+                    <span>{t.project}</span>
+                    {filters.projects.length > 0 && (
+                      <span className="w-5 h-5 rounded-full flex items-center justify-center bg-[#00326b] text-white text-xs">
+                        {filters.projects.length}
+                      </span>
+                    )}
+                  </div>
                 }
-                isActive={filters.blocks.length > 0}
-                isOpen={openFilter === "block"}
+                isActive={filters.projects.length > 0}
+                isOpen={openFilter === "projects"}
                 onToggle={() =>
-                  setOpenFilter(openFilter === "block" ? null : "block")
+                  setOpenFilter(openFilter === "projects" ? null : "projects")
                 }
               >
-                <div className="space-y-1">
-                  {["A", "B", "D"].map((block) => (
-                    <label
-                      key={block}
-                      className="flex items-center gap-2 px-2 py-1.5 hover:bg-black/5 rounded cursor-pointer"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleFilterToggle("blocks", block, true);
-                      }}
+                <div className="p-3 max-h-60 overflow-y-auto">
+                  {projects.map((project) => (
+                    <div
+                      key={project.id}
+                      className="flex items-center gap-2 py-1.5 cursor-pointer hover:bg-gray-100 px-2 rounded"
+                      onClick={() =>
+                        handleFilterToggle("projects", project.id.toString())
+                      }
                     >
-                      <input
-                        type="checkbox"
-                        checked={filters.blocks.includes(block)}
-                        className="text-[#FBB200]"
-                        onChange={(e) => {
-                          e.stopPropagation();
-                          handleFilterToggle("blocks", block, false);
-                        }}
-                        disabled={
-                          (block === "D" &&
-                            filters.blocks.some(
-                              (b) => b === "A" || b === "B"
-                            )) ||
-                          ((block === "A" || block === "B") &&
-                            filters.blocks.includes("D"))
-                        }
-                      />
-                      <span className="text-black">
-                        {t.block} {block}
-                      </span>
-                    </label>
+                      <div
+                        className={`w-4 h-4 rounded border flex items-center justify-center ${
+                          filters.projects.includes(project.id.toString())
+                            ? "bg-[#00326b] border-[#00326b]"
+                            : "border-gray-400"
+                        }`}
+                      >
+                        {filters.projects.includes(project.id.toString()) && (
+                          <Check size={12} className="text-white" />
+                        )}
+                      </div>
+                      <span>{project.title_ge}</span>
+                    </div>
                   ))}
                 </div>
               </FilterButton>
+
+              {/* Block Filter Button */}
+              <FilterButton
+                label={
+                  <div className="flex items-center gap-2">
+                    <span>{t.block}</span>
+                    {filters.blocks.length > 0 && (
+                      <span className="w-5 h-5 rounded-full flex items-center justify-center bg-[#00326b] text-white text-xs">
+                        {filters.blocks.length}
+                      </span>
+                    )}
+                  </div>
+                }
+                isActive={filters.blocks.length > 0}
+                isOpen={openFilter === "blocks"}
+                onToggle={() =>
+                  setOpenFilter(openFilter === "blocks" ? null : "blocks")
+                }
+              >
+                <div className="p-3 max-h-60 overflow-y-auto">
+                  {availableBlocks.map((block) => (
+                    <div
+                      key={block}
+                      className="flex items-center gap-2 py-1.5 cursor-pointer hover:bg-gray-100 px-2 rounded"
+                      onClick={() => handleFilterToggle("blocks", block)}
+                    >
+                      <div
+                        className={`w-4 h-4 rounded border flex items-center justify-center ${
+                          filters.blocks.includes(block)
+                            ? "bg-[#00326b] border-[#00326b]"
+                            : "border-gray-400"
+                        }`}
+                      >
+                        {filters.blocks.includes(block) && (
+                          <Check size={12} className="text-white" />
+                        )}
+                      </div>
+                      <span>{block}</span>
+                    </div>
+                  ))}
+                </div>
+              </FilterButton>
+
               <FilterButton
                 label={
                   filters.areas.length > 0
@@ -511,11 +779,36 @@ const FloorFilters = () => {
 
             {/* Mobile Filters Content */}
             <div className="space-y-6">
+              {/* Projects */}
+              <div>
+                <h3 className="text-white/90 mb-3">{t.project}</h3>
+                <div className="grid grid-cols-2 gap-2">
+                  {projects.map((project) => (
+                    <button
+                      key={project.id}
+                      onClick={() =>
+                        handleFilterToggle("projects", project.id.toString())
+                      }
+                      className={`p-3 rounded-lg text-center font-medium
+                                ${
+                                  filters.projects.includes(
+                                    project.id.toString()
+                                  )
+                                    ? "bg-[#FBB200] text-black"
+                                    : "bg-white/10 text-white/90"
+                                }`}
+                    >
+                      {project.title_ge}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               {/* Blocks */}
               <div>
                 <h3 className="text-white/90 mb-3">{t.block}</h3>
                 <div className="grid grid-cols-3 gap-2">
-                  {["A", "B", "D"].map((block) => (
+                  {availableBlocks.map((block) => (
                     <button
                       key={block}
                       onClick={() => handleFilterToggle("blocks", block)}
@@ -525,6 +818,12 @@ const FloorFilters = () => {
                                     ? "bg-[#FBB200] text-black"
                                     : "bg-white/10 text-white/90"
                                 }`}
+                      disabled={
+                        (block === "D" &&
+                          filters.blocks.some((b) => b === "A" || b === "B")) ||
+                        ((block === "A" || block === "B") &&
+                          filters.blocks.includes("D"))
+                      }
                     >
                       {t.block} {block}
                     </button>

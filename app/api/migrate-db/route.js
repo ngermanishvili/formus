@@ -250,10 +250,64 @@ export async function POST(request) {
                 status: "success",
                 message: "ორთაჭალის შესახებ გვერდის ინფორმაცია წარმატებით დაემატა"
             });
+        } else if (operation === "add_subtitle_columns") {
+            // Check if subtitle columns already exist
+            const subtitleGeExists = await db.query(`
+                SELECT EXISTS (
+                    SELECT FROM information_schema.columns 
+                    WHERE table_name = 'project_info' AND column_name = 'subtitle_ge'
+                );
+            `);
+
+            const subtitleEnExists = await db.query(`
+                SELECT EXISTS (
+                    SELECT FROM information_schema.columns 
+                    WHERE table_name = 'project_info' AND column_name = 'subtitle_en'
+                );
+            `);
+
+            let message = "";
+
+            // Add subtitle_ge column if it doesn't exist
+            if (!subtitleGeExists[0].exists) {
+                await db.query(`
+                    ALTER TABLE project_info 
+                    ADD COLUMN subtitle_ge TEXT
+                `);
+                message += "subtitle_ge ველი წარმატებით დაემატა. ";
+            } else {
+                message += "subtitle_ge ველი უკვე არსებობს. ";
+            }
+
+            // Add subtitle_en column if it doesn't exist
+            if (!subtitleEnExists[0].exists) {
+                await db.query(`
+                    ALTER TABLE project_info 
+                    ADD COLUMN subtitle_en TEXT
+                `);
+                message += "subtitle_en ველი წარმატებით დაემატა.";
+            } else {
+                message += "subtitle_en ველი უკვე არსებობს.";
+            }
+
+            // Update Ortachala Hills first section with subtitle data
+            await db.query(`
+                UPDATE project_info 
+                SET subtitle_ge = 'დაფინანსებულია "თიბისი" ბანკის მიერ',
+                    subtitle_en = 'Financed by TBC Bank'
+                WHERE project_id = 1 AND section_type = 'about_page' AND display_order = 1
+            `);
+
+            message += " ორთაჭალა ჰილსისთვის subtitle მნიშვნელობები განახლდა.";
+
+            return NextResponse.json({
+                status: "success",
+                message: message
+            });
         } else {
             return NextResponse.json({
                 status: "error",
-                message: "არასწორი ოპერაცია"
+                message: "უცნობი ოპერაცია"
             }, { status: 400 });
         }
     } catch (error) {

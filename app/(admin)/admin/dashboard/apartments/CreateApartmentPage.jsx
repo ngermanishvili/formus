@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,13 @@ import { CldUploadWidget } from "next-cloudinary";
 import { ImagePlus, Loader2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const ImageUpload = ({ value, onChange, title }) => {
   return (
@@ -75,7 +82,10 @@ export default function CreateApartmentPage() {
   const searchParams = useSearchParams();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const [blocks, setBlocks] = useState([]);
   const blockId = searchParams.get("blockId");
+  const projectId = searchParams.get("projectId") || "1"; // Default to project 1 (Ortachala Hills)
 
   const [formData, setFormData] = useState({
     apartment_number: "",
@@ -93,7 +103,63 @@ export default function CreateApartmentPage() {
     home_2d: "",
     home_3d: "",
     block_id: blockId || "",
+    project_id: projectId,
   });
+
+  // Fetch projects on component mount
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch("/api/projects");
+        if (response.ok) {
+          const { data } = await response.json();
+          setProjects(data);
+        }
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  // Fetch blocks when project_id changes
+  useEffect(() => {
+    if (formData.project_id) {
+      const fetchBlocks = async () => {
+        try {
+          const response = await fetch(
+            `/api/building_blocks?project_id=${formData.project_id}`
+          );
+          if (response.ok) {
+            const { data } = await response.json();
+            console.log(
+              `Fetched ${data.length} blocks for project ${formData.project_id}`
+            );
+            setBlocks(data);
+
+            // Reset block_id if the current one is not in the new list of blocks
+            if (
+              formData.block_id &&
+              !data.some(
+                (block) =>
+                  block.block_id.toString() === formData.block_id.toString()
+              )
+            ) {
+              setFormData((prev) => ({
+                ...prev,
+                block_id: data.length > 0 ? data[0].block_id.toString() : "",
+              }));
+            }
+          }
+        } catch (error) {
+          console.error("Error fetching blocks:", error);
+        }
+      };
+
+      fetchBlocks();
+    }
+  }, [formData.project_id]);
 
   const apartmentStatuses = [
     { value: "available", label: "თავისუფალი" },
@@ -104,6 +170,13 @@ export default function CreateApartmentPage() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSelectChange = (name, value) => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -159,6 +232,56 @@ export default function CreateApartmentPage() {
           <h2 className="text-2xl font-bold mb-6">ახალი ბინის დამატება</h2>
           <form onSubmit={handleCreateApartment} className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
+              {/* Project Selection */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium">პროექტი</label>
+                <Select
+                  value={formData.project_id}
+                  onValueChange={(value) =>
+                    handleSelectChange("project_id", value)
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="აირჩიეთ პროექტი" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {projects.map((project) => (
+                      <SelectItem
+                        key={project.id}
+                        value={project.id.toString()}
+                      >
+                        {project.title_ge}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Block Selection */}
+              <div className="space-y-2">
+                <label className="text-sm font-medium">ბლოკი</label>
+                <Select
+                  value={formData.block_id}
+                  onValueChange={(value) =>
+                    handleSelectChange("block_id", value)
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="აირჩიეთ ბლოკი" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {blocks.map((block) => (
+                      <SelectItem
+                        key={block.block_id}
+                        value={block.block_id.toString()}
+                      >
+                        {block.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
               <div className="space-y-2">
                 <label className="text-sm font-medium">ბინის ნომერი</label>
                 <Input
@@ -272,60 +395,46 @@ export default function CreateApartmentPage() {
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-medium">სტატუსი</label>
-                <select
-                  name="status"
+                <Select
                   value={formData.status}
-                  onChange={handleInputChange}
-                  className="w-full rounded-md border border-gray-200 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  required
+                  onValueChange={(value) => handleSelectChange("status", value)}
                 >
-                  {apartmentStatuses.map((status) => (
-                    <option key={status.value} value={status.value}>
-                      {status.label}
-                    </option>
-                  ))}
-                </select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="აირჩიეთ სტატუსი" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {apartmentStatuses.map((status) => (
+                      <SelectItem key={status.value} value={status.value}>
+                        {status.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
 
-            {/* ფოტოების სექცია */}
-            <div>
-              <h3 className="text-lg font-semibold mb-4">ბინის ვიზუალები</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <ImageUpload
-                  value={formData.home_2d}
-                  onChange={handleImageChange("home_2d")}
-                  title="2D რენდერი"
-                />
-                <ImageUpload
-                  value={formData.home_3d}
-                  onChange={handleImageChange("home_3d")}
-                  title="3D რენდერი"
-                />
-              </div>
+            <div className="grid grid-cols-2 gap-4">
+              <ImageUpload
+                title="ბინის 2D გეგმა"
+                value={formData.home_2d}
+                onChange={handleImageChange("home_2d")}
+              />
+              <ImageUpload
+                title="ბინის 3D გეგმა"
+                value={formData.home_3d}
+                onChange={handleImageChange("home_3d")}
+              />
             </div>
 
-            <div className="flex justify-end space-x-2">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => router.push("/admin/dashboard")}
-                disabled={loading}
-              >
-                გაუქმება
-              </Button>
-              <Button
-                type="submit"
-                disabled={loading}
-                className="min-w-[150px]"
-              >
+            <div className="flex justify-end">
+              <Button type="submit" disabled={loading}>
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    იტვირთება...
+                    მიმდინარეობს დამატება...
                   </>
                 ) : (
-                  "დამატება"
+                  "დაამატე"
                 )}
               </Button>
             </div>

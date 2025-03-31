@@ -44,10 +44,12 @@ export async function POST(request, { params }) {
                 title_ge,
                 description_en,
                 description_ge,
+                subtitle_en,
+                subtitle_ge,
                 image_url,
                 display_order,
                 section_type
-            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
             RETURNING *
         `, [
             id,
@@ -55,6 +57,8 @@ export async function POST(request, { params }) {
             data.title_ge,
             data.description_en || '',
             data.description_ge,
+            data.subtitle_en || '',
+            data.subtitle_ge || '',
             data.image_url || '',
             data.display_order || 0,
             data.section_type || 'feature'
@@ -100,17 +104,21 @@ export async function PUT(request, { params }) {
                 title_ge = $2,
                 description_en = $3,
                 description_ge = $4,
-                image_url = $5,
-                display_order = $6,
-                section_type = $7,
+                subtitle_en = $5,
+                subtitle_ge = $6,
+                image_url = $7,
+                display_order = $8,
+                section_type = $9,
                 updated_at = NOW()
-            WHERE id = $8 AND project_id = $9
+            WHERE id = $10 AND project_id = $11
             RETURNING *
         `, [
             data.title_en || '',
             data.title_ge,
             data.description_en || '',
             data.description_ge,
+            data.subtitle_en || '',
+            data.subtitle_ge || '',
             data.image_url || '',
             data.display_order || 0,
             data.section_type || 'feature',

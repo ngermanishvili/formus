@@ -104,7 +104,12 @@ const ApartmentDetails = () => {
     <div className="min-h-screen bg-white mt-[100px]">
       <div className="container mx-auto px-4 relative mb-8">
         <div className="flex justify-center w-full my-8">
-          <FloorFilters />
+          <FloorFilters
+            initialFilters={{
+              projects: data.project_id ? [data.project_id.toString()] : [],
+              blocks: [data.block_id],
+            }}
+          />
         </div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 mt-8">
           <div>

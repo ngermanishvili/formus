@@ -15,6 +15,8 @@ import {
   Languages,
   Plus,
   Trash,
+  Building2,
+  ArrowLeft,
 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 
@@ -22,6 +24,7 @@ export default function CreateProject() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("georgian");
+  const [blocks, setBlocks] = useState([{ name: "" }]);
   const [formData, setFormData] = useState({
     title_ge: "",
     title_en: "",
@@ -76,12 +79,31 @@ export default function CreateProject() {
     }));
   };
 
+  const handleAddBlock = () => {
+    setBlocks([...blocks, { name: "" }]);
+  };
+
+  const handleBlockChange = (index, value) => {
+    const newBlocks = [...blocks];
+    newBlocks[index].name = value;
+    setBlocks(newBlocks);
+  };
+
+  const handleRemoveBlock = (index) => {
+    if (blocks.length > 1) {
+      const newBlocks = [...blocks];
+      newBlocks.splice(index, 1);
+      setBlocks(newBlocks);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const response = await fetch("/api/projects", {
+      // First create the project
+      const projectResponse = await fetch("/api/projects", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,15 +111,41 @@ export default function CreateProject() {
         body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
-        router.push("/admin/dashboard/projects");
-      } else {
-        const data = await response.json();
-        alert(data.message || "შეცდომა პროექტის შექმნისას");
+      if (!projectResponse.ok) {
+        const data = await projectResponse.json();
+        console.error("პროექტის შექმნის შეცდომა:", data.message);
+        setLoading(false);
+        return;
       }
+
+      const projectData = await projectResponse.json();
+      const projectId = projectData.data.id;
+
+      // Now add the blocks
+      const validBlocks = blocks.filter((block) => block.name.trim() !== "");
+
+      if (validBlocks.length > 0) {
+        for (const block of validBlocks) {
+          const blockResponse = await fetch(
+            `/api/projects/${projectId}/blocks`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ name: block.name }),
+            }
+          );
+
+          if (!blockResponse.ok) {
+            console.error(`შეცდომა ბლოკის "${block.name}" დამატებისას`);
+          }
+        }
+      }
+
+      router.push("/admin/dashboard/projects");
     } catch (error) {
       console.error("Error creating project:", error);
-      alert("შეცდომა პროექტის შექმნისას");
     } finally {
       setLoading(false);
     }
@@ -122,6 +170,12 @@ export default function CreateProject() {
           </h1>
           <p className="text-gray-500 mt-1">შეავსეთ ინფორმაცია ორივე ენაზე</p>
         </div>
+        <button
+          onClick={() => router.back()}
+          className="flex items-center gap-1 text-slate-600 hover:text-slate-900"
+        >
+          <ArrowLeft size={16} /> უკან დაბრუნება
+        </button>
       </div>
 
       <form onSubmit={handleSubmit}>
@@ -214,6 +268,55 @@ export default function CreateProject() {
               პროექტისთვის გამოჩნდება მხოლოდ სურათი.
             </p>
           </div>
+
+          {/* Project Blocks */}
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <Label className="text-xl font-semibold">
+                  პროექტის ბლოკები
+                </Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={handleAddBlock}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  ბლოკის დამატება
+                </Button>
+              </div>
+
+              <div className="space-y-3">
+                {blocks.map((block, index) => (
+                  <div key={index} className="flex gap-2 items-center">
+                    <Building2 className="h-5 w-5 text-gray-400" />
+                    <Input
+                      placeholder="ბლოკის სახელი (მაგ: A, B, C...)"
+                      value={block.name}
+                      onChange={(e) => handleBlockChange(index, e.target.value)}
+                      className="flex-1"
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleRemoveBlock(index)}
+                      disabled={blocks.length === 1}
+                    >
+                      <Trash className="h-4 w-4 text-red-500" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+
+              <p className="text-sm text-gray-500 mt-4">
+                მიუთითეთ პროექტის სხვადასხვა ბლოკები (მაგ: A, B, C ბლოკი და
+                ა.შ.). ბლოკები საჭიროა, რომ შემდგომში ბინები მივაკუთვნოთ
+                კონკრეტულ ბლოკს.
+              </p>
+            </CardContent>
+          </Card>
 
           {/* First Section Content */}
           <Card>

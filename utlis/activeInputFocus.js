@@ -8,7 +8,7 @@ export const activeInputFocus = () => {
         this?.closest(".form-group")?.classList.add("focused");
       });
     });
-
+  ///
   // Blur event
   document
     .querySelectorAll(

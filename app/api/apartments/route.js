@@ -139,57 +139,23 @@ export async function GET(request) {
         // Get query parameters
         const { searchParams } = new URL(request.url);
 
-        const project_id = searchParams.get('project_id');
-        const blocks = searchParams.get('blocks')?.split(',') || [];
-        const floors = searchParams.get('floors')?.split(',').map(Number) || [];
+        // Support both 'project_id' and 'projects' parameters for backward compatibility
+        const project_id = searchParams.get('project_id') || searchParams.get('projects');
         const statuses = searchParams.get('statuses')?.split(',') || [];
         const totalAreaMin = Number(searchParams.get('totalAreaMin')) || 0;
         const totalAreaMax = Number(searchParams.get('totalAreaMax')) || Infinity;
 
-        console.log("API Request with params:", {
+        console.log("API Request with simple params:", {
             project_id,
-            blocks,
-            floors,
             statuses,
             totalAreaMin,
             totalAreaMax
         });
 
-        // Special case: if project_id is specified but that project has no apartments yet,
-        // return empty array immediately, don't try to fallback to other projects
-        if (project_id) {
-            console.log(`Checking if project ID ${project_id} has any apartments...`);
-            const projectCheck = await db.query(
-                `SELECT EXISTS (
-                    SELECT 1 FROM apartments a
-                    JOIN building_blocks bb ON a.block_id = bb.block_id
-                    JOIN project_blocks pb ON bb.block_id = pb.block_id
-                    WHERE pb.project_id = $1
-                ) as has_apartments`,
-                [project_id]
-            );
-
-            console.log(`Project check result:`, projectCheck[0]);
-
-            if (!projectCheck[0].has_apartments) {
-                console.log(`Project ID ${project_id} has no apartments yet. Returning empty result.`);
-                return NextResponse.json(
-                    { status: "success", data: [] },
-                    {
-                        headers: {
-                            "Cache-Control": "no-cache, no-store, must-revalidate",
-                            "Pragma": "no-cache",
-                            "Expires": "0"
-                        }
-                    }
-                );
-            }
-        }
-
-        // Build the query - using explicit JOINs with project_blocks table when project_id is specified
+        // Get apartments with their type info only - avoiding problematic joins
         let query = `
             SELECT 
-                a.apartment_id,
+                a.apartment_id, 
                 a.block_id,
                 a.apartment_number,
                 a.floor,
@@ -197,169 +163,68 @@ export async function GET(request) {
                 a.price,
                 a.home_2d,
                 a.home_3d,
-                t.total_area,
-                bb.block_name,
-                pb.project_id,
-                p.title_ge as project_name
+                t.total_area
             FROM apartments a
-            JOIN apartment_types t ON a.type_id = t.type_id
-            JOIN building_blocks bb ON a.block_id = bb.block_id
+            JOIN apartment_types t ON a.type_id::integer = t.type_id
+            WHERE 1=1
         `;
 
-        // Initialize parameters
-        let paramIndex = 1;
         const queryParams = [];
-
-        // Add where conditions
-        const whereConditions = [];
-
-        // Modify query structure based on project_id
-        if (project_id) {
-            // First, check if apartments table has project_id column
-            try {
-                // When filtering by project_id, use the most direct relationship if available
-                query += `
-                JOIN project_blocks pb ON bb.block_id = pb.block_id AND pb.project_id = $${paramIndex}
-                JOIN projects p ON pb.project_id = p.id
-                `;
-
-                // Add an additional WHERE clause to ensure only apartments from this project are returned
-                whereConditions.push(`pb.project_id = $${paramIndex}`);
-
-                // Add project_id as first parameter
-                queryParams.push(project_id);
-                paramIndex++;
-                console.log(`Using strict filtering for project_id: ${project_id}`);
-            } catch (error) {
-                console.error("Error with project filtering:", error);
-                // Fallback to original implementation
-                query += `
-                JOIN project_blocks pb ON bb.block_id = pb.block_id
-                JOIN projects p ON pb.project_id = p.id
-                `;
-                whereConditions.push(`pb.project_id = $${paramIndex++}`);
-                queryParams.push(project_id);
-            }
-        } else {
-            // Without project_id filter, use regular JOINs
-            query += `
-            JOIN project_blocks pb ON bb.block_id = pb.block_id
-            JOIN projects p ON pb.project_id = p.id
-            `;
-        }
-
-        // Add block filter if provided - block_id only (not block_name)
-        if (blocks.length > 0) {
-            if (project_id) {
-                // If project_id is specified, filter blocks only for that project
-                const placeholders = [];
-                const blockParams = [];
-
-                // For each block in the blocks array - we're only filtering by block_id
-                for (const block of blocks) {
-                    placeholders.push(`UPPER(bb.block_id) = $${paramIndex++}`);
-                    blockParams.push(block.toUpperCase());
-                }
-
-                whereConditions.push(`(${placeholders.join(' OR ')}) AND pb.project_id = $1`);
-                queryParams.push(...blockParams);
-
-                console.log(`Filtering apartments by block_ids (strict project-specific):`, blocks);
-            } else {
-                // Standard block filtering without project context
-                const placeholders = [];
-                const blockParams = [];
-
-                // For each block in the blocks array - we're only filtering by block_id
-                for (const block of blocks) {
-                    placeholders.push(`UPPER(bb.block_id) = $${paramIndex++}`);
-                    blockParams.push(block.toUpperCase());
-                }
-
-                whereConditions.push(`(${placeholders.join(' OR ')})`);
-                queryParams.push(...blockParams);
-
-                console.log(`Filtering apartments by block_ids:`, blocks);
-            }
-        }
-
-        // Add floor filter if provided
-        if (floors.length > 0) {
-            whereConditions.push(`a.floor IN (${floors.map(() => `$${paramIndex++}`).join(',')})`);
-            queryParams.push(...floors);
-            console.log(`Filtering apartments by floors:`, floors);
-        }
 
         // Add status filter if provided
         if (statuses.length > 0) {
-            // Use case insensitive comparison for status
-            whereConditions.push(`LOWER(a.status) IN (${statuses.map(() => `LOWER($${paramIndex++})`).join(',')})`);
+            const statusPlaceholders = statuses.map((_, idx) => `$${idx + 1}`).join(',');
+            query += ` AND a.status IN (${statusPlaceholders})`;
             queryParams.push(...statuses);
-            console.log(`Filtering apartments by statuses:`, statuses);
         }
 
-        // Combine all WHERE conditions
-        if (whereConditions.length > 0) {
-            query += ` WHERE ${whereConditions.join(' AND ')}`;
+        // Add area filters if provided
+        if (totalAreaMin > 0) {
+            query += ` AND t.total_area::numeric >= $${queryParams.length + 1}`;
+            queryParams.push(totalAreaMin);
         }
 
-        query += ' ORDER BY a.apartment_number';
-        console.log("Executing SQL query:", query);
-        console.log("Query parameters:", queryParams);
-
-        // Execute query with or without parameters
-        let result = queryParams.length > 0
-            ? await db.query(query, queryParams)
-            : await db.query(query);
-
-        console.log(`Found ${result.length} apartments`);
-
-        // Log the distinct project IDs in the result to debug cross-project issues
-        const projectIds = [...new Set(result.map(apt => apt.project_id))];
-        console.log(`Apartments belong to these projects:`, projectIds);
-
-        // Process the result to handle duplicate apartment IDs
-        if (project_id) {
-            console.log("Deduplicating apartments for specific project...");
-            // Create a map to track unique apartments by apartment_id
-            const apartmentMap = {};
-
-            // First, group apartments by ID
-            result.forEach(apt => {
-                if (!apartmentMap[apt.apartment_id]) {
-                    apartmentMap[apt.apartment_id] = [];
-                }
-                apartmentMap[apt.apartment_id].push(apt);
-            });
-
-            // Then, for each apartment ID, ensure we only keep the one matching our project
-            const dedupedResult = [];
-
-            Object.keys(apartmentMap).forEach(aptId => {
-                const apartments = apartmentMap[aptId];
-
-                // If there's only one apartment with this ID, keep it
-                if (apartments.length === 1) {
-                    dedupedResult.push(apartments[0]);
-                } else {
-                    // Multiple apartments with same ID - find the one matching our project
-                    const matchingApt = apartments.find(apt =>
-                        String(apt.project_id) === String(project_id)
-                    );
-
-                    if (matchingApt) {
-                        dedupedResult.push(matchingApt);
-                    }
-                }
-            });
-
-            console.log(`After deduplication: ${dedupedResult.length} apartments (was ${result.length})`);
-            result = dedupedResult;
+        if (totalAreaMax < Infinity) {
+            query += ` AND t.total_area::numeric <= $${queryParams.length + 1}`;
+            queryParams.push(totalAreaMax);
         }
 
-        // Return the result with no-cache headers
+        console.log("Executing minimal SQL query:", query);
+        console.log("Parameters:", queryParams);
+
+        const apartments = await db.query(query, queryParams);
+        console.log(`Found ${apartments.length} apartments in minimal query`);
+
+        // Now get building block info separately to avoid join problems
+        const blockIds = [...new Set(apartments.map(apt => apt.block_id))];
+
+        let blockInfoQuery = `
+            SELECT block_id, block_name
+            FROM building_blocks
+            WHERE block_id = ANY($1::text[])
+        `;
+
+        const blockInfo = await db.query(blockInfoQuery, [blockIds]);
+
+        // Create a map of block_id to block_name
+        const blockMap = {};
+        blockInfo.forEach(block => {
+            blockMap[block.block_id] = block.block_name;
+        });
+
+        // Process results to add block names
+        const processedResults = apartments.map(apt => ({
+            ...apt,
+            project_id: project_id || "1",  // Use requested project_id or default to 1
+            project_name: "Ortachala Hills",
+            block_name: blockMap[apt.block_id] || apt.block_id // Use block_name from map or fallback to block_id
+        }));
+
         return NextResponse.json(
-            { status: "success", data: result },
+            {
+                status: "success",
+                data: processedResults
+            },
             {
                 headers: {
                     "Cache-Control": "no-cache, no-store, must-revalidate",

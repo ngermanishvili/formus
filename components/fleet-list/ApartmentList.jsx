@@ -92,7 +92,8 @@ export default function ApartmentList() {
         const floorMatch =
           !filters.floors ||
           filters.floors.length === 0 ||
-          (apt.floor !== undefined && filters.floors.includes(apt.floor));
+          (apt.floor !== undefined &&
+            filters.floors.includes(Number(apt.floor)));
 
         const statusMatch =
           !filters.statuses ||
@@ -100,7 +101,7 @@ export default function ApartmentList() {
           (apt.status && filters.statuses.includes(apt.status));
 
         // Add area filter with null checks
-        const totalArea = apt.total_area || 0;
+        const totalArea = parseFloat(apt.total_area) || 0;
         const areaMatch =
           !filters.totalArea ||
           (totalArea >= (filters.totalArea.min || 0) &&
@@ -184,6 +185,21 @@ export default function ApartmentList() {
         if (filters.statuses && filters.statuses.length > 0) {
           params.append("statuses", filters.statuses.join(","));
           console.log(`Filtering by statuses: ${filters.statuses.join(",")}`);
+        }
+
+        // Add total area filters to the query params
+        if (filters.totalArea && filters.totalArea.min !== undefined) {
+          params.append("totalAreaMin", filters.totalArea.min);
+          console.log(`Filtering by minimum area: ${filters.totalArea.min}`);
+        }
+
+        if (
+          filters.totalArea &&
+          filters.totalArea.max !== undefined &&
+          filters.totalArea.max < Infinity
+        ) {
+          params.append("totalAreaMax", filters.totalArea.max);
+          console.log(`Filtering by maximum area: ${filters.totalArea.max}`);
         }
 
         // If we have parameters, add them to the URL
@@ -338,7 +354,13 @@ export default function ApartmentList() {
     };
 
     fetchData();
-  }, [filters.blocks, filters.projects, filters.floors, filters.statuses]);
+  }, [
+    filters.blocks,
+    filters.projects,
+    filters.floors,
+    filters.statuses,
+    filters.totalArea,
+  ]);
 
   if (loading) return <LoadingIndicator />;
   if (error) return <ErrorDisplay message={error} />;

@@ -95,7 +95,10 @@ export default function PropertyResults() {
                     </div>
                     <div className="flex items-center gap-2 text-gray-600">
                       <Sofa className="w-4 h-4" />
-                      <span>ბლოკი {property.block_id}</span>
+                      <span className="hover:text-black text-black">
+                        {" "}
+                        {property.block_id}
+                      </span>
                     </div>
                   </div>
                 </div>

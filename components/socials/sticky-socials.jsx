@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import { PiMessengerLogoDuotone } from "react-icons/pi";
 import { IoLogoWechat } from "react-icons/io5";
@@ -20,6 +21,7 @@ const StickySocial = () => {
     "https://www.facebook.com/messages/t/100464459308184"
   );
   const [showTooltip, setShowTooltip] = useState(true);
+  const [locale, setLocale] = useState(false);
 
   useEffect(() => {
     // Check if user is on mobile
@@ -34,21 +36,15 @@ const StickySocial = () => {
       setShowTooltip(false);
     }, 5000);
 
+    // Set locale based on window object (client-side only)
+    const isGeorgian =
+      window.location.pathname.startsWith("/ka") ||
+      navigator.language.startsWith("ka");
+    setLocale(isGeorgian);
+
     // Cleanup timer on component unmount
     return () => clearTimeout(tooltipTimer);
   }, []);
-
-  // Function to get the current locale
-  const getCurrentLocale = () => {
-    // Assuming you are using a library or method to get the locale.
-    // For simplicity, let's assume it's based on the URL or navigator language.
-    const locale =
-      window.location.pathname.startsWith("/ka") ||
-      navigator.language.startsWith("ka");
-    return locale;
-  };
-
-  const locale = getCurrentLocale();
 
   return (
     <>

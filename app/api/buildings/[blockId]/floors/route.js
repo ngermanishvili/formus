@@ -6,6 +6,19 @@ export async function GET(request, { params }) {
     console.log('Fetching floors for block:', params.blockId);
 
     try {
+        // Accept any blockId format (letter or number)
+        const blockId = params.blockId;
+
+        if (!blockId) {
+            return NextResponse.json(
+                {
+                    status: "error",
+                    message: "Block ID is required"
+                },
+                { status: 400 }
+            );
+        }
+
         const result = await db.query(`
             SELECT 
                 f.floor_id,
@@ -18,9 +31,9 @@ export async function GET(request, { params }) {
                 f.area,
                 f.rooms
             FROM floors f
-            WHERE f.block_id = $1
+            WHERE f.block_id LIKE $1
             ORDER BY f.floor_number::integer DESC
-        `, [params.blockId]);
+        `, [blockId.toString()]);
 
         // Full result logging
         console.log('Database result:', {
@@ -39,7 +52,7 @@ export async function GET(request, { params }) {
         const formattedFloors = floors.map(floor => ({
             id: floor.floor_id,
             title: floor.title,
-            block_id: params.blockId, // დავრწმუნდეთ რომ block_id სწორად მიეწოდება
+            block_id: blockId, // Use the variable we defined
             points: floor.polygon_coords,
             status: floor.status,
             price: floor.price || 'თავისუფალი',
@@ -53,7 +66,7 @@ export async function GET(request, { params }) {
             data: formattedFloors,
             meta: {
                 total: formattedFloors.length,
-                block: params.blockId
+                block: blockId
             }
         });
     } catch (error) {
@@ -88,6 +101,19 @@ export async function POST(request, { params }) {
     console.log('Creating new floor for block:', params.blockId);
 
     try {
+        // Accept any blockId format
+        const blockId = params.blockId;
+
+        if (!blockId) {
+            return NextResponse.json(
+                {
+                    status: "error",
+                    message: "Block ID is required"
+                },
+                { status: 400 }
+            );
+        }
+
         const data = await request.json();
         console.log('Received floor data:', { ...data, polygon_coords: '[HIDDEN]' });
 
@@ -105,7 +131,7 @@ export async function POST(request, { params }) {
             VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
             RETURNING floor_id
         `, [
-            params.blockId,
+            blockId.toString(),
             data.floor_number,
             data.polygon_coords,
             data.title,

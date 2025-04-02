@@ -143,11 +143,11 @@ export async function GET(request, { params }) {
         pb.project_id,
         p.title_ge as project_name
       FROM apartments a
-      JOIN apartment_types t ON a.type_id = t.type_id
-      LEFT JOIN project_blocks pb ON a.block_id = pb.block_id
-      LEFT JOIN projects p ON pb.project_id = p.id
-      WHERE a.apartment_id = $1
-    `, [id]);
+      JOIN apartment_types t ON a.type_id::TEXT = t.type_id::TEXT
+      LEFT JOIN project_blocks pb ON a.block_id::TEXT = pb.block_id::TEXT
+      LEFT JOIN projects p ON pb.project_id::TEXT = p.id::TEXT
+      WHERE a.apartment_id::TEXT = $1::TEXT
+    `, [id.toString()]);
 
     if (!result || result.length === 0) {
       return NextResponse.json(
@@ -272,9 +272,9 @@ export async function POST(request) {
         t.balcony_area,
         t.balcony2_area
       FROM apartments a
-      JOIN apartment_types t ON a.type_id = t.type_id
-      WHERE a.apartment_id = $1
-    `, [apartmentId]);
+      JOIN apartment_types t ON a.type_id::TEXT = t.type_id::TEXT
+      WHERE a.apartment_id::TEXT = $1::TEXT
+    `, [apartmentId.toString()]);
 
     return NextResponse.json({
       status: "success",
@@ -317,17 +317,15 @@ export async function DELETE(request, { params }) {
     // First delete from apartment_types
     await db.query(`
       DELETE FROM apartment_types 
-      WHERE type_id IN (
-        SELECT type_id 
-        FROM apartments 
-        WHERE apartment_id = $1
+      WHERE type_id::TEXT IN (
+        SELECT type_id::TEXT FROM apartments WHERE apartment_id::TEXT = $1::TEXT
       )
-    `, [id]);
+    `, [id.toString()]);
 
     // Then delete the apartment
     const result = await db.query(
-      'DELETE FROM apartments WHERE apartment_id = $1',
-      [id]
+      'DELETE FROM apartments WHERE apartment_id::TEXT = $1::TEXT',
+      [id.toString()]
     );
 
     if (!result || result.length === 0) {

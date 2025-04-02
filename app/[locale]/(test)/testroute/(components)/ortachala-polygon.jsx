@@ -46,6 +46,13 @@ const api = {
   getApartments: async (blockId) => {
     try {
       const response = await fetch(`/api/buildings/${blockId}/apartments`);
+
+      if (!response.ok) {
+        throw new Error(
+          `API returned ${response.status}: ${response.statusText}`
+        );
+      }
+
       const data = await response.json();
 
       if (data.status === "success") {
@@ -54,9 +61,9 @@ const api = {
           block_id: blockId,
         }));
       }
-      throw new Error(data.message);
+      throw new Error(data.message || "Error fetching apartments");
     } catch (error) {
-      console.error("Error fetching apartments:", error);
+      console.error(`Error fetching apartments for block ${blockId}:`, error);
       throw error;
     }
   },
@@ -331,7 +338,6 @@ const OrtachalaPolygon = () => {
             quality={100}
             alt="Ortachala"
             className="w-full h-full object-contain md:object-cover"
-            cloudName="formus"
             loading="lazy"
           />
           <div className="absolute inset-0 flex items-center justify-center">

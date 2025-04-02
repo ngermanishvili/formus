@@ -25,7 +25,7 @@ export async function GET(request, { params }) {
                 f.rooms,
                 f.floor_plan_url
             FROM floors f
-            WHERE f.floor_id = $1
+            WHERE f.floor_id::TEXT = $1::TEXT
         `, [params.id]);
 
         console.log('3. Floor query result:', {
@@ -69,10 +69,10 @@ export async function GET(request, { params }) {
                 t.balcony_area,
                 t.balcony2_area
             FROM apartments a
-            JOIN apartment_types t ON a.type_id = t.type_id
-            WHERE a.block_id = $1 AND a.floor = $2
+            JOIN apartment_types t ON a.type_id::TEXT = t.type_id::TEXT
+            WHERE a.block_id::TEXT = $1::TEXT AND a.floor::TEXT = $2::TEXT
             ORDER BY a.apartment_number
-        `, [floorData.block_id, floorData.floor_number]);
+        `, [floorData.block_id.toString(), floorData.floor_number.toString()]);
         console.log('6. Apartments query result:', {
             count: apartmentsResult.length,
             firstApartment: apartmentsResult[0]

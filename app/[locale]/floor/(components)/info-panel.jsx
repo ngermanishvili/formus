@@ -2,6 +2,50 @@ import { memo } from "react";
 import { getStatusText, getStatusStyle } from "@/lib/utils";
 import { useParams } from "next/navigation";
 
+// Define the RoomAreas component
+const RoomAreas = ({ data }) => {
+  if (!data) return null;
+
+  return (
+    <div className="grid grid-cols-2 gap-3">
+      {data.living_room_area > 0 && (
+        <div className="text-sm">
+          <span className="text-gray-500">სამზარეულო + მისაღები:</span>
+          <p className="font-semibold">{data.living_room_area} მ²</p>
+        </div>
+      )}
+
+      {data.bedroom_area > 0 && (
+        <div className="text-sm">
+          <span className="text-gray-500">საძინებელი 1:</span>
+          <p className="font-semibold">{data.bedroom_area} მ²</p>
+        </div>
+      )}
+
+      {data.bedroom2_area > 0 && (
+        <div className="text-sm">
+          <span className="text-gray-500">საძინებელი 2:</span>
+          <p className="font-semibold">{data.bedroom2_area} მ²</p>
+        </div>
+      )}
+
+      {data.bathroom_area > 0 && (
+        <div className="text-sm">
+          <span className="text-gray-500">სველი წერტილი:</span>
+          <p className="font-semibold">{data.bathroom_area} მ²</p>
+        </div>
+      )}
+
+      {data.balcony_area > 0 && (
+        <div className="text-sm">
+          <span className="text-gray-500">აივანი:</span>
+          <p className="font-semibold">{data.balcony_area} მ²</p>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const InfoPanel = memo(({ data, onViewDetails }) => {
   if (!data) return null;
 

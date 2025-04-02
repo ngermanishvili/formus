@@ -1,0 +1,304 @@
+
+> luxride-next@1.2.0 dev
+> next dev -p 3000
+
+  ▲ Next.js 14.2.13
+  - Local:        http://localhost:3000
+  - Environments: .env.local, .env
+
+ ✓ Starting...
+ ✓ Ready in 3.2s
+ ○ Compiling /[locale]/homes-list ...
+ ⚠ ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+Warning
+
+(2270:3) autoprefixer: Replace color-adjust to print-color-adjust. The color-adjust shorthand is currently deprecated.
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+./public/assets/scss/style.scss.webpack[javascript/auto]!=!./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/scss/style.scss
+./public/assets/scss/style.scss
+ ⚠ ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+Warning
+
+(2270:3) autoprefixer: Replace color-adjust to print-color-adjust. The color-adjust shorthand is currently deprecated.
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+./public/assets/scss/style.scss.webpack[javascript/auto]!=!./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/scss/style.scss
+./public/assets/scss/style.scss
+ ✓ Compiled /[locale]/homes-list in 108ms (869 modules)
+ ⚠ ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+Warning
+
+(2270:3) autoprefixer: Replace color-adjust to print-color-adjust. The color-adjust shorthand is currently deprecated.
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+./public/assets/scss/style.scss.webpack[javascript/auto]!=!./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/scss/style.scss
+./public/assets/scss/style.scss
+ ⚠ ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+Warning
+
+(2270:3) autoprefixer: Replace color-adjust to print-color-adjust. The color-adjust shorthand is currently deprecated.
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+./public/assets/scss/style.scss.webpack[javascript/auto]!=!./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/scss/style.scss
+./public/assets/scss/style.scss
+ GET /ka/homes-list?statuses=available&projects=13&totalAreaMin=40&totalAreaMax=60 200 in 4241ms
+ ⚠ ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+Warning
+
+(2270:3) autoprefixer: Replace color-adjust to print-color-adjust. The color-adjust shorthand is currently deprecated.
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+./public/assets/scss/style.scss.webpack[javascript/auto]!=!./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/scss/style.scss
+./public/assets/scss/style.scss
+ ⚠ ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+Warning
+
+(2270:3) autoprefixer: Replace color-adjust to print-color-adjust. The color-adjust shorthand is currently deprecated.
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+./public/assets/scss/style.scss.webpack[javascript/auto]!=!./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/scss/style.scss
+./public/assets/scss/style.scss
+ ○ Compiling /api/safe-homes-list ...
+ ⚠ ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+Warning
+
+(2270:3) autoprefixer: Replace color-adjust to print-color-adjust. The color-adjust shorthand is currently deprecated.
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+./public/assets/scss/style.scss.webpack[javascript/auto]!=!./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/scss/style.scss
+./public/assets/scss/style.scss
+Safe API Request with params: { project_id: '13', blocks: [], floors: [], statuses: [ 'available' ] }
+Executing safe SQL query: 
+            SELECT 
+                a.apartment_id,
+                a.block_id,
+                a.apartment_number,
+                a.floor,
+                a.status,
+                a.price,
+                a.home_2d,
+                a.home_3d,
+                t.total_area,
+                bb.block_code,
+                bb.block_name,
+                pb.project_id,
+                p.title_ge as project_name
+            FROM apartments a
+            JOIN apartment_types t ON a.type_id = t.type_id
+            JOIN building_blocks bb ON a.block_id = bb.id
+            JOIN project_blocks pb ON bb.id = pb.block_id
+            JOIN projects p ON pb.project_id = p.id
+         WHERE pb.project_id = $1 AND (LOWER(a.status) = LOWER($2)) ORDER BY a.apartment_number
+Query parameters: [ '13', 'available' ]
+Safe API Request with params: { project_id: '13', blocks: [], floors: [], statuses: [ 'available' ] }
+Executing safe SQL query: 
+            SELECT 
+                a.apartment_id,
+                a.block_id,
+                a.apartment_number,
+                a.floor,
+                a.status,
+                a.price,
+                a.home_2d,
+                a.home_3d,
+                t.total_area,
+                bb.block_code,
+                bb.block_name,
+                pb.project_id,
+                p.title_ge as project_name
+            FROM apartments a
+            JOIN apartment_types t ON a.type_id = t.type_id
+            JOIN building_blocks bb ON a.block_id = bb.id
+            JOIN project_blocks pb ON bb.id = pb.block_id
+            JOIN projects p ON pb.project_id = p.id
+         WHERE pb.project_id = $1 AND (LOWER(a.status) = LOWER($2)) ORDER BY a.apartment_number
+Query parameters: [ '13', 'available' ]
+New client connected to database
+Client acquired from pool
+New client connected to database
+Client acquired from pool
+Successfully connected to database
+New client connected to database
+Client acquired from pool
+Successfully connected to database
+Query executed successfully { rowCount: 0, firstRow: 'null' }
+Releasing client back to pool
+Found 0 apartments
+ GET /api/safe-homes-list?project_id=13&statuses=available&_=1743524975062 200 in 2823ms
+Query executed successfully { rowCount: 0, firstRow: 'null' }
+Releasing client back to pool
+Found 0 apartments
+ GET /api/safe-homes-list?project_id=13&statuses=available&_=1743524975055 200 in 2825ms
+Database connection test successful
+ ⚠ ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+Warning
+
+(2270:3) autoprefixer: Replace color-adjust to print-color-adjust. The color-adjust shorthand is currently deprecated.
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+./public/assets/scss/style.scss.webpack[javascript/auto]!=!./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/scss/style.scss
+./public/assets/scss/style.scss
+Client removed from pool
+Client removed from pool
+Client removed from pool
+ GET /ka/homes-list?statuses=available&projects=13&totalAreaMin=40&totalAreaMax=60 200 in 823ms
+Safe API Request with params: { project_id: null, blocks: [], floors: [], statuses: [ 'available' ] }
+Filtering by statuses: available
+Executing safe SQL query: 
+            SELECT 
+                a.apartment_id,
+                a.block_id,
+                a.apartment_number,
+                a.floor,
+                a.status,
+                a.price,
+                a.home_2d,
+                a.home_3d,
+                t.total_area,
+                bb.block_code,
+                bb.block_name,
+                pb.project_id,
+                p.title_ge as project_name
+            FROM apartments a
+            JOIN apartment_types t ON a.type_id = t.type_id
+            JOIN building_blocks bb ON a.block_id = bb.id
+            JOIN project_blocks pb ON bb.id = pb.block_id
+            JOIN projects p ON pb.project_id = p.id
+         WHERE LOWER(a.status) IN (LOWER($1)) ORDER BY a.apartment_number
+Query parameters: [ 'available' ]
+Safe API Request with params: { project_id: null, blocks: [], floors: [], statuses: [ 'available' ] }
+Filtering by statuses: available
+Executing safe SQL query: 
+            SELECT 
+                a.apartment_id,
+                a.block_id,
+                a.apartment_number,
+                a.floor,
+                a.status,
+                a.price,
+                a.home_2d,
+                a.home_3d,
+                t.total_area,
+                bb.block_code,
+                bb.block_name,
+                pb.project_id,
+                p.title_ge as project_name
+            FROM apartments a
+            JOIN apartment_types t ON a.type_id = t.type_id
+            JOIN building_blocks bb ON a.block_id = bb.id
+            JOIN project_blocks pb ON bb.id = pb.block_id
+            JOIN projects p ON pb.project_id = p.id
+         WHERE LOWER(a.status) IN (LOWER($1)) ORDER BY a.apartment_number
+Query parameters: [ 'available' ]
+New client connected to database
+Client acquired from pool
+Successfully connected to database
+New client connected to database
+Client acquired from pool
+Successfully connected to database
+New client connected to database
+Client acquired from pool
+Database connection test successful
+Query executed successfully { rowCount: 150, firstRow: '...exists' }
+Releasing client back to pool
+Found 150 apartments
+ GET /api/safe-homes-list?project_id=13&statuses=available&_=1743525266885 200 in 1433ms
+Query executed successfully { rowCount: 150, firstRow: '...exists' }
+Releasing client back to pool
+Found 150 apartments
+ GET /api/safe-homes-list?project_id=13&statuses=available&_=1743525266882 200 in 1666ms
+ GET /ka/homes-list?statuses=available&projects=13&totalAreaMin=40&totalAreaMax=60 200 in 57ms
+Client removed from pool
+Client removed from pool
+Client removed from pool
+Safe API Request with params: { project_id: null, blocks: [], floors: [], statuses: [ 'available' ] }
+Filtering by statuses: available
+Executing safe SQL query: 
+            SELECT 
+                a.apartment_id,
+                a.block_id,
+                a.apartment_number,
+                a.floor,
+                a.status,
+                a.price,
+                a.home_2d,
+                a.home_3d,
+                t.total_area,
+                bb.block_code,
+                bb.block_name,
+                pb.project_id,
+                p.title_ge as project_name
+            FROM apartments a
+            JOIN apartment_types t ON a.type_id = t.type_id
+            JOIN building_blocks bb ON a.block_id = bb.id
+            JOIN project_blocks pb ON bb.id = pb.block_id
+            JOIN projects p ON pb.project_id = p.id
+         WHERE LOWER(a.status) IN (LOWER($1)) ORDER BY a.apartment_number
+Query parameters: [ 'available' ]
+Safe API Request with params: { project_id: null, blocks: [], floors: [], statuses: [ 'available' ] }
+Filtering by statuses: available
+Executing safe SQL query: 
+            SELECT 
+                a.apartment_id,
+                a.block_id,
+                a.apartment_number,
+                a.floor,
+                a.status,
+                a.price,
+                a.home_2d,
+                a.home_3d,
+                t.total_area,
+                bb.block_code,
+                bb.block_name,
+                pb.project_id,
+                p.title_ge as project_name
+            FROM apartments a
+            JOIN apartment_types t ON a.type_id = t.type_id
+            JOIN building_blocks bb ON a.block_id = bb.id
+            JOIN project_blocks pb ON bb.id = pb.block_id
+            JOIN projects p ON pb.project_id = p.id
+         WHERE LOWER(a.status) IN (LOWER($1)) ORDER BY a.apartment_number
+Query parameters: [ 'available' ]
+New client connected to database
+Client acquired from pool
+Successfully connected to database
+New client connected to database
+Client acquired from pool
+Successfully connected to database
+Query executed successfully { rowCount: 150, firstRow: '...exists' }
+Releasing client back to pool
+Found 150 apartments
+ GET /api/safe-homes-list?project_id=13&statuses=available&_=1743525279819 200 in 3843ms
+Query executed successfully { rowCount: 150, firstRow: '...exists' }
+Releasing client back to pool
+Found 150 apartments
+ GET /api/safe-homes-list?project_id=13&statuses=available&_=1743525279822 200 in 4359ms
+Client removed from pool
+Client removed from pool
+ ⚠ ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+Warning
+
+(2270:3) autoprefixer: Replace color-adjust to print-color-adjust. The color-adjust shorthand is currently deprecated.
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+./public/assets/scss/style.scss.webpack[javascript/auto]!=!./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/scss/style.scss
+./public/assets/scss/style.scss
+ ⚠ ./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+Warning
+
+(2270:3) autoprefixer: Replace color-adjust to print-color-adjust. The color-adjust shorthand is currently deprecated.
+
+Import trace for requested module:
+./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/css/vendors/bootstrap.min.css
+./public/assets/scss/style.scss.webpack[javascript/auto]!=!./node_modules/next/dist/build/webpack/loaders/css-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[2]!./node_modules/next/dist/build/webpack/loaders/postcss-loader/src/index.js??ruleSet[1].rules[13].oneOf[13].use[3]!./node_modules/next/dist/build/webpack/loaders/resolve-url-loader/index.js??ruleSet[1].rules[13].oneOf[13].use[4]!./node_modules/next/dist/compiled/sass-loader/cjs.js??ruleSet[1].rules[13].oneOf[13].use[5]!./public/assets/scss/style.scss
+./public/assets/scss/style.scss

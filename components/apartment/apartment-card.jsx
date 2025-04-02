@@ -6,6 +6,7 @@ import { getStatusStyle, getStatusText } from "@/lib/utils";
 export default function ApartmentCard({ apartment, activeView }) {
   const pathname = usePathname();
   const isEnglish = pathname.startsWith("/en");
+  const language = isEnglish ? "en" : "ka";
 
   const translations = {
     apartment: isEnglish ? "Apartment" : "ბინა",
@@ -47,7 +48,7 @@ export default function ApartmentCard({ apartment, activeView }) {
             status
           )}`}
         >
-          {getStatusText(status)}
+          {getStatusText(status, language)}
         </div>
       </div>
 

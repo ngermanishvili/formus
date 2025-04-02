@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Home, BedDouble, Sofa, DoorOpen, MapPin, Heart } from "lucide-react";
 import { CldImage } from "next-cloudinary";
 import { useLocale } from "next-intl";
+import { getStatusText, getStatusStyle } from "@/lib/utils";
 
 const translations = {
   en: {
@@ -61,19 +62,6 @@ export default function PropertyResults({ apartments = [] }) {
         return "bg-red-500";
       default:
         return "bg-gray-500";
-    }
-  };
-
-  const getStatusText = (status) => {
-    switch (status.toLowerCase()) {
-      case "available":
-        return t.available;
-      case "reserved":
-        return t.reserved;
-      case "sold":
-        return t.sold;
-      default:
-        return status;
     }
   };
 
@@ -154,7 +142,7 @@ export default function PropertyResults({ apartments = [] }) {
                           property.status
                         )}`}
                       >
-                        {getStatusText(property.status)}
+                        {getStatusText(property.status, locale)}
                       </span>
                     </div>
                   </div>
@@ -180,7 +168,7 @@ export default function PropertyResults({ apartments = [] }) {
                     </div>
                     <div className="flex items-center gap-3 text-zinc-500">
                       <DoorOpen className="w-5 h-5 text-[#FCB203]" />
-                      <span>{getStatusText(property.status)}</span>
+                      <span>{getStatusText(property.status, locale)}</span>
                     </div>
                   </div>
 

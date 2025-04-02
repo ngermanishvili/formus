@@ -18,6 +18,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreVertical, Save, X } from "lucide-react";
+import { getStatusText } from "@/lib/utils";
 
 export const ApartmentList = ({
   apartments,
@@ -38,19 +39,6 @@ export const ApartmentList = ({
         return "bg-yellow-50 text-yellow-700 border-yellow-200";
       default:
         return "bg-gray-50 text-gray-700 border-gray-200";
-    }
-  };
-
-  const getStatusText = (status) => {
-    switch (status) {
-      case "available":
-        return "ხელმისაწვდომი";
-      case "sold":
-        return "გაყიდული";
-      case "reserved":
-        return "დაჯავშნილი";
-      default:
-        return status;
     }
   };
 
@@ -157,7 +145,7 @@ export const ApartmentList = ({
                   </TableCell>
                   <TableCell>
                     <Badge className={getStatusColor(apartment.status)}>
-                      {getStatusText(apartment.status)}
+                      {getStatusText(apartment.status, "ka")}
                     </Badge>
                   </TableCell>
                   <TableCell>

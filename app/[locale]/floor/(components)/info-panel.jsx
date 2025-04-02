@@ -1,7 +1,12 @@
 import { memo } from "react";
+import { getStatusText, getStatusStyle } from "@/lib/utils";
+import { useParams } from "next/navigation";
 
 const InfoPanel = memo(({ data, onViewDetails }) => {
   if (!data) return null;
+
+  const params = useParams();
+  const locale = params?.locale || "ka";
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -13,19 +18,6 @@ const InfoPanel = memo(({ data, onViewDetails }) => {
         return "bg-yellow-500";
       default:
         return "bg-gray-500";
-    }
-  };
-
-  const getStatusText = (status) => {
-    switch (status) {
-      case "available":
-        return "ხელმისაწვდომი";
-      case "sold":
-        return "გაყიდული";
-      case "reserved":
-        return "დაჯავშნილი";
-      default:
-        return "უცნობი";
     }
   };
 
@@ -50,7 +42,7 @@ const InfoPanel = memo(({ data, onViewDetails }) => {
                 data.status
               )}`}
             >
-              {getStatusText(data.status)}
+              {getStatusText(data.status, locale)}
             </div>
           </div>
         </div>

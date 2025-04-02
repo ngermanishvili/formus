@@ -9,7 +9,6 @@ export default function ApartmentCard({ apartment, activeView }) {
     block_id,
     floor,
     total_area,
-    price,
     home_2d,
     home_3d,
     apartment_id,
@@ -60,12 +59,6 @@ export default function ApartmentCard({ apartment, activeView }) {
             <span>საერთო ფართი</span>
             <span className="font-medium">{total_area} მ²</span>
           </div>
-          {price && (
-            <div className="flex justify-between text-blue-600">
-              <span>ფასი</span>
-              <span className="font-medium">${price.toLocaleString()}</span>
-            </div>
-          )}
         </div>
       </div>
     </Link>

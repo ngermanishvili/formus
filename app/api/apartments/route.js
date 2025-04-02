@@ -160,7 +160,6 @@ export async function GET(request) {
                 a.apartment_number,
                 a.floor,
                 a.status,
-                a.price,
                 a.home_2d,
                 a.home_3d,
                 t.total_area
